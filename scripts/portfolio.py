@@ -29,6 +29,11 @@ def execute(command: list[str], cwd: Path, timeout: int = 600) -> int:
     )
     if Path("/workspace/.python").exists():
         environment.setdefault("UV_PYTHON_INSTALL_DIR", "/workspace/.python")
+    cache = ROOT / ".local" / "cache"
+    cache.mkdir(parents=True, exist_ok=True)
+    environment.setdefault("MPLCONFIGDIR", str(cache / "matplotlib"))
+    environment.setdefault("XDG_CACHE_HOME", str(cache))
+    environment.setdefault("UV_LINK_MODE", "copy")
     for name in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
         environment[name] = "1"
     try:

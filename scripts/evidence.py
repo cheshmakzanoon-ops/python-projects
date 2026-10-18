@@ -72,6 +72,7 @@ def capture(project: Path, root: Path = ROOT) -> dict[str, Any]:
         for p in files
         if not EXCLUDED_PARTS.intersection(p.relative_to(project).parts)
         and p.name not in {".coverage", "coverage.xml"}
+        and not p.name.startswith(".coverage.")
     ]
     source, names = digest(files, root)
     contract, contract_names = digest(

@@ -23,6 +23,8 @@ def main() -> int:
     parser.add_argument("--python", default="3.13.16")
     parser.add_argument("--checks", default="check,demo,benchmark")
     parser.add_argument("--profile", choices=["ci", "standard"], default="ci")
+    parser.add_argument("--temp-root", type=Path, help="Writable scratch filesystem for clones")
+    parser.add_argument("--integrations", action="store_true")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     args.output = args.output.resolve()
@@ -32,8 +34,10 @@ def main() -> int:
     commit = subprocess.check_output(
         ["git", "rev-parse", "--verify", f"{args.commit}^{{commit}}"], cwd=ROOT, text=True
     ).strip()
-    if set(args.checks.split(",")) - {"check", "demo", "benchmark"}:
-        parser.error("--checks accepts check,demo,benchmark")
+    if set(args.checks.split(",")) - {"check", "demo", "benchmark", "extended"}:
+        parser.error("--checks accepts check,demo,benchmark,extended")
+    if "extended" in args.checks.split(",") and args.project != ["strata"]:
+        parser.error("extended requires exactly --project strata")
     environment = os.environ.copy()
     environment["PORTFOLIO_PYTHON"] = args.python
     for name in ("UV_CACHE_DIR", "UV_PYTHON_INSTALL_DIR"):
@@ -49,7 +53,7 @@ def main() -> int:
             if slug == "meridian":
                 environment.setdefault("MERIDIAN_PG_CONTAINER", metadata["container"])
     reports = []
-    with tempfile.TemporaryDirectory(prefix="portfolio-verify-") as folder:
+    with tempfile.TemporaryDirectory(prefix="portfolio-verify-", dir=args.temp_root) as folder:
         copy = Path(folder) / "source"
         # A disposable verification clone preserves Git provenance without sharing an index.
         subprocess.run(
@@ -69,6 +73,30 @@ def main() -> int:
             checks = []
             for check in args.checks.split(","):
                 command = [sys.executable, "scripts/portfolio.py", check, project["slug"]]
+                if check == "extended":
+                    workload = [
+                        "uv",
+                        "run",
+                        "--locked",
+                        "--python",
+                        args.python,
+                        "--project",
+                        str(scope),
+                        "python",
+                        str(scope / "benchmarks/extended_stateful.py"),
+                        "--jobs",
+                        "2",
+                        "--output",
+                        str(args.output / "strata-extended.json"),
+                    ]
+                    command = [
+                        sys.executable,
+                        "-c",
+                        "import sys; from pathlib import Path; "
+                        "sys.path.insert(0, 'scripts'); from portfolio import execute; "
+                        "raise SystemExit(execute(sys.argv[1:], Path.cwd(), 7200))",
+                        *workload,
+                    ]
                 if check == "benchmark":
                     command += ["--profile", args.profile]
                 log = args.output / f"{project['slug']}-{args.python}-{check}.log"
@@ -128,6 +156,22 @@ def main() -> int:
             (args.output / f"{project['slug']}-{args.python}.json").write_text(
                 json.dumps(report, indent=2) + "\n"
             )
+        if args.integrations:
+            for name in ("settlement", "stream-lake", "code-search"):
+                destination = args.output / name
+                command = [
+                    sys.executable,
+                    "integrations/run.py",
+                    name,
+                    "--output",
+                    str(destination),
+                ]
+                with (args.output / f"integration-{name}.log").open("w") as stream:
+                    result = subprocess.run(
+                        command, cwd=copy, env=environment, stdout=stream, stderr=subprocess.STDOUT
+                    )
+                reports.append({"status": "passed" if result.returncode == 0 else "failed"})
+                print(f"integration {name}: {result.returncode}", flush=True)
     return int(any(r["status"] != "passed" for r in reports))
 
 
