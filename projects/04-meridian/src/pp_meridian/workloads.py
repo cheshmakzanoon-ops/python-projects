@@ -17,10 +17,27 @@ from django.test import Client
 from pp_meridian.application import ledger, reconcile
 from pp_meridian.domain.journal import Entry, JournalValue
 from pp_meridian.evidence import provenance
-from pp_meridian.persistence.models import Account, Balance, Membership, Posting, Tenant
+from pp_meridian.persistence.models import (
+    Account,
+    Balance,
+    Membership,
+    Posting,
+    StatementRow,
+    Tenant,
+)
 from pp_meridian.reconciliation.assignment import solve
 from pp_meridian.reconciliation.candidates import MatchEntry, candidates
 from pp_meridian.reconciliation.normalize import normalize_row
+
+_BENCHMARK_SIZES = {
+    "ci": (1000, 200, 4, 500),
+    "standard": (250000, 10000, 100, 100000),
+}
+
+
+def check_status(checks: dict[str, bool]) -> tuple[str, list[str]]:
+    failed = [name for name, passed in checks.items() if not passed]
+    return ("failed" if failed else "passed"), failed
 
 
 def fixture(tenants: int, accounts: int) -> tuple[int, list[Tenant], dict[UUID, list[Account]]]:
@@ -127,16 +144,30 @@ def demo(output: Path, seed: int) -> None:
     repeated = reconcile.import_rows(user, tenant.id, bank.id, "synthetic-statement", rows)
     run = reconcile.run(user, tenant.id, bank.id)
     proposal = run.proposals.get()
-    reconcile.decide(user, tenant.id, proposal.id, "approve")
+    decision = reconcile.decide(user, tenant.id, proposal.id, "approve")
     Balance.objects.filter(account=bank).update(amount=999)
     corrupted = ledger.audit(user, tenant.id)
     ledger.audit(user, tenant.id, rebuild=True)
     verified = ledger.audit(user, tenant.id)
+    checks = {
+        "duplicate_journal_identical": invoice["id"] == duplicate["id"],
+        "reimport_idempotent": imported == repeated
+        and len(imported) == len(rows)
+        and len(set(imported)) == len(rows),
+        "ambiguous_proposal_reviewed": proposal.ambiguous and decision.status == "approved",
+        "projection_corruption_detected": corrupted["consistent"] is False,
+        "rebuild_consistent": verified["consistent"] is True,
+        "concurrent_transfers": len(transfer_ids) == 8 and len(set(transfer_ids)) == 8,
+        "linked_reversal": reversed_invoice.get("reversal_of") == invoice["id"],
+    }
+    status, failed = check_status(checks)
     result = {
         **before,
         "seed": seed,
         "dataset_id": "fictional-equipment-rental-v1",
-        "status": "passed",
+        "status": status,
+        "correctness_checks": checks,
+        "failed_checks": failed,
         "invoice": invoice,
         "duplicate_journal_identical": invoice["id"] == duplicate["id"],
         "reversal": reversed_invoice,
@@ -148,6 +179,11 @@ def demo(output: Path, seed: int) -> None:
         "rebuild_consistent": verified["consistent"],
         "tenant_id": str(tenant.id),
         "bank_account_id": str(bank.id),
+        "audit_diagnostics": {"before_rebuild": corrupted, "after_rebuild": verified},
+        "reimport_diagnostics": {
+            "first_ids": [str(i) for i in imported],
+            "repeated_ids": [str(i) for i in repeated],
+        },
     }
     if provenance()["source_content_sha256"] != before["source_content_sha256"]:
         raise RuntimeError("source changed during demo")
@@ -157,15 +193,20 @@ def demo(output: Path, seed: int) -> None:
         + __import__("html").escape(json.dumps(result, indent=2))
         + "</pre></html>"
     )
-    print(json.dumps({"status": "passed", "report": str(output / "report.html")}, indent=2))
+    print(
+        json.dumps(
+            {"status": status, "failed_checks": failed, "report": str(output / "report.html")},
+            indent=2,
+        )
+    )
+    if failed:
+        raise SystemExit(1)
 
 
 def benchmark(output: Path, seed: int, profile: str) -> None:
     before = provenance()
     rng = random.Random(seed)
-    count, account_count, tenant_count, row_count = (
-        (1000, 200, 4, 500) if profile == "ci" else (250000, 10000, 100, 100000)
-    )
+    count, account_count, tenant_count, row_count = _BENCHMARK_SIZES[profile]
     user, tenants, accounts = fixture(tenant_count, account_count)
     first = tenants[0]
     aa = accounts[first.id]
@@ -220,7 +261,8 @@ def benchmark(output: Path, seed: int, profile: str) -> None:
             batch_seconds[mode].append(time.perf_counter() - start)
             waits.append(ledger.lock_waits())
     replay_start = time.perf_counter()
-    audit_results = [ledger.audit(user, t.id)["consistent"] for t in tenants]
+    audit_reports = [(str(t.id), ledger.audit(user, t.id)) for t in tenants]
+    audit_results = [report["consistent"] for _, report in audit_reports]
     replay_seconds = time.perf_counter() - replay_start
     posting_rows = list(
         Posting.objects.exclude(journal__reference="")
@@ -248,12 +290,21 @@ def benchmark(output: Path, seed: int, profile: str) -> None:
     graph_edges = []
     solver_times = []
     graph_rows = []
+    reimport_diagnostics: list[dict[str, object]] = []
+    first_import_total = reimport_total = stored_before_total = stored_after_total = 0
+    solver_cardinality_valid = True
     for account_id, rows in grouped.items():
         account = Account.objects.get(id=account_id)
+        first_ids = []
         for offset in range(0, len(rows), 10000):
-            reconcile.import_rows(
-                user, account.tenant_id, account_id, "benchmark", rows[offset : offset + 10000]
+            first_ids.extend(
+                reconcile.import_rows(
+                    user, account.tenant_id, account_id, "benchmark", rows[offset : offset + 10000]
+                )
             )
+        stored_before = StatementRow.objects.filter(
+            account_id=account_id, source="benchmark"
+        ).count()
         left = [
             MatchEntry(
                 str(r["id"]),
@@ -277,12 +328,55 @@ def benchmark(output: Path, seed: int, profile: str) -> None:
         matched_rows += sum(len(a.pairs) for a in assignments)
         graph_edges.append(len(graph))
         graph_rows.append(len(rows))
-        assert sum(len(a.pairs) for a in assignments) <= len(rows)
-        # Reimport every source row to exercise stable identity without extra rows.
+        solver_cardinality_valid = solver_cardinality_valid and sum(
+            len(a.pairs) for a in assignments
+        ) <= len(rows)
+        # Verify both returned identities and persisted cardinality across reimport.
+        repeated_ids = []
         for offset in range(0, len(rows), 10000):
-            reconcile.import_rows(
-                user, account.tenant_id, account_id, "benchmark", rows[offset : offset + 10000]
+            repeated_ids.extend(
+                reconcile.import_rows(
+                    user, account.tenant_id, account_id, "benchmark", rows[offset : offset + 10000]
+                )
             )
+        stored_after = StatementRow.objects.filter(
+            account_id=account_id, source="benchmark"
+        ).count()
+        first_import_total += len(first_ids)
+        reimport_total += len(repeated_ids)
+        stored_before_total += stored_before
+        stored_after_total += stored_after
+        if not (
+            first_ids == repeated_ids
+            and len(first_ids) == len(set(first_ids)) == len(rows)
+            and stored_before == stored_after == len(rows)
+        ):
+            reimport_diagnostics.append(
+                {
+                    "account_id": str(account_id),
+                    "expected_rows": len(rows),
+                    "first_ids_count": len(first_ids),
+                    "first_ids_unique": len(set(first_ids)),
+                    "repeated_ids_count": len(repeated_ids),
+                    "identities_equal": first_ids == repeated_ids,
+                    "stored_before": stored_before,
+                    "stored_after": stored_after,
+                }
+            )
+    checks = {
+        "independent_replay": all(value is True for value in audit_results),
+        "statement_rows_accounted": sum(graph_rows) == row_count
+        and 0 <= matched_rows <= row_count
+        and solver_cardinality_valid,
+        "controlled_ambiguity_detected": ambiguous_components > 0,
+        "stable_reimport": not reimport_diagnostics
+        and first_import_total
+        == reimport_total
+        == stored_before_total
+        == stored_after_total
+        == row_count,
+    }
+    status, failed = check_status(checks)
     metrics: dict[str, object] = {
         "replay_seconds": replay_seconds,
         "normalization_rows_per_second": row_count / normalization_seconds,
@@ -328,18 +422,38 @@ def benchmark(output: Path, seed: int, profile: str) -> None:
         "measurement_runs": repetitions,
         "measurement_repetition_policy": "ci: five batches per contention mode; standard: one full 250k-journal workload because repeating million-posting durable workloads five times is costly; per-journal latency distribution retained",
         "metrics": metrics,
-        "correctness_checks": {
-            "independent_replay": all(audit_results),
-            "statement_rows_accounted": matched_rows <= row_count,
-            "controlled_ambiguity_detected": ambiguous_components > 0,
-            "stable_reimport": True,
+        "correctness_checks": checks,
+        "failed_checks": failed,
+        "audit_diagnostics": [
+            {"tenant_id": identity, "audit": report}
+            for identity, report in audit_reports
+            if report["consistent"] is not True
+        ],
+        "reimport_diagnostics": {
+            "accounts_checked": len(grouped),
+            "first_import_rows": first_import_total,
+            "reimport_rows": reimport_total,
+            "stored_rows_before": stored_before_total,
+            "stored_rows_after": stored_after_total,
+            "failures": reimport_diagnostics,
         },
-        "status": "passed",
+        "status": status,
     }
     if provenance()["source_content_sha256"] != before["source_content_sha256"]:
         raise RuntimeError("source changed during benchmark")
     (output / "benchmark.json").write_text(json.dumps(result, indent=2))
-    print(json.dumps({"status": "passed", "benchmark": str(output / "benchmark.json")}, indent=2))
+    print(
+        json.dumps(
+            {
+                "status": status,
+                "failed_checks": failed,
+                "benchmark": str(output / "benchmark.json"),
+            },
+            indent=2,
+        )
+    )
+    if failed:
+        raise SystemExit(1)
 
 
 def hashlib_dataset(seed: int, count: int) -> str:

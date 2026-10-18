@@ -52,3 +52,26 @@ proposal identity tests all pass. Final expanded result: 40 passed Python 3.13.1
 Python 3.14.8; own-core coverage96%, ledger91%. Wheel rebuilt/reinstalled and full PG demo
 from /tmp passed at /workspace/.results/meridian-installed-wheel-review-fixes-v2/report.html.
 Implementation writes are paused again for coordinator review/commit.
+
+## Workload failure propagation review
+
+Status: targeted fix verified; implementation writes paused. Demo/benchmark status and CLI
+exit now reflect all mandatory checks. Failed reports retain failed_checks plus actual audit
+and reimport diagnostics. Benchmark reimports compare ordered identities, distinct counts,
+and stored before/after row counts; public ci=1000 and standard=250000 journal dimensions
+are unchanged. Tests reduce only private ci fixture dimensions and assert actual report
+parameters; they are not advertised as full-profile benchmark evidence.
+
+Six targeted real-PostgreSQL CLI regressions passed on Python 3.14.8 (13.45 s) and 3.13.16
+(15.85 s): inconsistent independent audit; mismatched repeated-import identity; unexpected
+persisted statement row; normal passing benchmark; failed demo rebuild; mismatched duplicate
+journal response. Initial duplicate-response test adapter lacked Client's json method; corrected
+the response-shaped injected fixture, then reran all six successfully. Test connection-lifetime
+mutation is restored between fixtures to prevent cross-test client-session leaks.
+
+Commands: `uv run --locked pytest tests/acceptance/test_workload_failure_reporting.py -q`
+with separate MERIDIAN_TEST_DB_NAME per interpreter; explicit 3.13 environment uses
+`UV_PROJECT_ENVIRONMENT=/workspace/.cache/meridian-py313` and `--python 3.13.16`.
+Ruff format/check (53 files), strict mypy (33 modules), and sdist/wheel build pass.
+No heavy benchmark or full-suite repetition ran for this focused fix; coordinator will run
+both full suites and public ci workloads on the next immutable committed snapshot.
