@@ -1,0 +1,708 @@
+{
+  "schema_version": 1,
+  "judgment_protocol": "Topic and intent labels authored before running retrieval; no engine scores used. Graded 0..3; omitted documents are unjudged and treated as zero. Restricted documents excluded for public reader. Recall is pooled, not exhaustive web recall. Coordinator independent semantic audit requested.",
+  "seed": 1729,
+  "split_policy": "Seeded 30 development / 30 heldout, frozen before evaluation. Phrase constraint selected on development only.",
+  "queries": [
+    {
+      "id": "q00",
+      "query": "\"wal recovery\"",
+      "intent": "Find current guidance for wal recovery: A database process stopped after acknowledgment.",
+      "grades": {
+        "topic-00-runbook": 3,
+        "topic-00-design": 2,
+        "topic-00-incident": 1
+      },
+      "pool": "five authored topic-00 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q01",
+      "query": "\"lease fencing\"",
+      "intent": "Find current guidance for lease fencing: An expired worker continued writing after replacement.",
+      "grades": {
+        "topic-01-runbook": 3,
+        "topic-01-design": 2,
+        "topic-01-incident": 1
+      },
+      "pool": "five authored topic-01 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q02",
+      "query": "\"watermark delay\"",
+      "intent": "Find current guidance for watermark delay: A silent partition prevented event-time windows from closing.",
+      "grades": {
+        "topic-02-runbook": 3,
+        "topic-02-design": 2,
+        "topic-02-incident": 1
+      },
+      "pool": "five authored topic-02 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q03",
+      "query": "\"ledger reversal\"",
+      "intent": "Find current guidance for ledger reversal: An operator needs to correct a posted financial journal.",
+      "grades": {
+        "topic-03-runbook": 3,
+        "topic-03-design": 2,
+        "topic-03-incident": 1
+      },
+      "pool": "five authored topic-03 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q04",
+      "query": "\"schema evolution\"",
+      "intent": "Find current guidance for schema evolution: An upstream producer added a nullable column to a dataset.",
+      "grades": {
+        "topic-04-runbook": 3,
+        "topic-04-design": 2,
+        "topic-04-incident": 1
+      },
+      "pool": "five authored topic-04 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q05",
+      "query": "\"cache revocation\"",
+      "intent": "Find current guidance for cache revocation: A formerly authorized reader retained a cached result.",
+      "grades": {
+        "topic-05-runbook": 3,
+        "topic-05-design": 2,
+        "topic-05-incident": 1
+      },
+      "pool": "five authored topic-05 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q06",
+      "query": "\"snapshot isolation\"",
+      "intent": "Find current guidance for snapshot isolation: Two readers observed different revisions during a single report.",
+      "grades": {
+        "topic-06-runbook": 3,
+        "topic-06-design": 2,
+        "topic-06-incident": 1
+      },
+      "pool": "five authored topic-06 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q07",
+      "query": "\"phrase positions\"",
+      "intent": "Find current guidance for phrase positions: A search query matched words in the wrong order.",
+      "grades": {
+        "topic-07-runbook": 3,
+        "topic-07-design": 2,
+        "topic-07-incident": 1
+      },
+      "pool": "five authored topic-07 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q08",
+      "query": "\"unicode normalization\"",
+      "intent": "Find current guidance for unicode normalization: Equivalent accented strings produced different search results.",
+      "grades": {
+        "topic-08-runbook": 3,
+        "topic-08-design": 2,
+        "topic-08-incident": 1
+      },
+      "pool": "five authored topic-08 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q09",
+      "query": "\"retry budget\"",
+      "intent": "Find current guidance for retry budget: A transient provider failure caused unbounded work amplification.",
+      "grades": {
+        "topic-09-runbook": 3,
+        "topic-09-design": 2,
+        "topic-09-incident": 1
+      },
+      "pool": "five authored topic-09 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q10",
+      "query": "\"checkpoint restore\"",
+      "intent": "Find current guidance for checkpoint restore: A stream task restarted with inconsistent source and sink progress.",
+      "grades": {
+        "topic-10-runbook": 3,
+        "topic-10-design": 2,
+        "topic-10-incident": 1
+      },
+      "pool": "five authored topic-10 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q11",
+      "query": "\"idempotency conflict\"",
+      "intent": "Find current guidance for idempotency conflict: A client reused a request identity with a different payload.",
+      "grades": {
+        "topic-11-runbook": 3,
+        "topic-11-design": 2,
+        "topic-11-incident": 1
+      },
+      "pool": "five authored topic-11 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q12",
+      "query": "\"compaction safety\"",
+      "intent": "Find current guidance for compaction safety: A merge resurrected a value deleted by a newer tombstone.",
+      "grades": {
+        "topic-12-runbook": 3,
+        "topic-12-design": 2,
+        "topic-12-incident": 1
+      },
+      "pool": "five authored topic-12 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q13",
+      "query": "\"index corruption\"",
+      "intent": "Find current guidance for index corruption: An index segment changed after atomic publication.",
+      "grades": {
+        "topic-13-runbook": 3,
+        "topic-13-design": 2,
+        "topic-13-incident": 1
+      },
+      "pool": "five authored topic-13 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q14",
+      "query": "\"tenant namespace\"",
+      "intent": "Find current guidance for tenant namespace: Two organizations chose the same document identifier.",
+      "grades": {
+        "topic-14-runbook": 3,
+        "topic-14-design": 2,
+        "topic-14-incident": 1
+      },
+      "pool": "five authored topic-14 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q15",
+      "query": "\"group membership\"",
+      "intent": "Find current guidance for group membership: A team transfer left stale access grants on a service.",
+      "grades": {
+        "topic-15-runbook": 3,
+        "topic-15-design": 2,
+        "topic-15-incident": 1
+      },
+      "pool": "five authored topic-15 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q16",
+      "query": "\"backpressure queue\"",
+      "intent": "Find current guidance for backpressure queue: A producer outpaced the consumer until memory was exhausted.",
+      "grades": {
+        "topic-16-runbook": 3,
+        "topic-16-design": 2,
+        "topic-16-incident": 1
+      },
+      "pool": "five authored topic-16 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q17",
+      "query": "\"event deduplication\"",
+      "intent": "Find current guidance for event deduplication: A replayed message counted twice after a worker failure.",
+      "grades": {
+        "topic-17-runbook": 3,
+        "topic-17-design": 2,
+        "topic-17-incident": 1
+      },
+      "pool": "five authored topic-17 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q18",
+      "query": "\"timer persistence\"",
+      "intent": "Find current guidance for timer persistence: A long waiting workflow lost its wake-up after a restart.",
+      "grades": {
+        "topic-18-runbook": 3,
+        "topic-18-design": 2,
+        "topic-18-incident": 1
+      },
+      "pool": "five authored topic-18 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q19",
+      "query": "\"compensation order\"",
+      "intent": "Find current guidance for compensation order: A partially completed export left remote resources behind.",
+      "grades": {
+        "topic-19-runbook": 3,
+        "topic-19-design": 2,
+        "topic-19-incident": 1
+      },
+      "pool": "five authored topic-19 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q20",
+      "query": "\"safe rename\"",
+      "intent": "Find current guidance for safe rename: A refactor changed a shadowed identifier in an unrelated scope.",
+      "grades": {
+        "topic-20-runbook": 3,
+        "topic-20-design": 2,
+        "topic-20-incident": 1
+      },
+      "pool": "five authored topic-20 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q21",
+      "query": "\"taint propagation\"",
+      "intent": "Find current guidance for taint propagation: An untrusted source reached a command execution sink.",
+      "grades": {
+        "topic-21-runbook": 3,
+        "topic-21-design": 2,
+        "topic-21-incident": 1
+      },
+      "pool": "five authored topic-21 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q22",
+      "query": "\"dead code\"",
+      "intent": "Find current guidance for dead code: A variable was read only along an unreachable branch.",
+      "grades": {
+        "topic-22-runbook": 3,
+        "topic-22-design": 2,
+        "topic-22-incident": 1
+      },
+      "pool": "five authored topic-22 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q23",
+      "query": "\"artifact provenance\"",
+      "intent": "Find current guidance for artifact provenance: A model evaluation could not be matched to training inputs.",
+      "grades": {
+        "topic-23-runbook": 3,
+        "topic-23-design": 2,
+        "topic-23-incident": 1
+      },
+      "pool": "five authored topic-23 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q24",
+      "query": "\"data leakage\"",
+      "intent": "Find current guidance for data leakage: A transform was fitted on examples from the evaluation split.",
+      "grades": {
+        "topic-24-runbook": 3,
+        "topic-24-design": 2,
+        "topic-24-incident": 1
+      },
+      "pool": "five authored topic-24 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q25",
+      "query": "\"promotion rollback\"",
+      "intent": "Find current guidance for promotion rollback: A newly promoted model failed a monitored quality condition.",
+      "grades": {
+        "topic-25-runbook": 3,
+        "topic-25-design": 2,
+        "topic-25-incident": 1
+      },
+      "pool": "five authored topic-25 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q26",
+      "query": "\"route feasibility\"",
+      "intent": "Find current guidance for route feasibility: A fast routing heuristic exceeded vehicle capacity.",
+      "grades": {
+        "topic-26-runbook": 3,
+        "topic-26-design": 2,
+        "topic-26-incident": 1
+      },
+      "pool": "five authored topic-26 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q27",
+      "query": "\"time windows\"",
+      "intent": "Find current guidance for time windows: A vehicle arrived before service opening and missed a later stop.",
+      "grades": {
+        "topic-27-runbook": 3,
+        "topic-27-design": 2,
+        "topic-27-incident": 1
+      },
+      "pool": "five authored topic-27 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q28",
+      "query": "\"pitch octave\"",
+      "intent": "Find current guidance for pitch octave: A periodic waveform was decoded one octave too high.",
+      "grades": {
+        "topic-28-runbook": 3,
+        "topic-28-design": 2,
+        "topic-28-incident": 1
+      },
+      "pool": "five authored topic-28 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q29",
+      "query": "\"onset alignment\"",
+      "intent": "Find current guidance for onset alignment: Detected guitar attacks drifted relative to the reference notes.",
+      "grades": {
+        "topic-29-runbook": 3,
+        "topic-29-design": 2,
+        "topic-29-incident": 1
+      },
+      "pool": "five authored topic-29 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q30",
+      "query": "\"backup restore\"",
+      "intent": "Find current guidance for backup restore: A copied database omitted the current write-ahead log.",
+      "grades": {
+        "topic-30-runbook": 3,
+        "topic-30-design": 2,
+        "topic-30-incident": 1
+      },
+      "pool": "five authored topic-30 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q31",
+      "query": "\"atomic publication\"",
+      "intent": "Find current guidance for atomic publication: Readers saw a manifest before its referenced files were complete.",
+      "grades": {
+        "topic-31-runbook": 3,
+        "topic-31-design": 2,
+        "topic-31-incident": 1
+      },
+      "pool": "five authored topic-31 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q32",
+      "query": "\"bounded parser\"",
+      "intent": "Find current guidance for bounded parser: A malformed search expression consumed excessive resources.",
+      "grades": {
+        "topic-32-runbook": 3,
+        "topic-32-design": 2,
+        "topic-32-incident": 1
+      },
+      "pool": "five authored topic-32 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q33",
+      "query": "\"html escaping\"",
+      "intent": "Find current guidance for html escaping: A retrieved document contained script markup in its excerpt.",
+      "grades": {
+        "topic-33-runbook": 3,
+        "topic-33-design": 2,
+        "topic-33-incident": 1
+      },
+      "pool": "five authored topic-33 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q34",
+      "query": "\"token expiration\"",
+      "intent": "Find current guidance for token expiration: A demonstration credential remained usable after a session ended.",
+      "grades": {
+        "topic-34-runbook": 3,
+        "topic-34-design": 2,
+        "topic-34-incident": 1
+      },
+      "pool": "five authored topic-34 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q35",
+      "query": "\"readiness probe\"",
+      "intent": "Find current guidance for readiness probe: A live process served traffic despite a missing index segment.",
+      "grades": {
+        "topic-35-runbook": 3,
+        "topic-35-design": 2,
+        "topic-35-incident": 1
+      },
+      "pool": "five authored topic-35 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q36",
+      "query": "\"process cancellation\"",
+      "intent": "Find current guidance for process cancellation: An interrupted command left child workers running.",
+      "grades": {
+        "topic-36-runbook": 3,
+        "topic-36-design": 2,
+        "topic-36-incident": 1
+      },
+      "pool": "five authored topic-36 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q37",
+      "query": "\"memory budget\"",
+      "intent": "Find current guidance for memory budget: A large batch materialized multiple copies of the corpus.",
+      "grades": {
+        "topic-37-runbook": 3,
+        "topic-37-design": 2,
+        "topic-37-incident": 1
+      },
+      "pool": "five authored topic-37 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q38",
+      "query": "\"ranking explanation\"",
+      "intent": "Find current guidance for ranking explanation: A reviewer could not reproduce a document relevance score.",
+      "grades": {
+        "topic-38-runbook": 3,
+        "topic-38-design": 2,
+        "topic-38-incident": 1
+      },
+      "pool": "five authored topic-38 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q39",
+      "query": "\"relevance judgments\"",
+      "intent": "Find current guidance for relevance judgments: A search quality claim used generated documents without labels.",
+      "grades": {
+        "topic-39-runbook": 3,
+        "topic-39-design": 2,
+        "topic-39-incident": 1
+      },
+      "pool": "five authored topic-39 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q40",
+      "query": "\"transaction retry\"",
+      "intent": "Find current guidance for transaction retry: Two writers competed to publish the same generation.",
+      "grades": {
+        "topic-40-runbook": 3,
+        "topic-40-design": 2,
+        "topic-40-incident": 1
+      },
+      "pool": "five authored topic-40 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q41",
+      "query": "\"fsync boundary\"",
+      "intent": "Find current guidance for fsync boundary: A success response preceded durable persistence of an index file.",
+      "grades": {
+        "topic-41-runbook": 3,
+        "topic-41-design": 2,
+        "topic-41-incident": 1
+      },
+      "pool": "five authored topic-41 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q42",
+      "query": "\"deterministic tie\"",
+      "intent": "Find current guidance for deterministic tie: Identical scores produced unstable ranking between runs.",
+      "grades": {
+        "topic-42-runbook": 3,
+        "topic-42-design": 2,
+        "topic-42-incident": 1
+      },
+      "pool": "five authored topic-42 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q43",
+      "query": "\"metadata filter\"",
+      "intent": "Find current guidance for metadata filter: A type restriction accidentally used global scoring statistics.",
+      "grades": {
+        "topic-43-runbook": 3,
+        "topic-43-design": 2,
+        "topic-43-incident": 1
+      },
+      "pool": "five authored topic-43 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q44",
+      "query": "\"source offsets\"",
+      "intent": "Find current guidance for source offsets: A normalized character expansion shifted snippet highlighting.",
+      "grades": {
+        "topic-44-runbook": 3,
+        "topic-44-design": 2,
+        "topic-44-incident": 1
+      },
+      "pool": "five authored topic-44 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q45",
+      "query": "\"delete revision\"",
+      "intent": "Find current guidance for delete revision: A removed document reappeared from an old search segment.",
+      "grades": {
+        "topic-45-runbook": 3,
+        "topic-45-design": 2,
+        "topic-45-incident": 1
+      },
+      "pool": "five authored topic-45 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q46",
+      "query": "\"cold latency\"",
+      "intent": "Find current guidance for cold latency: A benchmark mixed disk startup costs with cached lookup times.",
+      "grades": {
+        "topic-46-runbook": 3,
+        "topic-46-design": 2,
+        "topic-46-incident": 1
+      },
+      "pool": "five authored topic-46 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q47",
+      "query": "\"audit trail\"",
+      "intent": "Find current guidance for audit trail: An administrator could not explain a permission-related result change.",
+      "grades": {
+        "topic-47-runbook": 3,
+        "topic-47-design": 2,
+        "topic-47-incident": 1
+      },
+      "pool": "five authored topic-47 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q48",
+      "query": "\"schema version\"",
+      "intent": "Find current guidance for schema version: A reader interpreted a new persisted layout using old assumptions.",
+      "grades": {
+        "topic-48-runbook": 3,
+        "topic-48-design": 2,
+        "topic-48-incident": 1
+      },
+      "pool": "five authored topic-48 documents; restricted doc excluded for public reader",
+      "split": "development"
+    },
+    {
+      "id": "q49",
+      "query": "\"path traversal\"",
+      "intent": "Find current guidance for path traversal: A tenant identifier attempted to escape its storage directory.",
+      "grades": {
+        "topic-49-runbook": 3,
+        "topic-49-design": 2,
+        "topic-49-incident": 1
+      },
+      "pool": "five authored topic-49 documents; restricted doc excluded for public reader",
+      "split": "heldout"
+    },
+    {
+      "id": "q50",
+      "query": "wal recovery type:runbook",
+      "intent": "Locate the operational procedure specifically for wal recovery.",
+      "grades": {
+        "topic-00-runbook": 3
+      },
+      "pool": "all runbooks manually checked by topic",
+      "split": "development"
+    },
+    {
+      "id": "q51",
+      "query": "ledger reversal type:runbook",
+      "intent": "Locate the operational procedure specifically for ledger reversal.",
+      "grades": {
+        "topic-03-runbook": 3
+      },
+      "pool": "all runbooks manually checked by topic",
+      "split": "heldout"
+    },
+    {
+      "id": "q52",
+      "query": "cache revocation type:runbook",
+      "intent": "Locate the operational procedure specifically for cache revocation.",
+      "grades": {
+        "topic-05-runbook": 3
+      },
+      "pool": "all runbooks manually checked by topic",
+      "split": "development"
+    },
+    {
+      "id": "q53",
+      "query": "unicode normalization type:runbook",
+      "intent": "Locate the operational procedure specifically for unicode normalization.",
+      "grades": {
+        "topic-08-runbook": 3
+      },
+      "pool": "all runbooks manually checked by topic",
+      "split": "development"
+    },
+    {
+      "id": "q54",
+      "query": "compaction safety type:runbook",
+      "intent": "Locate the operational procedure specifically for compaction safety.",
+      "grades": {
+        "topic-12-runbook": 3
+      },
+      "pool": "all runbooks manually checked by topic",
+      "split": "heldout"
+    },
+    {
+      "id": "q55",
+      "query": "event deduplication type:runbook",
+      "intent": "Locate the operational procedure specifically for event deduplication.",
+      "grades": {
+        "topic-17-runbook": 3
+      },
+      "pool": "all runbooks manually checked by topic",
+      "split": "development"
+    },
+    {
+      "id": "q56",
+      "query": "dead code type:runbook",
+      "intent": "Locate the operational procedure specifically for dead code.",
+      "grades": {
+        "topic-22-runbook": 3
+      },
+      "pool": "all runbooks manually checked by topic",
+      "split": "heldout"
+    },
+    {
+      "id": "q57",
+      "query": "pitch octave type:runbook",
+      "intent": "Locate the operational procedure specifically for pitch octave.",
+      "grades": {
+        "topic-28-runbook": 3
+      },
+      "pool": "all runbooks manually checked by topic",
+      "split": "development"
+    },
+    {
+      "id": "q58",
+      "query": "relevance judgments type:runbook",
+      "intent": "Locate the operational procedure specifically for relevance judgments.",
+      "grades": {
+        "topic-39-runbook": 3
+      },
+      "pool": "all runbooks manually checked by topic",
+      "split": "heldout"
+    },
+    {
+      "id": "q59",
+      "query": "delete revision type:runbook",
+      "intent": "Locate the operational procedure specifically for delete revision.",
+      "grades": {
+        "topic-45-runbook": 3
+      },
+      "pool": "all runbooks manually checked by topic",
+      "split": "development"
+    }
+  ]
+}

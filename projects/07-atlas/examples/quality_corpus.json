@@ -1,0 +1,3256 @@
+{
+  "schema_version": 1,
+  "provenance": "Original Atlas synthetic technical knowledge base; authored for this repository. No external copied assets.",
+  "documents": [
+    {
+      "id": "topic-00-runbook",
+      "title": "WAL recovery: runbook",
+      "text": "WAL recovery. Symptom: A database process stopped after acknowledgment. Procedure: Replay complete checksummed records and discard a torn final frame. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "wal-recovery",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-00-design",
+      "title": "WAL recovery: design",
+      "text": "WAL recovery. Design rationale: A database process stopped after acknowledgment. Decision: Replay complete checksummed records and discard a torn final frame. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "wal-recovery",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-00-incident",
+      "title": "WAL recovery: incident",
+      "text": "WAL recovery. During a synthetic reliability drill, the team observed this failure: A database process stopped after acknowledgment. Immediate mitigation: Replay complete checksummed records and discard a torn final frame. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "wal-recovery",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-00-restricted",
+      "title": "WAL recovery: restricted",
+      "text": "WAL recovery. Restricted drill notes. A database process stopped after acknowledgment. Internal remediation: Replay complete checksummed records and discard a torn final frame. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "wal-recovery",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-00-archive",
+      "title": "WAL recovery: archive",
+      "text": "WAL legacy recovery. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: wal unrelated discussion recovery. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "wal-recovery",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-01-runbook",
+      "title": "lease fencing: runbook",
+      "text": "lease fencing. Symptom: An expired worker continued writing after replacement. Procedure: Require a monotonically increasing epoch on every state-changing operation. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "lease-fencing",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-01-design",
+      "title": "lease fencing: design",
+      "text": "lease fencing. Design rationale: An expired worker continued writing after replacement. Decision: Require a monotonically increasing epoch on every state-changing operation. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "lease-fencing",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-01-incident",
+      "title": "lease fencing: incident",
+      "text": "lease fencing. During a synthetic reliability drill, the team observed this failure: An expired worker continued writing after replacement. Immediate mitigation: Require a monotonically increasing epoch on every state-changing operation. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "lease-fencing",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-01-restricted",
+      "title": "lease fencing: restricted",
+      "text": "lease fencing. Restricted drill notes. An expired worker continued writing after replacement. Internal remediation: Require a monotonically increasing epoch on every state-changing operation. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "lease-fencing",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-01-archive",
+      "title": "lease fencing: archive",
+      "text": "lease legacy fencing. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: lease unrelated discussion fencing. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "lease-fencing",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-02-runbook",
+      "title": "watermark delay: runbook",
+      "text": "watermark delay. Symptom: A silent partition prevented event-time windows from closing. Procedure: Mark idle partitions explicitly and restore the lower-bound contract on resumption. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "watermark-delay",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-02-design",
+      "title": "watermark delay: design",
+      "text": "watermark delay. Design rationale: A silent partition prevented event-time windows from closing. Decision: Mark idle partitions explicitly and restore the lower-bound contract on resumption. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "watermark-delay",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-02-incident",
+      "title": "watermark delay: incident",
+      "text": "watermark delay. During a synthetic reliability drill, the team observed this failure: A silent partition prevented event-time windows from closing. Immediate mitigation: Mark idle partitions explicitly and restore the lower-bound contract on resumption. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "watermark-delay",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-02-restricted",
+      "title": "watermark delay: restricted",
+      "text": "watermark delay. Restricted drill notes. A silent partition prevented event-time windows from closing. Internal remediation: Mark idle partitions explicitly and restore the lower-bound contract on resumption. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "watermark-delay",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-02-archive",
+      "title": "watermark delay: archive",
+      "text": "watermark legacy delay. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: watermark unrelated discussion delay. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "watermark-delay",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-03-runbook",
+      "title": "ledger reversal: runbook",
+      "text": "ledger reversal. Symptom: An operator needs to correct a posted financial journal. Procedure: Post a balanced reversing entry and preserve the original audit record. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "ledger-reversal",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-03-design",
+      "title": "ledger reversal: design",
+      "text": "ledger reversal. Design rationale: An operator needs to correct a posted financial journal. Decision: Post a balanced reversing entry and preserve the original audit record. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "ledger-reversal",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-03-incident",
+      "title": "ledger reversal: incident",
+      "text": "ledger reversal. During a synthetic reliability drill, the team observed this failure: An operator needs to correct a posted financial journal. Immediate mitigation: Post a balanced reversing entry and preserve the original audit record. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "ledger-reversal",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-03-restricted",
+      "title": "ledger reversal: restricted",
+      "text": "ledger reversal. Restricted drill notes. An operator needs to correct a posted financial journal. Internal remediation: Post a balanced reversing entry and preserve the original audit record. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "ledger-reversal",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-03-archive",
+      "title": "ledger reversal: archive",
+      "text": "ledger legacy reversal. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: ledger unrelated discussion reversal. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "ledger-reversal",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-04-runbook",
+      "title": "schema evolution: runbook",
+      "text": "schema evolution. Symptom: An upstream producer added a nullable column to a dataset. Procedure: Validate compatibility before publishing the new snapshot manifest. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "schema-evolution",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-04-design",
+      "title": "schema evolution: design",
+      "text": "schema evolution. Design rationale: An upstream producer added a nullable column to a dataset. Decision: Validate compatibility before publishing the new snapshot manifest. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "schema-evolution",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-04-incident",
+      "title": "schema evolution: incident",
+      "text": "schema evolution. During a synthetic reliability drill, the team observed this failure: An upstream producer added a nullable column to a dataset. Immediate mitigation: Validate compatibility before publishing the new snapshot manifest. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "schema-evolution",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-04-restricted",
+      "title": "schema evolution: restricted",
+      "text": "schema evolution. Restricted drill notes. An upstream producer added a nullable column to a dataset. Internal remediation: Validate compatibility before publishing the new snapshot manifest. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "schema-evolution",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-04-archive",
+      "title": "schema evolution: archive",
+      "text": "schema legacy evolution. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: schema unrelated discussion evolution. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "schema-evolution",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-05-runbook",
+      "title": "cache revocation: runbook",
+      "text": "cache revocation. Symptom: A formerly authorized reader retained a cached result. Procedure: Include the committed ACL revision and permission digest in cache identity. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "cache-revocation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-05-design",
+      "title": "cache revocation: design",
+      "text": "cache revocation. Design rationale: A formerly authorized reader retained a cached result. Decision: Include the committed ACL revision and permission digest in cache identity. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "cache-revocation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-05-incident",
+      "title": "cache revocation: incident",
+      "text": "cache revocation. During a synthetic reliability drill, the team observed this failure: A formerly authorized reader retained a cached result. Immediate mitigation: Include the committed ACL revision and permission digest in cache identity. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "cache-revocation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-05-restricted",
+      "title": "cache revocation: restricted",
+      "text": "cache revocation. Restricted drill notes. A formerly authorized reader retained a cached result. Internal remediation: Include the committed ACL revision and permission digest in cache identity. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "cache-revocation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-05-archive",
+      "title": "cache revocation: archive",
+      "text": "cache legacy revocation. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: cache unrelated discussion revocation. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "cache-revocation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-06-runbook",
+      "title": "snapshot isolation: runbook",
+      "text": "snapshot isolation. Symptom: Two readers observed different revisions during a single report. Procedure: Pin one generation and resolve all document versions through its metadata snapshot. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "snapshot-isolation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-06-design",
+      "title": "snapshot isolation: design",
+      "text": "snapshot isolation. Design rationale: Two readers observed different revisions during a single report. Decision: Pin one generation and resolve all document versions through its metadata snapshot. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "snapshot-isolation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-06-incident",
+      "title": "snapshot isolation: incident",
+      "text": "snapshot isolation. During a synthetic reliability drill, the team observed this failure: Two readers observed different revisions during a single report. Immediate mitigation: Pin one generation and resolve all document versions through its metadata snapshot. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "snapshot-isolation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-06-restricted",
+      "title": "snapshot isolation: restricted",
+      "text": "snapshot isolation. Restricted drill notes. Two readers observed different revisions during a single report. Internal remediation: Pin one generation and resolve all document versions through its metadata snapshot. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "snapshot-isolation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-06-archive",
+      "title": "snapshot isolation: archive",
+      "text": "snapshot legacy isolation. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: snapshot unrelated discussion isolation. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "snapshot-isolation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-07-runbook",
+      "title": "phrase positions: runbook",
+      "text": "phrase positions. Symptom: A search query matched words in the wrong order. Procedure: Intersect shifted positional postings for each term in the quoted phrase. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "phrase-positions",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-07-design",
+      "title": "phrase positions: design",
+      "text": "phrase positions. Design rationale: A search query matched words in the wrong order. Decision: Intersect shifted positional postings for each term in the quoted phrase. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "phrase-positions",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-07-incident",
+      "title": "phrase positions: incident",
+      "text": "phrase positions. During a synthetic reliability drill, the team observed this failure: A search query matched words in the wrong order. Immediate mitigation: Intersect shifted positional postings for each term in the quoted phrase. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "phrase-positions",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-07-restricted",
+      "title": "phrase positions: restricted",
+      "text": "phrase positions. Restricted drill notes. A search query matched words in the wrong order. Internal remediation: Intersect shifted positional postings for each term in the quoted phrase. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "phrase-positions",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-07-archive",
+      "title": "phrase positions: archive",
+      "text": "phrase legacy positions. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: phrase unrelated discussion positions. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "phrase-positions",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-08-runbook",
+      "title": "Unicode normalization: runbook",
+      "text": "Unicode normalization. Symptom: Equivalent accented strings produced different search results. Procedure: Normalize canonical clusters using NFKC and casefold while retaining source offsets. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "unicode-normalization",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-08-design",
+      "title": "Unicode normalization: design",
+      "text": "Unicode normalization. Design rationale: Equivalent accented strings produced different search results. Decision: Normalize canonical clusters using NFKC and casefold while retaining source offsets. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "unicode-normalization",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-08-incident",
+      "title": "Unicode normalization: incident",
+      "text": "Unicode normalization. During a synthetic reliability drill, the team observed this failure: Equivalent accented strings produced different search results. Immediate mitigation: Normalize canonical clusters using NFKC and casefold while retaining source offsets. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "unicode-normalization",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-08-restricted",
+      "title": "Unicode normalization: restricted",
+      "text": "Unicode normalization. Restricted drill notes. Equivalent accented strings produced different search results. Internal remediation: Normalize canonical clusters using NFKC and casefold while retaining source offsets. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "unicode-normalization",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-08-archive",
+      "title": "Unicode normalization: archive",
+      "text": "Unicode legacy normalization. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: unicode unrelated discussion normalization. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "unicode-normalization",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-09-runbook",
+      "title": "retry budget: runbook",
+      "text": "retry budget. Symptom: A transient provider failure caused unbounded work amplification. Procedure: Use capped attempts with exponential backoff and a bounded admission queue. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "retry-budget",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-09-design",
+      "title": "retry budget: design",
+      "text": "retry budget. Design rationale: A transient provider failure caused unbounded work amplification. Decision: Use capped attempts with exponential backoff and a bounded admission queue. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "retry-budget",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-09-incident",
+      "title": "retry budget: incident",
+      "text": "retry budget. During a synthetic reliability drill, the team observed this failure: A transient provider failure caused unbounded work amplification. Immediate mitigation: Use capped attempts with exponential backoff and a bounded admission queue. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "retry-budget",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-09-restricted",
+      "title": "retry budget: restricted",
+      "text": "retry budget. Restricted drill notes. A transient provider failure caused unbounded work amplification. Internal remediation: Use capped attempts with exponential backoff and a bounded admission queue. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "retry-budget",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-09-archive",
+      "title": "retry budget: archive",
+      "text": "retry legacy budget. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: retry unrelated discussion budget. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "retry-budget",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-10-runbook",
+      "title": "checkpoint restore: runbook",
+      "text": "checkpoint restore. Symptom: A stream task restarted with inconsistent source and sink progress. Procedure: Restore offsets, operator state, and sink publication from one durable checkpoint. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "checkpoint-restore",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-10-design",
+      "title": "checkpoint restore: design",
+      "text": "checkpoint restore. Design rationale: A stream task restarted with inconsistent source and sink progress. Decision: Restore offsets, operator state, and sink publication from one durable checkpoint. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "checkpoint-restore",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-10-incident",
+      "title": "checkpoint restore: incident",
+      "text": "checkpoint restore. During a synthetic reliability drill, the team observed this failure: A stream task restarted with inconsistent source and sink progress. Immediate mitigation: Restore offsets, operator state, and sink publication from one durable checkpoint. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "checkpoint-restore",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-10-restricted",
+      "title": "checkpoint restore: restricted",
+      "text": "checkpoint restore. Restricted drill notes. A stream task restarted with inconsistent source and sink progress. Internal remediation: Restore offsets, operator state, and sink publication from one durable checkpoint. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "checkpoint-restore",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-10-archive",
+      "title": "checkpoint restore: archive",
+      "text": "checkpoint legacy restore. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: checkpoint unrelated discussion restore. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "checkpoint-restore",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-11-runbook",
+      "title": "idempotency conflict: runbook",
+      "text": "idempotency conflict. Symptom: A client reused a request identity with a different payload. Procedure: Compare canonical request digests and reject mismatched replays. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "idempotency-conflict",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-11-design",
+      "title": "idempotency conflict: design",
+      "text": "idempotency conflict. Design rationale: A client reused a request identity with a different payload. Decision: Compare canonical request digests and reject mismatched replays. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "idempotency-conflict",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-11-incident",
+      "title": "idempotency conflict: incident",
+      "text": "idempotency conflict. During a synthetic reliability drill, the team observed this failure: A client reused a request identity with a different payload. Immediate mitigation: Compare canonical request digests and reject mismatched replays. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "idempotency-conflict",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-11-restricted",
+      "title": "idempotency conflict: restricted",
+      "text": "idempotency conflict. Restricted drill notes. A client reused a request identity with a different payload. Internal remediation: Compare canonical request digests and reject mismatched replays. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "idempotency-conflict",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-11-archive",
+      "title": "idempotency conflict: archive",
+      "text": "idempotency legacy conflict. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: idempotency unrelated discussion conflict. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "idempotency-conflict",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-12-runbook",
+      "title": "compaction safety: runbook",
+      "text": "compaction safety. Symptom: A merge resurrected a value deleted by a newer tombstone. Procedure: Keep tombstones until all overlapping older segments have been considered. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "compaction-safety",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-12-design",
+      "title": "compaction safety: design",
+      "text": "compaction safety. Design rationale: A merge resurrected a value deleted by a newer tombstone. Decision: Keep tombstones until all overlapping older segments have been considered. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "compaction-safety",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-12-incident",
+      "title": "compaction safety: incident",
+      "text": "compaction safety. During a synthetic reliability drill, the team observed this failure: A merge resurrected a value deleted by a newer tombstone. Immediate mitigation: Keep tombstones until all overlapping older segments have been considered. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "compaction-safety",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-12-restricted",
+      "title": "compaction safety: restricted",
+      "text": "compaction safety. Restricted drill notes. A merge resurrected a value deleted by a newer tombstone. Internal remediation: Keep tombstones until all overlapping older segments have been considered. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "compaction-safety",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-12-archive",
+      "title": "compaction safety: archive",
+      "text": "compaction legacy safety. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: compaction unrelated discussion safety. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "compaction-safety",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-13-runbook",
+      "title": "index corruption: runbook",
+      "text": "index corruption. Symptom: An index segment changed after atomic publication. Procedure: Verify the recorded digest and fail readiness rather than return partial content. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "index-corruption",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-13-design",
+      "title": "index corruption: design",
+      "text": "index corruption. Design rationale: An index segment changed after atomic publication. Decision: Verify the recorded digest and fail readiness rather than return partial content. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "index-corruption",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-13-incident",
+      "title": "index corruption: incident",
+      "text": "index corruption. During a synthetic reliability drill, the team observed this failure: An index segment changed after atomic publication. Immediate mitigation: Verify the recorded digest and fail readiness rather than return partial content. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "index-corruption",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-13-restricted",
+      "title": "index corruption: restricted",
+      "text": "index corruption. Restricted drill notes. An index segment changed after atomic publication. Internal remediation: Verify the recorded digest and fail readiness rather than return partial content. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "index-corruption",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-13-archive",
+      "title": "index corruption: archive",
+      "text": "index legacy corruption. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: index unrelated discussion corruption. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "index-corruption",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-14-runbook",
+      "title": "tenant namespace: runbook",
+      "text": "tenant namespace. Symptom: Two organizations chose the same document identifier. Procedure: Use physically separate catalogs and index directories for every tenant. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "tenant-namespace",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-14-design",
+      "title": "tenant namespace: design",
+      "text": "tenant namespace. Design rationale: Two organizations chose the same document identifier. Decision: Use physically separate catalogs and index directories for every tenant. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "tenant-namespace",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-14-incident",
+      "title": "tenant namespace: incident",
+      "text": "tenant namespace. During a synthetic reliability drill, the team observed this failure: Two organizations chose the same document identifier. Immediate mitigation: Use physically separate catalogs and index directories for every tenant. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "tenant-namespace",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-14-restricted",
+      "title": "tenant namespace: restricted",
+      "text": "tenant namespace. Restricted drill notes. Two organizations chose the same document identifier. Internal remediation: Use physically separate catalogs and index directories for every tenant. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "tenant-namespace",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-14-archive",
+      "title": "tenant namespace: archive",
+      "text": "tenant legacy namespace. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: tenant unrelated discussion namespace. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "tenant-namespace",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-15-runbook",
+      "title": "group membership: runbook",
+      "text": "group membership. Symptom: A team transfer left stale access grants on a service. Procedure: Resolve memberships from the current catalog transaction and increment the ACL revision. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "group-membership",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-15-design",
+      "title": "group membership: design",
+      "text": "group membership. Design rationale: A team transfer left stale access grants on a service. Decision: Resolve memberships from the current catalog transaction and increment the ACL revision. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "group-membership",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-15-incident",
+      "title": "group membership: incident",
+      "text": "group membership. During a synthetic reliability drill, the team observed this failure: A team transfer left stale access grants on a service. Immediate mitigation: Resolve memberships from the current catalog transaction and increment the ACL revision. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "group-membership",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-15-restricted",
+      "title": "group membership: restricted",
+      "text": "group membership. Restricted drill notes. A team transfer left stale access grants on a service. Internal remediation: Resolve memberships from the current catalog transaction and increment the ACL revision. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "group-membership",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-15-archive",
+      "title": "group membership: archive",
+      "text": "group legacy membership. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: group unrelated discussion membership. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "group-membership",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-16-runbook",
+      "title": "backpressure queue: runbook",
+      "text": "backpressure queue. Symptom: A producer outpaced the consumer until memory was exhausted. Procedure: Bound queue length and block admission while preserving cancellation. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "backpressure-queue",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-16-design",
+      "title": "backpressure queue: design",
+      "text": "backpressure queue. Design rationale: A producer outpaced the consumer until memory was exhausted. Decision: Bound queue length and block admission while preserving cancellation. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "backpressure-queue",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-16-incident",
+      "title": "backpressure queue: incident",
+      "text": "backpressure queue. During a synthetic reliability drill, the team observed this failure: A producer outpaced the consumer until memory was exhausted. Immediate mitigation: Bound queue length and block admission while preserving cancellation. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "backpressure-queue",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-16-restricted",
+      "title": "backpressure queue: restricted",
+      "text": "backpressure queue. Restricted drill notes. A producer outpaced the consumer until memory was exhausted. Internal remediation: Bound queue length and block admission while preserving cancellation. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "backpressure-queue",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-16-archive",
+      "title": "backpressure queue: archive",
+      "text": "backpressure legacy queue. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: backpressure unrelated discussion queue. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "backpressure-queue",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-17-runbook",
+      "title": "event deduplication: runbook",
+      "text": "event deduplication. Symptom: A replayed message counted twice after a worker failure. Procedure: Persist stable event identities in the same boundary as aggregate state. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "event-deduplication",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-17-design",
+      "title": "event deduplication: design",
+      "text": "event deduplication. Design rationale: A replayed message counted twice after a worker failure. Decision: Persist stable event identities in the same boundary as aggregate state. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "event-deduplication",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-17-incident",
+      "title": "event deduplication: incident",
+      "text": "event deduplication. During a synthetic reliability drill, the team observed this failure: A replayed message counted twice after a worker failure. Immediate mitigation: Persist stable event identities in the same boundary as aggregate state. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "event-deduplication",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-17-restricted",
+      "title": "event deduplication: restricted",
+      "text": "event deduplication. Restricted drill notes. A replayed message counted twice after a worker failure. Internal remediation: Persist stable event identities in the same boundary as aggregate state. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "event-deduplication",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-17-archive",
+      "title": "event deduplication: archive",
+      "text": "event legacy deduplication. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: event unrelated discussion deduplication. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "event-deduplication",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-18-runbook",
+      "title": "timer persistence: runbook",
+      "text": "timer persistence. Symptom: A long waiting workflow lost its wake-up after a restart. Procedure: Store due timestamps durably and claim timers with transactional leases. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "timer-persistence",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-18-design",
+      "title": "timer persistence: design",
+      "text": "timer persistence. Design rationale: A long waiting workflow lost its wake-up after a restart. Decision: Store due timestamps durably and claim timers with transactional leases. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "timer-persistence",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-18-incident",
+      "title": "timer persistence: incident",
+      "text": "timer persistence. During a synthetic reliability drill, the team observed this failure: A long waiting workflow lost its wake-up after a restart. Immediate mitigation: Store due timestamps durably and claim timers with transactional leases. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "timer-persistence",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-18-restricted",
+      "title": "timer persistence: restricted",
+      "text": "timer persistence. Restricted drill notes. A long waiting workflow lost its wake-up after a restart. Internal remediation: Store due timestamps durably and claim timers with transactional leases. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "timer-persistence",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-18-archive",
+      "title": "timer persistence: archive",
+      "text": "timer legacy persistence. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: timer unrelated discussion persistence. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "timer-persistence",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-19-runbook",
+      "title": "compensation order: runbook",
+      "text": "compensation order. Symptom: A partially completed export left remote resources behind. Procedure: Run idempotent compensations in reverse dependency order and record each result. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "compensation-order",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-19-design",
+      "title": "compensation order: design",
+      "text": "compensation order. Design rationale: A partially completed export left remote resources behind. Decision: Run idempotent compensations in reverse dependency order and record each result. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "compensation-order",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-19-incident",
+      "title": "compensation order: incident",
+      "text": "compensation order. During a synthetic reliability drill, the team observed this failure: A partially completed export left remote resources behind. Immediate mitigation: Run idempotent compensations in reverse dependency order and record each result. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "compensation-order",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-19-restricted",
+      "title": "compensation order: restricted",
+      "text": "compensation order. Restricted drill notes. A partially completed export left remote resources behind. Internal remediation: Run idempotent compensations in reverse dependency order and record each result. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "compensation-order",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-19-archive",
+      "title": "compensation order: archive",
+      "text": "compensation legacy order. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: compensation unrelated discussion order. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "compensation-order",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-20-runbook",
+      "title": "safe rename: runbook",
+      "text": "safe rename. Symptom: A refactor changed a shadowed identifier in an unrelated scope. Procedure: Use scope bindings and reject unresolved dynamic references before generating edits. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "safe-rename",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-20-design",
+      "title": "safe rename: design",
+      "text": "safe rename. Design rationale: A refactor changed a shadowed identifier in an unrelated scope. Decision: Use scope bindings and reject unresolved dynamic references before generating edits. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "safe-rename",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-20-incident",
+      "title": "safe rename: incident",
+      "text": "safe rename. During a synthetic reliability drill, the team observed this failure: A refactor changed a shadowed identifier in an unrelated scope. Immediate mitigation: Use scope bindings and reject unresolved dynamic references before generating edits. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "safe-rename",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-20-restricted",
+      "title": "safe rename: restricted",
+      "text": "safe rename. Restricted drill notes. A refactor changed a shadowed identifier in an unrelated scope. Internal remediation: Use scope bindings and reject unresolved dynamic references before generating edits. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "safe-rename",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-20-archive",
+      "title": "safe rename: archive",
+      "text": "safe legacy rename. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: safe unrelated discussion rename. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "safe-rename",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-21-runbook",
+      "title": "taint propagation: runbook",
+      "text": "taint propagation. Symptom: An untrusted source reached a command execution sink. Procedure: Track source-to-sink dataflow across assignments and expose the provenance trace. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "taint-propagation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-21-design",
+      "title": "taint propagation: design",
+      "text": "taint propagation. Design rationale: An untrusted source reached a command execution sink. Decision: Track source-to-sink dataflow across assignments and expose the provenance trace. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "taint-propagation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-21-incident",
+      "title": "taint propagation: incident",
+      "text": "taint propagation. During a synthetic reliability drill, the team observed this failure: An untrusted source reached a command execution sink. Immediate mitigation: Track source-to-sink dataflow across assignments and expose the provenance trace. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "taint-propagation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-21-restricted",
+      "title": "taint propagation: restricted",
+      "text": "taint propagation. Restricted drill notes. An untrusted source reached a command execution sink. Internal remediation: Track source-to-sink dataflow across assignments and expose the provenance trace. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "taint-propagation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-21-archive",
+      "title": "taint propagation: archive",
+      "text": "taint legacy propagation. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: taint unrelated discussion propagation. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "taint-propagation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-22-runbook",
+      "title": "dead code: runbook",
+      "text": "dead code. Symptom: A variable was read only along an unreachable branch. Procedure: Build explicit control-flow edges before computing liveness to a fixed point. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "dead-code",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-22-design",
+      "title": "dead code: design",
+      "text": "dead code. Design rationale: A variable was read only along an unreachable branch. Decision: Build explicit control-flow edges before computing liveness to a fixed point. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "dead-code",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-22-incident",
+      "title": "dead code: incident",
+      "text": "dead code. During a synthetic reliability drill, the team observed this failure: A variable was read only along an unreachable branch. Immediate mitigation: Build explicit control-flow edges before computing liveness to a fixed point. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "dead-code",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-22-restricted",
+      "title": "dead code: restricted",
+      "text": "dead code. Restricted drill notes. A variable was read only along an unreachable branch. Internal remediation: Build explicit control-flow edges before computing liveness to a fixed point. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "dead-code",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-22-archive",
+      "title": "dead code: archive",
+      "text": "dead legacy code. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: dead unrelated discussion code. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "dead-code",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-23-runbook",
+      "title": "artifact provenance: runbook",
+      "text": "artifact provenance. Symptom: A model evaluation could not be matched to training inputs. Procedure: Record immutable dataset, source, parameter, and dependency-lock digests. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "artifact-provenance",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-23-design",
+      "title": "artifact provenance: design",
+      "text": "artifact provenance. Design rationale: A model evaluation could not be matched to training inputs. Decision: Record immutable dataset, source, parameter, and dependency-lock digests. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "artifact-provenance",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-23-incident",
+      "title": "artifact provenance: incident",
+      "text": "artifact provenance. During a synthetic reliability drill, the team observed this failure: A model evaluation could not be matched to training inputs. Immediate mitigation: Record immutable dataset, source, parameter, and dependency-lock digests. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "artifact-provenance",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-23-restricted",
+      "title": "artifact provenance: restricted",
+      "text": "artifact provenance. Restricted drill notes. A model evaluation could not be matched to training inputs. Internal remediation: Record immutable dataset, source, parameter, and dependency-lock digests. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "artifact-provenance",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-23-archive",
+      "title": "artifact provenance: archive",
+      "text": "artifact legacy provenance. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: artifact unrelated discussion provenance. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "artifact-provenance",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-24-runbook",
+      "title": "data leakage: runbook",
+      "text": "data leakage. Symptom: A transform was fitted on examples from the evaluation split. Procedure: Fit preprocessing only on training data and persist the split assignment. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "data-leakage",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-24-design",
+      "title": "data leakage: design",
+      "text": "data leakage. Design rationale: A transform was fitted on examples from the evaluation split. Decision: Fit preprocessing only on training data and persist the split assignment. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "data-leakage",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-24-incident",
+      "title": "data leakage: incident",
+      "text": "data leakage. During a synthetic reliability drill, the team observed this failure: A transform was fitted on examples from the evaluation split. Immediate mitigation: Fit preprocessing only on training data and persist the split assignment. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "data-leakage",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-24-restricted",
+      "title": "data leakage: restricted",
+      "text": "data leakage. Restricted drill notes. A transform was fitted on examples from the evaluation split. Internal remediation: Fit preprocessing only on training data and persist the split assignment. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "data-leakage",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-24-archive",
+      "title": "data leakage: archive",
+      "text": "data legacy leakage. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: data unrelated discussion leakage. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "data-leakage",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-25-runbook",
+      "title": "promotion rollback: runbook",
+      "text": "promotion rollback. Symptom: A newly promoted model failed a monitored quality condition. Procedure: Move the serving pointer atomically back to a verified immutable release. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "promotion-rollback",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-25-design",
+      "title": "promotion rollback: design",
+      "text": "promotion rollback. Design rationale: A newly promoted model failed a monitored quality condition. Decision: Move the serving pointer atomically back to a verified immutable release. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "promotion-rollback",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-25-incident",
+      "title": "promotion rollback: incident",
+      "text": "promotion rollback. During a synthetic reliability drill, the team observed this failure: A newly promoted model failed a monitored quality condition. Immediate mitigation: Move the serving pointer atomically back to a verified immutable release. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "promotion-rollback",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-25-restricted",
+      "title": "promotion rollback: restricted",
+      "text": "promotion rollback. Restricted drill notes. A newly promoted model failed a monitored quality condition. Internal remediation: Move the serving pointer atomically back to a verified immutable release. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "promotion-rollback",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-25-archive",
+      "title": "promotion rollback: archive",
+      "text": "promotion legacy rollback. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: promotion unrelated discussion rollback. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "promotion-rollback",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-26-runbook",
+      "title": "route feasibility: runbook",
+      "text": "route feasibility. Symptom: A fast routing heuristic exceeded vehicle capacity. Procedure: Run an independent checker over the complete route and reject violations. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "route-feasibility",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-26-design",
+      "title": "route feasibility: design",
+      "text": "route feasibility. Design rationale: A fast routing heuristic exceeded vehicle capacity. Decision: Run an independent checker over the complete route and reject violations. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "route-feasibility",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-26-incident",
+      "title": "route feasibility: incident",
+      "text": "route feasibility. During a synthetic reliability drill, the team observed this failure: A fast routing heuristic exceeded vehicle capacity. Immediate mitigation: Run an independent checker over the complete route and reject violations. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "route-feasibility",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-26-restricted",
+      "title": "route feasibility: restricted",
+      "text": "route feasibility. Restricted drill notes. A fast routing heuristic exceeded vehicle capacity. Internal remediation: Run an independent checker over the complete route and reject violations. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "route-feasibility",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-26-archive",
+      "title": "route feasibility: archive",
+      "text": "route legacy feasibility. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: route unrelated discussion feasibility. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "route-feasibility",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-27-runbook",
+      "title": "time windows: runbook",
+      "text": "time windows. Symptom: A vehicle arrived before service opening and missed a later stop. Procedure: Propagate travel, waiting, and service durations in the feasibility calculation. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "time-windows",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-27-design",
+      "title": "time windows: design",
+      "text": "time windows. Design rationale: A vehicle arrived before service opening and missed a later stop. Decision: Propagate travel, waiting, and service durations in the feasibility calculation. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "time-windows",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-27-incident",
+      "title": "time windows: incident",
+      "text": "time windows. During a synthetic reliability drill, the team observed this failure: A vehicle arrived before service opening and missed a later stop. Immediate mitigation: Propagate travel, waiting, and service durations in the feasibility calculation. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "time-windows",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-27-restricted",
+      "title": "time windows: restricted",
+      "text": "time windows. Restricted drill notes. A vehicle arrived before service opening and missed a later stop. Internal remediation: Propagate travel, waiting, and service durations in the feasibility calculation. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "time-windows",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-27-archive",
+      "title": "time windows: archive",
+      "text": "time legacy windows. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: time unrelated discussion windows. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "time-windows",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-28-runbook",
+      "title": "pitch octave: runbook",
+      "text": "pitch octave. Symptom: A periodic waveform was decoded one octave too high. Procedure: Compare harmonic evidence and penalize implausible temporal pitch jumps. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "pitch-octave",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-28-design",
+      "title": "pitch octave: design",
+      "text": "pitch octave. Design rationale: A periodic waveform was decoded one octave too high. Decision: Compare harmonic evidence and penalize implausible temporal pitch jumps. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "pitch-octave",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-28-incident",
+      "title": "pitch octave: incident",
+      "text": "pitch octave. During a synthetic reliability drill, the team observed this failure: A periodic waveform was decoded one octave too high. Immediate mitigation: Compare harmonic evidence and penalize implausible temporal pitch jumps. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "pitch-octave",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-28-restricted",
+      "title": "pitch octave: restricted",
+      "text": "pitch octave. Restricted drill notes. A periodic waveform was decoded one octave too high. Internal remediation: Compare harmonic evidence and penalize implausible temporal pitch jumps. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "pitch-octave",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-28-archive",
+      "title": "pitch octave: archive",
+      "text": "pitch legacy octave. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: pitch unrelated discussion octave. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "pitch-octave",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-29-runbook",
+      "title": "onset alignment: runbook",
+      "text": "onset alignment. Symptom: Detected guitar attacks drifted relative to the reference notes. Procedure: Use one sample-rate convention and explicitly account for window centering. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "onset-alignment",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-29-design",
+      "title": "onset alignment: design",
+      "text": "onset alignment. Design rationale: Detected guitar attacks drifted relative to the reference notes. Decision: Use one sample-rate convention and explicitly account for window centering. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "onset-alignment",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-29-incident",
+      "title": "onset alignment: incident",
+      "text": "onset alignment. During a synthetic reliability drill, the team observed this failure: Detected guitar attacks drifted relative to the reference notes. Immediate mitigation: Use one sample-rate convention and explicitly account for window centering. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "onset-alignment",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-29-restricted",
+      "title": "onset alignment: restricted",
+      "text": "onset alignment. Restricted drill notes. Detected guitar attacks drifted relative to the reference notes. Internal remediation: Use one sample-rate convention and explicitly account for window centering. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "onset-alignment",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-29-archive",
+      "title": "onset alignment: archive",
+      "text": "onset legacy alignment. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: onset unrelated discussion alignment. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "onset-alignment",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-30-runbook",
+      "title": "backup restore: runbook",
+      "text": "backup restore. Symptom: A copied database omitted the current write-ahead log. Procedure: Take a consistent database backup and verify restoration before retention cleanup. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "backup-restore",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-30-design",
+      "title": "backup restore: design",
+      "text": "backup restore. Design rationale: A copied database omitted the current write-ahead log. Decision: Take a consistent database backup and verify restoration before retention cleanup. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "backup-restore",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-30-incident",
+      "title": "backup restore: incident",
+      "text": "backup restore. During a synthetic reliability drill, the team observed this failure: A copied database omitted the current write-ahead log. Immediate mitigation: Take a consistent database backup and verify restoration before retention cleanup. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "backup-restore",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-30-restricted",
+      "title": "backup restore: restricted",
+      "text": "backup restore. Restricted drill notes. A copied database omitted the current write-ahead log. Internal remediation: Take a consistent database backup and verify restoration before retention cleanup. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "backup-restore",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-30-archive",
+      "title": "backup restore: archive",
+      "text": "backup legacy restore. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: backup unrelated discussion restore. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "backup-restore",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-31-runbook",
+      "title": "atomic publication: runbook",
+      "text": "atomic publication. Symptom: Readers saw a manifest before its referenced files were complete. Procedure: Fsync immutable files before committing their manifest pointer transaction. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "atomic-publication",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-31-design",
+      "title": "atomic publication: design",
+      "text": "atomic publication. Design rationale: Readers saw a manifest before its referenced files were complete. Decision: Fsync immutable files before committing their manifest pointer transaction. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "atomic-publication",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-31-incident",
+      "title": "atomic publication: incident",
+      "text": "atomic publication. During a synthetic reliability drill, the team observed this failure: Readers saw a manifest before its referenced files were complete. Immediate mitigation: Fsync immutable files before committing their manifest pointer transaction. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "atomic-publication",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-31-restricted",
+      "title": "atomic publication: restricted",
+      "text": "atomic publication. Restricted drill notes. Readers saw a manifest before its referenced files were complete. Internal remediation: Fsync immutable files before committing their manifest pointer transaction. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "atomic-publication",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-31-archive",
+      "title": "atomic publication: archive",
+      "text": "atomic legacy publication. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: atomic unrelated discussion publication. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "atomic-publication",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-32-runbook",
+      "title": "bounded parser: runbook",
+      "text": "bounded parser. Symptom: A malformed search expression consumed excessive resources. Procedure: Limit bytes, operands, phrase length, filters, and pagination before execution. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "bounded-parser",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-32-design",
+      "title": "bounded parser: design",
+      "text": "bounded parser. Design rationale: A malformed search expression consumed excessive resources. Decision: Limit bytes, operands, phrase length, filters, and pagination before execution. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "bounded-parser",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-32-incident",
+      "title": "bounded parser: incident",
+      "text": "bounded parser. During a synthetic reliability drill, the team observed this failure: A malformed search expression consumed excessive resources. Immediate mitigation: Limit bytes, operands, phrase length, filters, and pagination before execution. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "bounded-parser",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-32-restricted",
+      "title": "bounded parser: restricted",
+      "text": "bounded parser. Restricted drill notes. A malformed search expression consumed excessive resources. Internal remediation: Limit bytes, operands, phrase length, filters, and pagination before execution. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "bounded-parser",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-32-archive",
+      "title": "bounded parser: archive",
+      "text": "bounded legacy parser. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: bounded unrelated discussion parser. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "bounded-parser",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-33-runbook",
+      "title": "HTML escaping: runbook",
+      "text": "HTML escaping. Symptom: A retrieved document contained script markup in its excerpt. Procedure: Escape source text before adding narrowly controlled highlighting tags. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "html-escaping",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-33-design",
+      "title": "HTML escaping: design",
+      "text": "HTML escaping. Design rationale: A retrieved document contained script markup in its excerpt. Decision: Escape source text before adding narrowly controlled highlighting tags. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "html-escaping",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-33-incident",
+      "title": "HTML escaping: incident",
+      "text": "HTML escaping. During a synthetic reliability drill, the team observed this failure: A retrieved document contained script markup in its excerpt. Immediate mitigation: Escape source text before adding narrowly controlled highlighting tags. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "html-escaping",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-33-restricted",
+      "title": "HTML escaping: restricted",
+      "text": "HTML escaping. Restricted drill notes. A retrieved document contained script markup in its excerpt. Internal remediation: Escape source text before adding narrowly controlled highlighting tags. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "html-escaping",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-33-archive",
+      "title": "HTML escaping: archive",
+      "text": "HTML legacy escaping. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: html unrelated discussion escaping. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "html-escaping",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-34-runbook",
+      "title": "token expiration: runbook",
+      "text": "token expiration. Symptom: A demonstration credential remained usable after a session ended. Procedure: Rotate server-side token bindings and isolate loopback demonstrations from public traffic. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "token-expiration",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-34-design",
+      "title": "token expiration: design",
+      "text": "token expiration. Design rationale: A demonstration credential remained usable after a session ended. Decision: Rotate server-side token bindings and isolate loopback demonstrations from public traffic. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "token-expiration",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-34-incident",
+      "title": "token expiration: incident",
+      "text": "token expiration. During a synthetic reliability drill, the team observed this failure: A demonstration credential remained usable after a session ended. Immediate mitigation: Rotate server-side token bindings and isolate loopback demonstrations from public traffic. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "token-expiration",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-34-restricted",
+      "title": "token expiration: restricted",
+      "text": "token expiration. Restricted drill notes. A demonstration credential remained usable after a session ended. Internal remediation: Rotate server-side token bindings and isolate loopback demonstrations from public traffic. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "token-expiration",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-34-archive",
+      "title": "token expiration: archive",
+      "text": "token legacy expiration. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: token unrelated discussion expiration. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "token-expiration",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-35-runbook",
+      "title": "readiness probe: runbook",
+      "text": "readiness probe. Symptom: A live process served traffic despite a missing index segment. Procedure: Distinguish process health from full catalog and segment integrity validation. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "readiness-probe",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-35-design",
+      "title": "readiness probe: design",
+      "text": "readiness probe. Design rationale: A live process served traffic despite a missing index segment. Decision: Distinguish process health from full catalog and segment integrity validation. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "readiness-probe",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-35-incident",
+      "title": "readiness probe: incident",
+      "text": "readiness probe. During a synthetic reliability drill, the team observed this failure: A live process served traffic despite a missing index segment. Immediate mitigation: Distinguish process health from full catalog and segment integrity validation. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "readiness-probe",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-35-restricted",
+      "title": "readiness probe: restricted",
+      "text": "readiness probe. Restricted drill notes. A live process served traffic despite a missing index segment. Internal remediation: Distinguish process health from full catalog and segment integrity validation. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "readiness-probe",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-35-archive",
+      "title": "readiness probe: archive",
+      "text": "readiness legacy probe. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: readiness unrelated discussion probe. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "readiness-probe",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-36-runbook",
+      "title": "process cancellation: runbook",
+      "text": "process cancellation. Symptom: An interrupted command left child workers running. Procedure: Use explicit task ownership, bounded shutdown, and subprocess cleanup on failure. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "process-cancellation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-36-design",
+      "title": "process cancellation: design",
+      "text": "process cancellation. Design rationale: An interrupted command left child workers running. Decision: Use explicit task ownership, bounded shutdown, and subprocess cleanup on failure. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "process-cancellation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-36-incident",
+      "title": "process cancellation: incident",
+      "text": "process cancellation. During a synthetic reliability drill, the team observed this failure: An interrupted command left child workers running. Immediate mitigation: Use explicit task ownership, bounded shutdown, and subprocess cleanup on failure. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "process-cancellation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-36-restricted",
+      "title": "process cancellation: restricted",
+      "text": "process cancellation. Restricted drill notes. An interrupted command left child workers running. Internal remediation: Use explicit task ownership, bounded shutdown, and subprocess cleanup on failure. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "process-cancellation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-36-archive",
+      "title": "process cancellation: archive",
+      "text": "process legacy cancellation. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: process unrelated discussion cancellation. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "process-cancellation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-37-runbook",
+      "title": "memory budget: runbook",
+      "text": "memory budget. Symptom: A large batch materialized multiple copies of the corpus. Procedure: Measure peak resident memory and stream immutable output within the documented budget. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "memory-budget",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-37-design",
+      "title": "memory budget: design",
+      "text": "memory budget. Design rationale: A large batch materialized multiple copies of the corpus. Decision: Measure peak resident memory and stream immutable output within the documented budget. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "memory-budget",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-37-incident",
+      "title": "memory budget: incident",
+      "text": "memory budget. During a synthetic reliability drill, the team observed this failure: A large batch materialized multiple copies of the corpus. Immediate mitigation: Measure peak resident memory and stream immutable output within the documented budget. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "memory-budget",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-37-restricted",
+      "title": "memory budget: restricted",
+      "text": "memory budget. Restricted drill notes. A large batch materialized multiple copies of the corpus. Internal remediation: Measure peak resident memory and stream immutable output within the documented budget. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "memory-budget",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-37-archive",
+      "title": "memory budget: archive",
+      "text": "memory legacy budget. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: memory unrelated discussion budget. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "memory-budget",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-38-runbook",
+      "title": "ranking explanation: runbook",
+      "text": "ranking explanation. Symptom: A reviewer could not reproduce a document relevance score. Procedure: Report per-term frequency, visible statistics, and the fixed BM25 parameters. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "ranking-explanation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-38-design",
+      "title": "ranking explanation: design",
+      "text": "ranking explanation. Design rationale: A reviewer could not reproduce a document relevance score. Decision: Report per-term frequency, visible statistics, and the fixed BM25 parameters. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "ranking-explanation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-38-incident",
+      "title": "ranking explanation: incident",
+      "text": "ranking explanation. During a synthetic reliability drill, the team observed this failure: A reviewer could not reproduce a document relevance score. Immediate mitigation: Report per-term frequency, visible statistics, and the fixed BM25 parameters. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "ranking-explanation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-38-restricted",
+      "title": "ranking explanation: restricted",
+      "text": "ranking explanation. Restricted drill notes. A reviewer could not reproduce a document relevance score. Internal remediation: Report per-term frequency, visible statistics, and the fixed BM25 parameters. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "ranking-explanation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-38-archive",
+      "title": "ranking explanation: archive",
+      "text": "ranking legacy explanation. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: ranking unrelated discussion explanation. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "ranking-explanation",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-39-runbook",
+      "title": "relevance judgments: runbook",
+      "text": "relevance judgments. Symptom: A search quality claim used generated documents without labels. Procedure: Evaluate a separately judged collection with a frozen held-out query split. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "relevance-judgments",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-39-design",
+      "title": "relevance judgments: design",
+      "text": "relevance judgments. Design rationale: A search quality claim used generated documents without labels. Decision: Evaluate a separately judged collection with a frozen held-out query split. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "relevance-judgments",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-39-incident",
+      "title": "relevance judgments: incident",
+      "text": "relevance judgments. During a synthetic reliability drill, the team observed this failure: A search quality claim used generated documents without labels. Immediate mitigation: Evaluate a separately judged collection with a frozen held-out query split. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "relevance-judgments",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-39-restricted",
+      "title": "relevance judgments: restricted",
+      "text": "relevance judgments. Restricted drill notes. A search quality claim used generated documents without labels. Internal remediation: Evaluate a separately judged collection with a frozen held-out query split. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "relevance-judgments",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-39-archive",
+      "title": "relevance judgments: archive",
+      "text": "relevance legacy judgments. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: relevance unrelated discussion judgments. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "relevance-judgments",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-40-runbook",
+      "title": "transaction retry: runbook",
+      "text": "transaction retry. Symptom: Two writers competed to publish the same generation. Procedure: Serialize catalog changes and reject stale compare-and-publish attempts. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "transaction-retry",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-40-design",
+      "title": "transaction retry: design",
+      "text": "transaction retry. Design rationale: Two writers competed to publish the same generation. Decision: Serialize catalog changes and reject stale compare-and-publish attempts. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "transaction-retry",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-40-incident",
+      "title": "transaction retry: incident",
+      "text": "transaction retry. During a synthetic reliability drill, the team observed this failure: Two writers competed to publish the same generation. Immediate mitigation: Serialize catalog changes and reject stale compare-and-publish attempts. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "transaction-retry",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-40-restricted",
+      "title": "transaction retry: restricted",
+      "text": "transaction retry. Restricted drill notes. Two writers competed to publish the same generation. Internal remediation: Serialize catalog changes and reject stale compare-and-publish attempts. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "transaction-retry",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-40-archive",
+      "title": "transaction retry: archive",
+      "text": "transaction legacy retry. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: transaction unrelated discussion retry. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "transaction-retry",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-41-runbook",
+      "title": "fsync boundary: runbook",
+      "text": "fsync boundary. Symptom: A success response preceded durable persistence of an index file. Procedure: Flush file contents and the containing directory before metadata acknowledgment. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "fsync-boundary",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-41-design",
+      "title": "fsync boundary: design",
+      "text": "fsync boundary. Design rationale: A success response preceded durable persistence of an index file. Decision: Flush file contents and the containing directory before metadata acknowledgment. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "fsync-boundary",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-41-incident",
+      "title": "fsync boundary: incident",
+      "text": "fsync boundary. During a synthetic reliability drill, the team observed this failure: A success response preceded durable persistence of an index file. Immediate mitigation: Flush file contents and the containing directory before metadata acknowledgment. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "fsync-boundary",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-41-restricted",
+      "title": "fsync boundary: restricted",
+      "text": "fsync boundary. Restricted drill notes. A success response preceded durable persistence of an index file. Internal remediation: Flush file contents and the containing directory before metadata acknowledgment. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "fsync-boundary",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-41-archive",
+      "title": "fsync boundary: archive",
+      "text": "fsync legacy boundary. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: fsync unrelated discussion boundary. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "fsync-boundary",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-42-runbook",
+      "title": "deterministic tie: runbook",
+      "text": "deterministic tie. Symptom: Identical scores produced unstable ranking between runs. Procedure: Break score ties by stable document identifier and preserve this in top-k selection. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "deterministic-tie",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-42-design",
+      "title": "deterministic tie: design",
+      "text": "deterministic tie. Design rationale: Identical scores produced unstable ranking between runs. Decision: Break score ties by stable document identifier and preserve this in top-k selection. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "deterministic-tie",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-42-incident",
+      "title": "deterministic tie: incident",
+      "text": "deterministic tie. During a synthetic reliability drill, the team observed this failure: Identical scores produced unstable ranking between runs. Immediate mitigation: Break score ties by stable document identifier and preserve this in top-k selection. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "deterministic-tie",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-42-restricted",
+      "title": "deterministic tie: restricted",
+      "text": "deterministic tie. Restricted drill notes. Identical scores produced unstable ranking between runs. Internal remediation: Break score ties by stable document identifier and preserve this in top-k selection. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "deterministic-tie",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-42-archive",
+      "title": "deterministic tie: archive",
+      "text": "deterministic legacy tie. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: deterministic unrelated discussion tie. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "deterministic-tie",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-43-runbook",
+      "title": "metadata filter: runbook",
+      "text": "metadata filter. Symptom: A type restriction accidentally used global scoring statistics. Procedure: Intersect explicit filters with visibility before document-frequency calculation. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "metadata-filter",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-43-design",
+      "title": "metadata filter: design",
+      "text": "metadata filter. Design rationale: A type restriction accidentally used global scoring statistics. Decision: Intersect explicit filters with visibility before document-frequency calculation. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "metadata-filter",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-43-incident",
+      "title": "metadata filter: incident",
+      "text": "metadata filter. During a synthetic reliability drill, the team observed this failure: A type restriction accidentally used global scoring statistics. Immediate mitigation: Intersect explicit filters with visibility before document-frequency calculation. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "metadata-filter",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-43-restricted",
+      "title": "metadata filter: restricted",
+      "text": "metadata filter. Restricted drill notes. A type restriction accidentally used global scoring statistics. Internal remediation: Intersect explicit filters with visibility before document-frequency calculation. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "metadata-filter",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-43-archive",
+      "title": "metadata filter: archive",
+      "text": "metadata legacy filter. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: metadata unrelated discussion filter. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "metadata-filter",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-44-runbook",
+      "title": "source offsets: runbook",
+      "text": "source offsets. Symptom: A normalized character expansion shifted snippet highlighting. Procedure: Carry original start and end character boundaries through tokenization. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "source-offsets",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-44-design",
+      "title": "source offsets: design",
+      "text": "source offsets. Design rationale: A normalized character expansion shifted snippet highlighting. Decision: Carry original start and end character boundaries through tokenization. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "source-offsets",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-44-incident",
+      "title": "source offsets: incident",
+      "text": "source offsets. During a synthetic reliability drill, the team observed this failure: A normalized character expansion shifted snippet highlighting. Immediate mitigation: Carry original start and end character boundaries through tokenization. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "source-offsets",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-44-restricted",
+      "title": "source offsets: restricted",
+      "text": "source offsets. Restricted drill notes. A normalized character expansion shifted snippet highlighting. Internal remediation: Carry original start and end character boundaries through tokenization. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "source-offsets",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-44-archive",
+      "title": "source offsets: archive",
+      "text": "source legacy offsets. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: source unrelated discussion offsets. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "source-offsets",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-45-runbook",
+      "title": "delete revision: runbook",
+      "text": "delete revision. Symptom: A removed document reappeared from an old search segment. Procedure: Resolve postings through current catalog revisions and exclude all deleted identities. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "delete-revision",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-45-design",
+      "title": "delete revision: design",
+      "text": "delete revision. Design rationale: A removed document reappeared from an old search segment. Decision: Resolve postings through current catalog revisions and exclude all deleted identities. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "delete-revision",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-45-incident",
+      "title": "delete revision: incident",
+      "text": "delete revision. During a synthetic reliability drill, the team observed this failure: A removed document reappeared from an old search segment. Immediate mitigation: Resolve postings through current catalog revisions and exclude all deleted identities. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "delete-revision",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-45-restricted",
+      "title": "delete revision: restricted",
+      "text": "delete revision. Restricted drill notes. A removed document reappeared from an old search segment. Internal remediation: Resolve postings through current catalog revisions and exclude all deleted identities. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "delete-revision",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-45-archive",
+      "title": "delete revision: archive",
+      "text": "delete legacy revision. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: delete unrelated discussion revision. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "delete-revision",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-46-runbook",
+      "title": "cold latency: runbook",
+      "text": "cold latency. Symptom: A benchmark mixed disk startup costs with cached lookup times. Procedure: Record cold index loading separately from repeated warm query measurements. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "cold-latency",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-46-design",
+      "title": "cold latency: design",
+      "text": "cold latency. Design rationale: A benchmark mixed disk startup costs with cached lookup times. Decision: Record cold index loading separately from repeated warm query measurements. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "cold-latency",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-46-incident",
+      "title": "cold latency: incident",
+      "text": "cold latency. During a synthetic reliability drill, the team observed this failure: A benchmark mixed disk startup costs with cached lookup times. Immediate mitigation: Record cold index loading separately from repeated warm query measurements. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "cold-latency",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-46-restricted",
+      "title": "cold latency: restricted",
+      "text": "cold latency. Restricted drill notes. A benchmark mixed disk startup costs with cached lookup times. Internal remediation: Record cold index loading separately from repeated warm query measurements. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "cold-latency",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-46-archive",
+      "title": "cold latency: archive",
+      "text": "cold legacy latency. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: cold unrelated discussion latency. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "cold-latency",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-47-runbook",
+      "title": "audit trail: runbook",
+      "text": "audit trail. Symptom: An administrator could not explain a permission-related result change. Procedure: Record generation and committed ACL revision in every search response. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "audit-trail",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-47-design",
+      "title": "audit trail: design",
+      "text": "audit trail. Design rationale: An administrator could not explain a permission-related result change. Decision: Record generation and committed ACL revision in every search response. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "audit-trail",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-47-incident",
+      "title": "audit trail: incident",
+      "text": "audit trail. During a synthetic reliability drill, the team observed this failure: An administrator could not explain a permission-related result change. Immediate mitigation: Record generation and committed ACL revision in every search response. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "audit-trail",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-47-restricted",
+      "title": "audit trail: restricted",
+      "text": "audit trail. Restricted drill notes. An administrator could not explain a permission-related result change. Internal remediation: Record generation and committed ACL revision in every search response. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "audit-trail",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-47-archive",
+      "title": "audit trail: archive",
+      "text": "audit legacy trail. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: audit unrelated discussion trail. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "audit-trail",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-48-runbook",
+      "title": "schema version: runbook",
+      "text": "schema version. Symptom: A reader interpreted a new persisted layout using old assumptions. Procedure: Reject unknown format and tokenizer versions before reading any content. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "schema-version",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-48-design",
+      "title": "schema version: design",
+      "text": "schema version. Design rationale: A reader interpreted a new persisted layout using old assumptions. Decision: Reject unknown format and tokenizer versions before reading any content. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "schema-version",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-48-incident",
+      "title": "schema version: incident",
+      "text": "schema version. During a synthetic reliability drill, the team observed this failure: A reader interpreted a new persisted layout using old assumptions. Immediate mitigation: Reject unknown format and tokenizer versions before reading any content. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "schema-version",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-48-restricted",
+      "title": "schema version: restricted",
+      "text": "schema version. Restricted drill notes. A reader interpreted a new persisted layout using old assumptions. Internal remediation: Reject unknown format and tokenizer versions before reading any content. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "schema-version",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-48-archive",
+      "title": "schema version: archive",
+      "text": "schema legacy version. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: schema unrelated discussion version. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "schema-version",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-49-runbook",
+      "title": "path traversal: runbook",
+      "text": "path traversal. Symptom: A tenant identifier attempted to escape its storage directory. Procedure: Map tenant identities to a fixed digest rather than joining untrusted paths. Verification: repeat the original operation and inspect the committed state. Stop if integrity validation fails. Record the incident identity and observed generation before escalation.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "runbook",
+        "tag": "path-traversal",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-49-design",
+      "title": "path traversal: design",
+      "text": "path traversal. Design rationale: A tenant identifier attempted to escape its storage directory. Decision: Map tenant identities to a fixed digest rather than joining untrusted paths. A local process can fail at any persistence boundary, so acknowledgments need an explicit contract. We prefer auditable state transitions to a hidden mutable pointer. Rejected alternative: return partial success without explaining omitted records.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "design",
+        "tag": "path-traversal",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-49-incident",
+      "title": "path traversal: incident",
+      "text": "path traversal. During a synthetic reliability drill, the team observed this failure: A tenant identifier attempted to escape its storage directory. Immediate mitigation: Map tenant identities to a fixed digest rather than joining untrusted paths. No customer deployment is claimed. The regression fixture repeats the failure and compares against an independently derived invariant.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "incident",
+        "tag": "path-traversal",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-49-restricted",
+      "title": "path traversal: restricted",
+      "text": "path traversal. Restricted drill notes. A tenant identifier attempted to escape its storage directory. Internal remediation: Map tenant identities to a fixed digest rather than joining untrusted paths. This document is intentionally limited to the operations group. Never expose this text through public facets, counts, snippets, or global ranking statistics.",
+      "acl": [
+        "group:ops"
+      ],
+      "metadata": {
+        "type": "restricted",
+        "tag": "path-traversal",
+        "source": "original-atlas-kb-v1"
+      }
+    },
+    {
+      "id": "topic-49-archive",
+      "title": "path traversal: archive",
+      "text": "path legacy traversal. Historical brainstorming with no current operational guidance. The separate words are present only as old tags: path unrelated discussion traversal. This archival note is not a remediation procedure. Prefer the current runbook when diagnosing failures.",
+      "acl": [
+        "*"
+      ],
+      "metadata": {
+        "type": "archive",
+        "tag": "path-traversal",
+        "source": "original-atlas-kb-v1"
+      }
+    }
+  ]
+}

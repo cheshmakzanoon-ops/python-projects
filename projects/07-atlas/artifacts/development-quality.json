@@ -1,0 +1,3100 @@
+{
+  "schema_version": 1,
+  "project": "atlas",
+  "source_commit": "a76e5a376333b501ccc91496f99e3c82a7c09f1b",
+  "source_dirty": true,
+  "source_scope": "project",
+  "source_content_sha256": "fd5c4f83b0e4d34ffd3fffb5f4605a1faf5948af8cdf420984feb6b0a04bc49d",
+  "source_inputs": [
+    ".python-version",
+    "benchmarks/README.md",
+    "examples/README.md",
+    "examples/quality_corpus.json",
+    "examples/quality_judgments.json",
+    "pyproject.toml",
+    "src/pp_atlas/__init__.py",
+    "src/pp_atlas/api/__init__.py",
+    "src/pp_atlas/auth/__init__.py",
+    "src/pp_atlas/benchmarks.py",
+    "src/pp_atlas/cache.py",
+    "src/pp_atlas/catalog.py",
+    "src/pp_atlas/cli.py",
+    "src/pp_atlas/engine.py",
+    "src/pp_atlas/evaluation.py",
+    "src/pp_atlas/index/postings.py",
+    "src/pp_atlas/index/segments.py",
+    "src/pp_atlas/ingest/tokenizer.py",
+    "src/pp_atlas/models.py",
+    "src/pp_atlas/provenance.py",
+    "src/pp_atlas/py.typed",
+    "src/pp_atlas/query.py",
+    "src/pp_atlas/ranking/bm25.py",
+    "src/pp_atlas/snippets.py",
+    "tests/acceptance/test_cli_quality.py",
+    "tests/integration/test_failures.py",
+    "tests/integration/test_persistence_auth.py",
+    "tests/property/test_history.py",
+    "tests/unit/test_lexical.py",
+    "uv.lock"
+  ],
+  "root_contract_sha256": "02ada2c86150819a031976352a2d0d6f5b056862308b7d28fade1e630a716ae3",
+  "root_contract_inputs": [
+    "AGENTS.md",
+    "PYTHON_PORTFOLIO_MASTER_EXECUTION_BRIEF.md",
+    "portfolio.toml",
+    "ruff.toml",
+    "scripts/portfolio.py"
+  ],
+  "lockfile_sha256": "afadf806fdbb623044aa563e65234d12d3a49b57e907308cab46198ecad717f8",
+  "provenance_note": "checkout source scope captured",
+  "python": "3.14.8 (main, Oct  3 2026, 01:04:31) [Clang 22.1.3 ]",
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+  "memory_limit_bytes": 34359738368,
+  "threads": {
+    "OMP_NUM_THREADS": "not-set",
+    "OPENBLAS_NUM_THREADS": "not-set",
+    "MKL_NUM_THREADS": "not-set"
+  },
+  "corpus_sha256": "e3f24f2f08379dae885622179cd58765a72f54797d42b0acb83decf073e6bec1",
+  "judgments_sha256": "eccefbe08f5525d9168229f6bbffe6b8636cc4276cb4da5d0a0df75f3f88854c",
+  "baseline": {
+    "schema_version": 1,
+    "mode": "bag_of_words_baseline",
+    "judgments": "graded0..3; unjudged=0; recall over authored relevant pool",
+    "query_count": 60,
+    "aggregates": {
+      "development": {
+        "ndcg_at_10": 0.7226288062250323,
+        "mrr": 0.5944444444444444,
+        "pooled_recall_at_10": 1.0
+      },
+      "heldout": {
+        "ndcg_at_10": 0.697401083372323,
+        "mrr": 0.5611111111111111,
+        "pooled_recall_at_10": 1.0
+      }
+    },
+    "per_query": [
+      {
+        "id": "q00",
+        "query": "\"wal recovery\"",
+        "intent": "Find current guidance for wal recovery: A database process stopped after acknowledgment.",
+        "split": "heldout",
+        "grades": {
+          "topic-00-runbook": 3,
+          "topic-00-design": 2,
+          "topic-00-incident": 1
+        },
+        "executed_query": "wal recovery",
+        "ranked": [
+          "topic-00-archive",
+          "topic-00-runbook",
+          "topic-00-incident",
+          "topic-00-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-00-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q01",
+        "query": "\"lease fencing\"",
+        "intent": "Find current guidance for lease fencing: An expired worker continued writing after replacement.",
+        "split": "development",
+        "grades": {
+          "topic-01-runbook": 3,
+          "topic-01-design": 2,
+          "topic-01-incident": 1
+        },
+        "executed_query": "lease fencing",
+        "ranked": [
+          "topic-01-archive",
+          "topic-01-runbook",
+          "topic-01-incident",
+          "topic-01-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-01-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q02",
+        "query": "\"watermark delay\"",
+        "intent": "Find current guidance for watermark delay: A silent partition prevented event-time windows from closing.",
+        "split": "heldout",
+        "grades": {
+          "topic-02-runbook": 3,
+          "topic-02-design": 2,
+          "topic-02-incident": 1
+        },
+        "executed_query": "watermark delay",
+        "ranked": [
+          "topic-02-archive",
+          "topic-02-runbook",
+          "topic-02-incident",
+          "topic-02-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-02-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q03",
+        "query": "\"ledger reversal\"",
+        "intent": "Find current guidance for ledger reversal: An operator needs to correct a posted financial journal.",
+        "split": "heldout",
+        "grades": {
+          "topic-03-runbook": 3,
+          "topic-03-design": 2,
+          "topic-03-incident": 1
+        },
+        "executed_query": "ledger reversal",
+        "ranked": [
+          "topic-03-archive",
+          "topic-03-runbook",
+          "topic-03-incident",
+          "topic-03-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-03-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q04",
+        "query": "\"schema evolution\"",
+        "intent": "Find current guidance for schema evolution: An upstream producer added a nullable column to a dataset.",
+        "split": "development",
+        "grades": {
+          "topic-04-runbook": 3,
+          "topic-04-design": 2,
+          "topic-04-incident": 1
+        },
+        "executed_query": "schema evolution",
+        "ranked": [
+          "topic-04-archive",
+          "topic-04-runbook",
+          "topic-04-incident",
+          "topic-04-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-04-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q05",
+        "query": "\"cache revocation\"",
+        "intent": "Find current guidance for cache revocation: A formerly authorized reader retained a cached result.",
+        "split": "development",
+        "grades": {
+          "topic-05-runbook": 3,
+          "topic-05-design": 2,
+          "topic-05-incident": 1
+        },
+        "executed_query": "cache revocation",
+        "ranked": [
+          "topic-05-archive",
+          "topic-05-runbook",
+          "topic-05-incident",
+          "topic-05-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-05-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q06",
+        "query": "\"snapshot isolation\"",
+        "intent": "Find current guidance for snapshot isolation: Two readers observed different revisions during a single report.",
+        "split": "development",
+        "grades": {
+          "topic-06-runbook": 3,
+          "topic-06-design": 2,
+          "topic-06-incident": 1
+        },
+        "executed_query": "snapshot isolation",
+        "ranked": [
+          "topic-06-archive",
+          "topic-06-runbook",
+          "topic-06-incident",
+          "topic-06-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-06-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q07",
+        "query": "\"phrase positions\"",
+        "intent": "Find current guidance for phrase positions: A search query matched words in the wrong order.",
+        "split": "development",
+        "grades": {
+          "topic-07-runbook": 3,
+          "topic-07-design": 2,
+          "topic-07-incident": 1
+        },
+        "executed_query": "phrase positions",
+        "ranked": [
+          "topic-07-archive",
+          "topic-07-runbook",
+          "topic-07-incident",
+          "topic-07-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-07-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q08",
+        "query": "\"unicode normalization\"",
+        "intent": "Find current guidance for unicode normalization: Equivalent accented strings produced different search results.",
+        "split": "development",
+        "grades": {
+          "topic-08-runbook": 3,
+          "topic-08-design": 2,
+          "topic-08-incident": 1
+        },
+        "executed_query": "unicode normalization",
+        "ranked": [
+          "topic-08-archive",
+          "topic-08-runbook",
+          "topic-08-incident",
+          "topic-08-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-08-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q09",
+        "query": "\"retry budget\"",
+        "intent": "Find current guidance for retry budget: A transient provider failure caused unbounded work amplification.",
+        "split": "heldout",
+        "grades": {
+          "topic-09-runbook": 3,
+          "topic-09-design": 2,
+          "topic-09-incident": 1
+        },
+        "executed_query": "retry budget",
+        "ranked": [
+          "topic-09-archive",
+          "topic-09-runbook",
+          "topic-09-incident",
+          "topic-09-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-09-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q10",
+        "query": "\"checkpoint restore\"",
+        "intent": "Find current guidance for checkpoint restore: A stream task restarted with inconsistent source and sink progress.",
+        "split": "heldout",
+        "grades": {
+          "topic-10-runbook": 3,
+          "topic-10-design": 2,
+          "topic-10-incident": 1
+        },
+        "executed_query": "checkpoint restore",
+        "ranked": [
+          "topic-10-archive",
+          "topic-10-runbook",
+          "topic-10-incident",
+          "topic-10-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-10-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q11",
+        "query": "\"idempotency conflict\"",
+        "intent": "Find current guidance for idempotency conflict: A client reused a request identity with a different payload.",
+        "split": "heldout",
+        "grades": {
+          "topic-11-runbook": 3,
+          "topic-11-design": 2,
+          "topic-11-incident": 1
+        },
+        "executed_query": "idempotency conflict",
+        "ranked": [
+          "topic-11-archive",
+          "topic-11-runbook",
+          "topic-11-incident",
+          "topic-11-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-11-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q12",
+        "query": "\"compaction safety\"",
+        "intent": "Find current guidance for compaction safety: A merge resurrected a value deleted by a newer tombstone.",
+        "split": "development",
+        "grades": {
+          "topic-12-runbook": 3,
+          "topic-12-design": 2,
+          "topic-12-incident": 1
+        },
+        "executed_query": "compaction safety",
+        "ranked": [
+          "topic-12-archive",
+          "topic-12-runbook",
+          "topic-12-incident",
+          "topic-12-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-12-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q13",
+        "query": "\"index corruption\"",
+        "intent": "Find current guidance for index corruption: An index segment changed after atomic publication.",
+        "split": "heldout",
+        "grades": {
+          "topic-13-runbook": 3,
+          "topic-13-design": 2,
+          "topic-13-incident": 1
+        },
+        "executed_query": "index corruption",
+        "ranked": [
+          "topic-13-archive",
+          "topic-13-runbook",
+          "topic-13-incident",
+          "topic-13-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-13-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q14",
+        "query": "\"tenant namespace\"",
+        "intent": "Find current guidance for tenant namespace: Two organizations chose the same document identifier.",
+        "split": "heldout",
+        "grades": {
+          "topic-14-runbook": 3,
+          "topic-14-design": 2,
+          "topic-14-incident": 1
+        },
+        "executed_query": "tenant namespace",
+        "ranked": [
+          "topic-14-archive",
+          "topic-14-runbook",
+          "topic-14-incident",
+          "topic-14-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-14-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q15",
+        "query": "\"group membership\"",
+        "intent": "Find current guidance for group membership: A team transfer left stale access grants on a service.",
+        "split": "development",
+        "grades": {
+          "topic-15-runbook": 3,
+          "topic-15-design": 2,
+          "topic-15-incident": 1
+        },
+        "executed_query": "group membership",
+        "ranked": [
+          "topic-15-archive",
+          "topic-15-runbook",
+          "topic-15-incident",
+          "topic-15-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-15-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q16",
+        "query": "\"backpressure queue\"",
+        "intent": "Find current guidance for backpressure queue: A producer outpaced the consumer until memory was exhausted.",
+        "split": "development",
+        "grades": {
+          "topic-16-runbook": 3,
+          "topic-16-design": 2,
+          "topic-16-incident": 1
+        },
+        "executed_query": "backpressure queue",
+        "ranked": [
+          "topic-16-archive",
+          "topic-16-runbook",
+          "topic-16-incident",
+          "topic-16-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-16-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q17",
+        "query": "\"event deduplication\"",
+        "intent": "Find current guidance for event deduplication: A replayed message counted twice after a worker failure.",
+        "split": "development",
+        "grades": {
+          "topic-17-runbook": 3,
+          "topic-17-design": 2,
+          "topic-17-incident": 1
+        },
+        "executed_query": "event deduplication",
+        "ranked": [
+          "topic-17-archive",
+          "topic-17-runbook",
+          "topic-17-incident",
+          "topic-17-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-17-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q18",
+        "query": "\"timer persistence\"",
+        "intent": "Find current guidance for timer persistence: A long waiting workflow lost its wake-up after a restart.",
+        "split": "heldout",
+        "grades": {
+          "topic-18-runbook": 3,
+          "topic-18-design": 2,
+          "topic-18-incident": 1
+        },
+        "executed_query": "timer persistence",
+        "ranked": [
+          "topic-18-archive",
+          "topic-18-design",
+          "topic-18-runbook",
+          "topic-18-incident"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.619993237061603,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-18-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q19",
+        "query": "\"compensation order\"",
+        "intent": "Find current guidance for compensation order: A partially completed export left remote resources behind.",
+        "split": "development",
+        "grades": {
+          "topic-19-runbook": 3,
+          "topic-19-design": 2,
+          "topic-19-incident": 1
+        },
+        "executed_query": "compensation order",
+        "ranked": [
+          "topic-19-archive",
+          "topic-19-runbook",
+          "topic-19-incident",
+          "topic-19-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-19-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q20",
+        "query": "\"safe rename\"",
+        "intent": "Find current guidance for safe rename: A refactor changed a shadowed identifier in an unrelated scope.",
+        "split": "development",
+        "grades": {
+          "topic-20-runbook": 3,
+          "topic-20-design": 2,
+          "topic-20-incident": 1
+        },
+        "executed_query": "safe rename",
+        "ranked": [
+          "topic-20-archive",
+          "topic-20-runbook",
+          "topic-20-incident",
+          "topic-20-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-20-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q21",
+        "query": "\"taint propagation\"",
+        "intent": "Find current guidance for taint propagation: An untrusted source reached a command execution sink.",
+        "split": "development",
+        "grades": {
+          "topic-21-runbook": 3,
+          "topic-21-design": 2,
+          "topic-21-incident": 1
+        },
+        "executed_query": "taint propagation",
+        "ranked": [
+          "topic-21-archive",
+          "topic-21-runbook",
+          "topic-21-incident",
+          "topic-21-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-21-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q22",
+        "query": "\"dead code\"",
+        "intent": "Find current guidance for dead code: A variable was read only along an unreachable branch.",
+        "split": "heldout",
+        "grades": {
+          "topic-22-runbook": 3,
+          "topic-22-design": 2,
+          "topic-22-incident": 1
+        },
+        "executed_query": "dead code",
+        "ranked": [
+          "topic-22-archive",
+          "topic-22-runbook",
+          "topic-22-incident",
+          "topic-22-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-22-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q23",
+        "query": "\"artifact provenance\"",
+        "intent": "Find current guidance for artifact provenance: A model evaluation could not be matched to training inputs.",
+        "split": "heldout",
+        "grades": {
+          "topic-23-runbook": 3,
+          "topic-23-design": 2,
+          "topic-23-incident": 1
+        },
+        "executed_query": "artifact provenance",
+        "ranked": [
+          "topic-23-archive",
+          "topic-23-runbook",
+          "topic-23-incident",
+          "topic-23-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-23-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q24",
+        "query": "\"data leakage\"",
+        "intent": "Find current guidance for data leakage: A transform was fitted on examples from the evaluation split.",
+        "split": "development",
+        "grades": {
+          "topic-24-runbook": 3,
+          "topic-24-design": 2,
+          "topic-24-incident": 1
+        },
+        "executed_query": "data leakage",
+        "ranked": [
+          "topic-24-archive",
+          "topic-24-runbook",
+          "topic-24-incident",
+          "topic-24-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-24-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q25",
+        "query": "\"promotion rollback\"",
+        "intent": "Find current guidance for promotion rollback: A newly promoted model failed a monitored quality condition.",
+        "split": "heldout",
+        "grades": {
+          "topic-25-runbook": 3,
+          "topic-25-design": 2,
+          "topic-25-incident": 1
+        },
+        "executed_query": "promotion rollback",
+        "ranked": [
+          "topic-25-archive",
+          "topic-25-runbook",
+          "topic-25-incident",
+          "topic-25-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-25-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q26",
+        "query": "\"route feasibility\"",
+        "intent": "Find current guidance for route feasibility: A fast routing heuristic exceeded vehicle capacity.",
+        "split": "heldout",
+        "grades": {
+          "topic-26-runbook": 3,
+          "topic-26-design": 2,
+          "topic-26-incident": 1
+        },
+        "executed_query": "route feasibility",
+        "ranked": [
+          "topic-26-archive",
+          "topic-26-runbook",
+          "topic-26-incident",
+          "topic-26-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-26-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q27",
+        "query": "\"time windows\"",
+        "intent": "Find current guidance for time windows: A vehicle arrived before service opening and missed a later stop.",
+        "split": "development",
+        "grades": {
+          "topic-27-runbook": 3,
+          "topic-27-design": 2,
+          "topic-27-incident": 1
+        },
+        "executed_query": "time windows",
+        "ranked": [
+          "topic-27-archive",
+          "topic-02-runbook",
+          "topic-27-runbook",
+          "topic-02-incident",
+          "topic-27-incident",
+          "topic-02-design",
+          "topic-27-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.5202770627117072,
+          "mrr": 0.3333333333333333,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-27-archive",
+          "topic-02-runbook",
+          "topic-02-incident",
+          "topic-02-design"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q28",
+        "query": "\"pitch octave\"",
+        "intent": "Find current guidance for pitch octave: A periodic waveform was decoded one octave too high.",
+        "split": "development",
+        "grades": {
+          "topic-28-runbook": 3,
+          "topic-28-design": 2,
+          "topic-28-incident": 1
+        },
+        "executed_query": "pitch octave",
+        "ranked": [
+          "topic-28-archive",
+          "topic-28-runbook",
+          "topic-28-incident",
+          "topic-28-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-28-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q29",
+        "query": "\"onset alignment\"",
+        "intent": "Find current guidance for onset alignment: Detected guitar attacks drifted relative to the reference notes.",
+        "split": "heldout",
+        "grades": {
+          "topic-29-runbook": 3,
+          "topic-29-design": 2,
+          "topic-29-incident": 1
+        },
+        "executed_query": "onset alignment",
+        "ranked": [
+          "topic-29-archive",
+          "topic-29-runbook",
+          "topic-29-incident",
+          "topic-29-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-29-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q30",
+        "query": "\"backup restore\"",
+        "intent": "Find current guidance for backup restore: A copied database omitted the current write-ahead log.",
+        "split": "development",
+        "grades": {
+          "topic-30-runbook": 3,
+          "topic-30-design": 2,
+          "topic-30-incident": 1
+        },
+        "executed_query": "backup restore",
+        "ranked": [
+          "topic-30-archive",
+          "topic-30-runbook",
+          "topic-30-incident",
+          "topic-30-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-30-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q31",
+        "query": "\"atomic publication\"",
+        "intent": "Find current guidance for atomic publication: Readers saw a manifest before its referenced files were complete.",
+        "split": "heldout",
+        "grades": {
+          "topic-31-runbook": 3,
+          "topic-31-design": 2,
+          "topic-31-incident": 1
+        },
+        "executed_query": "atomic publication",
+        "ranked": [
+          "topic-31-archive",
+          "topic-13-runbook",
+          "topic-31-runbook",
+          "topic-13-incident",
+          "topic-31-incident",
+          "topic-13-design",
+          "topic-31-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.5202770627117072,
+          "mrr": 0.3333333333333333,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-31-archive",
+          "topic-13-runbook",
+          "topic-13-incident",
+          "topic-13-design"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q32",
+        "query": "\"bounded parser\"",
+        "intent": "Find current guidance for bounded parser: A malformed search expression consumed excessive resources.",
+        "split": "heldout",
+        "grades": {
+          "topic-32-runbook": 3,
+          "topic-32-design": 2,
+          "topic-32-incident": 1
+        },
+        "executed_query": "bounded parser",
+        "ranked": [
+          "topic-32-archive",
+          "topic-32-runbook",
+          "topic-32-incident",
+          "topic-32-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-32-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q33",
+        "query": "\"html escaping\"",
+        "intent": "Find current guidance for html escaping: A retrieved document contained script markup in its excerpt.",
+        "split": "heldout",
+        "grades": {
+          "topic-33-runbook": 3,
+          "topic-33-design": 2,
+          "topic-33-incident": 1
+        },
+        "executed_query": "html escaping",
+        "ranked": [
+          "topic-33-archive",
+          "topic-33-runbook",
+          "topic-33-incident",
+          "topic-33-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-33-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q34",
+        "query": "\"token expiration\"",
+        "intent": "Find current guidance for token expiration: A demonstration credential remained usable after a session ended.",
+        "split": "development",
+        "grades": {
+          "topic-34-runbook": 3,
+          "topic-34-design": 2,
+          "topic-34-incident": 1
+        },
+        "executed_query": "token expiration",
+        "ranked": [
+          "topic-34-archive",
+          "topic-34-runbook",
+          "topic-34-incident",
+          "topic-34-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-34-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q35",
+        "query": "\"readiness probe\"",
+        "intent": "Find current guidance for readiness probe: A live process served traffic despite a missing index segment.",
+        "split": "heldout",
+        "grades": {
+          "topic-35-runbook": 3,
+          "topic-35-design": 2,
+          "topic-35-incident": 1
+        },
+        "executed_query": "readiness probe",
+        "ranked": [
+          "topic-35-archive",
+          "topic-35-runbook",
+          "topic-35-incident",
+          "topic-35-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-35-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q36",
+        "query": "\"process cancellation\"",
+        "intent": "Find current guidance for process cancellation: An interrupted command left child workers running.",
+        "split": "heldout",
+        "grades": {
+          "topic-36-runbook": 3,
+          "topic-36-design": 2,
+          "topic-36-incident": 1
+        },
+        "executed_query": "process cancellation",
+        "ranked": [
+          "topic-36-archive",
+          "topic-36-design",
+          "topic-36-runbook",
+          "topic-36-incident",
+          "topic-16-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.619993237061603,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-36-archive",
+          "topic-16-design"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q37",
+        "query": "\"memory budget\"",
+        "intent": "Find current guidance for memory budget: A large batch materialized multiple copies of the corpus.",
+        "split": "heldout",
+        "grades": {
+          "topic-37-runbook": 3,
+          "topic-37-design": 2,
+          "topic-37-incident": 1
+        },
+        "executed_query": "memory budget",
+        "ranked": [
+          "topic-37-archive",
+          "topic-37-runbook",
+          "topic-37-incident",
+          "topic-37-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-37-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q38",
+        "query": "\"ranking explanation\"",
+        "intent": "Find current guidance for ranking explanation: A reviewer could not reproduce a document relevance score.",
+        "split": "development",
+        "grades": {
+          "topic-38-runbook": 3,
+          "topic-38-design": 2,
+          "topic-38-incident": 1
+        },
+        "executed_query": "ranking explanation",
+        "ranked": [
+          "topic-38-archive",
+          "topic-38-runbook",
+          "topic-38-incident",
+          "topic-38-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-38-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q39",
+        "query": "\"relevance judgments\"",
+        "intent": "Find current guidance for relevance judgments: A search quality claim used generated documents without labels.",
+        "split": "heldout",
+        "grades": {
+          "topic-39-runbook": 3,
+          "topic-39-design": 2,
+          "topic-39-incident": 1
+        },
+        "executed_query": "relevance judgments",
+        "ranked": [
+          "topic-39-archive",
+          "topic-39-runbook",
+          "topic-39-incident",
+          "topic-39-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-39-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q40",
+        "query": "\"transaction retry\"",
+        "intent": "Find current guidance for transaction retry: Two writers competed to publish the same generation.",
+        "split": "development",
+        "grades": {
+          "topic-40-runbook": 3,
+          "topic-40-design": 2,
+          "topic-40-incident": 1
+        },
+        "executed_query": "transaction retry",
+        "ranked": [
+          "topic-40-archive",
+          "topic-40-runbook",
+          "topic-40-incident",
+          "topic-40-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-40-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q41",
+        "query": "\"fsync boundary\"",
+        "intent": "Find current guidance for fsync boundary: A success response preceded durable persistence of an index file.",
+        "split": "heldout",
+        "grades": {
+          "topic-41-runbook": 3,
+          "topic-41-design": 2,
+          "topic-41-incident": 1
+        },
+        "executed_query": "fsync boundary",
+        "ranked": [
+          "topic-41-archive",
+          "topic-41-design",
+          "topic-41-runbook",
+          "topic-41-incident",
+          "topic-31-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.619993237061603,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-41-archive",
+          "topic-31-design"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q42",
+        "query": "\"deterministic tie\"",
+        "intent": "Find current guidance for deterministic tie: Identical scores produced unstable ranking between runs.",
+        "split": "heldout",
+        "grades": {
+          "topic-42-runbook": 3,
+          "topic-42-design": 2,
+          "topic-42-incident": 1
+        },
+        "executed_query": "deterministic tie",
+        "ranked": [
+          "topic-42-archive",
+          "topic-42-runbook",
+          "topic-42-incident",
+          "topic-42-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-42-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q43",
+        "query": "\"metadata filter\"",
+        "intent": "Find current guidance for metadata filter: A type restriction accidentally used global scoring statistics.",
+        "split": "development",
+        "grades": {
+          "topic-43-runbook": 3,
+          "topic-43-design": 2,
+          "topic-43-incident": 1
+        },
+        "executed_query": "metadata filter",
+        "ranked": [
+          "topic-43-archive",
+          "topic-43-runbook",
+          "topic-43-incident",
+          "topic-43-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-43-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q44",
+        "query": "\"source offsets\"",
+        "intent": "Find current guidance for source offsets: A normalized character expansion shifted snippet highlighting.",
+        "split": "development",
+        "grades": {
+          "topic-44-runbook": 3,
+          "topic-44-design": 2,
+          "topic-44-incident": 1
+        },
+        "executed_query": "source offsets",
+        "ranked": [
+          "topic-44-archive",
+          "topic-44-runbook",
+          "topic-08-runbook",
+          "topic-44-incident",
+          "topic-10-runbook",
+          "topic-08-incident",
+          "topic-10-incident",
+          "topic-44-design",
+          "topic-08-design",
+          "topic-10-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6168113967660921,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-44-archive",
+          "topic-08-runbook",
+          "topic-10-runbook",
+          "topic-08-incident",
+          "topic-10-incident",
+          "topic-08-design",
+          "topic-10-design"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q45",
+        "query": "\"delete revision\"",
+        "intent": "Find current guidance for delete revision: A removed document reappeared from an old search segment.",
+        "split": "development",
+        "grades": {
+          "topic-45-runbook": 3,
+          "topic-45-design": 2,
+          "topic-45-incident": 1
+        },
+        "executed_query": "delete revision",
+        "ranked": [
+          "topic-45-archive",
+          "topic-45-runbook",
+          "topic-45-incident",
+          "topic-45-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-45-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q46",
+        "query": "\"cold latency\"",
+        "intent": "Find current guidance for cold latency: A benchmark mixed disk startup costs with cached lookup times.",
+        "split": "heldout",
+        "grades": {
+          "topic-46-runbook": 3,
+          "topic-46-design": 2,
+          "topic-46-incident": 1
+        },
+        "executed_query": "cold latency",
+        "ranked": [
+          "topic-46-archive",
+          "topic-46-runbook",
+          "topic-46-incident",
+          "topic-46-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-46-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q47",
+        "query": "\"audit trail\"",
+        "intent": "Find current guidance for audit trail: An administrator could not explain a permission-related result change.",
+        "split": "heldout",
+        "grades": {
+          "topic-47-runbook": 3,
+          "topic-47-design": 2,
+          "topic-47-incident": 1
+        },
+        "executed_query": "audit trail",
+        "ranked": [
+          "topic-47-archive",
+          "topic-47-runbook",
+          "topic-47-incident",
+          "topic-47-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-47-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q48",
+        "query": "\"schema version\"",
+        "intent": "Find current guidance for schema version: A reader interpreted a new persisted layout using old assumptions.",
+        "split": "development",
+        "grades": {
+          "topic-48-runbook": 3,
+          "topic-48-design": 2,
+          "topic-48-incident": 1
+        },
+        "executed_query": "schema version",
+        "ranked": [
+          "topic-48-archive",
+          "topic-48-runbook",
+          "topic-48-incident",
+          "topic-48-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-48-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q49",
+        "query": "\"path traversal\"",
+        "intent": "Find current guidance for path traversal: A tenant identifier attempted to escape its storage directory.",
+        "split": "heldout",
+        "grades": {
+          "topic-49-runbook": 3,
+          "topic-49-design": 2,
+          "topic-49-incident": 1
+        },
+        "executed_query": "path traversal",
+        "ranked": [
+          "topic-49-archive",
+          "topic-49-runbook",
+          "topic-49-incident",
+          "topic-49-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.6609898057851442,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-49-archive"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q50",
+        "query": "wal recovery type:runbook",
+        "intent": "Locate the operational procedure specifically for wal recovery.",
+        "split": "development",
+        "grades": {
+          "topic-00-runbook": 3
+        },
+        "executed_query": "wal recovery type:runbook",
+        "ranked": [
+          "topic-00-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      },
+      {
+        "id": "q51",
+        "query": "ledger reversal type:runbook",
+        "intent": "Locate the operational procedure specifically for ledger reversal.",
+        "split": "heldout",
+        "grades": {
+          "topic-03-runbook": 3
+        },
+        "executed_query": "ledger reversal type:runbook",
+        "ranked": [
+          "topic-03-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      },
+      {
+        "id": "q52",
+        "query": "cache revocation type:runbook",
+        "intent": "Locate the operational procedure specifically for cache revocation.",
+        "split": "development",
+        "grades": {
+          "topic-05-runbook": 3
+        },
+        "executed_query": "cache revocation type:runbook",
+        "ranked": [
+          "topic-05-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      },
+      {
+        "id": "q53",
+        "query": "unicode normalization type:runbook",
+        "intent": "Locate the operational procedure specifically for unicode normalization.",
+        "split": "development",
+        "grades": {
+          "topic-08-runbook": 3
+        },
+        "executed_query": "unicode normalization type:runbook",
+        "ranked": [
+          "topic-08-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      },
+      {
+        "id": "q54",
+        "query": "compaction safety type:runbook",
+        "intent": "Locate the operational procedure specifically for compaction safety.",
+        "split": "heldout",
+        "grades": {
+          "topic-12-runbook": 3
+        },
+        "executed_query": "compaction safety type:runbook",
+        "ranked": [
+          "topic-12-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      },
+      {
+        "id": "q55",
+        "query": "event deduplication type:runbook",
+        "intent": "Locate the operational procedure specifically for event deduplication.",
+        "split": "development",
+        "grades": {
+          "topic-17-runbook": 3
+        },
+        "executed_query": "event deduplication type:runbook",
+        "ranked": [
+          "topic-17-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      },
+      {
+        "id": "q56",
+        "query": "dead code type:runbook",
+        "intent": "Locate the operational procedure specifically for dead code.",
+        "split": "heldout",
+        "grades": {
+          "topic-22-runbook": 3
+        },
+        "executed_query": "dead code type:runbook",
+        "ranked": [
+          "topic-22-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      },
+      {
+        "id": "q57",
+        "query": "pitch octave type:runbook",
+        "intent": "Locate the operational procedure specifically for pitch octave.",
+        "split": "development",
+        "grades": {
+          "topic-28-runbook": 3
+        },
+        "executed_query": "pitch octave type:runbook",
+        "ranked": [
+          "topic-28-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      },
+      {
+        "id": "q58",
+        "query": "relevance judgments type:runbook",
+        "intent": "Locate the operational procedure specifically for relevance judgments.",
+        "split": "heldout",
+        "grades": {
+          "topic-39-runbook": 3
+        },
+        "executed_query": "relevance judgments type:runbook",
+        "ranked": [
+          "topic-39-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      },
+      {
+        "id": "q59",
+        "query": "delete revision type:runbook",
+        "intent": "Locate the operational procedure specifically for delete revision.",
+        "split": "development",
+        "grades": {
+          "topic-45-runbook": 3
+        },
+        "executed_query": "delete revision type:runbook",
+        "ranked": [
+          "topic-45-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      }
+    ]
+  },
+  "improved": {
+    "schema_version": 1,
+    "mode": "phrase_constraints",
+    "judgments": "graded0..3; unjudged=0; recall over authored relevant pool",
+    "query_count": 60,
+    "aggregates": {
+      "development": {
+        "ndcg_at_10": 0.9646178127152214,
+        "mrr": 0.9833333333333333,
+        "pooled_recall_at_10": 1.0
+      },
+      "heldout": {
+        "ndcg_at_10": 0.9514991958147977,
+        "mrr": 0.9833333333333333,
+        "pooled_recall_at_10": 1.0
+      }
+    },
+    "per_query": [
+      {
+        "id": "q00",
+        "query": "\"wal recovery\"",
+        "intent": "Find current guidance for wal recovery: A database process stopped after acknowledgment.",
+        "split": "heldout",
+        "grades": {
+          "topic-00-runbook": 3,
+          "topic-00-design": 2,
+          "topic-00-incident": 1
+        },
+        "executed_query": "\"wal recovery\"",
+        "ranked": [
+          "topic-00-runbook",
+          "topic-00-incident",
+          "topic-00-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q01",
+        "query": "\"lease fencing\"",
+        "intent": "Find current guidance for lease fencing: An expired worker continued writing after replacement.",
+        "split": "development",
+        "grades": {
+          "topic-01-runbook": 3,
+          "topic-01-design": 2,
+          "topic-01-incident": 1
+        },
+        "executed_query": "\"lease fencing\"",
+        "ranked": [
+          "topic-01-runbook",
+          "topic-01-incident",
+          "topic-01-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q02",
+        "query": "\"watermark delay\"",
+        "intent": "Find current guidance for watermark delay: A silent partition prevented event-time windows from closing.",
+        "split": "heldout",
+        "grades": {
+          "topic-02-runbook": 3,
+          "topic-02-design": 2,
+          "topic-02-incident": 1
+        },
+        "executed_query": "\"watermark delay\"",
+        "ranked": [
+          "topic-02-runbook",
+          "topic-02-incident",
+          "topic-02-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q03",
+        "query": "\"ledger reversal\"",
+        "intent": "Find current guidance for ledger reversal: An operator needs to correct a posted financial journal.",
+        "split": "heldout",
+        "grades": {
+          "topic-03-runbook": 3,
+          "topic-03-design": 2,
+          "topic-03-incident": 1
+        },
+        "executed_query": "\"ledger reversal\"",
+        "ranked": [
+          "topic-03-runbook",
+          "topic-03-incident",
+          "topic-03-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q04",
+        "query": "\"schema evolution\"",
+        "intent": "Find current guidance for schema evolution: An upstream producer added a nullable column to a dataset.",
+        "split": "development",
+        "grades": {
+          "topic-04-runbook": 3,
+          "topic-04-design": 2,
+          "topic-04-incident": 1
+        },
+        "executed_query": "\"schema evolution\"",
+        "ranked": [
+          "topic-04-runbook",
+          "topic-04-incident",
+          "topic-04-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q05",
+        "query": "\"cache revocation\"",
+        "intent": "Find current guidance for cache revocation: A formerly authorized reader retained a cached result.",
+        "split": "development",
+        "grades": {
+          "topic-05-runbook": 3,
+          "topic-05-design": 2,
+          "topic-05-incident": 1
+        },
+        "executed_query": "\"cache revocation\"",
+        "ranked": [
+          "topic-05-runbook",
+          "topic-05-incident",
+          "topic-05-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q06",
+        "query": "\"snapshot isolation\"",
+        "intent": "Find current guidance for snapshot isolation: Two readers observed different revisions during a single report.",
+        "split": "development",
+        "grades": {
+          "topic-06-runbook": 3,
+          "topic-06-design": 2,
+          "topic-06-incident": 1
+        },
+        "executed_query": "\"snapshot isolation\"",
+        "ranked": [
+          "topic-06-runbook",
+          "topic-06-incident",
+          "topic-06-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q07",
+        "query": "\"phrase positions\"",
+        "intent": "Find current guidance for phrase positions: A search query matched words in the wrong order.",
+        "split": "development",
+        "grades": {
+          "topic-07-runbook": 3,
+          "topic-07-design": 2,
+          "topic-07-incident": 1
+        },
+        "executed_query": "\"phrase positions\"",
+        "ranked": [
+          "topic-07-runbook",
+          "topic-07-incident",
+          "topic-07-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q08",
+        "query": "\"unicode normalization\"",
+        "intent": "Find current guidance for unicode normalization: Equivalent accented strings produced different search results.",
+        "split": "development",
+        "grades": {
+          "topic-08-runbook": 3,
+          "topic-08-design": 2,
+          "topic-08-incident": 1
+        },
+        "executed_query": "\"unicode normalization\"",
+        "ranked": [
+          "topic-08-runbook",
+          "topic-08-incident",
+          "topic-08-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q09",
+        "query": "\"retry budget\"",
+        "intent": "Find current guidance for retry budget: A transient provider failure caused unbounded work amplification.",
+        "split": "heldout",
+        "grades": {
+          "topic-09-runbook": 3,
+          "topic-09-design": 2,
+          "topic-09-incident": 1
+        },
+        "executed_query": "\"retry budget\"",
+        "ranked": [
+          "topic-09-runbook",
+          "topic-09-incident",
+          "topic-09-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q10",
+        "query": "\"checkpoint restore\"",
+        "intent": "Find current guidance for checkpoint restore: A stream task restarted with inconsistent source and sink progress.",
+        "split": "heldout",
+        "grades": {
+          "topic-10-runbook": 3,
+          "topic-10-design": 2,
+          "topic-10-incident": 1
+        },
+        "executed_query": "\"checkpoint restore\"",
+        "ranked": [
+          "topic-10-runbook",
+          "topic-10-incident",
+          "topic-10-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q11",
+        "query": "\"idempotency conflict\"",
+        "intent": "Find current guidance for idempotency conflict: A client reused a request identity with a different payload.",
+        "split": "heldout",
+        "grades": {
+          "topic-11-runbook": 3,
+          "topic-11-design": 2,
+          "topic-11-incident": 1
+        },
+        "executed_query": "\"idempotency conflict\"",
+        "ranked": [
+          "topic-11-runbook",
+          "topic-11-incident",
+          "topic-11-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q12",
+        "query": "\"compaction safety\"",
+        "intent": "Find current guidance for compaction safety: A merge resurrected a value deleted by a newer tombstone.",
+        "split": "development",
+        "grades": {
+          "topic-12-runbook": 3,
+          "topic-12-design": 2,
+          "topic-12-incident": 1
+        },
+        "executed_query": "\"compaction safety\"",
+        "ranked": [
+          "topic-12-runbook",
+          "topic-12-incident",
+          "topic-12-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q13",
+        "query": "\"index corruption\"",
+        "intent": "Find current guidance for index corruption: An index segment changed after atomic publication.",
+        "split": "heldout",
+        "grades": {
+          "topic-13-runbook": 3,
+          "topic-13-design": 2,
+          "topic-13-incident": 1
+        },
+        "executed_query": "\"index corruption\"",
+        "ranked": [
+          "topic-13-runbook",
+          "topic-13-incident",
+          "topic-13-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q14",
+        "query": "\"tenant namespace\"",
+        "intent": "Find current guidance for tenant namespace: Two organizations chose the same document identifier.",
+        "split": "heldout",
+        "grades": {
+          "topic-14-runbook": 3,
+          "topic-14-design": 2,
+          "topic-14-incident": 1
+        },
+        "executed_query": "\"tenant namespace\"",
+        "ranked": [
+          "topic-14-runbook",
+          "topic-14-incident",
+          "topic-14-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q15",
+        "query": "\"group membership\"",
+        "intent": "Find current guidance for group membership: A team transfer left stale access grants on a service.",
+        "split": "development",
+        "grades": {
+          "topic-15-runbook": 3,
+          "topic-15-design": 2,
+          "topic-15-incident": 1
+        },
+        "executed_query": "\"group membership\"",
+        "ranked": [
+          "topic-15-runbook",
+          "topic-15-incident",
+          "topic-15-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q16",
+        "query": "\"backpressure queue\"",
+        "intent": "Find current guidance for backpressure queue: A producer outpaced the consumer until memory was exhausted.",
+        "split": "development",
+        "grades": {
+          "topic-16-runbook": 3,
+          "topic-16-design": 2,
+          "topic-16-incident": 1
+        },
+        "executed_query": "\"backpressure queue\"",
+        "ranked": [
+          "topic-16-runbook",
+          "topic-16-incident",
+          "topic-16-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q17",
+        "query": "\"event deduplication\"",
+        "intent": "Find current guidance for event deduplication: A replayed message counted twice after a worker failure.",
+        "split": "development",
+        "grades": {
+          "topic-17-runbook": 3,
+          "topic-17-design": 2,
+          "topic-17-incident": 1
+        },
+        "executed_query": "\"event deduplication\"",
+        "ranked": [
+          "topic-17-runbook",
+          "topic-17-incident",
+          "topic-17-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q18",
+        "query": "\"timer persistence\"",
+        "intent": "Find current guidance for timer persistence: A long waiting workflow lost its wake-up after a restart.",
+        "split": "heldout",
+        "grades": {
+          "topic-18-runbook": 3,
+          "topic-18-design": 2,
+          "topic-18-incident": 1
+        },
+        "executed_query": "\"timer persistence\"",
+        "ranked": [
+          "topic-18-design",
+          "topic-18-runbook",
+          "topic-18-incident"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.8428282648809379,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q19",
+        "query": "\"compensation order\"",
+        "intent": "Find current guidance for compensation order: A partially completed export left remote resources behind.",
+        "split": "development",
+        "grades": {
+          "topic-19-runbook": 3,
+          "topic-19-design": 2,
+          "topic-19-incident": 1
+        },
+        "executed_query": "\"compensation order\"",
+        "ranked": [
+          "topic-19-runbook",
+          "topic-19-incident",
+          "topic-19-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q20",
+        "query": "\"safe rename\"",
+        "intent": "Find current guidance for safe rename: A refactor changed a shadowed identifier in an unrelated scope.",
+        "split": "development",
+        "grades": {
+          "topic-20-runbook": 3,
+          "topic-20-design": 2,
+          "topic-20-incident": 1
+        },
+        "executed_query": "\"safe rename\"",
+        "ranked": [
+          "topic-20-runbook",
+          "topic-20-incident",
+          "topic-20-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q21",
+        "query": "\"taint propagation\"",
+        "intent": "Find current guidance for taint propagation: An untrusted source reached a command execution sink.",
+        "split": "development",
+        "grades": {
+          "topic-21-runbook": 3,
+          "topic-21-design": 2,
+          "topic-21-incident": 1
+        },
+        "executed_query": "\"taint propagation\"",
+        "ranked": [
+          "topic-21-runbook",
+          "topic-21-incident",
+          "topic-21-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q22",
+        "query": "\"dead code\"",
+        "intent": "Find current guidance for dead code: A variable was read only along an unreachable branch.",
+        "split": "heldout",
+        "grades": {
+          "topic-22-runbook": 3,
+          "topic-22-design": 2,
+          "topic-22-incident": 1
+        },
+        "executed_query": "\"dead code\"",
+        "ranked": [
+          "topic-22-runbook",
+          "topic-22-incident",
+          "topic-22-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q23",
+        "query": "\"artifact provenance\"",
+        "intent": "Find current guidance for artifact provenance: A model evaluation could not be matched to training inputs.",
+        "split": "heldout",
+        "grades": {
+          "topic-23-runbook": 3,
+          "topic-23-design": 2,
+          "topic-23-incident": 1
+        },
+        "executed_query": "\"artifact provenance\"",
+        "ranked": [
+          "topic-23-runbook",
+          "topic-23-incident",
+          "topic-23-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q24",
+        "query": "\"data leakage\"",
+        "intent": "Find current guidance for data leakage: A transform was fitted on examples from the evaluation split.",
+        "split": "development",
+        "grades": {
+          "topic-24-runbook": 3,
+          "topic-24-design": 2,
+          "topic-24-incident": 1
+        },
+        "executed_query": "\"data leakage\"",
+        "ranked": [
+          "topic-24-runbook",
+          "topic-24-incident",
+          "topic-24-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q25",
+        "query": "\"promotion rollback\"",
+        "intent": "Find current guidance for promotion rollback: A newly promoted model failed a monitored quality condition.",
+        "split": "heldout",
+        "grades": {
+          "topic-25-runbook": 3,
+          "topic-25-design": 2,
+          "topic-25-incident": 1
+        },
+        "executed_query": "\"promotion rollback\"",
+        "ranked": [
+          "topic-25-runbook",
+          "topic-25-incident",
+          "topic-25-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q26",
+        "query": "\"route feasibility\"",
+        "intent": "Find current guidance for route feasibility: A fast routing heuristic exceeded vehicle capacity.",
+        "split": "heldout",
+        "grades": {
+          "topic-26-runbook": 3,
+          "topic-26-design": 2,
+          "topic-26-incident": 1
+        },
+        "executed_query": "\"route feasibility\"",
+        "ranked": [
+          "topic-26-runbook",
+          "topic-26-incident",
+          "topic-26-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q27",
+        "query": "\"time windows\"",
+        "intent": "Find current guidance for time windows: A vehicle arrived before service opening and missed a later stop.",
+        "split": "development",
+        "grades": {
+          "topic-27-runbook": 3,
+          "topic-27-design": 2,
+          "topic-27-incident": 1
+        },
+        "executed_query": "\"time windows\"",
+        "ranked": [
+          "topic-02-runbook",
+          "topic-27-runbook",
+          "topic-02-incident",
+          "topic-27-incident",
+          "topic-02-design",
+          "topic-27-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.629824243916629,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-02-runbook",
+          "topic-02-incident",
+          "topic-02-design"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q28",
+        "query": "\"pitch octave\"",
+        "intent": "Find current guidance for pitch octave: A periodic waveform was decoded one octave too high.",
+        "split": "development",
+        "grades": {
+          "topic-28-runbook": 3,
+          "topic-28-design": 2,
+          "topic-28-incident": 1
+        },
+        "executed_query": "\"pitch octave\"",
+        "ranked": [
+          "topic-28-runbook",
+          "topic-28-incident",
+          "topic-28-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q29",
+        "query": "\"onset alignment\"",
+        "intent": "Find current guidance for onset alignment: Detected guitar attacks drifted relative to the reference notes.",
+        "split": "heldout",
+        "grades": {
+          "topic-29-runbook": 3,
+          "topic-29-design": 2,
+          "topic-29-incident": 1
+        },
+        "executed_query": "\"onset alignment\"",
+        "ranked": [
+          "topic-29-runbook",
+          "topic-29-incident",
+          "topic-29-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q30",
+        "query": "\"backup restore\"",
+        "intent": "Find current guidance for backup restore: A copied database omitted the current write-ahead log.",
+        "split": "development",
+        "grades": {
+          "topic-30-runbook": 3,
+          "topic-30-design": 2,
+          "topic-30-incident": 1
+        },
+        "executed_query": "\"backup restore\"",
+        "ranked": [
+          "topic-30-runbook",
+          "topic-30-incident",
+          "topic-30-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q31",
+        "query": "\"atomic publication\"",
+        "intent": "Find current guidance for atomic publication: Readers saw a manifest before its referenced files were complete.",
+        "split": "heldout",
+        "grades": {
+          "topic-31-runbook": 3,
+          "topic-31-design": 2,
+          "topic-31-incident": 1
+        },
+        "executed_query": "\"atomic publication\"",
+        "ranked": [
+          "topic-13-runbook",
+          "topic-31-runbook",
+          "topic-13-incident",
+          "topic-31-incident",
+          "topic-13-design",
+          "topic-31-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.629824243916629,
+          "mrr": 0.5,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-13-runbook",
+          "topic-13-incident",
+          "topic-13-design"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q32",
+        "query": "\"bounded parser\"",
+        "intent": "Find current guidance for bounded parser: A malformed search expression consumed excessive resources.",
+        "split": "heldout",
+        "grades": {
+          "topic-32-runbook": 3,
+          "topic-32-design": 2,
+          "topic-32-incident": 1
+        },
+        "executed_query": "\"bounded parser\"",
+        "ranked": [
+          "topic-32-runbook",
+          "topic-32-incident",
+          "topic-32-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q33",
+        "query": "\"html escaping\"",
+        "intent": "Find current guidance for html escaping: A retrieved document contained script markup in its excerpt.",
+        "split": "heldout",
+        "grades": {
+          "topic-33-runbook": 3,
+          "topic-33-design": 2,
+          "topic-33-incident": 1
+        },
+        "executed_query": "\"html escaping\"",
+        "ranked": [
+          "topic-33-runbook",
+          "topic-33-incident",
+          "topic-33-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q34",
+        "query": "\"token expiration\"",
+        "intent": "Find current guidance for token expiration: A demonstration credential remained usable after a session ended.",
+        "split": "development",
+        "grades": {
+          "topic-34-runbook": 3,
+          "topic-34-design": 2,
+          "topic-34-incident": 1
+        },
+        "executed_query": "\"token expiration\"",
+        "ranked": [
+          "topic-34-runbook",
+          "topic-34-incident",
+          "topic-34-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q35",
+        "query": "\"readiness probe\"",
+        "intent": "Find current guidance for readiness probe: A live process served traffic despite a missing index segment.",
+        "split": "heldout",
+        "grades": {
+          "topic-35-runbook": 3,
+          "topic-35-design": 2,
+          "topic-35-incident": 1
+        },
+        "executed_query": "\"readiness probe\"",
+        "ranked": [
+          "topic-35-runbook",
+          "topic-35-incident",
+          "topic-35-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q36",
+        "query": "\"process cancellation\"",
+        "intent": "Find current guidance for process cancellation: An interrupted command left child workers running.",
+        "split": "heldout",
+        "grades": {
+          "topic-36-runbook": 3,
+          "topic-36-design": 2,
+          "topic-36-incident": 1
+        },
+        "executed_query": "\"process cancellation\"",
+        "ranked": [
+          "topic-36-design",
+          "topic-36-runbook",
+          "topic-36-incident"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.8428282648809379,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q37",
+        "query": "\"memory budget\"",
+        "intent": "Find current guidance for memory budget: A large batch materialized multiple copies of the corpus.",
+        "split": "heldout",
+        "grades": {
+          "topic-37-runbook": 3,
+          "topic-37-design": 2,
+          "topic-37-incident": 1
+        },
+        "executed_query": "\"memory budget\"",
+        "ranked": [
+          "topic-37-runbook",
+          "topic-37-incident",
+          "topic-37-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q38",
+        "query": "\"ranking explanation\"",
+        "intent": "Find current guidance for ranking explanation: A reviewer could not reproduce a document relevance score.",
+        "split": "development",
+        "grades": {
+          "topic-38-runbook": 3,
+          "topic-38-design": 2,
+          "topic-38-incident": 1
+        },
+        "executed_query": "\"ranking explanation\"",
+        "ranked": [
+          "topic-38-runbook",
+          "topic-38-incident",
+          "topic-38-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q39",
+        "query": "\"relevance judgments\"",
+        "intent": "Find current guidance for relevance judgments: A search quality claim used generated documents without labels.",
+        "split": "heldout",
+        "grades": {
+          "topic-39-runbook": 3,
+          "topic-39-design": 2,
+          "topic-39-incident": 1
+        },
+        "executed_query": "\"relevance judgments\"",
+        "ranked": [
+          "topic-39-runbook",
+          "topic-39-incident",
+          "topic-39-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q40",
+        "query": "\"transaction retry\"",
+        "intent": "Find current guidance for transaction retry: Two writers competed to publish the same generation.",
+        "split": "development",
+        "grades": {
+          "topic-40-runbook": 3,
+          "topic-40-design": 2,
+          "topic-40-incident": 1
+        },
+        "executed_query": "\"transaction retry\"",
+        "ranked": [
+          "topic-40-runbook",
+          "topic-40-incident",
+          "topic-40-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q41",
+        "query": "\"fsync boundary\"",
+        "intent": "Find current guidance for fsync boundary: A success response preceded durable persistence of an index file.",
+        "split": "heldout",
+        "grades": {
+          "topic-41-runbook": 3,
+          "topic-41-design": 2,
+          "topic-41-incident": 1
+        },
+        "executed_query": "\"fsync boundary\"",
+        "ranked": [
+          "topic-41-design",
+          "topic-41-runbook",
+          "topic-41-incident"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.8428282648809379,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q42",
+        "query": "\"deterministic tie\"",
+        "intent": "Find current guidance for deterministic tie: Identical scores produced unstable ranking between runs.",
+        "split": "heldout",
+        "grades": {
+          "topic-42-runbook": 3,
+          "topic-42-design": 2,
+          "topic-42-incident": 1
+        },
+        "executed_query": "\"deterministic tie\"",
+        "ranked": [
+          "topic-42-runbook",
+          "topic-42-incident",
+          "topic-42-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q43",
+        "query": "\"metadata filter\"",
+        "intent": "Find current guidance for metadata filter: A type restriction accidentally used global scoring statistics.",
+        "split": "development",
+        "grades": {
+          "topic-43-runbook": 3,
+          "topic-43-design": 2,
+          "topic-43-incident": 1
+        },
+        "executed_query": "\"metadata filter\"",
+        "ranked": [
+          "topic-43-runbook",
+          "topic-43-incident",
+          "topic-43-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q44",
+        "query": "\"source offsets\"",
+        "intent": "Find current guidance for source offsets: A normalized character expansion shifted snippet highlighting.",
+        "split": "development",
+        "grades": {
+          "topic-44-runbook": 3,
+          "topic-44-design": 2,
+          "topic-44-incident": 1
+        },
+        "executed_query": "\"source offsets\"",
+        "ranked": [
+          "topic-44-runbook",
+          "topic-08-runbook",
+          "topic-44-incident",
+          "topic-08-incident",
+          "topic-44-design",
+          "topic-08-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9220433016555235,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [
+          "topic-08-runbook",
+          "topic-08-incident",
+          "topic-08-design"
+        ],
+        "ranking_failure": true
+      },
+      {
+        "id": "q45",
+        "query": "\"delete revision\"",
+        "intent": "Find current guidance for delete revision: A removed document reappeared from an old search segment.",
+        "split": "development",
+        "grades": {
+          "topic-45-runbook": 3,
+          "topic-45-design": 2,
+          "topic-45-incident": 1
+        },
+        "executed_query": "\"delete revision\"",
+        "ranked": [
+          "topic-45-runbook",
+          "topic-45-incident",
+          "topic-45-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q46",
+        "query": "\"cold latency\"",
+        "intent": "Find current guidance for cold latency: A benchmark mixed disk startup costs with cached lookup times.",
+        "split": "heldout",
+        "grades": {
+          "topic-46-runbook": 3,
+          "topic-46-design": 2,
+          "topic-46-incident": 1
+        },
+        "executed_query": "\"cold latency\"",
+        "ranked": [
+          "topic-46-runbook",
+          "topic-46-incident",
+          "topic-46-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q47",
+        "query": "\"audit trail\"",
+        "intent": "Find current guidance for audit trail: An administrator could not explain a permission-related result change.",
+        "split": "heldout",
+        "grades": {
+          "topic-47-runbook": 3,
+          "topic-47-design": 2,
+          "topic-47-incident": 1
+        },
+        "executed_query": "\"audit trail\"",
+        "ranked": [
+          "topic-47-runbook",
+          "topic-47-incident",
+          "topic-47-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q48",
+        "query": "\"schema version\"",
+        "intent": "Find current guidance for schema version: A reader interpreted a new persisted layout using old assumptions.",
+        "split": "development",
+        "grades": {
+          "topic-48-runbook": 3,
+          "topic-48-design": 2,
+          "topic-48-incident": 1
+        },
+        "executed_query": "\"schema version\"",
+        "ranked": [
+          "topic-48-runbook",
+          "topic-48-incident",
+          "topic-48-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q49",
+        "query": "\"path traversal\"",
+        "intent": "Find current guidance for path traversal: A tenant identifier attempted to escape its storage directory.",
+        "split": "heldout",
+        "grades": {
+          "topic-49-runbook": 3,
+          "topic-49-design": 2,
+          "topic-49-incident": 1
+        },
+        "executed_query": "\"path traversal\"",
+        "ranked": [
+          "topic-49-runbook",
+          "topic-49-incident",
+          "topic-49-design"
+        ],
+        "metrics": {
+          "ndcg_at_10": 0.9721212198129313,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": true
+      },
+      {
+        "id": "q50",
+        "query": "wal recovery type:runbook",
+        "intent": "Locate the operational procedure specifically for wal recovery.",
+        "split": "development",
+        "grades": {
+          "topic-00-runbook": 3
+        },
+        "executed_query": "wal recovery type:runbook",
+        "ranked": [
+          "topic-00-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      },
+      {
+        "id": "q51",
+        "query": "ledger reversal type:runbook",
+        "intent": "Locate the operational procedure specifically for ledger reversal.",
+        "split": "heldout",
+        "grades": {
+          "topic-03-runbook": 3
+        },
+        "executed_query": "ledger reversal type:runbook",
+        "ranked": [
+          "topic-03-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      },
+      {
+        "id": "q52",
+        "query": "cache revocation type:runbook",
+        "intent": "Locate the operational procedure specifically for cache revocation.",
+        "split": "development",
+        "grades": {
+          "topic-05-runbook": 3
+        },
+        "executed_query": "cache revocation type:runbook",
+        "ranked": [
+          "topic-05-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      },
+      {
+        "id": "q53",
+        "query": "unicode normalization type:runbook",
+        "intent": "Locate the operational procedure specifically for unicode normalization.",
+        "split": "development",
+        "grades": {
+          "topic-08-runbook": 3
+        },
+        "executed_query": "unicode normalization type:runbook",
+        "ranked": [
+          "topic-08-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      },
+      {
+        "id": "q54",
+        "query": "compaction safety type:runbook",
+        "intent": "Locate the operational procedure specifically for compaction safety.",
+        "split": "heldout",
+        "grades": {
+          "topic-12-runbook": 3
+        },
+        "executed_query": "compaction safety type:runbook",
+        "ranked": [
+          "topic-12-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      },
+      {
+        "id": "q55",
+        "query": "event deduplication type:runbook",
+        "intent": "Locate the operational procedure specifically for event deduplication.",
+        "split": "development",
+        "grades": {
+          "topic-17-runbook": 3
+        },
+        "executed_query": "event deduplication type:runbook",
+        "ranked": [
+          "topic-17-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      },
+      {
+        "id": "q56",
+        "query": "dead code type:runbook",
+        "intent": "Locate the operational procedure specifically for dead code.",
+        "split": "heldout",
+        "grades": {
+          "topic-22-runbook": 3
+        },
+        "executed_query": "dead code type:runbook",
+        "ranked": [
+          "topic-22-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      },
+      {
+        "id": "q57",
+        "query": "pitch octave type:runbook",
+        "intent": "Locate the operational procedure specifically for pitch octave.",
+        "split": "development",
+        "grades": {
+          "topic-28-runbook": 3
+        },
+        "executed_query": "pitch octave type:runbook",
+        "ranked": [
+          "topic-28-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      },
+      {
+        "id": "q58",
+        "query": "relevance judgments type:runbook",
+        "intent": "Locate the operational procedure specifically for relevance judgments.",
+        "split": "heldout",
+        "grades": {
+          "topic-39-runbook": 3
+        },
+        "executed_query": "relevance judgments type:runbook",
+        "ranked": [
+          "topic-39-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      },
+      {
+        "id": "q59",
+        "query": "delete revision type:runbook",
+        "intent": "Locate the operational procedure specifically for delete revision.",
+        "split": "development",
+        "grades": {
+          "topic-45-runbook": 3
+        },
+        "executed_query": "delete revision type:runbook",
+        "ranked": [
+          "topic-45-runbook"
+        ],
+        "metrics": {
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "pooled_recall_at_10": 1.0
+        },
+        "unjudged_retrieved": [],
+        "ranking_failure": false
+      }
+    ]
+  }
+}
