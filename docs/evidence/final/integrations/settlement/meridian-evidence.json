@@ -1,0 +1,15 @@
+{
+  "journal_ids": [
+    "a61e1459-dec6-4749-b1f9-2880b8205eeb",
+    "69ba2556-bf68-4dca-82b4-68f0aab41eb5",
+    "8fa5cd86-731c-4ae7-8376-277361495438"
+  ],
+  "journal_count": 3,
+  "reversal_count": 1,
+  "all_journals_balanced": true,
+  "independent_balances_minor_units": {
+    "5e127f84-3352-46bb-ba94-a521823519c8": 1234,
+    "96b82cbb-0d7b-4671-8c5b-2c94ff856ea0": -1234
+  },
+  "projection_audit_consistent": true
+}

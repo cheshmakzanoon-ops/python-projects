@@ -1,0 +1,7 @@
+[09-routecraft] uv run --locked --python 3.14.8 python -m pp_routecraft.cli demo --output /workspace/portfolio-verify-3qn2313o/source/.local/routecraft/demo --seed 1729
+Using CPython 3.14.8
+Creating virtual environment at: .venv
+   Building pp-routecraft @ file:///workspace/portfolio-verify-3qn2313o/source/projects/09-routecraft
+      Built pp-routecraft @ file:///workspace/portfolio-verify-3qn2313o/source/projects/09-routecraft
+Installed 27 packages in 1.31s
+{"status": "FEASIBLE", "objective": [4, 657], "replanned": [4, 606], "output": "/workspace/portfolio-verify-3qn2313o/source/.local/routecraft/demo"}

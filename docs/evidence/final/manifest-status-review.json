@@ -1,0 +1,6 @@
+{
+  "scope": "Only project status fields changed; all ten local acceptance and coordinator review gates have passed. Hosted CI is separately unverified.",
+  "old_commit": "e76dceedde124cb9776f6d8189aab05b6fa4c95a",
+  "only_status_fields_changed": true,
+  "project_count": 10
+}

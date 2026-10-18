@@ -1,0 +1,2 @@
+[09-routecraft] uv run --locked --python 3.14.8 python -m pp_routecraft.cli benchmark --output /workspace/portfolio-verify-3qn2313o/source/.local/routecraft/benchmark --seed 1729 --profile standard
+{"status": "passed", "output": "/workspace/portfolio-verify-3qn2313o/source/.local/routecraft/benchmark/benchmark.json"}

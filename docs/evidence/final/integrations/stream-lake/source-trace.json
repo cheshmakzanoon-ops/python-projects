@@ -1,0 +1,58 @@
+[
+  {
+    "source_id": "source",
+    "partition": 0,
+    "source_offset": 0,
+    "event_time": 8000,
+    "key": "device-1",
+    "value": 10,
+    "stream": "reading",
+    "event_id": "",
+    "kind": "event",
+    "schema_version": 1,
+    "payload": "",
+    "ingress_ordinal": 0
+  },
+  {
+    "source_id": "source",
+    "partition": 0,
+    "source_offset": 1,
+    "event_time": 10000,
+    "key": "",
+    "value": 0,
+    "stream": "reading",
+    "event_id": "",
+    "kind": "watermark",
+    "schema_version": 1,
+    "payload": "",
+    "ingress_ordinal": 0
+  },
+  {
+    "source_id": "source",
+    "partition": 0,
+    "source_offset": 2,
+    "event_time": 9000,
+    "key": "device-1",
+    "value": 7,
+    "stream": "reading",
+    "event_id": "",
+    "kind": "event",
+    "schema_version": 1,
+    "payload": "",
+    "ingress_ordinal": 0
+  },
+  {
+    "source_id": "source",
+    "partition": 0,
+    "source_offset": 3,
+    "event_time": 25000,
+    "key": "",
+    "value": 0,
+    "stream": "reading",
+    "event_id": "",
+    "kind": "watermark",
+    "schema_version": 1,
+    "payload": "",
+    "ingress_ordinal": 0
+  }
+]

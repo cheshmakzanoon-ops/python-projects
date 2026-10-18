@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "integration": "stream-lake",
+  "source_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+  "source_dirty": false,
+  "status": "passed",
+  "stages": [
+    {
+      "project": "current",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.14.8",
+        "python",
+        "/workspace/portfolio-verify-3qn2313o/source/integrations/02-stream-lake/current_stage.py",
+        "--output",
+        "/workspace/python-projects/.local/final-evidence/corrected-standard/stream-lake"
+      ],
+      "exit_code": 0,
+      "seconds": 0.21480686900031287,
+      "stage_sha256": "9f8235c34e99e0374ba02a60b6e3cffd1c1315c2a01adebd7d94dd404e56fe15"
+    },
+    {
+      "project": "quarry",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.14.8",
+        "python",
+        "/workspace/portfolio-verify-3qn2313o/source/integrations/02-stream-lake/quarry_stage.py",
+        "--output",
+        "/workspace/python-projects/.local/final-evidence/corrected-standard/stream-lake"
+      ],
+      "exit_code": 0,
+      "seconds": 1.5304630850005196,
+      "stage_sha256": "ec9caf3682decd190d4bf177ba5f2824ee6d79bd151beb4347aa734d17a5a088"
+    }
+  ]
+}

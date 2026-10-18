@@ -1,0 +1,11 @@
+Using CPython 3.14.8
+Creating virtual environment at: .venv
+   Building pp-meridian @ file:///workspace/portfolio-verify-3qn2313o/source/projects/04-meridian
+      Built pp-meridian @ file:///workspace/portfolio-verify-3qn2313o/source/projects/04-meridian
+Installed 26 packages in 317ms
+warning: `VIRTUAL_ENV=/workspace/portfolio-verify-3qn2313o/source/projects/04-meridian/.venv` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+Using CPython 3.14.8
+Creating virtual environment at: .venv
+   Building pp-anchor @ file:///workspace/portfolio-verify-3qn2313o/source/projects/01-anchor
+      Built pp-anchor @ file:///workspace/portfolio-verify-3qn2313o/source/projects/01-anchor
+Installed 41 packages in 102ms

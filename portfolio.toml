@@ -11,7 +11,7 @@ default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = ["postgresql"]
-status = "verifying"
+status = "complete"
 demo_module = "pp_anchor.cli"
 
 default_port = 8101
@@ -29,7 +29,7 @@ default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "verifying"
+status = "complete"
 demo_module = "pp_strata.cli"
 
 format_arguments = ["ruff", "format", "--check", "."]
@@ -46,7 +46,7 @@ default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "verifying"
+status = "complete"
 demo_module = "pp_current.cli"
 
 format_arguments = ["ruff", "format", "--check", "."]
@@ -63,7 +63,7 @@ default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = ["postgresql"]
-status = "verifying"
+status = "complete"
 demo_module = "pp_meridian.cli"
 
 default_port = 8104
@@ -81,7 +81,7 @@ default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "verifying"
+status = "complete"
 demo_module = "pp_quarry.cli"
 
 format_arguments = ["ruff", "format", "--check", "."]
@@ -98,7 +98,7 @@ default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "verifying"
+status = "complete"
 demo_module = "pp_pytrace.cli"
 
 format_arguments = ["ruff", "format", "--check", "."]
@@ -115,7 +115,7 @@ default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "verifying"
+status = "complete"
 demo_module = "pp_atlas.cli"
 
 default_port = 8107
@@ -133,7 +133,7 @@ default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "verifying"
+status = "complete"
 demo_module = "pp_proving_ground.cli"
 
 default_port = 8108
@@ -151,7 +151,7 @@ default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "verifying"
+status = "complete"
 demo_module = "pp_routecraft.cli"
 
 format_arguments = ["ruff", "format", "--check", "."]
@@ -168,7 +168,7 @@ default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "verifying"
+status = "complete"
 demo_module = "pp_resonance.cli"
 format_arguments = ["ruff", "format", "--check", "."]
 lint_arguments = ["ruff", "check", "."]

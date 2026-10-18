@@ -1,0 +1,1 @@
+{"key": "[\"device-1\",0,10000]", "operation": "upsert", "payload": {"aggregate": {"average": 10.0, "count": 1, "end": 10000, "key": "device-1", "max": 10, "min": 10, "start": 0, "sum": 10}, "day": "1970-01-01", "device": "device-1", "value": 10}, "source_namespace": "current:stream-lake:tumbling", "version": 1}

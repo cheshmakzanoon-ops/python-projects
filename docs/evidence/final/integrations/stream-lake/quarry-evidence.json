@@ -1,0 +1,1944 @@
+{
+  "mapping": "Current(job_id,operator_id,key,revision) \u2192 Quarry(namespace,key,version)",
+  "snapshots": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "initial_sum": 10,
+  "latest_sum": 17,
+  "historical_sum": 10,
+  "full_rebuild_matches": true,
+  "historical_conflict_rejected": true,
+  "manifests": [
+    {
+      "base_snapshot": null,
+      "code_digest": "555064dd234025373f3b46f02c6065c39cde862c055e65931fdb11560366d03e",
+      "column_lineage": {
+        "daily.count": "count(facts.key)",
+        "daily.total": "sum(facts.value)",
+        "facts.day": "normalized.payload.day",
+        "facts.device": "normalized.payload.device",
+        "facts.value": "normalized.payload.value"
+      },
+      "contract": {
+        "fields": {
+          "aggregate": {
+            "kind": "json",
+            "nullable": false
+          },
+          "day": {
+            "kind": "string",
+            "nullable": false
+          },
+          "device": {
+            "kind": "string",
+            "nullable": false
+          },
+          "value": {
+            "kind": "number",
+            "nullable": false
+          }
+        },
+        "max_rows": null,
+        "maximum": null,
+        "min_rows": 0,
+        "minimum": null
+      },
+      "execution_settings": {
+        "memory_mb": 128,
+        "threads": 1
+      },
+      "format_version": 1,
+      "partitions": {
+        "0": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-0-e9ae130af6e242809bd880c9681754cb.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-0-6c031aba7df7453c883de30d9b66215f.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-0-4aaab58b42514dab833334a1099459f1.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "1": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-1-41ff2fe5e46a4be2b1fad5d589524540.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-1-ded28586799447569eae26cc319d3659.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-1-eb8af25f279c4f3597f2fcdccbe9635d.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "2": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-2-833d0c32f25a479fbd8ba777a75f2944.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-2-8bfa26bbeae14ffd8c499e3dafaec8c2.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-2-42e0dcc75a73408098aa7961644ab7d0.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "3": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-3-213dd0ecfd4c4ffc89cdbff09453aa3b.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-3-7b5bdc37eed942d6a28c19a730d8e196.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-3-46ce2b12f2504db894b66faa88002b6a.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "4": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-4-6421225d1b724ba6ba23a552562a01f4.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-4-15ca36b3ca0a40c0af68a47fdf2ef818.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-4-d284d76ba78f4b78a9e99e00c7cb81b4.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "5": {
+          "daily": {
+            "bytes": 500,
+            "fingerprint": "20373bcadbd32ab55e6999b577392b32618ae05745ba39d73aaccaf9f9533d37",
+            "input_fingerprints": [
+              "4b4d2c2c81dc9bc4861449164ef75951f7939cc01f40d753000da7be528c1748"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-5-f47913f9332c45e5a4c6bf989f92878c.parquet",
+            "reused": false,
+            "rows": 1,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "35ac0742a64de266a2ce90b11a4a9a80a7ae082bb1d9d42975e601e40534c553",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 3045,
+            "fingerprint": "4b4d2c2c81dc9bc4861449164ef75951f7939cc01f40d753000da7be528c1748",
+            "input_fingerprints": [
+              "f38f16db90642bfe26638e5fe7a146d59d4b557cb8936e9d7b50ec43b9d26013"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-5-0d94fd6c6d7447eea754fc21349e6aa7.parquet",
+            "reused": false,
+            "rows": 1,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "5110755a64be0585cc8d13d8b3495caa156d6af0c587b6c06230a85c5498309d",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 3294,
+            "fingerprint": "f38f16db90642bfe26638e5fe7a146d59d4b557cb8936e9d7b50ec43b9d26013",
+            "input_fingerprints": [
+              "af974837466e3bc093a6e5c1f162bbce44001f4df2dde2bfb6458fcc859714ca"
+            ],
+            "parents": [],
+            "path": "data/normalized-5-f5be88170b27492ea31a85e7128a78bb.parquet",
+            "reused": false,
+            "rows": 1,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "f3ef84490077ab6c7fcdca08be1f3d30ebf957ca6698e379fbaaf6449a72ff6a",
+            "transform": "normalize"
+          }
+        },
+        "6": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-6-8edcbed5a4af46d1b43672e297b33a6f.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-6-b22aa0e8931641b8ae151e4733b3774b.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-6-5ee17593ab684a26b86c468d7916b69a.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "7": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-7-84939152069f4386b246d7e5f5efe1a3.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-7-9a8e032117644af98fd0f0c93ded6456.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-7-27f7899ae29642c8abceb8a95d6c7d71.parquet",
+            "reused": false,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        }
+      },
+      "quality": {
+        "live_rows": 1,
+        "maximum_value": 10,
+        "minimum_value": 10,
+        "partitions": {
+          "0": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "1": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "2": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "3": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "4": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "5": {
+            "count": 1,
+            "maximum": 10,
+            "minimum": 10
+          },
+          "6": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "7": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          }
+        },
+        "scope": "global reduction of partition-local summaries"
+      },
+      "stats": {
+        "bytes_written": 15253,
+        "max_batch_rows": 1,
+        "parquet_input_bytes": 13829,
+        "reused_nodes": 0,
+        "rewritten_buckets": 8
+      },
+      "snapshot": 1
+    },
+    {
+      "base_snapshot": 1,
+      "code_digest": "555064dd234025373f3b46f02c6065c39cde862c055e65931fdb11560366d03e",
+      "column_lineage": {
+        "daily.count": "count(facts.key)",
+        "daily.total": "sum(facts.value)",
+        "facts.day": "normalized.payload.day",
+        "facts.device": "normalized.payload.device",
+        "facts.value": "normalized.payload.value"
+      },
+      "contract": {
+        "fields": {
+          "aggregate": {
+            "kind": "json",
+            "nullable": false
+          },
+          "day": {
+            "kind": "string",
+            "nullable": false
+          },
+          "device": {
+            "kind": "string",
+            "nullable": false
+          },
+          "value": {
+            "kind": "number",
+            "nullable": false
+          }
+        },
+        "max_rows": null,
+        "maximum": null,
+        "min_rows": 0,
+        "minimum": null
+      },
+      "execution_settings": {
+        "memory_mb": 128,
+        "threads": 1
+      },
+      "format_version": 1,
+      "partitions": {
+        "0": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-0-e9ae130af6e242809bd880c9681754cb.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-0-6c031aba7df7453c883de30d9b66215f.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-0-4aaab58b42514dab833334a1099459f1.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "1": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-1-41ff2fe5e46a4be2b1fad5d589524540.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-1-ded28586799447569eae26cc319d3659.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-1-eb8af25f279c4f3597f2fcdccbe9635d.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "2": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-2-833d0c32f25a479fbd8ba777a75f2944.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-2-8bfa26bbeae14ffd8c499e3dafaec8c2.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-2-42e0dcc75a73408098aa7961644ab7d0.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "3": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-3-213dd0ecfd4c4ffc89cdbff09453aa3b.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-3-7b5bdc37eed942d6a28c19a730d8e196.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-3-46ce2b12f2504db894b66faa88002b6a.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "4": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-4-6421225d1b724ba6ba23a552562a01f4.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-4-15ca36b3ca0a40c0af68a47fdf2ef818.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-4-d284d76ba78f4b78a9e99e00c7cb81b4.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "5": {
+          "daily": {
+            "bytes": 500,
+            "fingerprint": "20373bcadbd32ab55e6999b577392b32618ae05745ba39d73aaccaf9f9533d37",
+            "input_fingerprints": [
+              "4b4d2c2c81dc9bc4861449164ef75951f7939cc01f40d753000da7be528c1748"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-5-f47913f9332c45e5a4c6bf989f92878c.parquet",
+            "reused": true,
+            "rows": 1,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "35ac0742a64de266a2ce90b11a4a9a80a7ae082bb1d9d42975e601e40534c553",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 3045,
+            "fingerprint": "4b4d2c2c81dc9bc4861449164ef75951f7939cc01f40d753000da7be528c1748",
+            "input_fingerprints": [
+              "f38f16db90642bfe26638e5fe7a146d59d4b557cb8936e9d7b50ec43b9d26013"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-5-0d94fd6c6d7447eea754fc21349e6aa7.parquet",
+            "reused": true,
+            "rows": 1,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "5110755a64be0585cc8d13d8b3495caa156d6af0c587b6c06230a85c5498309d",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 3294,
+            "fingerprint": "f38f16db90642bfe26638e5fe7a146d59d4b557cb8936e9d7b50ec43b9d26013",
+            "input_fingerprints": [
+              "af974837466e3bc093a6e5c1f162bbce44001f4df2dde2bfb6458fcc859714ca"
+            ],
+            "parents": [],
+            "path": "data/normalized-5-f5be88170b27492ea31a85e7128a78bb.parquet",
+            "reused": true,
+            "rows": 1,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "f3ef84490077ab6c7fcdca08be1f3d30ebf957ca6698e379fbaaf6449a72ff6a",
+            "transform": "normalize"
+          }
+        },
+        "6": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-6-8edcbed5a4af46d1b43672e297b33a6f.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-6-b22aa0e8931641b8ae151e4733b3774b.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-6-5ee17593ab684a26b86c468d7916b69a.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "7": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-7-84939152069f4386b246d7e5f5efe1a3.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-7-9a8e032117644af98fd0f0c93ded6456.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-7-27f7899ae29642c8abceb8a95d6c7d71.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        }
+      },
+      "quality": {
+        "live_rows": 1,
+        "maximum_value": 10,
+        "minimum_value": 10,
+        "partitions": {
+          "0": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "1": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "2": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "3": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "4": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "5": {
+            "count": 1,
+            "maximum": 10,
+            "minimum": 10
+          },
+          "6": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "7": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          }
+        },
+        "scope": "global reduction of partition-local summaries"
+      },
+      "stats": {
+        "bytes_written": 0,
+        "max_batch_rows": 0,
+        "parquet_input_bytes": 0,
+        "reused_nodes": 24,
+        "rewritten_buckets": 0
+      },
+      "snapshot": 2
+    },
+    {
+      "base_snapshot": 2,
+      "code_digest": "555064dd234025373f3b46f02c6065c39cde862c055e65931fdb11560366d03e",
+      "column_lineage": {
+        "daily.count": "count(facts.key)",
+        "daily.total": "sum(facts.value)",
+        "facts.day": "normalized.payload.day",
+        "facts.device": "normalized.payload.device",
+        "facts.value": "normalized.payload.value"
+      },
+      "contract": {
+        "fields": {
+          "aggregate": {
+            "kind": "json",
+            "nullable": false
+          },
+          "day": {
+            "kind": "string",
+            "nullable": false
+          },
+          "device": {
+            "kind": "string",
+            "nullable": false
+          },
+          "value": {
+            "kind": "number",
+            "nullable": false
+          }
+        },
+        "max_rows": null,
+        "maximum": null,
+        "min_rows": 0,
+        "minimum": null
+      },
+      "execution_settings": {
+        "memory_mb": 128,
+        "threads": 1
+      },
+      "format_version": 1,
+      "partitions": {
+        "0": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-0-e9ae130af6e242809bd880c9681754cb.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-0-6c031aba7df7453c883de30d9b66215f.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-0-4aaab58b42514dab833334a1099459f1.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "1": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-1-41ff2fe5e46a4be2b1fad5d589524540.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-1-ded28586799447569eae26cc319d3659.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-1-eb8af25f279c4f3597f2fcdccbe9635d.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "2": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-2-833d0c32f25a479fbd8ba777a75f2944.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-2-8bfa26bbeae14ffd8c499e3dafaec8c2.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-2-42e0dcc75a73408098aa7961644ab7d0.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "3": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-3-213dd0ecfd4c4ffc89cdbff09453aa3b.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-3-7b5bdc37eed942d6a28c19a730d8e196.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-3-46ce2b12f2504db894b66faa88002b6a.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "4": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-4-6421225d1b724ba6ba23a552562a01f4.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-4-15ca36b3ca0a40c0af68a47fdf2ef818.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-4-d284d76ba78f4b78a9e99e00c7cb81b4.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "5": {
+          "daily": {
+            "bytes": 500,
+            "fingerprint": "add6aded3a785aa47aac7bdfaf7f2fb13e3771279e3cc262d34546a3d1849581",
+            "input_fingerprints": [
+              "fd58fff068256d54d95bb7fe002df45f772e8a82e20ce237bd580f53d35e34ea"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-5-cd574d9f74fa4e68a149c23f54306d78.parquet",
+            "reused": false,
+            "rows": 1,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "58b9586547457e3d3c7ccc578f2dbb93d7b4ca2c405f97d487cea149fca269b4",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 3035,
+            "fingerprint": "fd58fff068256d54d95bb7fe002df45f772e8a82e20ce237bd580f53d35e34ea",
+            "input_fingerprints": [
+              "2d2b39d094872e0a6faa60e5f81e0f2a16649371e145e071ccd98e4c6b488844"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-5-ce7bb76ae01c431dabcf845c79f4c1b9.parquet",
+            "reused": false,
+            "rows": 1,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "f0e3393edcc929b632b0c4c8e78b8e4bd1ded3bb106ac1d4ce72d74691227691",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 3294,
+            "fingerprint": "2d2b39d094872e0a6faa60e5f81e0f2a16649371e145e071ccd98e4c6b488844",
+            "input_fingerprints": [
+              "f662694d35d6894542522511b69836c38d2bc305756dd687611888b1ac56c1f9"
+            ],
+            "parents": [],
+            "path": "data/normalized-5-b64a64ed80fa4fdc8f886e7e650b13db.parquet",
+            "reused": false,
+            "rows": 1,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "af706cafad069da4c4249f96d47197070a92de139bade83d7ef6286d325c8eef",
+            "transform": "normalize"
+          }
+        },
+        "6": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-6-8edcbed5a4af46d1b43672e297b33a6f.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-6-b22aa0e8931641b8ae151e4733b3774b.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-6-5ee17593ab684a26b86c468d7916b69a.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "7": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-7-84939152069f4386b246d7e5f5efe1a3.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-7-9a8e032117644af98fd0f0c93ded6456.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-7-27f7899ae29642c8abceb8a95d6c7d71.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        }
+      },
+      "quality": {
+        "live_rows": 1,
+        "maximum_value": 17,
+        "minimum_value": 17,
+        "partitions": {
+          "0": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "1": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "2": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "3": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "4": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "5": {
+            "count": 1,
+            "maximum": 17,
+            "minimum": 17
+          },
+          "6": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "7": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          }
+        },
+        "scope": "global reduction of partition-local summaries"
+      },
+      "stats": {
+        "bytes_written": 6829,
+        "max_batch_rows": 1,
+        "parquet_input_bytes": 6329,
+        "reused_nodes": 21,
+        "rewritten_buckets": 1
+      },
+      "snapshot": 3
+    },
+    {
+      "base_snapshot": 3,
+      "code_digest": "555064dd234025373f3b46f02c6065c39cde862c055e65931fdb11560366d03e",
+      "column_lineage": {
+        "daily.count": "count(facts.key)",
+        "daily.total": "sum(facts.value)",
+        "facts.day": "normalized.payload.day",
+        "facts.device": "normalized.payload.device",
+        "facts.value": "normalized.payload.value"
+      },
+      "contract": {
+        "fields": {
+          "aggregate": {
+            "kind": "json",
+            "nullable": false
+          },
+          "day": {
+            "kind": "string",
+            "nullable": false
+          },
+          "device": {
+            "kind": "string",
+            "nullable": false
+          },
+          "value": {
+            "kind": "number",
+            "nullable": false
+          }
+        },
+        "max_rows": null,
+        "maximum": null,
+        "min_rows": 0,
+        "minimum": null
+      },
+      "execution_settings": {
+        "memory_mb": 128,
+        "threads": 1
+      },
+      "format_version": 1,
+      "partitions": {
+        "0": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-0-e9ae130af6e242809bd880c9681754cb.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-0-6c031aba7df7453c883de30d9b66215f.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-0-4aaab58b42514dab833334a1099459f1.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "1": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-1-41ff2fe5e46a4be2b1fad5d589524540.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-1-ded28586799447569eae26cc319d3659.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-1-eb8af25f279c4f3597f2fcdccbe9635d.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "2": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-2-833d0c32f25a479fbd8ba777a75f2944.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-2-8bfa26bbeae14ffd8c499e3dafaec8c2.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-2-42e0dcc75a73408098aa7961644ab7d0.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "3": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-3-213dd0ecfd4c4ffc89cdbff09453aa3b.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-3-7b5bdc37eed942d6a28c19a730d8e196.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-3-46ce2b12f2504db894b66faa88002b6a.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "4": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-4-6421225d1b724ba6ba23a552562a01f4.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-4-15ca36b3ca0a40c0af68a47fdf2ef818.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-4-d284d76ba78f4b78a9e99e00c7cb81b4.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "5": {
+          "daily": {
+            "bytes": 500,
+            "fingerprint": "add6aded3a785aa47aac7bdfaf7f2fb13e3771279e3cc262d34546a3d1849581",
+            "input_fingerprints": [
+              "fd58fff068256d54d95bb7fe002df45f772e8a82e20ce237bd580f53d35e34ea"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-5-cd574d9f74fa4e68a149c23f54306d78.parquet",
+            "reused": true,
+            "rows": 1,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "58b9586547457e3d3c7ccc578f2dbb93d7b4ca2c405f97d487cea149fca269b4",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 3035,
+            "fingerprint": "fd58fff068256d54d95bb7fe002df45f772e8a82e20ce237bd580f53d35e34ea",
+            "input_fingerprints": [
+              "2d2b39d094872e0a6faa60e5f81e0f2a16649371e145e071ccd98e4c6b488844"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-5-ce7bb76ae01c431dabcf845c79f4c1b9.parquet",
+            "reused": true,
+            "rows": 1,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "f0e3393edcc929b632b0c4c8e78b8e4bd1ded3bb106ac1d4ce72d74691227691",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 3294,
+            "fingerprint": "2d2b39d094872e0a6faa60e5f81e0f2a16649371e145e071ccd98e4c6b488844",
+            "input_fingerprints": [
+              "f662694d35d6894542522511b69836c38d2bc305756dd687611888b1ac56c1f9"
+            ],
+            "parents": [],
+            "path": "data/normalized-5-b64a64ed80fa4fdc8f886e7e650b13db.parquet",
+            "reused": true,
+            "rows": 1,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "af706cafad069da4c4249f96d47197070a92de139bade83d7ef6286d325c8eef",
+            "transform": "normalize"
+          }
+        },
+        "6": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-6-8edcbed5a4af46d1b43672e297b33a6f.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-6-b22aa0e8931641b8ae151e4733b3774b.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-6-5ee17593ab684a26b86c468d7916b69a.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        },
+        "7": {
+          "daily": {
+            "bytes": 132,
+            "fingerprint": "cb787cc55df62a0cf9c30d07841feb9e5cd3ed96d04fa922f373faed1642d3dd",
+            "input_fingerprints": [
+              "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-7-84939152069f4386b246d7e5f5efe1a3.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "13672845f5e8435fd764f3ae71eee3e4a069a21b6a3c6df9261bf70e0e7f0459",
+            "transform": "daily"
+          },
+          "facts": {
+            "bytes": 277,
+            "fingerprint": "2d2eea76dd9c1fabb18f8de03d4f5d61de7de8ff09b8c1783089b3421888d54a",
+            "input_fingerprints": [
+              "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-7-9a8e032117644af98fd0f0c93ded6456.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
+            "sha256": "57ab67a064b76180df59d70722af6a8c944e725285c0dfafbe4d5fc55ac64be1",
+            "transform": "facts"
+          },
+          "normalized": {
+            "bytes": 793,
+            "fingerprint": "8b48bd1db779baaebe01ea7f71a7d4b583c5b1509a4feec3f4eea6e47e31e19f",
+            "input_fingerprints": [
+              "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ],
+            "parents": [],
+            "path": "data/normalized-7-27f7899ae29642c8abceb8a95d6c7d71.parquet",
+            "reused": true,
+            "rows": 0,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4a722c4bc80eb373b6e2297e91e8dbb27d95d0c0bd3c3fcfb8b9372cefce4663",
+            "transform": "normalize"
+          }
+        }
+      },
+      "quality": {
+        "live_rows": 1,
+        "maximum_value": 17,
+        "minimum_value": 17,
+        "partitions": {
+          "0": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "1": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "2": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "3": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "4": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "5": {
+            "count": 1,
+            "maximum": 17,
+            "minimum": 17
+          },
+          "6": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          },
+          "7": {
+            "count": 0,
+            "maximum": null,
+            "minimum": null
+          }
+        },
+        "scope": "global reduction of partition-local summaries"
+      },
+      "stats": {
+        "bytes_written": 0,
+        "max_batch_rows": 0,
+        "parquet_input_bytes": 0,
+        "reused_nodes": 24,
+        "rewritten_buckets": 0
+      },
+      "snapshot": 4
+    }
+  ]
+}

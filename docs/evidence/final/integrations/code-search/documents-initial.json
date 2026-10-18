@@ -1,0 +1,109 @@
+[
+  {
+    "id": "private_service.py:06b7e2feaa5498c8d0cbd2c2",
+    "title": "PT002 private_service.py",
+    "text": "PT002 private_service.py String-built or untrusted SQL flows to an execution method     key = input()     cursor.execute(\"SELECT value FROM readings WHERE key = '\" + key + \"'\") configured untrusted source String-built or untrusted SQL flows to an execution method",
+    "restricted": true,
+    "finding": {
+      "id": "06b7e2feaa5498c8d0cbd2c2",
+      "rule_id": "PT002",
+      "severity": "error",
+      "confidence": "high",
+      "path": "private_service.py",
+      "location": {
+        "line": 3,
+        "column": 5,
+        "end_line": 3,
+        "end_column": 75
+      },
+      "sink_location": {
+        "line": 3,
+        "column": 5,
+        "end_line": 3,
+        "end_column": 75
+      },
+      "evidence": [
+        {
+          "line": 2,
+          "message": "configured untrusted source"
+        },
+        {
+          "line": 3,
+          "message": "String-built or untrusted SQL flows to an execution method"
+        }
+      ],
+      "message": "String-built or untrusted SQL flows to an execution method",
+      "coverage": "modeled"
+    }
+  },
+  {
+    "id": "public_service.py:790b07c46cef5c7c6d8e49dd",
+    "title": "PT001 public_service.py",
+    "text": "PT001 public_service.py Untrusted value flows to a shell-enabled process     command = input()     sp.run(command, shell=True)  configured untrusted source Untrusted value flows to a shell-enabled process",
+    "restricted": false,
+    "finding": {
+      "id": "790b07c46cef5c7c6d8e49dd",
+      "rule_id": "PT001",
+      "severity": "error",
+      "confidence": "high",
+      "path": "public_service.py",
+      "location": {
+        "line": 6,
+        "column": 5,
+        "end_line": 6,
+        "end_column": 32
+      },
+      "sink_location": {
+        "line": 6,
+        "column": 5,
+        "end_line": 6,
+        "end_column": 32
+      },
+      "evidence": [
+        {
+          "line": 5,
+          "message": "configured untrusted source"
+        },
+        {
+          "line": 6,
+          "message": "Untrusted value flows to a shell-enabled process"
+        }
+      ],
+      "message": "Untrusted value flows to a shell-enabled process",
+      "coverage": "modeled"
+    }
+  },
+  {
+    "id": "public_service.py:c195ab0e4cce21b573b5cf36",
+    "title": "PT003 public_service.py",
+    "text": "PT003 public_service.py Configured synchronous blocking call inside async function async def poll():     clock.sleep(1) Configured synchronous blocking call inside async function",
+    "restricted": false,
+    "finding": {
+      "id": "c195ab0e4cce21b573b5cf36",
+      "rule_id": "PT003",
+      "severity": "error",
+      "confidence": "high",
+      "path": "public_service.py",
+      "location": {
+        "line": 9,
+        "column": 5,
+        "end_line": 9,
+        "end_column": 19
+      },
+      "sink_location": {
+        "line": 9,
+        "column": 5,
+        "end_line": 9,
+        "end_column": 19
+      },
+      "evidence": [
+        {
+          "line": 9,
+          "message": "Configured synchronous blocking call inside async function"
+        }
+      ],
+      "message": "Configured synchronous blocking call inside async function",
+      "coverage": "modeled"
+    }
+  }
+]
