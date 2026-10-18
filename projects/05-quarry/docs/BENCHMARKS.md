@@ -8,14 +8,41 @@ JSON records originals rows/second, original and incremental times, incremental/
 
 Source provenance includes exact project source and lock hashes plus relevant root-contract hashes, source commit and project dirty flag. Source scope comprises src/tests/examples/benchmarks code/data files, pyproject.toml, uv.lock and .python-version; generated outputs and evidence are excluded. Root scope comprises AGENTS.md, ruff.toml, portfolio.toml, dispatcher and the master brief. The benchmark confirms unchanged source hash after execution.
 
-Measured development results are appended after validation. Final release-quality runs belong to the coordinator's exported committed tree; do not treat dirty development numbers as final portfolio evidence.
+The accepted standard result below comes from the coordinator's immutable committed tree. Historical dirty-checkout development captures remain labeled separately and are not substitutes for that evidence.
+
+## Accepted standard result
+
+The full standard workload passed on CPython 3.14.8 from clean source commit `59443e2bcdfc6a1dd81f8334c108474eef2d3030`. See the [raw measured report](../../../docs/evidence/final/standard/quarry-3.14.8-benchmark-benchmark.json) and [coordinator verification wrapper](../../../docs/evidence/final/standard/quarry-3.14.8.json). The wrapper records successful demo/standard commands and unchanged source after execution. This was one costly measured run, preceded by a separate 20,000-original/eight-bucket warmup; it does not provide a repeated-run latency distribution.
+
+The measured run ingested 5,000,000 originals over 128 buckets, followed by separate batches of 500,000 corrections, 100,000 deletes and 100 nullable schema-addition upserts. Its final analytical state contained 4,900,100 live rows and its exact historical registry contained 5,600,100 accepted identities. The schema batch uses newer versions and restores 100 previously deleted keys. Both the independent complete-rebuild comparison and the forced full current-state Parquet rebuild matched digest `eb4449629d8ea89c9ecff3457aa3f49a6c0ace83ceb0c302fdc3df61c1375bb3`.
+
+| Measured operation or quantity | Result |
+| --- | ---: |
+| Original ingestion and publication | 453.668268 s |
+| Original-event throughput | 11,021.27 rows/s |
+| Three subsequent ingestion/publication phases, combined | 470.169370 s |
+| One forced full current-state Parquet graph rebuild | 121.066512 s |
+| Subsequent phases / forced rebuild time | 3.883563 |
+| Sorted facts query and streaming result digest | 36.047760 s |
+| Orphan reconciliation, with zero orphans | 0.055222 s |
+| Independent complete-rebuild oracle | 91.197882 s |
+| Peak process RSS | 312,631,296 bytes |
+| Parquet bytes written, original plus three update publications | 719,045,175 bytes |
+| Logical Parquet transform input bytes, including forced rebuild | 897,480,399 bytes |
+| Logical source bytes read across ingestion hash/parse passes | 3,303,426,868 bytes |
+
+This result demonstrates correct processing at the required size, not an incremental speedup. The three subsequent phases include event ingestion, identity-registry updates and three publications; the comparator is one graph rebuild from already materialized current state. Broad correction/delete batches reach every bucket, and the global schema change invalidates all 128 buckets. The final update publication therefore rebuilt 128 buckets and reused zero nodes. The separate targeted correction demo proves locality; it must not be used to imply that this broad standard workload avoided full bucket rewrites.
+
+The raw report records source digest `c2d532eb22b507168c771d915203437b50cc985e7f4fdf0db9397078a1e15af3`, lock digest `71898d3b0636bd6d3ed606a933766b7c6849d8da3766504686d8599fd5fbe00f`, exact identities for all four source files and five checksummed publication summaries. The coordinator wrapper uses its explicitly listed, broader source/root input sets and therefore records different scope hashes; consult each report's declared inputs rather than treating their hash values as interchangeable. DuckDB used one thread and a 128 MB engine memory limit, with 1,024-row Arrow batches and a 65,536-byte source-record bound. RSS includes Python, Arrow, DuckDB and evaluation overhead; it is not capped by the engine limit. The source read cache was primed by the oracle, engines had a bounded warmup, and measurement used a fresh catalog. Hardware CPU metadata is reported as unknown; these synthetic local results do not establish production capacity.
+
+The accepted compatibility wrappers also passed all 37 tests on [CPython 3.13.16](../../../docs/evidence/final/python313/quarry-3.13.16.json) and [CPython 3.14.8](../../../docs/evidence/final/python314/quarry-3.14.8.json), with clean immutable source at their recorded commit `7114e39c7e9e8af177e84fe8cd990fe5a09bde63`.
 
 ## Development baseline (not final committed evidence)
 
 A 3.13.16 run at dirty source digest `d6bfb001b269e27d7751e5203b107e47f16f45bed0e3c0c896d1ab6990f52695` completed one warmup and five measurements. Median original ingestion throughput was 6,671.61 rows/s; the individual measured runs ranged 4,850.31–15,226.15 rows/s under a shared development host. Peak process RSS was 151,871,488 bytes. Original builds took 1.31–4.12 s; subsequent three batches took 1.63–2.97 s; a forced full current-state Parquet rebuild took 0.50–1.04 s. Incremental/full ratios of 1.95–5.15 reflect three separate publications spanning all buckets and the schema-global rebuild; this workload is not evidence of a speedup. Targeted demo correction separately proves one bucket rebuilt and 21 nodes reused. Every run matched the independent rebuild digest. Source records totaled 9,799,974 logical read bytes per run across hash/parse passes.
 
-That earlier exact development report is in `artifacts/ci-313-development.json`. Subsequent fixes and default-interpreter selection change source identity; coordinator verification must rerun the finalized committed source before release claims. Standard profile execution is coordinator-owned and must not be inferred from this CI baseline.
+That earlier exact development report is in `artifacts/ci-313-development.json`. Subsequent fixes and default-interpreter selection changed source identity. This historical CI capture does not establish standard completion; the accepted committed-source standard result above supplies that evidence.
 
 ## Stable handoff baseline on Python 3.14.8
 
-The finalized development source `c2d532eb22b507168c771d915203437b50cc985e7f4fdf0db9397078a1e15af3` completed all five CI measurements and the 20,000-row warmup on Python 3.14.8. Median original throughput was 18,088.47 rows/s; peak process RSS was 131,145,728 bytes. Original builds took 1.085–1.362s, the three incremental publications 1.192–1.424s, and full current-state graph rebuilds 0.366–0.449s. Incremental/full ratios were 2.923–3.881; all five results matched the independent full-rebuild digest. The report now records exact source identities for all four files, historical registry cardinality and checksummed manifest summaries, along with separate warmup_parameters. See `artifacts/ci-development.json`. This remains dirty-checkout development evidence; final source-commit verification belongs to the coordinator.
+The finalized development source `c2d532eb22b507168c771d915203437b50cc985e7f4fdf0db9397078a1e15af3` completed all five CI measurements and the 20,000-row warmup on Python 3.14.8. Median original throughput was 18,088.47 rows/s; peak process RSS was 131,145,728 bytes. Original builds took 1.085–1.362s, the three incremental publications 1.192–1.424s, and full current-state graph rebuilds 0.366–0.449s. Incremental/full ratios were 2.923–3.881; all five results matched the independent full-rebuild digest. The report now records exact source identities for all four files, historical registry cardinality and checksummed manifest summaries, along with separate warmup_parameters. See `artifacts/ci-development.json`. This remains dirty-checkout development evidence. The accepted coordinator runs above now provide committed-source compatibility and standard verification.

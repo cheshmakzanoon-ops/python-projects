@@ -1,0 +1,162 @@
+[05-quarry] uv run --locked --python 3.14.8 python -m pp_quarry.cli benchmark --output /workspace/portfolio-verify-8m2k525j/source/.local/quarry/benchmark --seed 1729 --profile standard
+ 19% ▕███████▏                              ▏ (~8 seconds remaining)     20% ▕███████▌                              ▏ (~8 seconds remaining)     22% ▕████████▎                             ▏ (~8 seconds remaining)     23% ▕████████▋                             ▏ (~8 seconds remaining)     23% ▕████████▋                             ▏ (~7 seconds remaining)     26% ▕█████████▉                            ▏ (~7 seconds remaining)     27% ▕██████████▎                           ▏ (~7 seconds remaining)     30% ▕███████████▍                          ▏ (~7 seconds remaining)     31% ▕███████████▊                          ▏ (~7 seconds remaining)     33% ▕████████████▌                         ▏ (~6 seconds remaining)     34% ▕████████████▉                         ▏ (~6 seconds remaining)     35% ▕█████████████▎                        ▏ (~6 seconds remaining)     37% ▕██████████████                        ▏ (~6 seconds remaining)     38% ▕██████████████▍                       ▏ (~6 seconds remaining)     39% ▕██████████████▊                       ▏ (~6 seconds remaining)     41% ▕███████████████▌                      ▏ (~6 seconds remaining)     42% ▕███████████████▉                      ▏ (~6 seconds remaining)     42% ▕███████████████▉                      ▏ (~5 seconds remaining)     45% ▕█████████████████                     ▏ (~5 seconds remaining)     46% ▕█████████████████▍                    ▏ (~5 seconds remaining)     48% ▕██████████████████▏                   ▏ (~5 seconds remaining)    100% ▕██████████████████████████████████████▏ (00:00:04.86 elapsed)     
+ 11% ▕████▏                                 ▏ (~15 seconds remaining)    12% ▕████▌                                 ▏ (~14 seconds remaining)    15% ▕█████▋                                ▏ (~14 seconds remaining)    16% ▕██████                                ▏ (~14 seconds remaining)    18% ▕██████▊                               ▏ (~13 seconds remaining)    19% ▕███████▏                              ▏ (~13 seconds remaining)    20% ▕███████▌                              ▏ (~13 seconds remaining)    22% ▕████████▎                             ▏ (~12 seconds remaining)    23% ▕████████▋                             ▏ (~12 seconds remaining)    26% ▕█████████▉                            ▏ (~11 seconds remaining)    27% ▕██████████▎                           ▏ (~11 seconds remaining)    30% ▕███████████▍                          ▏ (~10 seconds remaining)    31% ▕███████████▊                          ▏ (~10 seconds remaining)    33% ▕████████████▌                         ▏ (~9 seconds remaining)     34% ▕████████████▉                         ▏ (~9 seconds remaining)     35% ▕█████████████▎                        ▏ (~9 seconds remaining)     37% ▕██████████████                        ▏ (~9 seconds remaining)     38% ▕██████████████▍                       ▏ (~9 seconds remaining)     38% ▕██████████████▍                       ▏ (~8 seconds remaining)     39% ▕██████████████▊                       ▏ (~8 seconds remaining)     41% ▕███████████████▌                      ▏ (~8 seconds remaining)     42% ▕███████████████▉                      ▏ (~8 seconds remaining)     45% ▕█████████████████                     ▏ (~7 seconds remaining)     46% ▕█████████████████▍                    ▏ (~7 seconds remaining)     48% ▕██████████████████▏                   ▏ (~7 seconds remaining)    100% ▕██████████████████████████████████████▏ (00:00:05.24 elapsed)     
+{
+  "schema_version": 1,
+  "project": "quarry",
+  "source_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+  "source_dirty": false,
+  "source_scope": "project",
+  "source_content_sha256": "c2d532eb22b507168c771d915203437b50cc985e7f4fdf0db9397078a1e15af3",
+  "root_contract_sha256": "9a1b85700595aeb75ffc12316f3169aba97fb3857e0655c705337fff7708bcb1",
+  "lockfile_sha256": "71898d3b0636bd6d3ed606a933766b7c6849d8da3766504686d8599fd5fbe00f",
+  "python": "3.14.8",
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "cpu": "unknown",
+  "memory_limit_bytes": null,
+  "seed": 1729,
+  "profile": "standard",
+  "memory_metadata_note": "OS peak RSS measured; cgroup maximum not inferred",
+  "dataset_id": "synthetic-device-v1:b8380a1411b616e3a7d506e927b7475968e3def869ad4d8248dedf478f5c4425",
+  "parameters": {
+    "original_events": 5000000,
+    "corrections": 500000,
+    "deletes": 100000,
+    "schema_additions": 100,
+    "buckets": 128,
+    "batch_rows": 1024,
+    "max_record_bytes": 65536,
+    "duckdb_memory_mb": 128,
+    "duckdb_threads": 1,
+    "cache_state": "source read cache primed by independent oracle; engine warmed with 20,000 events; fresh catalogs per run"
+  },
+  "source_identities": [
+    {
+      "file": "original.ndjson",
+      "sha256": "b8380a1411b616e3a7d506e927b7475968e3def869ad4d8248dedf478f5c4425",
+      "bytes": 742789197
+    },
+    {
+      "file": "late-updates.ndjson",
+      "sha256": "79918e3b961c4a99d836a106caa639d73d499473a9aa09b8e4f82ba290da5f79",
+      "bytes": 73763050
+    },
+    {
+      "file": "deletes.ndjson",
+      "sha256": "0f2bd75ebe6b56d0a8c2f5f2999b1066c647ee9741e2184cb0c64873fb8779ef",
+      "bytes": 9288890
+    },
+    {
+      "file": "schema-evolution.ndjson",
+      "sha256": "236de7fb0e92e8862a7d0f103c158766a613f5f29b25bc8a533efa855a18ad0d",
+      "bytes": 15580
+    }
+  ],
+  "warmup_parameters": {
+    "original_events": 20000,
+    "corrections": 2000,
+    "deletes": 400,
+    "schema_additions": 100,
+    "buckets": 8,
+    "fresh_catalog": true
+  },
+  "warmup_runs": 1,
+  "measurement_runs": 1,
+  "repetition_note": "CI has five measurements; standard has one measured run with 5,000,000 originals plus a bounded warmup with 20,000 originals to avoid duplicating the full historical catalog; the costly-run exception explicitly applies",
+  "metrics": {
+    "samples": [
+      {
+        "original_seconds": 453.66826777999995,
+        "incremental_seconds": 470.1693704900008,
+        "rows_per_second": 11021.26896480377,
+        "query_seconds": 36.04775954099932,
+        "recovery_seconds": 0.05522206699970411,
+        "bytes_written": 719045175,
+        "parquet_transform_bytes_read": 897480399,
+        "full_rebuild_seconds": 121.06651198799955,
+        "rewritten_buckets": 128,
+        "reused_nodes": 0,
+        "incremental_full_ratio": 3.8835625373976685,
+        "full_oracle_ratio": 5.1554856463027035,
+        "orphan_count": 0,
+        "registry_identities": 5600100,
+        "publication_summaries": [
+          {
+            "snapshot": 1,
+            "manifest_sha256": "c71b655e42ebdaf154f98fc3ca2b92abdcdfbbdf22120937458d585787851f16",
+            "files": 384,
+            "live_rows": 5000000,
+            "stats": {
+              "bytes_written": 179400950,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 179297570,
+              "reused_nodes": 0,
+              "rewritten_buckets": 128
+            }
+          },
+          {
+            "snapshot": 2,
+            "manifest_sha256": "ab6c5f2d42091483e09b10d254b9d55316cbe406ed5e67861d972cfc0728dc44",
+            "files": 384,
+            "live_rows": 5000000,
+            "stats": {
+              "bytes_written": 181785961,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 181682570,
+              "reused_nodes": 0,
+              "rewritten_buckets": 128
+            }
+          },
+          {
+            "snapshot": 3,
+            "manifest_sha256": "7ea005141a70b087ea67535c9a708edf2a3a0dae00abd379456872acc5cadec6",
+            "files": 384,
+            "live_rows": 4900000,
+            "stats": {
+              "bytes_written": 178906011,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 178802591,
+              "reused_nodes": 0,
+              "rewritten_buckets": 128
+            }
+          },
+          {
+            "snapshot": 4,
+            "manifest_sha256": "8d2d350d9212dea232b6839527f0e69482806ece7820a7772c2f19e35193dedf",
+            "files": 384,
+            "live_rows": 4900100,
+            "stats": {
+              "bytes_written": 178952253,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 178848834,
+              "reused_nodes": 0,
+              "rewritten_buckets": 128
+            }
+          },
+          {
+            "snapshot": 5,
+            "manifest_sha256": "1d91597aaab93ad04f1b4e414f68ab15120000f1fb4b63730e6578779a558d3f",
+            "files": 384,
+            "live_rows": 4900100,
+            "stats": {
+              "bytes_written": 178952253,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 178848834,
+              "reused_nodes": 0,
+              "rewritten_buckets": 128
+            }
+          }
+        ]
+      }
+    ],
+    "rows_per_second_median": 11021.26896480377,
+    "peak_rss_bytes": 312631296,
+    "source_bytes_read_per_run": 3303426868,
+    "oracle_seconds": 91.19788177999999
+  },
+  "correctness_checks": {
+    "independent_full_rebuild": true,
+    "latest_digest": "eb4449629d8ea89c9ecff3457aa3f49a6c0ace83ceb0c302fdc3df61c1375bb3"
+  },
+  "status": "passed"
+}

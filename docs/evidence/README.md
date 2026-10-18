@@ -21,7 +21,7 @@ Strata's [extended suite](final/strata-extended/strata-extended.json) passed all
 
 All three public-interface integrations passed committed source `7114e39`: [settlement](final/python314/settlement/integration.json), [stream-lake](final/python314/stream-lake/integration.json), [code-search](final/python314/code-search/integration.json). Separate package environments exchange HTTP or JSON; they do not import sibling source.
 
-The required standard profiles are currently running serially from `59443e2bcdfc6a1dd81f8334c108474eef2d3030`, together with all ten demos and the three integrations. Completed standard reports will be added here. Large generated data, databases, environments and caches are excluded from Git.
+The required standard profiles are running serially from `59443e2bcdfc6a1dd81f8334c108474eef2d3030`, together with all ten demos and the three integrations. Accepted full-size records are available for [Anchor](final/standard/anchor-3.14.8.json), [Strata](final/standard/strata-3.14.8.json), [Meridian](final/standard/meridian-3.14.8.json) and [Quarry](final/standard/quarry-3.14.8.json). Remaining profiles are pending. Large generated data, databases, environments and caches are excluded from Git.
 
 Local validation, Git synchronization and hosted CI are distinct. Hosted runs were observed queued; no remote pass is claimed. See [status](../STATUS.md), [environment](../ENVIRONMENT.md), [independent review](INDEPENDENT_REVIEW.md) and [evidence policy](../architecture/EVIDENCE.md).
 

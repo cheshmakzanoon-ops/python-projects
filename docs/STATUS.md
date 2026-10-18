@@ -7,8 +7,8 @@ All ten original implementations exist and have passed local quality, packaging 
 | Anchor |54tests, real PostgreSQL/process faults | Coordinator and live settlement | Standard passed |
 | Strata |79tests, MVCC/corruption/crash | Descriptor/format findings closed |100×5000 and standard passed |
 | Current |30tests, independent raw-control oracle | Coordinator and stream-lake | RSS fix: affected checks and million-event profiles pending |
-| Meridian |46tests, PostgreSQL constraints/races/reporting | Tenant/history/cost findings closed | Clean clone,250k journals |
-| Quarry |37tests, exact historical identities | Bounded input/source race findings closed | Clean clone,5m originals/corrections |
+| Meridian |46tests, PostgreSQL constraints/races/reporting | Tenant/history/cost findings closed | Standard passed: 250k journals and 100k statement rows |
+| Quarry |37tests, exact historical identities | Bounded input/source race findings closed | Standard passed: 5m originals plus corrections/deletes |
 | PyTrace |77tests, CFG/codemod/SARIF | Bounded read findings closed | Clean clone,250k LOC |
 | Atlas |40tests, visible scores/ACLs | Judgment audit and code-search | Clean clone,100k documents |
 | Proving Ground |103tests, leakage/CAS/serving |58independent closure checks | Clean clone,250k×40 data |
