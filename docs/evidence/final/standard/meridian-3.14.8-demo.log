@@ -1,0 +1,11 @@
+[04-meridian] uv run --locked --python 3.14.8 python -m pp_meridian.cli demo --output /workspace/portfolio-verify-8m2k525j/source/.local/meridian/demo --seed 1729
+Using CPython 3.14.8
+Creating virtual environment at: .venv
+   Building pp-meridian @ file:///workspace/portfolio-verify-8m2k525j/source/projects/04-meridian
+      Built pp-meridian @ file:///workspace/portfolio-verify-8m2k525j/source/projects/04-meridian
+Installed 26 packages in 1.26s
+{
+  "status": "passed",
+  "failed_checks": [],
+  "report": "/workspace/portfolio-verify-8m2k525j/source/.local/meridian/demo/report.html"
+}

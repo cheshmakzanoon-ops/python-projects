@@ -1,0 +1,9 @@
+{
+  "observed_at_utc": "2026-10-18T02:43:49.376530+00:00",
+  "workload_source_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+  "journals": 250001,
+  "postings": 1000002,
+  "provisioned_accounts": 10000,
+  "accounts_with_postings": 496,
+  "scope": "Completed write-population snapshot, including one extra two-posting warmup journal. Audit and reconciliation acceptance remain separate. Generator cycles select a hot subset of provisioned accounts; do not imply all provisioned accounts receive writes."
+}

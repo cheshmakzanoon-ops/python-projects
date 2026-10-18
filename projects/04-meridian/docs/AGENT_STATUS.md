@@ -1,7 +1,14 @@
 # A04 Meridian handoff
 
-Status: verifying (implementation and local gates complete; coordinator independent review,
-immutable committed-source evidence, and full standard measurement remain).
+Status: verified at immutable source `59443e2bcdfc6a1dd81f8334c108474eef2d3030`.
+Meridian implementation, accepted matrix verification, and full standard measurement are complete.
+The coordinator owns final repository integration and publication. Implementation writes remain paused.
+
+Accepted [Python 3.13 evidence](../../../docs/evidence/final/python313/meridian-3.13.16.json)
+and [Python 3.14 evidence](../../../docs/evidence/final/python314/meridian-3.14.8.json)
+both passed, including 46 tests per interpreter. The [standard wrapper](../../../docs/evidence/final/standard/meridian-3.14.8.json)
+and [raw report](../../../docs/evidence/final/standard/meridian-3.14.8-benchmark-benchmark.json)
+passed against the same clean immutable source. Earlier development checkpoints below are historical.
 
 ME-01–08 are implemented and locally verified on real PostgreSQL 17.11. No required test
 uses skips/xfails or mocks PostgreSQL. Exact commands below all exited 0:
@@ -32,10 +39,10 @@ Public API: Basic Django authentication, verified X-Tenant-ID, Idempotency-Key; 
 journal postings, immutable history/reversal, historical balance, statement import, run/proposal
 review. Default loopback port 8104. Standard profile retains 250000 journals/~million postings,
 10000 accounts/100 tenants/100000 rows, one costly full measurement per contention mode;
-coordinator will run from a stable committed tree under an exclusive resource lease.
+the completed accepted immutable measurement is summarized at the end of this status record.
 
-Current exact remaining: coordinator independent review, final immutable source evidence,
-full standard profile measurement. No missing implementation acceptance IDs are known.
+The earlier independent-review, immutable-evidence, and standard-measurement gates are now closed
+by the accepted final evidence linked above. No project implementation acceptance IDs remain open.
 No shared/root or Git mutations performed. Root CI/container binding request acknowledged.
 
 Final expanded acceptance test also executes the public demo and clean-demo subprocesses,
@@ -73,5 +80,28 @@ Commands: `uv run --locked pytest tests/acceptance/test_workload_failure_reporti
 with separate MERIDIAN_TEST_DB_NAME per interpreter; explicit 3.13 environment uses
 `UV_PROJECT_ENVIRONMENT=/workspace/.cache/meridian-py313` and `--python 3.13.16`.
 Ruff format/check (53 files), strict mypy (33 modules), and sdist/wheel build pass.
-No heavy benchmark or full-suite repetition ran for this focused fix; coordinator will run
-both full suites and public ci workloads on the next immutable committed snapshot.
+No heavy benchmark or full-suite repetition ran during that focused fix. The coordinator subsequently
+verified both full suites, public ci workloads, and the standard profile at the accepted immutable revision.
+
+## Accepted final standard result
+
+The clean CPython 3.14.8 standard run at `59443e2bcdfc6a1dd81f8334c108474eef2d3030`
+measured 250000 journals / 1000000 postings, eight clients, 100 tenants, and 100000 statement rows.
+There was one full cost-exception measurement plus one additional two-posting warmup journal.
+The same-tenant phase measured 83.5906 journals/second (125000 journals; p95 0.168624 s);
+the many-tenant phase measured 108.9654 journals/second (125000; p95 0.126260 s).
+Independent replay took 23.4057 s. Matching accounted for 99000 matched / 1000 unmatched rows
+and 1000 ambiguous components. Reimport returned 100000 stable identities and preserved 100000
+stored rows. All mandatory checks passed; audit/reimport failure lists were empty.
+
+The [account distribution observation](../../../docs/evidence/final/meridian-account-distribution.json)
+records 10000 provisioned accounts but only 496 with postings. This is a hot-account workload,
+not evidence that all 10000 accounts were actively written. Zero batch-boundary wait samples
+must not be read as zero contention: the [during-run observation](../../../docs/evidence/final/meridian-lock-observation.json)
+shows seven waiting sessions. That snapshot supplies neither cumulative wait time nor an
+independent acceptance pass. Single-run synthetic timing does not establish production capacity.
+
+Exact raw-report source SHA-256: `530ea3216de80d90015a655209261085f6f6b2d1ec1fde92e5dce8cfd22dcd51`;
+lock SHA-256: `278057ae9b5d37f8ac2d66073891b25e2d51b15d13f7f753129aea59e01bb54d`.
+The raw report and wrapper retain their distinct declared digest input scopes. No source,
+dependency, test, or evidence file changed during this documentation-only handoff.

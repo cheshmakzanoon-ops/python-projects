@@ -1,0 +1,32 @@
+{
+  "observed_at_utc": "2026-10-18T02:15:43.234248+00:00",
+  "workload_source_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+  "scope": "Single observational snapshot during same-tenant phase; client backends in the synthetic Meridian database; observer excluded. Not cumulative wait time or an acceptance pass.",
+  "query": "SELECT state,wait_event_type,wait_event,count(*) FROM pg_stat_activity WHERE datname=current_database() AND pid<>pg_backend_pid() AND backend_type='client backend' GROUP BY state,wait_event_type,wait_event ORDER BY count(*) DESC",
+  "sessions": [
+    {
+      "state": "active",
+      "wait_event_type": "Lock",
+      "wait_event": "tuple",
+      "count": 6
+    },
+    {
+      "state": "active",
+      "wait_event_type": "Lock",
+      "wait_event": "transactionid",
+      "count": 1
+    },
+    {
+      "state": "idle",
+      "wait_event_type": "Client",
+      "wait_event": "ClientRead",
+      "count": 1
+    },
+    {
+      "state": "idle in transaction",
+      "wait_event_type": "Client",
+      "wait_event": "ClientRead",
+      "count": 1
+    }
+  ]
+}
