@@ -1,0 +1,2 @@
+[02-strata] uv run --locked --python 3.13.16 python -m pp_strata.cli demo --output /workspace/portfolio-verify-q_j50t9a/source/.local/strata/demo --seed 1729
+{"status": "passed", "report": "/workspace/portfolio-verify-q_j50t9a/source/.local/strata/demo/demo.json"}

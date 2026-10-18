@@ -229,7 +229,8 @@ def benchmark(output: Path, profile: Literal["ci", "standard"], seed: int) -> di
         "limitations": [
             "Synthetic local filesystem workload, no power-loss simulation",
             "Five repetitions apply to commit comparisons; mixed workload runs once",
-            "Read amplification includes compaction and recovery reads; it is a conservative whole-workload ratio",
+            "Read amplification uses the first owner's counters through compaction; "
+            "subsequent validation and reopened recovery reads are excluded",
             "ru_maxrss includes Python and independent dictionary oracle; Linux KiB conversion",
             "OS page cache is not controlled; concurrent host work can affect timing",
         ],

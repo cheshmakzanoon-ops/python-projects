@@ -1,0 +1,169 @@
+{
+  "correctness_checks": {
+    "comparison_record_counts": true,
+    "full_scan_before_after_compaction": true,
+    "mixed_points_match_dictionary": true,
+    "recovered_scan_matches_dictionary": true,
+    "source_unchanged": true
+  },
+  "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+  "dataset_id": "strata-v1:4736b0ba5183f794785cc00da7a1156c4ab7cc829276ab5089b821ca70856a36",
+  "digest_inputs": "src/**, tests/**, benchmarks/**, examples/** (excluding __pycache__); pyproject.toml; uv.lock; .python-version",
+  "limitations": [
+    "Synthetic local filesystem workload, no power-loss simulation",
+    "Five repetitions apply to commit comparisons; mixed workload runs once",
+    "Read amplification includes compaction and recovery reads; it is a conservative whole-workload ratio",
+    "ru_maxrss includes Python and independent dictionary oracle; Linux KiB conversion",
+    "OS page cache is not controlled; concurrent host work can affect timing"
+  ],
+  "lockfile_sha256": "33d8e55d6e7773df668c53066b89481c06c274b4e3989b5cba83d33581f7667d",
+  "measurement_runs": 5,
+  "memory_limit_bytes": 34359738368,
+  "metrics": {
+    "churn": {
+      "disk_after_compaction": 19640,
+      "disk_before_compaction": 427301,
+      "seconds": 1.1380102660000375
+    },
+    "compaction_stall_seconds": [
+      0.04798069799971927
+    ],
+    "disk_bytes": 527782,
+    "durable_commit_comparison": {
+      "sqlite_batch_1": {
+        "maximum_seconds": 0.1013263800000459,
+        "median_seconds": 0.07074638099993535,
+        "minimum_seconds": 0.06822181600000476,
+        "p95_seconds": 0.1013263800000459,
+        "raw_seconds": [
+          0.06822181600000476,
+          0.0690349530000276,
+          0.07074638099993535,
+          0.1013263800000459,
+          0.08308981300024243
+        ],
+        "records": 200,
+        "records_per_second": 2826.999730207864
+      },
+      "sqlite_batch_100": {
+        "maximum_seconds": 0.0014439130000027944,
+        "median_seconds": 0.0012600869999914721,
+        "minimum_seconds": 0.0012043219999213761,
+        "p95_seconds": 0.0014439130000027944,
+        "raw_seconds": [
+          0.0012043219999213761,
+          0.0013221119997979258,
+          0.0012547110000014072,
+          0.0012600869999914721,
+          0.0014439130000027944
+        ],
+        "records": 200,
+        "records_per_second": 158719.199548407
+      },
+      "strata_batch_1": {
+        "maximum_seconds": 0.11311309799975788,
+        "median_seconds": 0.10252815100011503,
+        "minimum_seconds": 0.08730447800007823,
+        "p95_seconds": 0.11311309799975788,
+        "raw_seconds": [
+          0.08730447800007823,
+          0.10421964800025307,
+          0.11311309799975788,
+          0.10252815100011503,
+          0.09655721299986908
+        ],
+        "records": 200,
+        "records_per_second": 1950.6837687902478
+      },
+      "strata_batch_100": {
+        "maximum_seconds": 0.00410288600005515,
+        "median_seconds": 0.002798856000026717,
+        "minimum_seconds": 0.002424050999707106,
+        "p95_seconds": 0.00410288600005515,
+        "raw_seconds": [
+          0.00410288600005515,
+          0.002798856000026717,
+          0.003190827999787871,
+          0.002671708999969269,
+          0.002424050999707106
+        ],
+        "records": 200,
+        "records_per_second": 71457.7670298475
+      }
+    },
+    "initial_records_per_second": 37776.90827947337,
+    "initial_seconds": 0.05294239499971809,
+    "io_counters": {
+      "active_snapshots": 0,
+      "block_read_bytes": 752061,
+      "block_reads": 12,
+      "cache_hits": 0,
+      "checkpoint": 839,
+      "disk_bytes": 527782,
+      "format": 1,
+      "logical_bytes_written": 751965,
+      "memtable_records": 0,
+      "oldest_snapshot": null,
+      "sequence": 839,
+      "table_bytes_written": 1285813,
+      "tables": [
+        "table-edf6560d85af412b8b5b0650614b653e.sst"
+      ],
+      "wal_bytes_written": 762033,
+      "writer_failed": false
+    },
+    "peak_rss_bytes": 23965696,
+    "read_amplification_bytes_per_requested_value": 2.4875006615156647,
+    "read_latency": {
+      "maximum_seconds": 0.000890057000106026,
+      "median_seconds": 1.2052999863954028e-05,
+      "minimum_seconds": 5.61500019102823e-06,
+      "p95_seconds": 8.113900003081653e-05
+    },
+    "recovery_seconds": 0.015590737999900739,
+    "space_amplification": 1.06614010989011,
+    "write_amplification": 2.723326218640495,
+    "write_or_batch_latency": {
+      "maximum_seconds": 0.005790159999833122,
+      "median_seconds": 0.0006014040000081877,
+      "minimum_seconds": 0.00019516699967425666,
+      "p95_seconds": 0.0024409590000686876
+    }
+  },
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "packaging_context": "source-checkout",
+  "parameters": {
+    "block_target_bytes": 65536,
+    "cache_blocks_per_table": 32,
+    "cache_state": "warm in-process reads; reopen OS cache not dropped",
+    "churn_operations": 2000,
+    "durability": "WAL fsync per commit",
+    "initial_records": 2000,
+    "key_bytes": 16,
+    "memtable_bytes": 8388608,
+    "mixed_operations": 2000,
+    "processes": 1,
+    "sqlite": "journal_mode=WAL; synchronous=FULL; one connection; same rows and transaction sizes",
+    "threads": 1,
+    "value_bytes": 256
+  },
+  "pid": 49945,
+  "profile": "ci",
+  "project": "strata",
+  "python": "3.13.16",
+  "root_contract_sha256": "3fa066c6c98e31660c33fc7b83614452f4d61b09f74b202819f48d135e0658af",
+  "root_digest_inputs": [
+    "ruff.toml",
+    "AGENTS.md",
+    "portfolio.toml",
+    "scripts/portfolio.py"
+  ],
+  "schema_version": 1,
+  "seed": 1729,
+  "source_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+  "source_content_sha256": "49730eb7670eb00c203a71f6754c0eccae7147c0ff033d5173d36f12419d5fc3",
+  "source_dirty": false,
+  "source_scope": "project",
+  "status": "passed",
+  "warmup_runs": 1
+}

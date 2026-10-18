@@ -5,7 +5,7 @@ All ten original implementations exist and have passed local quality, packaging 
 | Product | Local suite | Review | Remaining final work |
 | --- | --- | --- | --- |
 | Anchor |54tests, real PostgreSQL/process faults | Coordinator and live settlement | Standard passed |
-| Strata |79tests, MVCC/corruption/crash | Descriptor/format findings closed |100×5000 and standard passed |
+| Strata |79tests, MVCC/corruption/crash | Descriptor/format findings closed |100×5000 passed; counter-scope wording correction reruns pending |
 | Current |30tests, independent raw-control oracle | Coordinator and stream-lake | RSS fix: affected checks and million-event profiles pending |
 | Meridian |46tests, PostgreSQL constraints/races/reporting | Tenant/history/cost findings closed | Standard passed: 250k journals and 100k statement rows |
 | Quarry |37tests, exact historical identities | Bounded input/source race findings closed | Standard passed: 5m originals plus corrections/deletes |

@@ -26,7 +26,7 @@ uv run --locked python -m pp_strata.cli benchmark --profile standard --output /a
 | Peak process RSS including independent oracle | 316,174,336 bytes |
 | Final disk size / live-byte space amplification | 67,490,354 bytes / 1.066× |
 | WAL + table bytes / logical mutation bytes | 2.774× |
-| Whole-workload block-read bytes / requested read-value bytes | 216.55× |
+| Block-read bytes / requested read-value bytes, first owner through compaction | 216.55× |
 | Churn disk bytes before / after compaction | 10,196,594 / 19,641 |
 
 Durable-commit comparisons below use 2,000 records per repetition, one warmup
@@ -44,7 +44,10 @@ one thread: Strata syncs the WAL per commit, while SQLite uses WAL mode and
 All independent mixed point-read, full-scan before/after compaction, recovered
 scan, comparison-count and unchanged-source checks passed. The larger read
 amplification reflects block-granularity reads and maintenance in the numerator;
-it is a whole-workload byte ratio rather than an isolated per-request I/O count.
+it is a phase byte ratio rather than an isolated per-request I/O count. Counters
+are sampled immediately after compaction and exclude the subsequent validation
+scan and the separate reopened recovery owner. The historical raw limitation
+described a broader scope incorrectly; see the [retained erratum](../../../docs/evidence/final/attempts/strata-counter-scope/coordinator-erratum.json).
 The OS page cache was not dropped. These variable local synthetic measurements
 show the synchronization/batching tradeoff and the cost of larger tables; they
 do not establish a general ranking against SQLite or production capacity.
@@ -117,8 +120,9 @@ checks. It is a correctness workload, not a throughput test. Full compaction and
 materialized scans are the main algorithmic limits; a measured future improvement
 would use version-pinned streaming iterators and a bounded leveled compactor.
 
-Counter limits: read amplification includes maintenance reads and is a
-whole-workload ratio; the OS cache is warm and never forcibly dropped. RSS
+Counter limits: read amplification includes maintenance reads through the first
+owner's compaction, excluding later validation/recovery reads; the OS cache is
+warm and never forcibly dropped. RSS
 includes the dictionary oracle. Block caches are 32 blocks per table, and the
 default memtable threshold is 8 MiB. Table bytes written include flush and
 compaction output; filesystem journaling/controller writes are not measured.

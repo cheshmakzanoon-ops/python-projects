@@ -1,0 +1,48 @@
+[02-strata] uv run --locked --python 3.14.8 ruff format --check .
+Using CPython 3.14.8
+Creating virtual environment at: .venv
+   Building pp-strata @ file:///workspace/portfolio-verify-s21ujvba/source/projects/02-strata
+      Built pp-strata @ file:///workspace/portfolio-verify-s21ujvba/source/projects/02-strata
+Installed 17 packages in 753ms
+32 files already formatted
+[02-strata] uv run --locked --python 3.14.8 ruff check .
+All checks passed!
+[02-strata] uv run --locked --python 3.14.8 mypy src
+Success: no issues found in 13 source files
+[02-strata] uv run --locked --python 3.14.8 pytest
+============================= test session starts ==============================
+platform linux -- Python 3.14.8, pytest-9.1.1, pluggy-1.7.0
+rootdir: /workspace/portfolio-verify-s21ujvba/source/projects/02-strata
+configfile: pyproject.toml
+testpaths: tests
+plugins: cov-7.1.0, hypothesis-6.170.1
+collected 79 items
+
+tests/acceptance/test_faults.py ........................................ [ 50%]
+....                                                                     [ 55%]
+tests/acceptance/test_snapshot_contract.py ......                        [ 63%]
+tests/integration/test_cli.py ...                                        [ 67%]
+tests/integration/test_threads.py .                                      [ 68%]
+tests/property/test_model.py ..                                          [ 70%]
+tests/unit/test_formats.py .......................                       [100%]
+
+============================== 79 passed in 4.72s ==============================
+[02-strata] uv build --no-sources --python 3.14.8
+Building source distribution...
+Building wheel from source distribution...
+Successfully built dist/pp_strata-0.1.0.tar.gz
+Successfully built dist/pp_strata-0.1.0-py3-none-any.whl
+[02-strata] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/portfolio-verify-s21ujvba/source/scripts/wheel_smoke.py /workspace/portfolio-verify-s21ujvba/source/projects/02-strata pp_strata
+Using CPython 3.14.8
+Creating virtual environment at: /tmp/portfolio-wheel-xs8x1jqb/venv
+Activate with: source /tmp/portfolio-wheel-xs8x1jqb/venv/bin/activate
+Resolved 18 packages in 2ms
+warning: Requirements file `/tmp/portfolio-wheel-xs8x1jqb/constraints.txt` does not contain any dependencies
+Using Python 3.14.8 environment at: /tmp/portfolio-wheel-xs8x1jqb/venv
+Resolved 1 package in 3ms
+Prepared 1 package in 5ms
+Installed 1 package in 2ms
+ + pp-strata==0.1.0 (from file:///workspace/portfolio-verify-s21ujvba/source/projects/02-strata/dist/pp_strata-0.1.0-py3-none-any.whl)
+/tmp/portfolio-wheel-xs8x1jqb/venv/lib/python3.14/site-packages/pp_strata/__init__.py
+{"status": "passed", "report": "/tmp/portfolio-wheel-xs8x1jqb/owned-demo/demo.json"}
+Removed Strata-owned output.

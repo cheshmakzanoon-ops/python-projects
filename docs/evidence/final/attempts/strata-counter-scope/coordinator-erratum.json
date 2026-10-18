@@ -1,0 +1,10 @@
+{
+  "observed_at_utc": "2026-10-18T03:49:05.702381+00:00",
+  "status": "historical measurements retained; report wording superseded",
+  "affected_field": "limitations: read amplification counter scope",
+  "prior_wording": "Read amplification includes compaction and recovery reads; it is a conservative whole-workload ratio",
+  "correct_scope": "The first Database owner counters are sampled immediately after compaction. They include earlier scan/compaction reads, and exclude the following validation scan and the separate reopened recovery owner.",
+  "numeric_measurements_changed": false,
+  "source_fix": "Only the descriptive limitation string in src/pp_strata/workloads.py changes; storage algorithms and numerical counter collection are unchanged. Fresh compatibility/CI/standard reports will replace the main accepted records.",
+  "extended_suite": "The100seed/5000operation storage suite does not execute workloads.py; its tested storage core remains unchanged. Its existing exact-source report is retained without claiming a new execution."
+}
