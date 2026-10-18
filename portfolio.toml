@@ -1,0 +1,132 @@
+schema_version = 1
+uv_version = "0.12.23"
+
+[[projects]]
+slug = "anchor"
+directory = "projects/01-anchor"
+distribution = "pp-anchor"
+package = "pp_anchor"
+cli = "anchor"
+default_python = "3.13.16"
+required_python_versions = ["3.13", "3.14"]
+supported_platforms = ["linux"]
+required_services = ["postgresql"]
+status = "queued"
+demo_module = "pp_anchor.cli"
+
+[[projects]]
+slug = "strata"
+directory = "projects/02-strata"
+distribution = "pp-strata"
+package = "pp_strata"
+cli = "strata"
+default_python = "3.13.16"
+required_python_versions = ["3.13", "3.14"]
+supported_platforms = ["linux"]
+required_services = []
+status = "queued"
+demo_module = "pp_strata.cli"
+
+[[projects]]
+slug = "current"
+directory = "projects/03-current"
+distribution = "pp-current"
+package = "pp_current"
+cli = "current"
+default_python = "3.13.16"
+required_python_versions = ["3.13", "3.14"]
+supported_platforms = ["linux"]
+required_services = []
+status = "queued"
+demo_module = "pp_current.cli"
+
+[[projects]]
+slug = "meridian"
+directory = "projects/04-meridian"
+distribution = "pp-meridian"
+package = "pp_meridian"
+cli = "meridian"
+default_python = "3.13.16"
+required_python_versions = ["3.13", "3.14"]
+supported_platforms = ["linux"]
+required_services = ["postgresql"]
+status = "queued"
+demo_module = "pp_meridian.cli"
+
+[[projects]]
+slug = "quarry"
+directory = "projects/05-quarry"
+distribution = "pp-quarry"
+package = "pp_quarry"
+cli = "quarry"
+default_python = "3.13.16"
+required_python_versions = ["3.13", "3.14"]
+supported_platforms = ["linux"]
+required_services = []
+status = "queued"
+demo_module = "pp_quarry.cli"
+
+[[projects]]
+slug = "pytrace"
+directory = "projects/06-pytrace"
+distribution = "pp-pytrace"
+package = "pp_pytrace"
+cli = "pytrace"
+default_python = "3.13.16"
+required_python_versions = ["3.13", "3.14"]
+supported_platforms = ["linux"]
+required_services = []
+status = "queued"
+demo_module = "pp_pytrace.cli"
+
+[[projects]]
+slug = "atlas"
+directory = "projects/07-atlas"
+distribution = "pp-atlas"
+package = "pp_atlas"
+cli = "atlas"
+default_python = "3.13.16"
+required_python_versions = ["3.13", "3.14"]
+supported_platforms = ["linux"]
+required_services = []
+status = "queued"
+demo_module = "pp_atlas.cli"
+
+[[projects]]
+slug = "proving-ground"
+directory = "projects/08-proving-ground"
+distribution = "pp-proving-ground"
+package = "pp_proving_ground"
+cli = "proving-ground"
+default_python = "3.13.16"
+required_python_versions = ["3.13", "3.14"]
+supported_platforms = ["linux"]
+required_services = []
+status = "queued"
+demo_module = "pp_proving_ground.cli"
+
+[[projects]]
+slug = "routecraft"
+directory = "projects/09-routecraft"
+distribution = "pp-routecraft"
+package = "pp_routecraft"
+cli = "routecraft"
+default_python = "3.13.16"
+required_python_versions = ["3.13", "3.14"]
+supported_platforms = ["linux"]
+required_services = []
+status = "queued"
+demo_module = "pp_routecraft.cli"
+
+[[projects]]
+slug = "resonance"
+directory = "projects/10-resonance"
+distribution = "pp-resonance"
+package = "pp_resonance"
+cli = "resonance"
+default_python = "3.13.16"
+required_python_versions = ["3.13", "3.14"]
+supported_platforms = ["linux"]
+required_services = []
+status = "queued"
+demo_module = "pp_resonance.cli"

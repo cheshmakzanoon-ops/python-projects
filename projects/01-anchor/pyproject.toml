@@ -1,0 +1,23 @@
+[project]
+name = "pp-anchor"
+version = "0.1.0"
+description = "Anchor: independent Python portfolio project"
+requires-python = ">=3.13"
+dependencies = []
+[project.scripts]
+anchor = "pp_anchor.cli:main"
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+[dependency-groups]
+dev = ["pytest>=8", "pytest-cov>=6", "hypothesis>=6", "ruff>=0.11", "mypy>=1.15"]
+[tool.hatch.build.targets.wheel]
+packages = ["src/pp_anchor"]
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib"
+testpaths = ["tests"]
+[tool.mypy]
+python_version = "3.13"
+strict = true
+[tool.ruff]
+extend = "../../ruff.toml"
