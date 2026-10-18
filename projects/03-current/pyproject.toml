@@ -3,7 +3,9 @@ name = "pp-current"
 version = "0.1.0"
 description = "Current: independent Python portfolio project"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "typer>=0.16",
+]
 [project.scripts]
 current = "pp_current.cli:main"
 [build-system]
@@ -21,3 +23,8 @@ python_version = "3.13"
 strict = true
 [tool.ruff]
 extend = "../../ruff.toml"
+[tool.coverage.run]
+branch = true
+source = ["pp_current.model", "pp_current.event_time", "pp_current.operators", "pp_current.runtime", "pp_current.ingress", "pp_current.sinks", "pp_current.sources"]
+[tool.coverage.report]
+show_missing = true

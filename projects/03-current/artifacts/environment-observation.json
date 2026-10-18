@@ -1,0 +1,6 @@
+{
+  "scope": "supplemental observation after development CI benchmark; not a timed measurement",
+  "memory_limit_bytes": 34359738368,
+  "memory_limit_source": "/sys/fs/cgroup/memory.max",
+  "cpu_model": "INTEL(R) XEON(R) PLATINUM 8573C"
+}

@@ -1,0 +1,24 @@
+..............................                                           [100%]
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.13.16-final-0 _______________
+
+Name                                    Stmts   Miss Branch BrPart  Cover   Missing
+-----------------------------------------------------------------------------------
+src/pp_current/event_time/__init__.py       0      0      0      0   100%
+src/pp_current/event_time/policy.py        27      1     12      2    92%   22, 27->32
+src/pp_current/ingress/__init__.py          0      0      0      0   100%
+src/pp_current/ingress/journal.py          98      5     22      4    92%   40, 58, 130->132, 143, 156, 165
+src/pp_current/model/__init__.py            0      0      0      0   100%
+src/pp_current/model/envelope.py           62      0     26      0   100%
+src/pp_current/operators/__init__.py        0      0      0      0   100%
+src/pp_current/operators/tumbling.py       20      0      2      0   100%
+src/pp_current/runtime/__init__.py          0      0      0      0   100%
+src/pp_current/runtime/asyncio.py          68      1     26      1    98%   81
+src/pp_current/runtime/engine.py          161      0     58      0   100%
+src/pp_current/sinks/__init__.py            0      0      0      0   100%
+src/pp_current/sinks/idempotent.py         24      0      2      0   100%
+src/pp_current/sources/__init__.py          0      0      0      0   100%
+src/pp_current/sources/ndjson.py            9      0      4      0   100%
+-----------------------------------------------------------------------------------
+TOTAL                                     469      7    152      7    98%
+30 passed in 29.10s

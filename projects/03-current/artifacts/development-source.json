@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "project": "current",
+  "source_commit": "63d8873a58669a278ada0d688c5fb0503875b6bb",
+  "source_dirty": true,
+  "source_scope": "project",
+  "source_content_sha256": "ababa3cb1e6836489b8fe1d0f475ecbcd2cc35e63b74aab2d030334b7a10491b",
+  "root_contract_sha256": "d1c520ff29898954d9f29de42eeb9ffbca02ca75c7ba69a82d6f790554497704",
+  "lockfile_sha256": "baf15ac83a35752ad671410a6466a49a8b6f5b43d6210beed3cb3bd6982239a3",
+  "python": "3.14.8",
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "cpu": "unknown",
+  "memory_limit_bytes": null,
+  "seed": 1729,
+  "dataset_id": "fc04e820abe891aa04e99ed8a434033d7c4eaf4764f0982374686506c0ccdc18",
+  "profile": "development-demo",
+  "warmup_runs": 1,
+  "measurement_runs": 5,
+  "evidence_kind": "dirty development source; coordinator immutable verification required",
+  "wheel_sha256": "9052e8f608d72c239c10d7513411f6deba0064fd2e02345c76260cc649148174"
+}

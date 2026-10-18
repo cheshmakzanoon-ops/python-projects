@@ -1,0 +1,26 @@
+{
+  "events": 10000,
+  "records": 10046,
+  "dispositions": {
+    "accepted-late": 65,
+    "on-time": 9902,
+    "rejected-late": 33
+  },
+  "outputs": 25345,
+  "oracle_matches": true,
+  "processing_seconds": 5.056957663000048,
+  "checkpoint_seconds": [
+    3.289461964000111,
+    0.3705448390001038
+  ],
+  "max_watermark_lag_ms": 101900,
+  "max_finalization_lag_ms": 113000,
+  "controlled_crash_exit": 73,
+  "admission_seconds": 3.9233262200000354,
+  "throughput_events_s": 1977.4735456391943,
+  "restore_seconds": 0.00014063499975236482,
+  "buffer_peak": 48,
+  "state_peak": 4560,
+  "watermark": 9223372036854775807,
+  "disk_bytes": 24457224
+}
