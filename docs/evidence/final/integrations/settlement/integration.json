@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "integration": "settlement",
-  "source_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+  "source_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
   "source_dirty": false,
   "status": "passed",
   "stages": [
@@ -14,12 +14,12 @@
         "--python",
         "3.14.8",
         "python",
-        "/workspace/portfolio-verify-3qn2313o/source/integrations/01-settlement/meridian_stage.py",
+        "/workspace/portfolio-verify-tqzd7em_/source/integrations/01-settlement/meridian_stage.py",
         "--output",
-        "/workspace/python-projects/.local/final-evidence/corrected-standard/settlement"
+        "/workspace/python-projects/.local/final-evidence/handoff-demo/settlement"
       ],
       "exit_code": 0,
-      "seconds": 9.062144448000254,
+      "seconds": 3.9771076279994304,
       "stage_sha256": "1c61b0a0d6d7c60afd1e1efa049c73201c3fac5791a7cf7eb73cb738d7d44185"
     }
   ]

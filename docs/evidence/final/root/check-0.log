@@ -1,7 +1,8 @@
+[source] uv sync --locked --project tooling/quality --python 3.13.16
 Using CPython 3.13.16
 Creating virtual environment at: tooling/quality/.venv
-Resolved 28 packages in 2ms
-Installed 26 packages in 572ms
+Resolved 28 packages in 5ms
+Installed 26 packages in 1.38s
  + ast-serialize==0.13.1
  + click==8.5.0
  + ghp-import==2.1.0

@@ -1,1 +1,2 @@
+[source] uv run --locked --project tooling/quality ruff format --check scripts integrations
 23 files already formatted

@@ -1,5 +1,5 @@
 {
-  "comparison_commit": "dd808544337ab6a4f8bf0797dccaf010bf636371",
+  "comparison_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
   "status": "passed",
   "scope": "Thirty accepted clean-source project/interpreter/profile wrappers and raw workloads, three public-interface integrations; current project and lock bytes match each accepted outer wrapper. Each raw report retains its own explicitly declared digest scope. Root/extended/remote status is recorded separately.",
   "comparisons": [

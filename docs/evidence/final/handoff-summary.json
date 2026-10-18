@@ -1,0 +1,73 @@
+{
+  "status": "passed",
+  "source_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
+  "projects": [
+    {
+      "project": "anchor",
+      "path": "docs/evidence/final/handoff/anchor-3.14.8.json",
+      "source_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
+      "status": "passed"
+    },
+    {
+      "project": "atlas",
+      "path": "docs/evidence/final/handoff/atlas-3.14.8.json",
+      "source_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
+      "status": "passed"
+    },
+    {
+      "project": "current",
+      "path": "docs/evidence/final/handoff/current-3.14.8.json",
+      "source_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
+      "status": "passed"
+    },
+    {
+      "project": "meridian",
+      "path": "docs/evidence/final/handoff/meridian-3.14.8.json",
+      "source_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
+      "status": "passed"
+    },
+    {
+      "project": "proving-ground",
+      "path": "docs/evidence/final/handoff/proving-ground-3.14.8.json",
+      "source_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
+      "status": "passed"
+    },
+    {
+      "project": "pytrace",
+      "path": "docs/evidence/final/handoff/pytrace-3.14.8.json",
+      "source_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
+      "status": "passed"
+    },
+    {
+      "project": "quarry",
+      "path": "docs/evidence/final/handoff/quarry-3.14.8.json",
+      "source_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
+      "status": "passed"
+    },
+    {
+      "project": "resonance",
+      "path": "docs/evidence/final/handoff/resonance-3.14.8.json",
+      "source_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
+      "status": "passed"
+    },
+    {
+      "project": "routecraft",
+      "path": "docs/evidence/final/handoff/routecraft-3.14.8.json",
+      "source_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
+      "status": "passed"
+    },
+    {
+      "project": "strata",
+      "path": "docs/evidence/final/handoff/strata-3.14.8.json",
+      "source_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
+      "status": "passed"
+    }
+  ],
+  "integrations": [
+    "settlement",
+    "stream-lake",
+    "code-search"
+  ],
+  "root_verification": "docs/evidence/final/root/verification.json",
+  "scope": "All ten small demos and three public-interface integrations in one clean immutable snapshot; shared tooling and strict docs tested in a separate clone at the same commit."
+}

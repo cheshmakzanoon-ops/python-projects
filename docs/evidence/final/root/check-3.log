@@ -1,2 +1,3 @@
+[source] uv run --locked --project tooling/quality pytest -q scripts/tests
 .............                                                            [100%]
-13 passed in 1.51s
+13 passed in 1.39s

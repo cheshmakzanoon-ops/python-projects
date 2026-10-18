@@ -1,1 +1,2 @@
+[source] uv run --locked --project tooling/quality ruff check scripts integrations
 All checks passed!

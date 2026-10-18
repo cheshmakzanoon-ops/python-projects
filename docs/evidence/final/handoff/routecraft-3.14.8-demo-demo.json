@@ -1,0 +1,32 @@
+{
+  "baseline_objective": [
+    4,
+    999
+  ],
+  "coordinates": "synthetic visual aids, not roads",
+  "cpu": "unknown",
+  "improved_objective": [
+    4,
+    657
+  ],
+  "limitations": "heuristic optimality gap unknown; no reloading or transfers",
+  "lockfile_sha256": "9aef9e96a988bfdd7403447241e67af694abf1c7d3910e57cae691e55643a011",
+  "memory_limit_bytes": null,
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "python": "3.14.8",
+  "rejected_plan_diagnostics": [
+    "duplicate mandatory stop"
+  ],
+  "replanning_objective": [
+    4,
+    606
+  ],
+  "root_contract_sha256": "cec05e7bb5d335b6143ae2e6f0b68a72076000be7ec998307004ca8e220ed6d6",
+  "schema_version": 1,
+  "seed": 1729,
+  "source_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
+  "source_content_sha256": "4821fdbd90e0bbfd39ac9aa6dd29b66a6bd57723ae18809e8ef084896d657df5",
+  "source_dirty": false,
+  "source_scope": "project",
+  "verified": true
+}

@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "project": "meridian",
+  "source_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
+  "source_dirty": false,
+  "source_scope": "project",
+  "packaging_context": "source-checkout",
+  "source_content_sha256": "530ea3216de80d90015a655209261085f6f6b2d1ec1fde92e5dce8cfd22dcd51",
+  "root_contract_sha256": "cd21d9e8d224f6e83a69465b750154140e27b021d871d78c7538c4e8ff7b641b",
+  "lockfile_sha256": "278057ae9b5d37f8ac2d66073891b25e2d51b15d13f7f753129aea59e01bb54d",
+  "digest_inputs": "src/**,tests/**,benchmarks/**,examples/** excluding __pycache__/pyc; pyproject.toml; uv.lock; .python-version",
+  "metadata_limitations": null,
+  "root_digest_inputs": [
+    "ruff.toml",
+    "AGENTS.md",
+    "portfolio.toml",
+    "scripts/portfolio.py"
+  ],
+  "python": "3.14.8",
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+  "memory_limit_bytes": 34359738368,
+  "seed": 1729,
+  "dataset_id": "fictional-equipment-rental-v1",
+  "status": "passed",
+  "correctness_checks": {
+    "duplicate_journal_identical": true,
+    "reimport_idempotent": true,
+    "ambiguous_proposal_reviewed": true,
+    "projection_corruption_detected": true,
+    "rebuild_consistent": true,
+    "concurrent_transfers": true,
+    "linked_reversal": true
+  },
+  "failed_checks": [],
+  "invoice": {
+    "id": "5b91525e-a3c1-4bdc-b22a-1de37337b62b",
+    "journal_id": "5b91525e-a3c1-4bdc-b22a-1de37337b62b",
+    "tenant_id": "a2d47e61-fae9-4b7c-9899-cb8e8165e5e4",
+    "currency": "USD",
+    "sequence": 1,
+    "reference": "invoice-100",
+    "reversal_of": null,
+    "postings": [
+      {
+        "id": "26a0dc6a-739b-44e2-b69a-031385ec77db",
+        "account_id": "40a01b3c-b8d7-4727-9061-2f63993c8fab",
+        "minor_units": 10000
+      },
+      {
+        "id": "f6788ec9-c169-4c08-bdd6-35b8782439e3",
+        "account_id": "6a97be25-b536-4273-a3ce-5cacf5195132",
+        "minor_units": -10000
+      }
+    ]
+  },
+  "duplicate_journal_identical": true,
+  "reversal": {
+    "id": "06807d78-3b50-4656-8a3f-10cae5efa7c2",
+    "journal_id": "06807d78-3b50-4656-8a3f-10cae5efa7c2",
+    "tenant_id": "a2d47e61-fae9-4b7c-9899-cb8e8165e5e4",
+    "currency": "USD",
+    "sequence": 3,
+    "reference": "invoice-100",
+    "reversal_of": "5b91525e-a3c1-4bdc-b22a-1de37337b62b",
+    "postings": [
+      {
+        "id": "a0e5815a-21b4-4164-896c-1c37a24cfdf3",
+        "account_id": "6a97be25-b536-4273-a3ce-5cacf5195132",
+        "minor_units": 10000
+      },
+      {
+        "id": "bfd7c03b-0b0e-4a44-897e-24f50001cf2c",
+        "account_id": "40a01b3c-b8d7-4727-9061-2f63993c8fab",
+        "minor_units": -10000
+      }
+    ]
+  },
+  "concurrent_transfers": 8,
+  "reimport_idempotent": true,
+  "reconciliation": {
+    "rows": 2,
+    "postings": 10,
+    "edges": 2,
+    "components": 1,
+    "ambiguous_components": 1,
+    "cost": 250
+  },
+  "ambiguous_proposal_reviewed": true,
+  "projection_corruption_detected": true,
+  "rebuild_consistent": true,
+  "tenant_id": "a2d47e61-fae9-4b7c-9899-cb8e8165e5e4",
+  "bank_account_id": "6b57e953-1375-49c0-ad58-0831eb7a6b00",
+  "audit_diagnostics": {
+    "before_rebuild": {
+      "consistent": false,
+      "differences": [
+        {
+          "account": "6b57e953-1375-49c0-ad58-0831eb7a6b00",
+          "projection": 999,
+          "replay": 7500
+        }
+      ],
+      "rebuilt": false
+    },
+    "after_rebuild": {
+      "consistent": true,
+      "differences": [],
+      "rebuilt": false
+    }
+  },
+  "reimport_diagnostics": {
+    "first_ids": [
+      "7cf0cf92-ec07-4cf7-ad3e-95fb9558e426",
+      "2523107c-c613-4f25-ba7e-4f09e6965cbd"
+    ],
+    "repeated_ids": [
+      "7cf0cf92-ec07-4cf7-ad3e-95fb9558e426",
+      "2523107c-c613-4f25-ba7e-4f09e6965cbd"
+    ]
+  }
+}

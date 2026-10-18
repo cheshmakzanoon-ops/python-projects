@@ -1,7 +1,8 @@
 {
-  "source_commit": "a43c8e96ebc9345312c7d1223d833a8ed01a10ba",
+  "source_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
   "source_clean_before": true,
-  "root_contract_sha256": "b6cd5e99e80442d13aa0c3b7d6c7423f181f6572242dab63f8f2d9f2597be363",
+  "source_clean_after": true,
+  "root_contract_sha256": "5bb6b943e088ad213affc839f260ea5493429586d08f25d3c360af28163bfd0c",
   "root_contract_inputs": [
     ".github/workflows/ci.yml",
     ".github/workflows/extended.yml",
@@ -37,7 +38,7 @@
     "tooling/quality/uv.lock"
   ],
   "source_unchanged_after": true,
-  "checked_at_utc": "2026-10-18T01:56:13.419860+00:00",
+  "checked_at_utc": "2026-10-18T04:23:24.904111+00:00",
   "checks": [
     {
       "command": [
@@ -49,8 +50,20 @@
         "--python",
         "3.13.16"
       ],
+      "bounded_runner": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-c",
+        "import sys; from pathlib import Path; sys.path.insert(0,'scripts'); from portfolio import execute; raise SystemExit(execute(sys.argv[1:],Path.cwd(),600))",
+        "uv",
+        "sync",
+        "--locked",
+        "--project",
+        "tooling/quality",
+        "--python",
+        "3.13.16"
+      ],
       "exit_code": 0,
-      "seconds": 0.6199503289999484,
+      "seconds": 1.573769327998889,
       "log": "check-0.log"
     },
     {
@@ -66,8 +79,23 @@
         "scripts",
         "integrations"
       ],
+      "bounded_runner": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-c",
+        "import sys; from pathlib import Path; sys.path.insert(0,'scripts'); from portfolio import execute; raise SystemExit(execute(sys.argv[1:],Path.cwd(),600))",
+        "uv",
+        "run",
+        "--locked",
+        "--project",
+        "tooling/quality",
+        "ruff",
+        "format",
+        "--check",
+        "scripts",
+        "integrations"
+      ],
       "exit_code": 0,
-      "seconds": 0.16530200599936506,
+      "seconds": 0.21109140500084322,
       "log": "check-1.log"
     },
     {
@@ -82,8 +110,22 @@
         "scripts",
         "integrations"
       ],
+      "bounded_runner": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-c",
+        "import sys; from pathlib import Path; sys.path.insert(0,'scripts'); from portfolio import execute; raise SystemExit(execute(sys.argv[1:],Path.cwd(),600))",
+        "uv",
+        "run",
+        "--locked",
+        "--project",
+        "tooling/quality",
+        "ruff",
+        "check",
+        "scripts",
+        "integrations"
+      ],
       "exit_code": 0,
-      "seconds": 0.06585311699927843,
+      "seconds": 0.13539423600013833,
       "log": "check-2.log"
     },
     {
@@ -97,8 +139,21 @@
         "-q",
         "scripts/tests"
       ],
+      "bounded_runner": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-c",
+        "import sys; from pathlib import Path; sys.path.insert(0,'scripts'); from portfolio import execute; raise SystemExit(execute(sys.argv[1:],Path.cwd(),600))",
+        "uv",
+        "run",
+        "--locked",
+        "--project",
+        "tooling/quality",
+        "pytest",
+        "-q",
+        "scripts/tests"
+      ],
       "exit_code": 0,
-      "seconds": 2.480640059000507,
+      "seconds": 2.3213607689995115,
       "log": "check-3.log"
     },
     {
@@ -106,8 +161,15 @@
         "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
         "scripts/check_docs.py"
       ],
+      "bounded_runner": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-c",
+        "import sys; from pathlib import Path; sys.path.insert(0,'scripts'); from portfolio import execute; raise SystemExit(execute(sys.argv[1:],Path.cwd(),600))",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "scripts/check_docs.py"
+      ],
       "exit_code": 0,
-      "seconds": 1.5461396729997432,
+      "seconds": 1.1375900829989405,
       "log": "check-4.log"
     }
   ],

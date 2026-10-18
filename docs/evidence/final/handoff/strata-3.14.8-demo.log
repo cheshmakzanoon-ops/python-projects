@@ -1,0 +1,7 @@
+[02-strata] uv run --locked --python 3.14.8 python -m pp_strata.cli demo --output /workspace/portfolio-verify-tqzd7em_/source/.local/strata/demo --seed 1729
+Using CPython 3.14.8
+Creating virtual environment at: .venv
+   Building pp-strata @ file:///workspace/portfolio-verify-tqzd7em_/source/projects/02-strata
+      Built pp-strata @ file:///workspace/portfolio-verify-tqzd7em_/source/projects/02-strata
+Installed 17 packages in 528ms
+{"status": "passed", "report": "/workspace/portfolio-verify-tqzd7em_/source/.local/strata/demo/demo.json"}

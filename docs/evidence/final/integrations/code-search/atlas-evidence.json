@@ -6,7 +6,7 @@
     "hits": [
       {
         "id": "public_service.py:790b07c46cef5c7c6d8e49dd",
-        "revision": "6f03950e81ea4cfc8056f1d551400b31",
+        "revision": "f6e978cf2e1a45a3b348971d1501c832",
         "title": "PT001 public_service.py",
         "score": 0.6630103466225564,
         "snippet": "<mark>PT001</mark> public_service.py Untrusted value flows to a shell-enabled process     command = input()     sp.run(command, shell=True)  configured untrusted source Untrusted value flows to a shell-enabled process",
@@ -37,7 +37,7 @@
     "hits": [
       {
         "id": "public_service.py:c195ab0e4cce21b573b5cf36",
-        "revision": "1a549f5a8c8d45589a0495c0e0d1ae32",
+        "revision": "89fe8c4ac1f54ba1820620c91f8cbe8a",
         "title": "PT003 public_service.py",
         "score": 0.2876820724517809,
         "snippet": "<mark>PT003</mark> public_service.py Configured synchronous blocking call inside async function async def poll():     clock.sleep(1) Configured synchronous blocking call inside async function",
@@ -67,7 +67,7 @@
     "hits": [
       {
         "id": "public_service.py:c195ab0e4cce21b573b5cf36",
-        "revision": "1a549f5a8c8d45589a0495c0e0d1ae32",
+        "revision": "89fe8c4ac1f54ba1820620c91f8cbe8a",
         "title": "PT003 public_service.py",
         "score": 0.8476346777597116,
         "snippet": "PT003 public_service.py Configured synchronous <mark>blocking</mark> call inside <mark>async</mark> function <mark>async</mark> def poll():     clock.sleep(1) Configured synchronous <mark>blocking</mark> call inside <mark>async</mark> function",

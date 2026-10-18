@@ -1,0 +1,14 @@
+[10-resonance] uv run --locked --python 3.14.8 python -m pp_resonance.cli demo --output /workspace/portfolio-verify-tqzd7em_/source/.local/resonance/demo --seed 1729
+Using CPython 3.14.8
+Creating virtual environment at: .venv
+   Building pp-resonance @ file:///workspace/portfolio-verify-tqzd7em_/source/projects/10-resonance
+      Built pp-resonance @ file:///workspace/portfolio-verify-tqzd7em_/source/projects/10-resonance
+Installed 32 packages in 1.21s
+{
+  "notes": 6,
+  "midi_checked": 6,
+  "report": "/workspace/portfolio-verify-tqzd7em_/source/.local/resonance/demo/analysis.html",
+  "diagnostics": [
+    "46 non-silent frames were uncertain; no criticism inferred"
+  ]
+}

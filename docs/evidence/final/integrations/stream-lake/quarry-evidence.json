@@ -62,7 +62,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-0-e9ae130af6e242809bd880c9681754cb.parquet",
+            "path": "data/daily-0-4717b5261e4a4adca07815958afd3493.parquet",
             "reused": false,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -78,7 +78,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-0-6c031aba7df7453c883de30d9b66215f.parquet",
+            "path": "data/facts-0-a1959cf112f449148628141bb06ac287.parquet",
             "reused": false,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -92,7 +92,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-0-4aaab58b42514dab833334a1099459f1.parquet",
+            "path": "data/normalized-0-5fa039bb9e4442c8a039b726c239a86f.parquet",
             "reused": false,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -110,7 +110,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-1-41ff2fe5e46a4be2b1fad5d589524540.parquet",
+            "path": "data/daily-1-b4954c0de79041d08187b099c98e4724.parquet",
             "reused": false,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -126,7 +126,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-1-ded28586799447569eae26cc319d3659.parquet",
+            "path": "data/facts-1-8560697f5fb04577a3cfc17edccf54f2.parquet",
             "reused": false,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -140,7 +140,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-1-eb8af25f279c4f3597f2fcdccbe9635d.parquet",
+            "path": "data/normalized-1-781b3bce036d4a1bb31a16bcab8130c8.parquet",
             "reused": false,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -158,7 +158,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-2-833d0c32f25a479fbd8ba777a75f2944.parquet",
+            "path": "data/daily-2-44849e9440ce4dd5a4bedb003f73d5e9.parquet",
             "reused": false,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -174,7 +174,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-2-8bfa26bbeae14ffd8c499e3dafaec8c2.parquet",
+            "path": "data/facts-2-796ccd523b03492fb58097a7b0d65ab1.parquet",
             "reused": false,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -188,7 +188,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-2-42e0dcc75a73408098aa7961644ab7d0.parquet",
+            "path": "data/normalized-2-a54e2423adfb488a8d911e4df2362ad2.parquet",
             "reused": false,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -206,7 +206,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-3-213dd0ecfd4c4ffc89cdbff09453aa3b.parquet",
+            "path": "data/daily-3-8dec53ca58074ef6b057d065bddf358b.parquet",
             "reused": false,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -222,7 +222,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-3-7b5bdc37eed942d6a28c19a730d8e196.parquet",
+            "path": "data/facts-3-937f5641a2e248d7bf12e3da0b640b1f.parquet",
             "reused": false,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -236,7 +236,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-3-46ce2b12f2504db894b66faa88002b6a.parquet",
+            "path": "data/normalized-3-b28b04d5724e4ee6a80f9d17586be363.parquet",
             "reused": false,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -254,7 +254,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-4-6421225d1b724ba6ba23a552562a01f4.parquet",
+            "path": "data/daily-4-1ce284ef7a494e7593e5b3c07e5126a2.parquet",
             "reused": false,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -270,7 +270,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-4-15ca36b3ca0a40c0af68a47fdf2ef818.parquet",
+            "path": "data/facts-4-d25e4d18a7cb4c0e9cb793647485e05a.parquet",
             "reused": false,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -284,7 +284,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-4-d284d76ba78f4b78a9e99e00c7cb81b4.parquet",
+            "path": "data/normalized-4-c28b4e6ee74e45fa948241fba8c201bd.parquet",
             "reused": false,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -302,7 +302,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-5-f47913f9332c45e5a4c6bf989f92878c.parquet",
+            "path": "data/daily-5-7fef0963b5544a2da5c39dc5e1f85cf3.parquet",
             "reused": false,
             "rows": 1,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -318,7 +318,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-5-0d94fd6c6d7447eea754fc21349e6aa7.parquet",
+            "path": "data/facts-5-9bb6c1a7f34542ec884edaa61547279f.parquet",
             "reused": false,
             "rows": 1,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -332,7 +332,7 @@
               "af974837466e3bc093a6e5c1f162bbce44001f4df2dde2bfb6458fcc859714ca"
             ],
             "parents": [],
-            "path": "data/normalized-5-f5be88170b27492ea31a85e7128a78bb.parquet",
+            "path": "data/normalized-5-29e08d0626a74c35bff448eebb700b24.parquet",
             "reused": false,
             "rows": 1,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -350,7 +350,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-6-8edcbed5a4af46d1b43672e297b33a6f.parquet",
+            "path": "data/daily-6-08063469f4b84cffba35a042b345b87c.parquet",
             "reused": false,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -366,7 +366,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-6-b22aa0e8931641b8ae151e4733b3774b.parquet",
+            "path": "data/facts-6-7586f5e9b65841d1bc3ea748ad65a923.parquet",
             "reused": false,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -380,7 +380,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-6-5ee17593ab684a26b86c468d7916b69a.parquet",
+            "path": "data/normalized-6-b2db027f873c48d4a71f7eb3c3d4890a.parquet",
             "reused": false,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -398,7 +398,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-7-84939152069f4386b246d7e5f5efe1a3.parquet",
+            "path": "data/daily-7-74673b04ba234849be62c4eeafd3e7da.parquet",
             "reused": false,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -414,7 +414,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-7-9a8e032117644af98fd0f0c93ded6456.parquet",
+            "path": "data/facts-7-68a7fd456b554162999399563259acad.parquet",
             "reused": false,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -428,7 +428,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-7-27f7899ae29642c8abceb8a95d6c7d71.parquet",
+            "path": "data/normalized-7-a03d7f1c1fd64f46b278be8740239ccc.parquet",
             "reused": false,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -544,7 +544,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-0-e9ae130af6e242809bd880c9681754cb.parquet",
+            "path": "data/daily-0-4717b5261e4a4adca07815958afd3493.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -560,7 +560,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-0-6c031aba7df7453c883de30d9b66215f.parquet",
+            "path": "data/facts-0-a1959cf112f449148628141bb06ac287.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -574,7 +574,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-0-4aaab58b42514dab833334a1099459f1.parquet",
+            "path": "data/normalized-0-5fa039bb9e4442c8a039b726c239a86f.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -592,7 +592,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-1-41ff2fe5e46a4be2b1fad5d589524540.parquet",
+            "path": "data/daily-1-b4954c0de79041d08187b099c98e4724.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -608,7 +608,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-1-ded28586799447569eae26cc319d3659.parquet",
+            "path": "data/facts-1-8560697f5fb04577a3cfc17edccf54f2.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -622,7 +622,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-1-eb8af25f279c4f3597f2fcdccbe9635d.parquet",
+            "path": "data/normalized-1-781b3bce036d4a1bb31a16bcab8130c8.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -640,7 +640,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-2-833d0c32f25a479fbd8ba777a75f2944.parquet",
+            "path": "data/daily-2-44849e9440ce4dd5a4bedb003f73d5e9.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -656,7 +656,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-2-8bfa26bbeae14ffd8c499e3dafaec8c2.parquet",
+            "path": "data/facts-2-796ccd523b03492fb58097a7b0d65ab1.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -670,7 +670,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-2-42e0dcc75a73408098aa7961644ab7d0.parquet",
+            "path": "data/normalized-2-a54e2423adfb488a8d911e4df2362ad2.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -688,7 +688,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-3-213dd0ecfd4c4ffc89cdbff09453aa3b.parquet",
+            "path": "data/daily-3-8dec53ca58074ef6b057d065bddf358b.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -704,7 +704,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-3-7b5bdc37eed942d6a28c19a730d8e196.parquet",
+            "path": "data/facts-3-937f5641a2e248d7bf12e3da0b640b1f.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -718,7 +718,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-3-46ce2b12f2504db894b66faa88002b6a.parquet",
+            "path": "data/normalized-3-b28b04d5724e4ee6a80f9d17586be363.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -736,7 +736,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-4-6421225d1b724ba6ba23a552562a01f4.parquet",
+            "path": "data/daily-4-1ce284ef7a494e7593e5b3c07e5126a2.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -752,7 +752,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-4-15ca36b3ca0a40c0af68a47fdf2ef818.parquet",
+            "path": "data/facts-4-d25e4d18a7cb4c0e9cb793647485e05a.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -766,7 +766,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-4-d284d76ba78f4b78a9e99e00c7cb81b4.parquet",
+            "path": "data/normalized-4-c28b4e6ee74e45fa948241fba8c201bd.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -784,7 +784,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-5-f47913f9332c45e5a4c6bf989f92878c.parquet",
+            "path": "data/daily-5-7fef0963b5544a2da5c39dc5e1f85cf3.parquet",
             "reused": true,
             "rows": 1,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -800,7 +800,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-5-0d94fd6c6d7447eea754fc21349e6aa7.parquet",
+            "path": "data/facts-5-9bb6c1a7f34542ec884edaa61547279f.parquet",
             "reused": true,
             "rows": 1,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -814,7 +814,7 @@
               "af974837466e3bc093a6e5c1f162bbce44001f4df2dde2bfb6458fcc859714ca"
             ],
             "parents": [],
-            "path": "data/normalized-5-f5be88170b27492ea31a85e7128a78bb.parquet",
+            "path": "data/normalized-5-29e08d0626a74c35bff448eebb700b24.parquet",
             "reused": true,
             "rows": 1,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -832,7 +832,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-6-8edcbed5a4af46d1b43672e297b33a6f.parquet",
+            "path": "data/daily-6-08063469f4b84cffba35a042b345b87c.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -848,7 +848,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-6-b22aa0e8931641b8ae151e4733b3774b.parquet",
+            "path": "data/facts-6-7586f5e9b65841d1bc3ea748ad65a923.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -862,7 +862,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-6-5ee17593ab684a26b86c468d7916b69a.parquet",
+            "path": "data/normalized-6-b2db027f873c48d4a71f7eb3c3d4890a.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -880,7 +880,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-7-84939152069f4386b246d7e5f5efe1a3.parquet",
+            "path": "data/daily-7-74673b04ba234849be62c4eeafd3e7da.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -896,7 +896,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-7-9a8e032117644af98fd0f0c93ded6456.parquet",
+            "path": "data/facts-7-68a7fd456b554162999399563259acad.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -910,7 +910,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-7-27f7899ae29642c8abceb8a95d6c7d71.parquet",
+            "path": "data/normalized-7-a03d7f1c1fd64f46b278be8740239ccc.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -1026,7 +1026,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-0-e9ae130af6e242809bd880c9681754cb.parquet",
+            "path": "data/daily-0-4717b5261e4a4adca07815958afd3493.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -1042,7 +1042,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-0-6c031aba7df7453c883de30d9b66215f.parquet",
+            "path": "data/facts-0-a1959cf112f449148628141bb06ac287.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -1056,7 +1056,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-0-4aaab58b42514dab833334a1099459f1.parquet",
+            "path": "data/normalized-0-5fa039bb9e4442c8a039b726c239a86f.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -1074,7 +1074,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-1-41ff2fe5e46a4be2b1fad5d589524540.parquet",
+            "path": "data/daily-1-b4954c0de79041d08187b099c98e4724.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -1090,7 +1090,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-1-ded28586799447569eae26cc319d3659.parquet",
+            "path": "data/facts-1-8560697f5fb04577a3cfc17edccf54f2.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -1104,7 +1104,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-1-eb8af25f279c4f3597f2fcdccbe9635d.parquet",
+            "path": "data/normalized-1-781b3bce036d4a1bb31a16bcab8130c8.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -1122,7 +1122,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-2-833d0c32f25a479fbd8ba777a75f2944.parquet",
+            "path": "data/daily-2-44849e9440ce4dd5a4bedb003f73d5e9.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -1138,7 +1138,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-2-8bfa26bbeae14ffd8c499e3dafaec8c2.parquet",
+            "path": "data/facts-2-796ccd523b03492fb58097a7b0d65ab1.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -1152,7 +1152,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-2-42e0dcc75a73408098aa7961644ab7d0.parquet",
+            "path": "data/normalized-2-a54e2423adfb488a8d911e4df2362ad2.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -1170,7 +1170,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-3-213dd0ecfd4c4ffc89cdbff09453aa3b.parquet",
+            "path": "data/daily-3-8dec53ca58074ef6b057d065bddf358b.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -1186,7 +1186,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-3-7b5bdc37eed942d6a28c19a730d8e196.parquet",
+            "path": "data/facts-3-937f5641a2e248d7bf12e3da0b640b1f.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -1200,7 +1200,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-3-46ce2b12f2504db894b66faa88002b6a.parquet",
+            "path": "data/normalized-3-b28b04d5724e4ee6a80f9d17586be363.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -1218,7 +1218,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-4-6421225d1b724ba6ba23a552562a01f4.parquet",
+            "path": "data/daily-4-1ce284ef7a494e7593e5b3c07e5126a2.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -1234,7 +1234,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-4-15ca36b3ca0a40c0af68a47fdf2ef818.parquet",
+            "path": "data/facts-4-d25e4d18a7cb4c0e9cb793647485e05a.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -1248,7 +1248,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-4-d284d76ba78f4b78a9e99e00c7cb81b4.parquet",
+            "path": "data/normalized-4-c28b4e6ee74e45fa948241fba8c201bd.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -1266,7 +1266,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-5-cd574d9f74fa4e68a149c23f54306d78.parquet",
+            "path": "data/daily-5-8c230ac1021f4d869ba30fa31b8a42a4.parquet",
             "reused": false,
             "rows": 1,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -1282,7 +1282,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-5-ce7bb76ae01c431dabcf845c79f4c1b9.parquet",
+            "path": "data/facts-5-f8b3d120c2814d75ad1510ed3e3e4a0b.parquet",
             "reused": false,
             "rows": 1,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -1296,7 +1296,7 @@
               "f662694d35d6894542522511b69836c38d2bc305756dd687611888b1ac56c1f9"
             ],
             "parents": [],
-            "path": "data/normalized-5-b64a64ed80fa4fdc8f886e7e650b13db.parquet",
+            "path": "data/normalized-5-c0213b919ff641aead342273ff680a4e.parquet",
             "reused": false,
             "rows": 1,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -1314,7 +1314,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-6-8edcbed5a4af46d1b43672e297b33a6f.parquet",
+            "path": "data/daily-6-08063469f4b84cffba35a042b345b87c.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -1330,7 +1330,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-6-b22aa0e8931641b8ae151e4733b3774b.parquet",
+            "path": "data/facts-6-7586f5e9b65841d1bc3ea748ad65a923.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -1344,7 +1344,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-6-5ee17593ab684a26b86c468d7916b69a.parquet",
+            "path": "data/normalized-6-b2db027f873c48d4a71f7eb3c3d4890a.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -1362,7 +1362,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-7-84939152069f4386b246d7e5f5efe1a3.parquet",
+            "path": "data/daily-7-74673b04ba234849be62c4eeafd3e7da.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -1378,7 +1378,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-7-9a8e032117644af98fd0f0c93ded6456.parquet",
+            "path": "data/facts-7-68a7fd456b554162999399563259acad.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -1392,7 +1392,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-7-27f7899ae29642c8abceb8a95d6c7d71.parquet",
+            "path": "data/normalized-7-a03d7f1c1fd64f46b278be8740239ccc.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -1508,7 +1508,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-0-e9ae130af6e242809bd880c9681754cb.parquet",
+            "path": "data/daily-0-4717b5261e4a4adca07815958afd3493.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -1524,7 +1524,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-0-6c031aba7df7453c883de30d9b66215f.parquet",
+            "path": "data/facts-0-a1959cf112f449148628141bb06ac287.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -1538,7 +1538,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-0-4aaab58b42514dab833334a1099459f1.parquet",
+            "path": "data/normalized-0-5fa039bb9e4442c8a039b726c239a86f.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -1556,7 +1556,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-1-41ff2fe5e46a4be2b1fad5d589524540.parquet",
+            "path": "data/daily-1-b4954c0de79041d08187b099c98e4724.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -1572,7 +1572,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-1-ded28586799447569eae26cc319d3659.parquet",
+            "path": "data/facts-1-8560697f5fb04577a3cfc17edccf54f2.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -1586,7 +1586,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-1-eb8af25f279c4f3597f2fcdccbe9635d.parquet",
+            "path": "data/normalized-1-781b3bce036d4a1bb31a16bcab8130c8.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -1604,7 +1604,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-2-833d0c32f25a479fbd8ba777a75f2944.parquet",
+            "path": "data/daily-2-44849e9440ce4dd5a4bedb003f73d5e9.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -1620,7 +1620,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-2-8bfa26bbeae14ffd8c499e3dafaec8c2.parquet",
+            "path": "data/facts-2-796ccd523b03492fb58097a7b0d65ab1.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -1634,7 +1634,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-2-42e0dcc75a73408098aa7961644ab7d0.parquet",
+            "path": "data/normalized-2-a54e2423adfb488a8d911e4df2362ad2.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -1652,7 +1652,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-3-213dd0ecfd4c4ffc89cdbff09453aa3b.parquet",
+            "path": "data/daily-3-8dec53ca58074ef6b057d065bddf358b.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -1668,7 +1668,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-3-7b5bdc37eed942d6a28c19a730d8e196.parquet",
+            "path": "data/facts-3-937f5641a2e248d7bf12e3da0b640b1f.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -1682,7 +1682,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-3-46ce2b12f2504db894b66faa88002b6a.parquet",
+            "path": "data/normalized-3-b28b04d5724e4ee6a80f9d17586be363.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -1700,7 +1700,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-4-6421225d1b724ba6ba23a552562a01f4.parquet",
+            "path": "data/daily-4-1ce284ef7a494e7593e5b3c07e5126a2.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -1716,7 +1716,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-4-15ca36b3ca0a40c0af68a47fdf2ef818.parquet",
+            "path": "data/facts-4-d25e4d18a7cb4c0e9cb793647485e05a.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -1730,7 +1730,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-4-d284d76ba78f4b78a9e99e00c7cb81b4.parquet",
+            "path": "data/normalized-4-c28b4e6ee74e45fa948241fba8c201bd.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -1748,7 +1748,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-5-cd574d9f74fa4e68a149c23f54306d78.parquet",
+            "path": "data/daily-5-8c230ac1021f4d869ba30fa31b8a42a4.parquet",
             "reused": true,
             "rows": 1,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -1764,7 +1764,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-5-ce7bb76ae01c431dabcf845c79f4c1b9.parquet",
+            "path": "data/facts-5-f8b3d120c2814d75ad1510ed3e3e4a0b.parquet",
             "reused": true,
             "rows": 1,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -1778,7 +1778,7 @@
               "f662694d35d6894542522511b69836c38d2bc305756dd687611888b1ac56c1f9"
             ],
             "parents": [],
-            "path": "data/normalized-5-b64a64ed80fa4fdc8f886e7e650b13db.parquet",
+            "path": "data/normalized-5-c0213b919ff641aead342273ff680a4e.parquet",
             "reused": true,
             "rows": 1,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -1796,7 +1796,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-6-8edcbed5a4af46d1b43672e297b33a6f.parquet",
+            "path": "data/daily-6-08063469f4b84cffba35a042b345b87c.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -1812,7 +1812,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-6-b22aa0e8931641b8ae151e4733b3774b.parquet",
+            "path": "data/facts-6-7586f5e9b65841d1bc3ea748ad65a923.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -1826,7 +1826,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-6-5ee17593ab684a26b86c468d7916b69a.parquet",
+            "path": "data/normalized-6-b2db027f873c48d4a71f7eb3c3d4890a.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
@@ -1844,7 +1844,7 @@
             "parents": [
               "facts"
             ],
-            "path": "data/daily-7-84939152069f4386b246d7e5f5efe1a3.parquet",
+            "path": "data/daily-7-74673b04ba234849be62c4eeafd3e7da.parquet",
             "reused": true,
             "rows": 0,
             "schema": "day: string\ncount: int64\ntotal: double",
@@ -1860,7 +1860,7 @@
             "parents": [
               "normalized"
             ],
-            "path": "data/facts-7-9a8e032117644af98fd0f0c93ded6456.parquet",
+            "path": "data/facts-7-68a7fd456b554162999399563259acad.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64\npayload__aggregate: extension<arrow.json>",
@@ -1874,7 +1874,7 @@
               "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             ],
             "parents": [],
-            "path": "data/normalized-7-27f7899ae29642c8abceb8a95d6c7d71.parquet",
+            "path": "data/normalized-7-a03d7f1c1fd64f46b278be8740239ccc.parquet",
             "reused": true,
             "rows": 0,
             "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",

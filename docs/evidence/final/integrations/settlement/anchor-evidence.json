@@ -1,6 +1,6 @@
 {
-  "first_run": "fd4a6acc-a6e3-46f4-9035-6910a3b685b2",
-  "first_journal_id": "a61e1459-dec6-4749-b1f9-2880b8205eeb",
+  "first_run": "6ac3992d-b2fd-4500-8e2c-5570941cf0e2",
+  "first_journal_id": "502d947b-f833-4f6e-9bfa-6cbc03dabdd6",
   "worker_was_killed_after_commit": true,
   "first_status": "completed",
   "first_history": [
@@ -44,7 +44,7 @@
       "data": {
         "error": null,
         "result": {
-          "journal_id": "a61e1459-dec6-4749-b1f9-2880b8205eeb"
+          "journal_id": "502d947b-f833-4f6e-9bfa-6cbc03dabdd6"
         },
         "attempt": 2,
         "retry_delay": 0
@@ -54,7 +54,7 @@
       ]
     }
   ],
-  "compensation_run": "32b18f27-5991-4236-8098-99242399213e",
+  "compensation_run": "653d3613-3d68-4317-b3f7-12ca40af1779",
   "compensation_status": "compensated",
   "compensation_history": [
     {
@@ -86,7 +86,7 @@
       "data": {
         "error": null,
         "result": {
-          "journal_id": "69ba2556-bf68-4dca-82b4-68f0aab41eb5"
+          "journal_id": "c01a6ade-648f-470d-8cf6-dd3a20bfa6df"
         },
         "attempt": 1,
         "retry_delay": 0
@@ -138,7 +138,7 @@
       "data": {
         "error": null,
         "result": {
-          "reversal_id": "8fa5cd86-731c-4ae7-8376-277361495438"
+          "reversal_id": "e82cd455-c71f-459f-9464-4f7a177d2183"
         },
         "attempt": 1,
         "retry_delay": 0

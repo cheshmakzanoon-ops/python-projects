@@ -1,4 +1,5 @@
+[source] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python scripts/check_docs.py
 INFO    -  Cleaning site directory
-INFO    -  Building documentation to directory: /workspace/portfolio-root-verify-n1cze_9j/source/.local/docs-site
-INFO    -  Documentation built in 0.23 seconds
-Checked 169 local documentation links; 0 failures.
+INFO    -  Building documentation to directory: /workspace/portfolio-root-verify-1imz3oh8/source/.local/docs-site
+INFO    -  Documentation built in 0.24 seconds
+Checked 378 local documentation links; 0 failures.

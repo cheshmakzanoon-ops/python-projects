@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "audited_at_utc": "2026-10-18T04:22:35.875409+00:00",
-  "comparison_commit": "dd808544337ab6a4f8bf0797dccaf010bf636371",
+  "audited_at_utc": "2026-10-18T04:24:40.362990+00:00",
+  "comparison_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
   "status": "passed",
   "scope": "Thirty accepted clean-source project/interpreter/profile wrappers and raw workloads, three public-interface integrations; current project and lock bytes match each accepted outer wrapper. Each raw report retains its own explicitly declared digest scope. Root/extended/remote status is recorded separately.",
   "project_test_executions": 1136,
@@ -428,20 +428,20 @@
     },
     {
       "path": "docs/evidence/final/integrations/settlement/integration.json",
-      "sha256": "ae97b1a2aa0c131fcc7352cd1f60d86420d50d9526d753c375d85c08f763a8fe",
-      "tested_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "sha256": "ee0e47298ac3ad5ab216fcb4be4e14eb478f375af7160912e673226da825e73f",
+      "tested_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
       "status": "passed"
     },
     {
       "path": "docs/evidence/final/integrations/stream-lake/integration.json",
-      "sha256": "82c057926457272e7c7db0bb74886fa0e42c78bef44080d62b1764fb8133cbb8",
-      "tested_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "sha256": "655623fb24714757c2db1ee73929c88c39b99a41c709aa0f78d92af8840ba97b",
+      "tested_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
       "status": "passed"
     },
     {
       "path": "docs/evidence/final/integrations/code-search/integration.json",
-      "sha256": "75c736ad14f53255df103383d83288f1de157cbc39ca2ac2e71616fc79a4a6e4",
-      "tested_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "sha256": "e48836656fd8b8ed48dd0e64770598f16a1485be8714a46b0a491d72b992bd13",
+      "tested_commit": "442c638370616652a40be6fa4bd8cab585da38bd",
       "status": "passed"
     }
   ],

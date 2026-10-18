@@ -23,6 +23,8 @@ All three public-interface integrations passed in clean committed snapshots: [se
 
 The [acceptance audit](final/acceptance-summary.json) checks 30 accepted project/interpreter/profile records, their raw workload artifacts and three integrations. It independently recounts 1,136 project test executions and compares every accepted project/lock digest with the reviewed current bytes. It retains artifact SHA-256 values and actual tested commits; shared root tooling, the extended suite and hosted status are separate. The [current source comparison](final/current-source-comparison.json) has the same explicit scope.
 
+The [final handoff snapshot](final/handoff-summary.json) reproduces all ten small demos and all three integrations from one clean commit. Its shared-root record checks the current informational manifest statuses, 13 tooling tests, and the strict documentation build; earlier full-workload records retain their actual measurement commits.
+
 All ten full standard profiles are accepted:
 
 | Product | Standard execution record | Principal scale |
