@@ -1,0 +1,61 @@
+{
+  "acknowledged_transactions": 10,
+  "catalog_inspection": {
+    "active_snapshots": 0,
+    "block_read_bytes": 1882,
+    "block_reads": 2,
+    "cache_hits": 3,
+    "checkpoint": 2,
+    "disk_bytes": 1205,
+    "format": 1,
+    "logical_bytes_written": 933,
+    "memtable_records": 0,
+    "oldest_snapshot": null,
+    "sequence": 2,
+    "table_bytes_written": 2216,
+    "tables": [
+      "table-0d31eca92840472abd31379504720fa2.sst"
+    ],
+    "wal_bytes_written": 957,
+    "writer_failed": false
+  },
+  "checks": {
+    "all_acknowledged_transactions_recover": true,
+    "backup_restores_historical_snapshot": true,
+    "snapshot_survives_compaction": true,
+    "unacknowledged_batch_atomic": true
+  },
+  "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+  "digest_inputs": "src/**, tests/**, benchmarks/**, examples/** (excluding __pycache__); pyproject.toml; uv.lock; .python-version",
+  "durability_boundary": "POSIX fsync/rename and controlled process termination; no power-loss claim",
+  "historical_snapshot_sequence": 1,
+  "lockfile_sha256": "33d8e55d6e7773df668c53066b89481c06c274b4e3989b5cba83d33581f7667d",
+  "memory_limit_bytes": 34359738368,
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "packaging_context": "source-checkout",
+  "pid": 37973,
+  "project": "strata",
+  "python": "3.14.8",
+  "recovered_sequence": 11,
+  "root_contract_sha256": "a20ec2cb739f73a7dc38d988fef352cbb02e28d8e768a3e64e6df3de014826ec",
+  "root_digest_inputs": [
+    "ruff.toml",
+    "AGENTS.md",
+    "portfolio.toml",
+    "scripts/portfolio.py"
+  ],
+  "schema_version": 1,
+  "seed": 1729,
+  "source_commit": "eb88f10ebf577b8754e4982e6e22accec8355244",
+  "source_content_sha256": "49730eb7670eb00c203a71f6754c0eccae7147c0ff033d5173d36f12419d5fc3",
+  "source_dirty": true,
+  "source_scope": "project",
+  "status": "passed",
+  "timeline": [
+    "snapshot sequence=1 contains 20 catalog entries",
+    "overwrite, delete, flush, compaction: old snapshot remains unchanged",
+    "closed all original owner handles; historical backup restored and verified",
+    "subprocess acknowledged 10 durable commits, then terminated after the next WAL fsync",
+    "new owner recovered sequence=11; all acknowledgements retained; uncertain batch is complete"
+  ]
+}

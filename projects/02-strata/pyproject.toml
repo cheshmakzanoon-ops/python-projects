@@ -1,7 +1,8 @@
 [project]
 name = "pp-strata"
 version = "0.1.0"
-description = "Strata: independent Python portfolio project"
+description = "An original snapshot-isolated LSM byte-storage engine with verified recovery"
+readme = "README.md"
 requires-python = ">=3.13"
 dependencies = []
 [project.scripts]
@@ -21,3 +22,11 @@ python_version = "3.13"
 strict = true
 [tool.ruff]
 extend = "../../ruff.toml"
+
+[tool.coverage.run]
+branch = true
+source = ["pp_strata"]
+omit = ["*/cli.py", "*/evidence.py", "*/workloads.py"]
+
+[tool.coverage.report]
+show_missing = true

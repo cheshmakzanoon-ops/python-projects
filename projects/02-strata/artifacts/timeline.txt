@@ -1,0 +1,5 @@
+snapshot sequence=1 contains 20 catalog entries
+overwrite, delete, flush, compaction: old snapshot remains unchanged
+closed all original owner handles; historical backup restored and verified
+subprocess acknowledged 10 durable commits, then terminated after the next WAL fsync
+new owner recovered sequence=11; all acknowledgements retained; uncertain batch is complete

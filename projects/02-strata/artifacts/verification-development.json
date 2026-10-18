@@ -1,0 +1,112 @@
+{
+  "commands": [
+    {
+      "command": "uv run --locked ruff format --check .",
+      "exit_code": 0
+    },
+    {
+      "command": "uv run --locked ruff check .",
+      "exit_code": 0
+    },
+    {
+      "command": "uv run --locked mypy src",
+      "exit_code": 0,
+      "source_files": 13
+    },
+    {
+      "command": "uv run --locked pytest -q --cov --cov-report=term-missing",
+      "exit_code": 0,
+      "passed": 79,
+      "python": "3.14.8",
+      "seconds": 4.14
+    },
+    {
+      "command": "UV_PROJECT_ENVIRONMENT=.local/py313 uv run --locked --python 3.13.16 pytest -q",
+      "exit_code": 0,
+      "passed": 79,
+      "python": "3.13.16",
+      "seconds": 3.77
+    },
+    {
+      "command": "uv build",
+      "exit_code": 0
+    },
+    {
+      "command": "clean venv wheel install; from /tmp: python -m pp_strata.cli demo --output ABS --seed 1729",
+      "exit_code": 0,
+      "python": "3.14.8"
+    },
+    {
+      "command": "python benchmarks/extended_stateful.py --jobs 2 --seeds 2 --operations 100 --output ABS; --resume from one-seed checkpoint",
+      "complete_seeds": 2,
+      "exit_code": 0,
+      "oracle_match_after_resume": true
+    }
+  ],
+  "coverage": {
+    "covered_branches": 256,
+    "covered_lines": 823,
+    "excluded_lines": 0,
+    "missing_branches": 24,
+    "missing_lines": 27,
+    "num_branches": 280,
+    "num_partial_branches": 24,
+    "num_statements": 850,
+    "percent_branches_covered": 91.42857142857143,
+    "percent_branches_covered_display": "91",
+    "percent_covered": 95.48672566371681,
+    "percent_covered_display": "95",
+    "percent_statements_covered": 96.82352941176471,
+    "percent_statements_covered_display": "97"
+  },
+  "coverage_scope": "codec, WAL, memtable, SSTables, metadata I/O, errors, api; excludes CLI/provenance/workload adapters explicitly",
+  "current_source": {
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "digest_inputs": "src/**, tests/**, benchmarks/**, examples/** (excluding __pycache__); pyproject.toml; uv.lock; .python-version",
+    "lockfile_sha256": "33d8e55d6e7773df668c53066b89481c06c274b4e3989b5cba83d33581f7667d",
+    "memory_limit_bytes": 34359738368,
+    "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "packaging_context": "source-checkout",
+    "pid": 38148,
+    "project": "strata",
+    "python": "3.14.8",
+    "root_contract_sha256": "a20ec2cb739f73a7dc38d988fef352cbb02e28d8e768a3e64e6df3de014826ec",
+    "root_digest_inputs": [
+      "ruff.toml",
+      "AGENTS.md",
+      "portfolio.toml",
+      "scripts/portfolio.py"
+    ],
+    "schema_version": 1,
+    "source_commit": "b98e69e9e56a14704baa11347d241c078b7a6174",
+    "source_content_sha256": "49730eb7670eb00c203a71f6754c0eccae7147c0ff033d5173d36f12419d5fc3",
+    "source_dirty": true,
+    "source_scope": "project"
+  },
+  "independent_review": {
+    "boundary_script": "/tmp/strata-review-boundaries.py",
+    "boundary_script_exit_code": 0,
+    "findings_fixed": [
+      "WAL constructor leaked descriptor if directory sync failed",
+      "restore accepted unsupported BACKUP version and malformed schema"
+    ],
+    "regressions": "two constructor contexts and sixteen invalid schema variants, plus valid-schema incorrect content digest",
+    "reviewer": "A01"
+  },
+  "project": "strata",
+  "remaining": [
+    "100x5000 stateful committed-tree run at --jobs 2",
+    "standard benchmark under exclusive resource lease",
+    "coordinator review and immutable committed-tree checks"
+  ],
+  "schema_version": 1,
+  "snapshot_note": "Final 79-test matrices and clean wheel demo cover independent review fixes for WAL-constructor descriptor cleanup and strict backup schema validation before source-open side effects. Required full long suites remain coordinator-owned immutable runs.",
+  "status": "local-gates-passed-required-long-runs-pending",
+  "tested_source": {
+    "lockfile_sha256": "33d8e55d6e7773df668c53066b89481c06c274b4e3989b5cba83d33581f7667d",
+    "root_contract_sha256": "a20ec2cb739f73a7dc38d988fef352cbb02e28d8e768a3e64e6df3de014826ec",
+    "source_commit": "eb88f10ebf577b8754e4982e6e22accec8355244",
+    "source_content_sha256": "49730eb7670eb00c203a71f6754c0eccae7147c0ff033d5173d36f12419d5fc3",
+    "source_dirty": true
+  }
+}

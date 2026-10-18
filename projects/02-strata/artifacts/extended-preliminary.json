@@ -1,0 +1,31 @@
+{
+  "completed_operations": 55000,
+  "completed_seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "completed_seeds": 11,
+  "lockfile_sha256": "33d8e55d6e7773df668c53066b89481c06c274b4e3989b5cba83d33581f7667d",
+  "operations_per_seed": 5000,
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "project": "strata",
+  "python": "3.14.8",
+  "reason": "Coordinator requested stop of dirty-source serial run, then checkpoint/resume and bounded jobs2 harness for immutable verification. Exit143 was intentional, not a passing full suite.",
+  "required_seeds": 100,
+  "root_contract_sha256": "57ea907177231ae0a559e7ef2f0af781bb774c2525ef36afcc020a0b828a4ead",
+  "schema_version": 1,
+  "source_commit": "63d8873a58669a278ada0d688c5fb0503875b6bb",
+  "source_content_sha256": "78ab3a51c8ae7be997e083dfe26a4cc8c869bfcaf445312a24b2defb898baa1d",
+  "source_dirty": true,
+  "status": "stopped-before-full-gate",
+  "suite": "extended-stateful-preliminary"
+}

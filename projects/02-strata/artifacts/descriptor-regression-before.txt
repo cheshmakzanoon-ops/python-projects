@@ -1,0 +1,41 @@
+Intentional reproduction against an isolated wheel with the former descriptor-close ordering restored. The fixed product suite passes this regression.
+
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____________ test_st07_cleanup_exception_closes_retired_descriptors ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-63/test_st07_cleanup_exception_cl0')
+
+    def test_st07_cleanup_exception_closes_retired_descriptors(tmp_path: Path) -> None:
+        before = len(list(Path("/proc/self/fd").iterdir()))
+        armed = False
+    
+        def fail(name: str) -> None:
+            if armed and name == "before_obsolete_cleanup":
+                raise OSError(errno.EIO, "injected obsolete cleanup failure")
+    
+        with Database.open(tmp_path / "db", failpoint=fail) as db:
+            with db.begin() as tx:
+                tx.put(b"key", b"old")
+            db.flush()
+            with db.begin() as tx:
+                tx.delete(b"key")
+            db.flush()
+            armed = True
+            with pytest.raises(OSError):
+                db.compact()
+            assert db.writer_failed
+            with db.snapshot() as snap:
+                assert snap.get(b"key") is None
+>       assert len(list(Path("/proc/self/fd").iterdir())) == before
+E       AssertionError: assert 14 == 12
+E        +  where 14 = len([PosixPath('/proc/self/fd/0'), PosixPath('/proc/self/fd/1'), PosixPath('/proc/self/fd/2'), PosixPath('/proc/self/fd/3'), PosixPath('/proc/self/fd/4'), PosixPath('/proc/self/fd/5'), ...])
+E        +    where [PosixPath('/proc/self/fd/0'), PosixPath('/proc/self/fd/1'), PosixPath('/proc/self/fd/2'), PosixPath('/proc/self/fd/3'), PosixPath('/proc/self/fd/4'), PosixPath('/proc/self/fd/5'), ...] = list(<generator object Path.iterdir.<locals>.<genexpr> at 0x7f05329476a0>)
+E        +      where <generator object Path.iterdir.<locals>.<genexpr> at 0x7f05329476a0> = iterdir()
+E        +        where iterdir = PosixPath('/proc/self/fd').iterdir
+E        +          where PosixPath('/proc/self/fd') = Path('/proc/self/fd')
+
+tests/acceptance/test_faults.py:234: AssertionError
+=========================== short test summary info ============================
+FAILED tests/acceptance/test_faults.py::test_st07_cleanup_exception_closes_retired_descriptors
+1 failed in 0.03s
