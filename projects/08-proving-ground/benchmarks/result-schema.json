@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Proving Ground benchmark evidence",
+  "type": "object",
+  "required": ["schema_version", "project", "source_commit", "source_dirty", "source_scope", "source_content_sha256", "root_contract_sha256", "lockfile_sha256", "python", "os", "cpu", "memory_limit_bytes", "seed", "dataset_id", "profile", "parameters", "warmup_runs", "measurement_runs", "metrics", "correctness_checks", "status"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "project": {"const": "proving-ground"},
+    "source_dirty": {"type": "boolean"},
+    "profile": {"enum": ["ci", "standard"]},
+    "status": {"enum": ["passed", "failed", "blocked"]},
+    "measurement_runs": {"minimum": 5},
+    "metrics": {"type": "object"},
+    "correctness_checks": {"type": "object"}
+  }
+}
