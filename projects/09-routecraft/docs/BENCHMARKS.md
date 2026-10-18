@@ -16,6 +16,19 @@ not a claim of identical instruction counts. Seeds advance between paired repeat
 wall timing can alter completed iterations and therefore the resulting plan.
 Iteration-only deterministic tests are separate.
 
+Both profiles also run a **separate tiny non-improvement control**, recorded in
+`metrics.controls` rather than mixed into the 2 CI or 18 standard scale cases.
+The directed three-customer fixture has an independently exhaustively proven
+optimum. Its greedy construction already reaches that optimum. One actual paired
+warmup and five actual baseline/search measurements still execute the full
+20-iteration budget, with independently verified plans. The report records the
+oracle objective/plan/enumeration effort, individual measured durations and effort,
+and comparisons computed from actual trial objectives. Five ties demonstrate a
+real case in which search finds no improvement; they are not evidence that a
+larger island instance is optimal. A mismatched or invalid control plan fails the
+benchmark rather than manufacturing a tie. The existing scale-case inputs, seeds,
+budgets and dataset digest remain unchanged; the control has its own input digest.
+
 Metrics include paired gains/ties/losses/unavailable results, feasible rates,
 lexicographic objectives, time to first feasible, best improvement trajectory,
 operator counts, verifier median latency and Linux process peak RSS. RSS is a

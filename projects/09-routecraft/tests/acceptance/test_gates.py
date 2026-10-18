@@ -34,6 +34,32 @@ def test_rc06_equal_budget_ci_publishes_every_trial(tmp_path: Path) -> None:
     saved = json.loads((tmp_path / "benchmark" / "benchmark.json").read_text())
     assert saved["measurement_runs"] == 5
     assert len(saved["metrics"]["cases"]) == 2
+    # The separate exact-optimal control must exercise real work and publish
+    # measured non-improvement even when every full-scale scenario improves.
+    assert saved["correctness_checks"]["no_improvement_control"]
+    assert len(saved["metrics"]["controls"]) == 1
+    control = saved["metrics"]["controls"][0]
+    assert control["name"] == "exact_optimal_construction_baseline"
+    assert control["warmup_runs"] == 1 and control["measurement_runs"] == 5
+    assert control["paired_outcomes"] == ["tie"] * 5
+    assert control["no_improvement_trials"] == 5
+    assert control["all_plans_independently_verified"]
+    assert control["oracle"]["status"] == "OPTIMAL"
+    assert control["oracle"]["objective"] == [1, 8]
+    assert control["oracle"]["iterations"] == 24
+    from pp_routecraft.reporting.serialization import instance_from_dict, plan_from_dict
+
+    oracle_instance = instance_from_dict(control["instance"])
+    oracle_plan = plan_from_dict(control["oracle_plan"])
+    assert verify(oracle_instance, oracle_plan).valid
+    assert oracle_plan.objective == (1, 8)
+    assert len(control["baseline"]) == len(control["search"]) == 5
+    for row in control["baseline"] + control["search"]:
+        assert row["objective"] == [1, 8]
+        assert row["iterations"] == control["budget"]["iterations"] == 20
+        assert sum(count for _, count in row["operator_counts"]) == 20
+        assert row["stopping_reason"] == "iteration_budget"
+        assert row["first_feasible_seconds"] is not None
     for case in saved["metrics"]["cases"]:
         assert len(case["paired_outcomes"]) == len(case["baseline"]) == len(case["search"]) == 5
         assert all(
@@ -50,3 +76,22 @@ def test_rc08_status_distinction() -> None:
     assert exhaustive(instance).status == Status.PROVEN_INFEASIBLE
     valid = solve(tiny(), SearchBudget(0))
     assert valid.plan is not None and verify(tiny(), valid.plan).valid
+
+
+def test_rc06_control_rejects_valid_but_suboptimal_baseline(monkeypatch) -> None:
+    from dataclasses import replace
+
+    import pytest
+
+    from pp_routecraft import Plan, Route
+    from pp_routecraft import benchmark as benchmark_module
+
+    # Each route costs 8 (2+2+4 and 6+2), but using two vehicles is worse
+    # than the independently known one-vehicle tour with objective (1,8).
+    inferior = Plan((Route(0, (1, 2)), Route(1, (3,))), (2, 16))
+    assert verify(tiny(), inferior).valid
+    original = solve(tiny(), SearchBudget(0))
+    measured = replace(original, plan=inferior)
+    monkeypatch.setattr(benchmark_module, "construction_baseline", lambda *args: measured)
+    with pytest.raises(RuntimeError, match="match exhaustive optimum"):
+        benchmark_module.non_improvement_control(1729)

@@ -12,10 +12,12 @@ All ten original implementations exist and have passed local quality, packaging 
 | PyTrace |77tests, CFG/codemod/SARIF | Bounded read findings closed | Standard passed: 250,899 lines, independent cache/closure checks |
 | Atlas |40tests, visible scores/ACLs | Judgment audit and code-search | Standard passed: 100k documents and 10k measured queries |
 | Proving Ground |103tests, leakage/CAS/serving |58independent closure checks | Standard passed: 250k rows × 40 features, full lifecycle |
-| Routecraft |74tests, including canonical-order regression |180independent static+24rolling cases | Standard pending |
+| Routecraft |74tests, including canonical-order regression |180independent static+24rolling cases | Exact-optimal non-improvement control and affected reruns pending |
 | Resonance |25tests,6,272fixed pitch frames | Reattack/subtick/tempo findings closed | Clean clone,600s standard |
 
 See [independent review](evidence/INDEPENDENT_REVIEW.md) and each project's acceptance map, case study and operations guide. Counts describe tests actually run; the final evidence will identify exact revisions and exit codes. Local branch coverage for each defined domain core exceeds85%; whole-package coverage is separately reported by each owner.
+
+Routecraft's first full standard run executed all 18 scale scenarios and 90 paired trials, but every paired outcome was a gain. The brief also requires a no-improvement case. That report is preserved as a [superseded attempt](evidence/final/attempts/routecraft-missing-control/coordinator-review.json); a real exact-optimal baseline control and affected verification are pending. Its runner's passing status does not close this missing requirement.
 
 ## Integrations
 

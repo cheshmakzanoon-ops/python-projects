@@ -1,0 +1,581 @@
+{
+  "change_scope": "Separate tiny exact-optimal control; all18 standard scale inputs/seeds/budgets and2CI scale cases unchanged.",
+  "checks": {
+    "python3.13.16": "2focusedacceptancetests passed in3.44s",
+    "python3.14.8": "2focusedacceptancetests passed in1.71s",
+    "ruff_check": "passed",
+    "ruff_format": "passed",
+    "strict_mypy": "passed,21sourcefiles"
+  },
+  "control": {
+    "all_plans_independently_verified": true,
+    "baseline": [
+      {
+        "diagnostics": [],
+        "elapsed_seconds": 0.002217610001025605,
+        "first_feasible_seconds": 8.86369998625014e-05,
+        "iterations": 20,
+        "objective": [
+          1,
+          8
+        ],
+        "operator_counts": [
+          [
+            "construction_restarts",
+            20
+          ]
+        ],
+        "optimality_gap": "unknown",
+        "status": "FEASIBLE",
+        "stopping_reason": "iteration_budget",
+        "trajectory": [
+          [
+            0,
+            1,
+            8
+          ]
+        ]
+      },
+      {
+        "diagnostics": [],
+        "elapsed_seconds": 0.0019786680004472146,
+        "first_feasible_seconds": 0.00015981800061126705,
+        "iterations": 20,
+        "objective": [
+          1,
+          8
+        ],
+        "operator_counts": [
+          [
+            "construction_restarts",
+            20
+          ]
+        ],
+        "optimality_gap": "unknown",
+        "status": "FEASIBLE",
+        "stopping_reason": "iteration_budget",
+        "trajectory": [
+          [
+            0,
+            1,
+            8
+          ]
+        ]
+      },
+      {
+        "diagnostics": [],
+        "elapsed_seconds": 0.002808151999488473,
+        "first_feasible_seconds": 0.00021466999896802008,
+        "iterations": 20,
+        "objective": [
+          1,
+          8
+        ],
+        "operator_counts": [
+          [
+            "construction_restarts",
+            20
+          ]
+        ],
+        "optimality_gap": "unknown",
+        "status": "FEASIBLE",
+        "stopping_reason": "iteration_budget",
+        "trajectory": [
+          [
+            0,
+            1,
+            8
+          ]
+        ]
+      },
+      {
+        "diagnostics": [],
+        "elapsed_seconds": 0.0022815629999968223,
+        "first_feasible_seconds": 8.618299943918828e-05,
+        "iterations": 20,
+        "objective": [
+          1,
+          8
+        ],
+        "operator_counts": [
+          [
+            "construction_restarts",
+            20
+          ]
+        ],
+        "optimality_gap": "unknown",
+        "status": "FEASIBLE",
+        "stopping_reason": "iteration_budget",
+        "trajectory": [
+          [
+            0,
+            1,
+            8
+          ]
+        ]
+      },
+      {
+        "diagnostics": [],
+        "elapsed_seconds": 0.001891142999738804,
+        "first_feasible_seconds": 8.294600047520362e-05,
+        "iterations": 20,
+        "objective": [
+          1,
+          8
+        ],
+        "operator_counts": [
+          [
+            "construction_restarts",
+            20
+          ]
+        ],
+        "optimality_gap": "unknown",
+        "status": "FEASIBLE",
+        "stopping_reason": "iteration_budget",
+        "trajectory": [
+          [
+            0,
+            1,
+            8
+          ]
+        ]
+      }
+    ],
+    "budget": {
+      "iterations": 20,
+      "seconds": null
+    },
+    "dataset_id": "tiny-directed-v1:0fb286d892b48ae76a6e4cac4d43407dc15dbf2cf3e06b53f4d843d952cce099",
+    "instance": {
+      "depot": 0,
+      "matrix_version": "synthetic-v1",
+      "schema_version": 1,
+      "states": [],
+      "stops": [
+        {
+          "demand": 1,
+          "due": 20,
+          "id": 1,
+          "ready": 0,
+          "service": 0,
+          "x": 0.0,
+          "y": 0.0
+        },
+        {
+          "demand": 1,
+          "due": 20,
+          "id": 2,
+          "ready": 0,
+          "service": 0,
+          "x": 0.0,
+          "y": 0.0
+        },
+        {
+          "demand": 1,
+          "due": 20,
+          "id": 3,
+          "ready": 0,
+          "service": 0,
+          "x": 0.0,
+          "y": 0.0
+        }
+      ],
+      "travel": [
+        [
+          0,
+          2,
+          5,
+          6
+        ],
+        [
+          7,
+          0,
+          2,
+          8
+        ],
+        [
+          4,
+          9,
+          0,
+          2
+        ],
+        [
+          2,
+          3,
+          8,
+          0
+        ]
+      ],
+      "vehicles": [
+        {
+          "capacity": 3,
+          "end": 20,
+          "id": 0,
+          "start": 0
+        },
+        {
+          "capacity": 3,
+          "end": 20,
+          "id": 1,
+          "start": 0
+        }
+      ]
+    },
+    "measurement_runs": 5,
+    "name": "exact_optimal_construction_baseline",
+    "no_improvement_trials": 5,
+    "oracle": {
+      "diagnostics": [],
+      "elapsed_seconds": 0.00031543899967800826,
+      "first_feasible_seconds": 0.0002444000001560198,
+      "iterations": 24,
+      "objective": [
+        1,
+        8
+      ],
+      "operator_counts": [
+        [
+          "enumerated_plans",
+          24
+        ]
+      ],
+      "optimality_gap": "0",
+      "status": "OPTIMAL",
+      "stopping_reason": "exhaustive_enumeration",
+      "trajectory": []
+    },
+    "oracle_plan": {
+      "objective": [
+        1,
+        8
+      ],
+      "routes": [
+        {
+          "return_time": null,
+          "schedule": [],
+          "stops": [],
+          "vehicle_id": 0
+        },
+        {
+          "return_time": null,
+          "schedule": [],
+          "stops": [
+            1,
+            2,
+            3
+          ],
+          "vehicle_id": 1
+        }
+      ],
+      "schema_version": 1
+    },
+    "oracle_verified": true,
+    "paired_outcomes": [
+      "tie",
+      "tie",
+      "tie",
+      "tie",
+      "tie"
+    ],
+    "purpose": "non-improvement control; separate from full-scale island scenarios",
+    "search": [
+      {
+        "diagnostics": [],
+        "elapsed_seconds": 0.0010986550005327445,
+        "first_feasible_seconds": 0.00010043899965239689,
+        "iterations": 20,
+        "objective": [
+          1,
+          8
+        ],
+        "operator_counts": [
+          [
+            "relocate",
+            2
+          ],
+          [
+            "swap",
+            1
+          ],
+          [
+            "reverse",
+            6
+          ],
+          [
+            "random_destroy",
+            4
+          ],
+          [
+            "related_destroy",
+            7
+          ]
+        ],
+        "optimality_gap": "unknown",
+        "status": "FEASIBLE",
+        "stopping_reason": "iteration_budget",
+        "trajectory": [
+          [
+            0,
+            1,
+            8
+          ]
+        ]
+      },
+      {
+        "diagnostics": [],
+        "elapsed_seconds": 0.0017678130006970605,
+        "first_feasible_seconds": 0.00011819600149465259,
+        "iterations": 20,
+        "objective": [
+          1,
+          8
+        ],
+        "operator_counts": [
+          [
+            "relocate",
+            4
+          ],
+          [
+            "swap",
+            2
+          ],
+          [
+            "reverse",
+            1
+          ],
+          [
+            "random_destroy",
+            5
+          ],
+          [
+            "related_destroy",
+            8
+          ]
+        ],
+        "optimality_gap": "unknown",
+        "status": "FEASIBLE",
+        "stopping_reason": "iteration_budget",
+        "trajectory": [
+          [
+            0,
+            1,
+            8
+          ]
+        ]
+      },
+      {
+        "diagnostics": [],
+        "elapsed_seconds": 0.001464895000026445,
+        "first_feasible_seconds": 9.969299935619347e-05,
+        "iterations": 20,
+        "objective": [
+          1,
+          8
+        ],
+        "operator_counts": [
+          [
+            "relocate",
+            3
+          ],
+          [
+            "swap",
+            3
+          ],
+          [
+            "reverse",
+            4
+          ],
+          [
+            "random_destroy",
+            5
+          ],
+          [
+            "related_destroy",
+            5
+          ]
+        ],
+        "optimality_gap": "unknown",
+        "status": "FEASIBLE",
+        "stopping_reason": "iteration_budget",
+        "trajectory": [
+          [
+            0,
+            1,
+            8
+          ]
+        ]
+      },
+      {
+        "diagnostics": [],
+        "elapsed_seconds": 0.0009012830014398787,
+        "first_feasible_seconds": 0.0001081059999705758,
+        "iterations": 20,
+        "objective": [
+          1,
+          8
+        ],
+        "operator_counts": [
+          [
+            "relocate",
+            5
+          ],
+          [
+            "swap",
+            4
+          ],
+          [
+            "reverse",
+            4
+          ],
+          [
+            "random_destroy",
+            3
+          ],
+          [
+            "related_destroy",
+            4
+          ]
+        ],
+        "optimality_gap": "unknown",
+        "status": "FEASIBLE",
+        "stopping_reason": "iteration_budget",
+        "trajectory": [
+          [
+            0,
+            1,
+            8
+          ]
+        ]
+      },
+      {
+        "diagnostics": [],
+        "elapsed_seconds": 0.001087649001419777,
+        "first_feasible_seconds": 9.537900041323155e-05,
+        "iterations": 20,
+        "objective": [
+          1,
+          8
+        ],
+        "operator_counts": [
+          [
+            "relocate",
+            3
+          ],
+          [
+            "swap",
+            2
+          ],
+          [
+            "reverse",
+            7
+          ],
+          [
+            "random_destroy",
+            5
+          ],
+          [
+            "related_destroy",
+            3
+          ]
+        ],
+        "optimality_gap": "unknown",
+        "status": "FEASIBLE",
+        "stopping_reason": "iteration_budget",
+        "trajectory": [
+          [
+            0,
+            1,
+            8
+          ]
+        ]
+      }
+    ],
+    "seed": 1729,
+    "warmup": {
+      "baseline": {
+        "diagnostics": [],
+        "elapsed_seconds": 0.0026175599996349774,
+        "first_feasible_seconds": 0.00015493899991270155,
+        "iterations": 20,
+        "objective": [
+          1,
+          8
+        ],
+        "operator_counts": [
+          [
+            "construction_restarts",
+            20
+          ]
+        ],
+        "optimality_gap": "unknown",
+        "status": "FEASIBLE",
+        "stopping_reason": "iteration_budget",
+        "trajectory": [
+          [
+            0,
+            1,
+            8
+          ]
+        ]
+      },
+      "search": {
+        "diagnostics": [],
+        "elapsed_seconds": 0.0016706240003259154,
+        "first_feasible_seconds": 0.00011946199992962647,
+        "iterations": 20,
+        "objective": [
+          1,
+          8
+        ],
+        "operator_counts": [
+          [
+            "relocate",
+            2
+          ],
+          [
+            "swap",
+            1
+          ],
+          [
+            "reverse",
+            6
+          ],
+          [
+            "random_destroy",
+            4
+          ],
+          [
+            "related_destroy",
+            7
+          ]
+        ],
+        "optimality_gap": "unknown",
+        "status": "FEASIBLE",
+        "stopping_reason": "iteration_budget",
+        "trajectory": [
+          [
+            0,
+            1,
+            8
+          ]
+        ]
+      }
+    },
+    "warmup_runs": 1
+  },
+  "cpu": "unknown",
+  "lockfile_sha256": "9aef9e96a988bfdd7403447241e67af694abf1c7d3910e57cae691e55643a011",
+  "memory_limit_bytes": null,
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "project": "routecraft",
+  "python": "3.14.8",
+  "reason": "Coordinator standard run had only gain outcomes; prior standard artifact is obsolete for current acceptance.",
+  "remaining": "Coordinator committed-source fullmatrix/demos/CI/serialstandard rerun required.",
+  "root_contract_sha256": "f6eb7c7bfabd022f608c34f774f8007dc0f8310ed2c936cb60bcdb349494af58",
+  "schema_version": 1,
+  "source_commit": "c11e6b83261a6411b3d092568d01510845ce919b",
+  "source_content_sha256": "36ababf28a3a00a087fcae837c06ef1370f30928c011e2db64d0bf03f5585685",
+  "source_dirty": true,
+  "source_scope": "project",
+  "standard_benchmark_rerun": false
+}

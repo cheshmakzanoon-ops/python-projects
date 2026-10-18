@@ -110,3 +110,31 @@ return times and separately asserts the time-window/service calculation.
 
 Evidence: docs/evidence/review-ordering-fix.json. No standard benchmark rerun.
 Remaining: coordinator immutable full-suite/review/standard verification.
+
+## Non-improvement benchmark control (latest acceptance correction)
+
+Status: verifying; focused correction complete; writes paused.
+Development HEAD: `c11e6b83261a6411b3d092568d01510845ce919b`; dirty=True.
+Current project source SHA-256: `36ababf28a3a00a087fcae837c06ef1370f30928c011e2db64d0bf03f5585685`.
+No dependencies, Git or root/shared files changed.
+
+Coordinator's prior standard run completed18scale cases/90pairs with all gains;
+that report is OBSOLETE for final acceptance because it lacked a measured
+non-improvement case. Added `benchmark.non_improvement_control`, separately under
+`metrics.controls`, preserving all18standard and2CI scale-case generators, seeds,
+budgets and their dataset digest. A three-customer baseline is proved optimal by
+independent exhaustive enumeration:24plans, objective(1,8). The control executes
+one actual warmup plus5actual baseline/search pairs with20iteration budgets,
+independently verifies every plan, compares each objective to the oracle, and
+derives the five measured ties from those results. It publishes actual iterations,
+operator counts, duration, first-feasible time, trajectory and the oracle plan.
+Invalid, missing or suboptimal control results fail rather than become canned
+non-improvement claims. Benchmark passed status now requires the control.
+
+Focused publicCI/control acceptance tests pass on3.13.16 (2tests,3.44s) and
+3.14.8 (2tests,1.71s). The negative regression injects an independently valid
+two-vehicle objective(2,16) baseline and confirms the control rejects it against
+the exact optimum. Format/lint/strict mypy21files pass. No heavy standard run.
+Proof: docs/evidence/review-control-fix.json, with actual control measurements.
+Remaining: coordinator clean-source3.13/3.14fullchecks/demos/CI and serial standard
+rerun; no final-complete claim.

@@ -1,0 +1,11 @@
+{
+  "observed_at_utc": "2026-10-18T03:44:36.916838+00:00",
+  "source_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+  "raw_workload_status": "passed",
+  "coordinator_acceptance": "superseded; missing required non-improvement control",
+  "scope": "The18scale scenarios and90pairedtrials executed and passed their implemented checks. The brief also requires a case with no improvement; all90outcomes were gain. Preserve this actual result but do not count it as final required workload acceptance. A real exact-optimal baseline control and affected reruns are pending.",
+  "paired_outcomes": {
+    "gain": 90
+  },
+  "requirement_quote": "Include cases where no improvement is found."
+}

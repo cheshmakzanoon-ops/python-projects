@@ -7,7 +7,7 @@
 | RC-03 | Forward tour has cost 8; reverse costs 30 with arrivals 6,14,23; `test_directed_route_recalculation` checks the optimizer and hand result; random directed move outputs separately verified |
 | RC-04 | `test_cancel_timeout_rejected_moves_keep_incumbent`, `test_cancel_after_progress`; injected duplicate operator result rejected, original immutable incumbent retained through cancellation and zero wall deadline |
 | RC-05 | `test_same_seed_iteration_result_repeats` checks exact plans, trajectories, operator counts and 80 actual iterations; monotone best trajectory |
-| RC-06 | `test_rc06_equal_budget_ci_publishes_every_trial` uses real seeded runs, 5 paired measurements and identical caps; benchmark publishes gain/tie/loss/unavailable, feasibility, time, efforts, trajectory, verifier latency, peak memory |
+| RC-06 | `test_rc06_equal_budget_ci_publishes_every_trial` uses real seeded runs, 5 paired measurements and identical caps; benchmark publishes gain/tie/loss/unavailable, feasibility, time, efforts, trajectory, verifier latency, peak memory; a separate exhaustive-optimal tiny control executes one warmup and five real pairs to demonstrate measured non-improvement |
 | RC-07 | `test_replanning.py` tests delayed actual boundary, successful added request, no invented cargo, transfer/manifests/prefix/definition/matrix/mid-edge failures; demo drives public replanning CLI |
 | RC-08 | JSON parser round-trip, actual subprocess CLI from outside source, independent verify, SVG map/timeline assertions; timeout unknown distinguished from exhaustive infeasibility |
 
