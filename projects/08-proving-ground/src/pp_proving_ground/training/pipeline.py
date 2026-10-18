@@ -6,15 +6,13 @@ from dataclasses import dataclass
 from typing import Any, Literal
 
 import numpy as np
-from sklearn.dummy import DummyClassifier
 from sklearn.impute import SimpleImputer
-from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-from sklearn.tree import DecisionTreeClassifier
 
 from pp_proving_ground.data_contracts.schema import DatasetVersion, FloatArray
 from pp_proving_ground.splits.manifest import SplitManifest
+from pp_proving_ground.training.model_registry import build_estimator
 
 EstimatorName = Literal["prior", "logistic", "tree"]
 
@@ -39,16 +37,7 @@ def fit(
 
     split.validate(data)
     params = dict(parameters or {})
-    if estimator == "prior":
-        model: Any = DummyClassifier(strategy="prior")
-    elif estimator == "logistic":
-        model = LogisticRegression(max_iter=300, random_state=seed)
-    elif estimator == "tree":
-        model = DecisionTreeClassifier(max_depth=8, min_samples_leaf=20, random_state=seed)
-    else:
-        raise ValueError("unsupported estimator")
-    # sklearn validates parameter names here; caller values deliberately override defaults.
-    model.set_params(**params)
+    model = build_estimator(estimator, seed=seed, parameters=params)
     pipeline = Pipeline(
         [
             (
