@@ -1,0 +1,13 @@
+# Frozen evaluation contracts
+
+These definitions are fixed before estimator implementation/tuning. Generator parameters, never estimator output, supply ground truth.
+
+RE-01: all 49 equal-tempered semitones MIDI 40–88 inclusive (E2–E6), both 44,100 and 48,000 Hz, 0.60-second tones, amplitude parameter 0.6 (harmonic sum divided by 1.5), harmonics relative amplitudes [1, 0.35, 0.15], deterministic phase 0.3 radians per harmonic, additive zero-mean Gaussian noise standard deviation 0.0005 (seed 1729). Eligible frames have their entire 2,048-sample window within [0.10, 0.50] seconds, with starts on the global 256-sample grid. Every such ground-truth frame is in the denominator. Missing, unvoiced, nonfinite, nonpositive or >10-cent error outputs fail. Required success >=95%; report voicing recall and conditional pitch error separately. No adaptive exclusions.
+
+RE-05: clean isolated guitar-like plucks MIDI [40,45,50,55,59,64], onset seconds [0.30,1.05,1.80,2.55,3.30,4.05], duration 0.42 seconds, 0.6 amplitude, harmonic amplitudes [1,.35,.15], 5-ms linear attack, exponential decay time constant .30s, no noise, total length 4.90s. Exactly six notes required, pitch MIDI exact, onset absolute error <=60ms, offset absolute error <=80ms; zero permitted misses or extra events, no note onset in silent regions (allow onset tolerance around ground truth). RE-05 tuning uses this declared clean fixture; noisy, bent and vibrato phrases are separate challenge results and never replace it.
+
+RE-06: reference IDs a,b,c,d,e, pitches [60,62,64,65,67], starts [0,.6,1.2,1.8,2.4]s, duration .4s. Detected IDs x0,x1,x2,x3,x4 pitches [60,62,71,65,67], starts [0,.6,1.0,1.8,2.4]s: expected [(a,x0),(b,x1),(missing c),(extra x2),(d,x3),(e,x4)] (ordering of adjacent gap operations is immaterial). Exact match map and both unmatched sets required. Separate challenge: onset perturbations +/-35ms, vibrato +/-20c and bend +100c; no clean-gate exclusions based on challenge results.
+
+RE-04: symmetric nonperiodic sine window sin(pi*(j+.5)/2048), hop512, zero padding of 2048 on each side plus tail to a complete frame. Raw rFFT; overlap-add inverse divides by sum of squared windows. Compare to SciPy stft with the identical explicit window, boundary=None, padded=False, multiplying by window sum; tolerance 1e-10 complex spectrum and 1e-11 signal absolute error.
+
+RE-03: frame starts 0,256,... strictly below original signal length; final flush zero-pads every outstanding start. Empty signal yields no frames. Chunk boundaries cannot alter values or timestamps. Batch/chunk frame arrays must be bit-identical; pitch and event records must be equal. Input working memory bounded by frame size + caller chunk size; output records are retained and grow with duration.

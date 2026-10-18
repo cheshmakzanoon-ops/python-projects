@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "source_commit": "3f2c220333fce195c858fa1f08df21676dd51ff1",
+  "source_dirty": true,
+  "source_content_sha256": "ff3adaf492028e4a921d049a5c9f8aa3cdc3af260cdea059883c2fd114b572d1",
+  "lockfile_sha256": "8ac205930d14ebd160772d9950380e6e966aa61e740a0f3cd169c195f15cbefc",
+  "default_python": "3.14.8",
+  "required_python_versions": [
+    "3.13.16",
+    "3.14.8"
+  ],
+  "tests": {
+    "3.13.16": {
+      "passed": 25,
+      "seconds": 24.67
+    },
+    "3.14.8": {
+      "passed": 25,
+      "seconds": 14.26
+    }
+  },
+  "coverage_313": {
+    "covered_lines": 848,
+    "num_statements": 902,
+    "percent_covered": 93.54026845637584,
+    "percent_covered_display": "94",
+    "missing_lines": 54,
+    "excluded_lines": 0,
+    "percent_statements_covered": 94.01330376940133,
+    "percent_statements_covered_display": "94",
+    "num_branches": 290,
+    "num_partial_branches": 19,
+    "covered_branches": 267,
+    "missing_branches": 23,
+    "percent_branches_covered": 92.06896551724138,
+    "percent_branches_covered_display": "92"
+  },
+  "quality": {
+    "ruff_format": "passed",
+    "ruff_check": "passed",
+    "strict_mypy": "passed",
+    "build": "passed",
+    "clean_wheel_demo_313": "passed",
+    "clean_wheel_demo_314": "passed"
+  },
+  "clean_wheel_workdir": "/tmp",
+  "ci_status": "passed",
+  "pending": [
+    "coordinator immutable committed-source verification",
+    "600-second standard benchmark under coordinator exclusive lease"
+  ],
+  "note": "Development verification; no final committed-snapshot or standard result claimed."
+}

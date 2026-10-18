@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "kind": "authentic-development-demo",
+  "seed": 1729,
+  "provenance": {
+    "schema_version": 1,
+    "project": "resonance",
+    "source_commit": "3f2c220333fce195c858fa1f08df21676dd51ff1",
+    "source_dirty": true,
+    "source_scope": "project",
+    "source_content_sha256": "ff3adaf492028e4a921d049a5c9f8aa3cdc3af260cdea059883c2fd114b572d1",
+    "source_inputs": [
+      ".python-version",
+      "README.md",
+      "benchmarks/README.md",
+      "docs/ACCEPTANCE.md",
+      "docs/ARCHITECTURE.md",
+      "docs/BENCHMARKS.md",
+      "docs/CASE_STUDY.md",
+      "docs/DECISIONS.md",
+      "docs/FIXTURES.md",
+      "docs/OPERATIONS.md",
+      "docs/SHARED_CHANGE_REQUESTS.md",
+      "docs/THIRD_PARTY.md",
+      "examples/README.md",
+      "examples/reference.json",
+      "pyproject.toml",
+      "src/pp_resonance/__init__.py",
+      "src/pp_resonance/alignment/__init__.py",
+      "src/pp_resonance/alignment/dynamic.py",
+      "src/pp_resonance/analysis.py",
+      "src/pp_resonance/audio_io/__init__.py",
+      "src/pp_resonance/audio_io/pcm.py",
+      "src/pp_resonance/benchmark.py",
+      "src/pp_resonance/cli.py",
+      "src/pp_resonance/metrics/__init__.py",
+      "src/pp_resonance/metrics/evaluate.py",
+      "src/pp_resonance/midi/__init__.py",
+      "src/pp_resonance/midi/export.py",
+      "src/pp_resonance/model.py",
+      "src/pp_resonance/notes/__init__.py",
+      "src/pp_resonance/notes/decode.py",
+      "src/pp_resonance/onsets/__init__.py",
+      "src/pp_resonance/onsets/detect.py",
+      "src/pp_resonance/pitch/__init__.py",
+      "src/pp_resonance/pitch/difference.py",
+      "src/pp_resonance/provenance.py",
+      "src/pp_resonance/py.typed",
+      "src/pp_resonance/reports/__init__.py",
+      "src/pp_resonance/reports/render.py",
+      "src/pp_resonance/spectral/__init__.py",
+      "src/pp_resonance/spectral/transforms.py",
+      "src/pp_resonance/streaming/__init__.py",
+      "src/pp_resonance/streaming/framing.py",
+      "src/pp_resonance/synthesis/__init__.py",
+      "src/pp_resonance/synthesis/tones.py",
+      "tests/acceptance/test_acceptance.py",
+      "tests/integration/test_outputs.py",
+      "tests/property/test_framing.py",
+      "tests/unit/test_audio.py",
+      "tests/unit/test_numerics.py",
+      "uv.lock"
+    ],
+    "source_digest_inputs": "all project files excluding caches, dist, artifacts, results, AGENT_STATUS and coverage outputs",
+    "root_contract_sha256": "88150cdf73d7fda162cd442ab79f85dc9ea153bdbb9a3eab7532b9981f5aa2fe",
+    "root_contract_inputs": [
+      "AGENTS.md",
+      "portfolio.toml",
+      "ruff.toml",
+      "scripts/portfolio.py"
+    ],
+    "lockfile_sha256": "8ac205930d14ebd160772d9950380e6e966aa61e740a0f3cd169c195f15cbefc",
+    "python": "3.14.8 (main, Oct  3 2026, 01:04:31) [Clang 22.1.3 ]",
+    "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "memory_limit_bytes": 34359738368,
+    "seed": 1729,
+    "profile": "demo",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "audio_sha256": "3acb57aca8e69c76010567cd07d02ccfc3882685ff19d212629f075a38b004a8"
+  },
+  "notes": [
+    {
+      "id": "n0",
+      "midi": 40,
+      "start": 14336,
+      "end": 33920,
+      "frequency": 82.40952489299467,
+      "confidence": 0.9972217721664198,
+      "cents": 0.05537012352686447,
+      "spread_cents": 1.0226847049885985
+    },
+    {
+      "id": "n1",
+      "midi": 45,
+      "start": 50176,
+      "end": 70272,
+      "frequency": 109.9998816698093,
+      "confidence": 0.9968481078907929,
+      "cents": -0.0018623396851831964,
+      "spread_cents": 0.5695323331096791
+    },
+    {
+      "id": "n2",
+      "midi": 50,
+      "start": 86272,
+      "end": 106368,
+      "frequency": 146.83445979105,
+      "confidence": 0.993915738806185,
+      "cents": 0.02447502477357129,
+      "spread_cents": 0.33391306614976796
+    },
+    {
+      "id": "n3",
+      "midi": 55,
+      "start": 122112,
+      "end": 142720,
+      "frequency": 196.00263730426667,
+      "confidence": 0.9932826089203439,
+      "cents": 0.043451403692520735,
+      "spread_cents": 0.21620858807990445
+    },
+    {
+      "id": "n4",
+      "midi": 59,
+      "start": 158208,
+      "end": 178816,
+      "frequency": 246.94521317849743,
+      "confidence": 0.9935446242913483,
+      "cents": 0.02497579533813389,
+      "spread_cents": 0.12018942639478192
+    },
+    {
+      "id": "n5",
+      "midi": 64,
+      "start": 194048,
+      "end": 215168,
+      "frequency": 329.63383147338595,
+      "confidence": 0.9929510717329646,
+      "cents": 0.032954251530519355,
+      "spread_cents": 0.08371523438845407
+    }
+  ],
+  "alignment": [
+    {
+      "reference_id": "r0",
+      "detected_id": "n0",
+      "cost": 0.0013333333333333333,
+      "timing_samples": -64,
+      "cents": 0.05537012352686447
+    },
+    {
+      "reference_id": "r1",
+      "detected_id": "n1",
+      "cost": 0.004666666666666667,
+      "timing_samples": -224,
+      "cents": -0.0018623396851831964
+    },
+    {
+      "reference_id": "r2",
+      "detected_id": "n2",
+      "cost": 0.002666666666666666,
+      "timing_samples": -128,
+      "cents": 0.02447502477357129
+    },
+    {
+      "reference_id": "r3",
+      "detected_id": "n3",
+      "cost": 0.006,
+      "timing_samples": -288,
+      "cents": 0.043451403692520735
+    },
+    {
+      "reference_id": "r4",
+      "detected_id": "n4",
+      "cost": 0.003999999999999998,
+      "timing_samples": -192,
+      "cents": 0.02497579533813389
+    },
+    {
+      "reference_id": "r5",
+      "detected_id": "n5",
+      "cost": 0.007333333333333334,
+      "timing_samples": -352,
+      "cents": 0.032954251530519355
+    }
+  ],
+  "audio_input_sha256": "3acb57aca8e69c76010567cd07d02ccfc3882685ff19d212629f075a38b004a8",
+  "files": {
+    "analysis.png": "3343be6b613285c38e2dcd94bfd6f34cc827342201f792b38aa518deca3929ea",
+    "transcription.mid": "92f542a9538c55b2b0b012da83f6cea161e281d4df0901a4a1971dd50842bfda"
+  },
+  "reproduce": "python -m pp_resonance.cli demo --output ABS --seed 1729",
+  "note": "Actual generated sample; source was dirty during development. Final committed-source verification is coordinator-owned."
+}
