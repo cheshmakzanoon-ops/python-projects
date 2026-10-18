@@ -1,0 +1,35 @@
+{
+  "checks": {
+    "python3.13.16": {
+      "affected_tests_passed": 61,
+      "elapsed_seconds": 4.83
+    },
+    "python3.14.8": {
+      "affected_tests_passed": 61,
+      "elapsed_seconds": 7.8
+    },
+    "ruff_check": "passed",
+    "ruff_format": "passed",
+    "sdist_and_wheel": "passed3.14.8",
+    "strict_mypy": "passed,21sourcefiles"
+  },
+  "correction": "Canonical ascending 1..n record order is now an explicit input contract. solve/exhaustive return INVALID_INPUT; verify rejects; direct construct raises ValueError before scheduling.",
+  "cpu": "unknown",
+  "defect": "Noncanonical customer tuple order passed input validation but optimizer indexed by matrix node minus one, disagreeing with independently keyed verifier.",
+  "lockfile_sha256": "9aef9e96a988bfdd7403447241e67af694abf1c7d3910e57cae691e55643a011",
+  "memory_limit_bytes": null,
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "project": "routecraft",
+  "python": "3.14.8",
+  "regression": "tests/unit/test_verifier.py::test_noncanonical_sdk_customer_order_is_consistently_invalid",
+  "reviewer": "A03 independent review via coordinator",
+  "root_contract_sha256": "448cff2c08be61129891f21171b02488ac151c681804a2af929b164eae2bcd94",
+  "schema_version": 1,
+  "scope": "unit/property suites plus exact6-customer and truthful-status acceptance tests; earlier full73-test evidence precedes this additional regression",
+  "source_commit": "ddd1638d01e3f309c2c7826086e488dd7edc463c",
+  "source_content_sha256": "4bc6043864f3321f2b64d594efad64245d44fed0e0865631e03cfcf6d2adac2d",
+  "source_dirty": true,
+  "source_scope": "project",
+  "standard_benchmark_rerun": false,
+  "verification_environments": "separate UV_PROJECT_ENVIRONMENT per interpreter to avoid shared .venv race"
+}

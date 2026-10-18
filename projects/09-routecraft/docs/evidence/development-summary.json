@@ -1,0 +1,211 @@
+{
+  "branch_enabled_coverage": {
+    "313": {
+      "covered_branches": 443,
+      "covered_lines": 1012,
+      "excluded_lines": 0,
+      "missing_branches": 51,
+      "missing_lines": 52,
+      "num_branches": 494,
+      "num_partial_branches": 45,
+      "num_statements": 1064,
+      "percent_branches_covered": 89.67611336032388,
+      "percent_branches_covered_display": "90",
+      "percent_covered": 93.38896020539153,
+      "percent_covered_display": "93",
+      "percent_statements_covered": 95.11278195488721,
+      "percent_statements_covered_display": "95"
+    },
+    "314": {
+      "covered_branches": 443,
+      "covered_lines": 970,
+      "excluded_lines": 0,
+      "missing_branches": 51,
+      "missing_lines": 52,
+      "num_branches": 494,
+      "num_partial_branches": 45,
+      "num_statements": 1022,
+      "percent_branches_covered": 89.67611336032388,
+      "percent_branches_covered_display": "90",
+      "percent_covered": 93.20580474934037,
+      "percent_covered_display": "93",
+      "percent_statements_covered": 94.9119373776908,
+      "percent_statements_covered_display": "95"
+    }
+  },
+  "checks": {
+    "installed_wheel": {
+      "cleanup": "passed",
+      "demo": "passed",
+      "module_path": "temporary isolated venv site-packages",
+      "outside_source": true,
+      "python": "3.14.8",
+      "wheel_sha256": "5538d98e4754131c023a64eb314f58970c55840c17b23d1028a92beec816a986"
+    },
+    "python3.13.16": {
+      "build": "passed",
+      "format": "passed",
+      "lint": "passed",
+      "mypy": "passed (21 files)",
+      "test_seconds": 43.64,
+      "tests_passed": 73
+    },
+    "python3.14.8": {
+      "build": "passed",
+      "format": "passed",
+      "lint": "passed",
+      "mypy": "passed (21 files)",
+      "test_seconds": 23.1,
+      "tests_passed": 73
+    }
+  },
+  "ci_benchmark": {
+    "cases": [
+      {
+        "baseline_feasible_rate": 1.0,
+        "baseline_objectives": [
+          [
+            4,
+            869
+          ],
+          [
+            4,
+            869
+          ],
+          [
+            4,
+            869
+          ],
+          [
+            4,
+            869
+          ],
+          [
+            4,
+            869
+          ]
+        ],
+        "customers": 25,
+        "paired_outcomes": [
+          "loss",
+          "loss",
+          "gain",
+          "gain",
+          "gain"
+        ],
+        "search_feasible_rate": 1.0,
+        "search_objectives": [
+          [
+            4,
+            960
+          ],
+          [
+            4,
+            879
+          ],
+          [
+            4,
+            748
+          ],
+          [
+            4,
+            832
+          ],
+          [
+            4,
+            822
+          ]
+        ],
+        "tight_windows": false,
+        "verifier_seconds_median": 8.955599969340255e-05
+      },
+      {
+        "baseline_feasible_rate": 1.0,
+        "baseline_objectives": [
+          [
+            4,
+            869
+          ],
+          [
+            4,
+            869
+          ],
+          [
+            4,
+            869
+          ],
+          [
+            4,
+            869
+          ],
+          [
+            4,
+            869
+          ]
+        ],
+        "customers": 25,
+        "paired_outcomes": [
+          "loss",
+          "loss",
+          "gain",
+          "gain",
+          "gain"
+        ],
+        "search_feasible_rate": 1.0,
+        "search_objectives": [
+          [
+            4,
+            960
+          ],
+          [
+            4,
+            879
+          ],
+          [
+            4,
+            748
+          ],
+          [
+            4,
+            832
+          ],
+          [
+            4,
+            822
+          ]
+        ],
+        "tight_windows": true,
+        "verifier_seconds_median": 8.904800006348523e-05
+      }
+    ],
+    "full_local_path": "/workspace/.results/routecraft-ci-final-dev/benchmark.json",
+    "measurement_runs": 5,
+    "seed": 1729,
+    "status": "passed"
+  },
+  "cpu": "unknown",
+  "default_python": "3.14.8",
+  "limits": [
+    "heuristic optimality gap unknown",
+    "cooperative atomic-operation deadlines",
+    "no reload/transfer/traffic updates/mid-edge snapshots",
+    "synthetic data only",
+    "release evidence requires coordinator immutable-source verification"
+  ],
+  "lockfile_sha256": "9aef9e96a988bfdd7403447241e67af694abf1c7d3910e57cae691e55643a011",
+  "memory_limit_bytes": null,
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "project": "routecraft",
+  "python": "3.14.8",
+  "required_python_versions": [
+    "3.13.16",
+    "3.14.8"
+  ],
+  "root_contract_sha256": "5a91318136e2a5437fc47ea71b59d6f6af2afb9cd3ad09cd1fb367d121e94f32",
+  "schema_version": 1,
+  "source_commit": "703bf365454a4bad657dac87a973f2b3bdea8ea2",
+  "source_content_sha256": "f716e8fc03430a1af12faba37cd96210a644caed5afe6dcfa5e0c255f493d520",
+  "source_dirty": true,
+  "source_scope": "project",
+  "standard_benchmark": "pending coordinator committed-snapshot serial run"
+}

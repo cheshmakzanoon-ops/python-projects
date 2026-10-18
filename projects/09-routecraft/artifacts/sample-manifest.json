@@ -1,0 +1,28 @@
+{
+  "files": {
+    "tiny-instance.json": "adedc6595ae2160493013710a0d71ad2804a8e82fae9ff63be76c03e9d8034a5",
+    "tiny-plan.json": "3e738553a7a20a874911cbd89647189ffd6ac191181244f3a8ec745d1fd387a8",
+    "tiny-routes.svg": "bd01460cceb73939269b488aa16e9cc9c4f82357254c09069049af461a456108",
+    "tiny-timeline.svg": "54599cb854e77cc3827b3156475d861d30c091973a0bbc8bec328745383fc496"
+  },
+  "generator": "fixtures.tiny -> solve(SearchBudget(0)) -> independent verify -> render",
+  "objective": [
+    1,
+    8
+  ],
+  "project": "routecraft",
+  "schema_version": 1,
+  "snapshot": {
+    "cpu": "unknown",
+    "lockfile_sha256": "9aef9e96a988bfdd7403447241e67af694abf1c7d3910e57cae691e55643a011",
+    "memory_limit_bytes": null,
+    "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "python": "3.14.8",
+    "root_contract_sha256": "5a91318136e2a5437fc47ea71b59d6f6af2afb9cd3ad09cd1fb367d121e94f32",
+    "source_commit": "703bf365454a4bad657dac87a973f2b3bdea8ea2",
+    "source_content_sha256": "f716e8fc03430a1af12faba37cd96210a644caed5afe6dcfa5e0c255f493d520",
+    "source_dirty": true,
+    "source_scope": "project"
+  },
+  "verified": true
+}

@@ -1,0 +1,153 @@
+"""Versioned JSON boundary. Unknown/mistyped structures fail before solving."""
+
+import json
+from dataclasses import asdict
+from pathlib import Path
+
+from pp_routecraft.domain.instance import (
+    LoadedJob,
+    Plan,
+    Route,
+    RoutingInstance,
+    Stop,
+    Vehicle,
+    VehicleState,
+    VisitSchedule,
+)
+
+
+def _dict(value: object) -> dict[str, object]:
+    if not isinstance(value, dict) or any(not isinstance(k, str) for k in value):
+        raise ValueError("expected JSON object")
+    return {str(k): v for k, v in value.items()}
+
+
+def _list(value: object) -> list[object]:
+    if not isinstance(value, list):
+        raise ValueError("expected JSON array")
+    return list(value)
+
+
+def _int(value: object) -> int:
+    if type(value) is not int:
+        raise ValueError("expected integer units")
+    return value
+
+
+def _str(value: object) -> str:
+    if not isinstance(value, str):
+        raise ValueError("expected string")
+    return value
+
+
+def _float(value: object) -> float:
+    if not isinstance(value, (int, float)) or isinstance(value, bool):
+        raise ValueError("expected coordinate number")
+    return float(value)
+
+
+def _bool(value: object) -> bool:
+    if not isinstance(value, bool):
+        raise ValueError("expected boolean")
+    return value
+
+
+def instance_dict(instance: RoutingInstance) -> dict[str, object]:
+    return {"schema_version": 1, **asdict(instance)}
+
+
+def instance_from_dict(value: object) -> RoutingInstance:
+    data = _dict(value)
+    if _int(data.get("schema_version")) != 1:
+        raise ValueError("unsupported instance schema")
+    stops = []
+    for item in _list(data.get("stops")):
+        s = _dict(item)
+        stops.append(
+            Stop(
+                _int(s.get("id")),
+                _int(s.get("demand")),
+                _int(s.get("ready")),
+                _int(s.get("due")),
+                _int(s.get("service")),
+                _float(s.get("x", 0)),
+                _float(s.get("y", 0)),
+            )
+        )
+    vehicles = []
+    for item in _list(data.get("vehicles")):
+        v = _dict(item)
+        vehicles.append(
+            Vehicle(
+                _int(v.get("id")), _int(v.get("capacity")), _int(v.get("start")), _int(v.get("end"))
+            )
+        )
+    states = []
+    for item in _list(data.get("states", [])):
+        s = _dict(item)
+        jobs = []
+        for entry in _list(s.get("loaded")):
+            j = _dict(entry)
+            jobs.append(LoadedJob(_int(j.get("stop_id")), _int(j.get("quantity"))))
+        states.append(
+            VehicleState(
+                _int(s.get("vehicle_id")),
+                _bool(s.get("started")),
+                tuple(_int(j) for j in _list(s.get("executed"))),
+                _int(s.get("node")),
+                _int(s.get("time")),
+                _int(s.get("onboard")),
+                tuple(jobs),
+                _str(s.get("boundary")),
+            )
+        )
+    return RoutingInstance(
+        tuple(stops),
+        tuple(vehicles),
+        tuple(tuple(_int(v) for v in _list(row)) for row in _list(data.get("travel"))),
+        _int(data.get("depot", 0)),
+        _str(data.get("matrix_version", "synthetic-v1")),
+        tuple(states),
+    )
+
+
+def plan_from_dict(value: object) -> Plan:
+    data = _dict(value)
+    routes = []
+    for item in _list(data.get("routes")):
+        r = _dict(item)
+        visits = []
+        for entry in _list(r.get("schedule", [])):
+            s = _dict(entry)
+            visits.append(
+                VisitSchedule(
+                    _int(s.get("stop_id")),
+                    _int(s.get("arrival")),
+                    _int(s.get("service_start")),
+                    _int(s.get("departure")),
+                    _int(s.get("onboard_after")),
+                )
+            )
+        return_time = r.get("return_time")
+        routes.append(
+            Route(
+                _int(r.get("vehicle_id")),
+                tuple(_int(j) for j in _list(r.get("stops"))),
+                tuple(visits),
+                None if return_time is None else _int(return_time),
+            )
+        )
+    objective = _list(data.get("objective"))
+    if len(objective) != 2:
+        raise ValueError("lexicographic objective needs two values")
+    return Plan(
+        tuple(routes), (_int(objective[0]), _int(objective[1])), _int(data.get("schema_version"))
+    )
+
+
+def read_instance(path: Path) -> RoutingInstance:
+    return instance_from_dict(json.loads(path.read_text()))
+
+
+def read_plan(path: Path) -> Plan:
+    return plan_from_dict(json.loads(path.read_text()))

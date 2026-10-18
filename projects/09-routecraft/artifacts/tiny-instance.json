@@ -1,0 +1,75 @@
+{
+  "depot": 0,
+  "matrix_version": "synthetic-v1",
+  "schema_version": 1,
+  "states": [],
+  "stops": [
+    {
+      "demand": 1,
+      "due": 20,
+      "id": 1,
+      "ready": 0,
+      "service": 0,
+      "x": 0.0,
+      "y": 0.0
+    },
+    {
+      "demand": 1,
+      "due": 20,
+      "id": 2,
+      "ready": 0,
+      "service": 0,
+      "x": 0.0,
+      "y": 0.0
+    },
+    {
+      "demand": 1,
+      "due": 20,
+      "id": 3,
+      "ready": 0,
+      "service": 0,
+      "x": 0.0,
+      "y": 0.0
+    }
+  ],
+  "travel": [
+    [
+      0,
+      2,
+      5,
+      6
+    ],
+    [
+      7,
+      0,
+      2,
+      8
+    ],
+    [
+      4,
+      9,
+      0,
+      2
+    ],
+    [
+      2,
+      3,
+      8,
+      0
+    ]
+  ],
+  "vehicles": [
+    {
+      "capacity": 3,
+      "end": 20,
+      "id": 0,
+      "start": 0
+    },
+    {
+      "capacity": 3,
+      "end": 20,
+      "id": 1,
+      "start": 0
+    }
+  ]
+}

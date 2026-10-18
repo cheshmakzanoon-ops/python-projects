@@ -1,0 +1,47 @@
+{
+  "objective": [
+    1,
+    8
+  ],
+  "routes": [
+    {
+      "return_time": 8,
+      "schedule": [
+        {
+          "arrival": 2,
+          "departure": 2,
+          "onboard_after": 2,
+          "service_start": 2,
+          "stop_id": 1
+        },
+        {
+          "arrival": 4,
+          "departure": 4,
+          "onboard_after": 1,
+          "service_start": 4,
+          "stop_id": 2
+        },
+        {
+          "arrival": 6,
+          "departure": 6,
+          "onboard_after": 0,
+          "service_start": 6,
+          "stop_id": 3
+        }
+      ],
+      "stops": [
+        1,
+        2,
+        3
+      ],
+      "vehicle_id": 0
+    },
+    {
+      "return_time": 0,
+      "schedule": [],
+      "stops": [],
+      "vehicle_id": 1
+    }
+  ],
+  "schema_version": 1
+}
