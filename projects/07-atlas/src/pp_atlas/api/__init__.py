@@ -3,16 +3,16 @@
 import dataclasses
 import secrets
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, ConfigDict, Field
-from starlette.middleware.base import RequestResponseEndpoint
-from starlette.responses import Response
 
 from pp_atlas import CorruptSegment, Document, Engine, Principal
+from pp_atlas.api.body_limit import BodyLimitMiddleware
 
 
 @dataclass(frozen=True)
@@ -62,16 +62,7 @@ def create_app(engine: Engine, tokens: dict[str, Identity]) -> FastAPI:
             raise HTTPException(403, "tenant administrator required")
         return who
 
-    @app.middleware("http")
-    async def bound_body(request: Request, call_next: RequestResponseEndpoint) -> Response:
-        # Starlette caches the bounded body for the downstream Pydantic adapter.
-        body = bytearray()
-        async for block in request.stream():
-            body.extend(block)
-            if len(body) > 2_100_000:
-                return JSONResponse({"detail": "request body exceeds limit"}, status_code=413)
-        request._body = bytes(body)
-        return await call_next(request)
+    app.add_middleware(BodyLimitMiddleware, max_bytes=2_100_000)
 
     @app.exception_handler(ValueError)
     async def invalid(_: Request, error: ValueError) -> JSONResponse:
@@ -167,21 +158,6 @@ def create_app(engine: Engine, tokens: dict[str, Identity]) -> FastAPI:
 
     @app.get("/", response_class=HTMLResponse)
     def view() -> str:
-        return """<!doctype html><html lang=en><meta charset=utf-8><title>Atlas search</title>
-<style>body{font:18px system-ui;max-width:850px;margin:3rem auto;padding:1rem}input{padding:.7rem}article{border-top:1px solid #ccc;padding:1rem}mark{background:#ffe48b}</style>
-<h1>Atlas</h1><p>Search your authorized technical knowledge base.</p>
-<form id=f><input id=token type=password placeholder='Access token' required autocomplete=off>
-<input id=q placeholder='Query or &quot;exact phrase&quot;' size=35><button>Search</button></form>
-<p id=status role=status></p><main id=results></main><script>
-const form=document.getElementById('f'), results=document.getElementById('results');
-const statusLabel=document.getElementById('status'), token=document.getElementById('token');
-const query=document.getElementById('q');
-form.onsubmit=async e=>{e.preventDefault();results.replaceChildren();
-try {
-const response=await fetch('/search?q='+encodeURIComponent(query.value),{headers:{Authorization:'Bearer '+token.value}});
-const data=await response.json();statusLabel.textContent=response.ok?data.total+' results':data.detail;
-for(const hit of data.hits||[]){const a=document.createElement('article'),h=document.createElement('h2'),p=document.createElement('p');h.textContent=hit.title+' · '+hit.score.toFixed(3);p.innerHTML=hit.snippet;a.append(h,p);results.append(a);}
-}catch(error){statusLabel.textContent='Search unavailable. Check the local service.';}};
-</script></html>"""
+        return (Path(__file__).parent / "static" / "index.html").read_text(encoding="utf-8")
 
     return app
