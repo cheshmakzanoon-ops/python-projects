@@ -1,0 +1,41 @@
+[01-anchor] uv run --locked --python 3.14.8 python -m pp_anchor.cli benchmark --output /workspace/portfolio-verify-8m2k525j/source/.local/anchor/benchmark --seed 1729 --profile standard
+{
+  "repetitions": [
+    {
+      "elapsed_seconds": 233.2292740540006,
+      "admission_seconds": 34.99682393000057,
+      "offered_workflows": 5000,
+      "completed_workflows": 5000,
+      "activities": 25000,
+      "execution_attempts": 25250,
+      "injected_failures": 250,
+      "admitted_queue_depth": 5000,
+      "workflows_per_second": 21.438132156782036,
+      "metrics": {
+        "tasks": {
+          "completed": 25000
+        },
+        "runs": {
+          "completed": 5000
+        },
+        "retries": 250,
+        "created_to_start_p95_seconds": 189.67546335,
+        "ready_to_start_p95_seconds": 153.4505905,
+        "expired_leases": 0,
+        "database_size_bytes": 66019328
+      }
+    }
+  ],
+  "median_workflows_per_second": 21.438132156782036,
+  "min_workflows_per_second": 21.438132156782036,
+  "maxrss_kib": 42652,
+  "future_timer_probe": {
+    "timers": 100000,
+    "loaded_seconds": 1.4753179250001267,
+    "idle_tick_seconds": 0.02415401700000075,
+    "fired": 0,
+    "maxrss_growth_kib": 0,
+    "fixture": "isolated bulk future timer projection; no suspended timer coroutines"
+  },
+  "lease_recovery_seconds": 0.14475933700032328
+}

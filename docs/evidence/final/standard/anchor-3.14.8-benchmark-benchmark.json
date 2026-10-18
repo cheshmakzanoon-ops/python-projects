@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "project": "anchor",
+  "source_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+  "source_dirty": false,
+  "source_scope": "project",
+  "source_content_sha256": "c4e0d4054db2a808e93694f25bb49ccfae352e72bd7d460f8cc04b3ad41dc1c6",
+  "root_contract_sha256": "3fa066c6c98e31660c33fc7b83614452f4d61b09f74b202819f48d135e0658af",
+  "lockfile_sha256": "cb58668e71ccbc29112a367ef6cd358115039a96bffa666ba83c402e7929fdac",
+  "python": "3.14.8 (main, Oct  3 2026, 01:04:31) [Clang 22.1.3 ]",
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+  "memory_limit_bytes": 34359738368,
+  "seed": 1729,
+  "dataset_id": "699b4ed11829bf1d7dbd3492402ca0edb9c88754e4619ab95c85a4c4ef4b8131",
+  "profile": "standard",
+  "parameters": {
+    "workflows": 5000,
+    "measurement_runs": 1,
+    "repetition_justification": "Five ci measurements; one full standard measurement because the full durable workload takes tens of minutes on this host",
+    "activities_per_workflow": 5,
+    "schedulers": 2,
+    "worker_concurrency": 8,
+    "threads": 1,
+    "future_timers": 100000,
+    "durability": "PostgreSQL synchronous_commit=on; fsync=on"
+  },
+  "warmup_runs": 1,
+  "measurement_runs": 1,
+  "status": "passed",
+  "metrics": {
+    "repetitions": [
+      {
+        "elapsed_seconds": 233.2292740540006,
+        "admission_seconds": 34.99682393000057,
+        "offered_workflows": 5000,
+        "completed_workflows": 5000,
+        "activities": 25000,
+        "execution_attempts": 25250,
+        "injected_failures": 250,
+        "admitted_queue_depth": 5000,
+        "workflows_per_second": 21.438132156782036,
+        "metrics": {
+          "tasks": {
+            "completed": 25000
+          },
+          "runs": {
+            "completed": 5000
+          },
+          "retries": 250,
+          "created_to_start_p95_seconds": 189.67546335,
+          "ready_to_start_p95_seconds": 153.4505905,
+          "expired_leases": 0,
+          "database_size_bytes": 66019328
+        }
+      }
+    ],
+    "median_workflows_per_second": 21.438132156782036,
+    "min_workflows_per_second": 21.438132156782036,
+    "maxrss_kib": 42652,
+    "future_timer_probe": {
+      "timers": 100000,
+      "loaded_seconds": 1.4753179250001267,
+      "idle_tick_seconds": 0.02415401700000075,
+      "fired": 0,
+      "maxrss_growth_kib": 0,
+      "fixture": "isolated bulk future timer projection; no suspended timer coroutines"
+    },
+    "lease_recovery_seconds": 0.14475933700032328
+  },
+  "correctness_checks": {
+    "all_accepted_completed": true,
+    "five_activities_per_run": true,
+    "orphan_tasks": 0,
+    "future_timers_remain_durable": true
+  }
+}

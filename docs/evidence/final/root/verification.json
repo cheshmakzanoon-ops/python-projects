@@ -1,0 +1,115 @@
+{
+  "source_commit": "a43c8e96ebc9345312c7d1223d833a8ed01a10ba",
+  "source_clean_before": true,
+  "root_contract_sha256": "b6cd5e99e80442d13aa0c3b7d6c7423f181f6572242dab63f8f2d9f2597be363",
+  "root_contract_inputs": [
+    ".github/workflows/ci.yml",
+    ".github/workflows/extended.yml",
+    "AGENTS.md",
+    "PYTHON_PORTFOLIO_MASTER_EXECUTION_BRIEF.md",
+    "integrations/01-settlement/README.md",
+    "integrations/01-settlement/anchor_stage.py",
+    "integrations/01-settlement/meridian_stage.py",
+    "integrations/02-stream-lake/README.md",
+    "integrations/02-stream-lake/current_stage.py",
+    "integrations/02-stream-lake/quarry_stage.py",
+    "integrations/03-code-search/README.md",
+    "integrations/03-code-search/atlas_stage.py",
+    "integrations/03-code-search/pytrace_stage.py",
+    "integrations/run.py",
+    "portfolio.toml",
+    "ruff.toml",
+    "scripts/check_docs.py",
+    "scripts/ci_status.py",
+    "scripts/cloud_install.sh",
+    "scripts/evidence.py",
+    "scripts/mkdocs_source_links.py",
+    "scripts/portfolio.py",
+    "scripts/select_projects.py",
+    "scripts/services.py",
+    "scripts/tests/test_ci_status.py",
+    "scripts/tests/test_dispatcher.py",
+    "scripts/tests/test_evidence.py",
+    "scripts/tests/test_selection.py",
+    "scripts/verify_snapshot.py",
+    "scripts/wheel_smoke.py",
+    "tooling/quality/pyproject.toml",
+    "tooling/quality/uv.lock"
+  ],
+  "source_unchanged_after": true,
+  "checked_at_utc": "2026-10-18T01:56:13.419860+00:00",
+  "checks": [
+    {
+      "command": [
+        "uv",
+        "sync",
+        "--locked",
+        "--project",
+        "tooling/quality",
+        "--python",
+        "3.13.16"
+      ],
+      "exit_code": 0,
+      "seconds": 0.6199503289999484,
+      "log": "check-0.log"
+    },
+    {
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--project",
+        "tooling/quality",
+        "ruff",
+        "format",
+        "--check",
+        "scripts",
+        "integrations"
+      ],
+      "exit_code": 0,
+      "seconds": 0.16530200599936506,
+      "log": "check-1.log"
+    },
+    {
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--project",
+        "tooling/quality",
+        "ruff",
+        "check",
+        "scripts",
+        "integrations"
+      ],
+      "exit_code": 0,
+      "seconds": 0.06585311699927843,
+      "log": "check-2.log"
+    },
+    {
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--project",
+        "tooling/quality",
+        "pytest",
+        "-q",
+        "scripts/tests"
+      ],
+      "exit_code": 0,
+      "seconds": 2.480640059000507,
+      "log": "check-3.log"
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "scripts/check_docs.py"
+      ],
+      "exit_code": 0,
+      "seconds": 1.5461396729997432,
+      "log": "check-4.log"
+    }
+  ],
+  "status": "passed"
+}

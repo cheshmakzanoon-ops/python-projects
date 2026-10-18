@@ -1,0 +1,261 @@
+{
+  "schema_version": 1,
+  "workflow_id": "fd6b4a14-d1e3-4cd4-9b17-410e0145d9d0",
+  "schema": "anchor_demo_5062091de4434b3482b3",
+  "seed": 1729,
+  "status": "completed",
+  "provider": {
+    "publications": 1,
+    "fenced": false
+  },
+  "worker_killed": true,
+  "replay_verified": true,
+  "recovery_seconds": 0.6196820400000433,
+  "events": [
+    {
+      "seq": 1,
+      "kind": "started",
+      "step": "",
+      "data": {
+        "digest": "af80cbd95a648c707ba6e3ec013ecca10691ba5a4ffdf42d55b8bc6bd34c9052"
+      },
+      "commands": [
+        "step:validate"
+      ]
+    },
+    {
+      "seq": 2,
+      "kind": "signal",
+      "step": "",
+      "data": {
+        "name": "approve",
+        "payload": {
+          "approved": true
+        }
+      },
+      "commands": []
+    },
+    {
+      "seq": 3,
+      "kind": "activity_claimed",
+      "step": "validate",
+      "data": {
+        "epoch": 1,
+        "attempt": 1,
+        "command_id": "step:validate"
+      },
+      "commands": []
+    },
+    {
+      "seq": 4,
+      "kind": "step_completed",
+      "step": "validate",
+      "data": {
+        "error": null,
+        "result": {
+          "validated_rows": 60
+        },
+        "attempt": 1,
+        "retry_delay": 0
+      },
+      "commands": [
+        "step:partition_0",
+        "step:partition_1",
+        "step:partition_2"
+      ]
+    },
+    {
+      "seq": 5,
+      "kind": "activity_claimed",
+      "step": "partition_0",
+      "data": {
+        "epoch": 1,
+        "attempt": 1,
+        "command_id": "step:partition_0"
+      },
+      "commands": []
+    },
+    {
+      "seq": 6,
+      "kind": "step_completed",
+      "step": "partition_0",
+      "data": {
+        "error": null,
+        "result": {
+          "sha256": "ad324847c02401be6c4c0d1532cd17865607f5aae3944fe46da8c67a284b1a70",
+          "partition": 0
+        },
+        "attempt": 1,
+        "retry_delay": 0
+      },
+      "commands": []
+    },
+    {
+      "seq": 7,
+      "kind": "activity_claimed",
+      "step": "partition_1",
+      "data": {
+        "epoch": 1,
+        "attempt": 1,
+        "command_id": "step:partition_1"
+      },
+      "commands": []
+    },
+    {
+      "seq": 8,
+      "kind": "step_completed",
+      "step": "partition_1",
+      "data": {
+        "error": null,
+        "result": {
+          "sha256": "9e00060d45005c86262cd7466c19db884d44002fe36e12c9e55c808ceba85976",
+          "partition": 1
+        },
+        "attempt": 1,
+        "retry_delay": 0
+      },
+      "commands": []
+    },
+    {
+      "seq": 9,
+      "kind": "activity_claimed",
+      "step": "partition_2",
+      "data": {
+        "epoch": 1,
+        "attempt": 1,
+        "command_id": "step:partition_2"
+      },
+      "commands": []
+    },
+    {
+      "seq": 10,
+      "kind": "step_completed",
+      "step": "partition_2",
+      "data": {
+        "error": null,
+        "result": {
+          "sha256": "22f597edc6293d807d1c94f7ac255a9fd6ed5be62ad52d3ff6c2ff5e23d3e5f2",
+          "partition": 2
+        },
+        "attempt": 1,
+        "retry_delay": 0
+      },
+      "commands": [
+        "step:join"
+      ]
+    },
+    {
+      "seq": 11,
+      "kind": "step_completed",
+      "step": "join",
+      "data": {
+        "source": "internal"
+      },
+      "commands": [
+        "step:archive"
+      ]
+    },
+    {
+      "seq": 12,
+      "kind": "activity_claimed",
+      "step": "archive",
+      "data": {
+        "epoch": 1,
+        "attempt": 1,
+        "command_id": "step:archive"
+      },
+      "commands": []
+    },
+    {
+      "seq": 13,
+      "kind": "step_completed",
+      "step": "archive",
+      "data": {
+        "error": null,
+        "result": {
+          "bytes": 854,
+          "sha256": "6d8bd0623990268d2999001ac97278c2946e06d82899d1d0095bb58c38030a0e"
+        },
+        "attempt": 1,
+        "retry_delay": 0
+      },
+      "commands": [
+        "step:cooldown"
+      ]
+    },
+    {
+      "seq": 14,
+      "kind": "step_completed",
+      "step": "cooldown",
+      "data": {
+        "source": "timer"
+      },
+      "commands": [
+        "step:approval"
+      ]
+    },
+    {
+      "seq": 15,
+      "kind": "step_completed",
+      "step": "approval",
+      "data": {
+        "source": "internal"
+      },
+      "commands": [
+        "step:publish"
+      ]
+    },
+    {
+      "seq": 16,
+      "kind": "activity_claimed",
+      "step": "publish",
+      "data": {
+        "epoch": 1,
+        "attempt": 1,
+        "command_id": "step:publish"
+      },
+      "commands": []
+    },
+    {
+      "seq": 17,
+      "kind": "activity_claimed",
+      "step": "publish",
+      "data": {
+        "epoch": 2,
+        "attempt": 2,
+        "command_id": "step:publish"
+      },
+      "commands": []
+    },
+    {
+      "seq": 18,
+      "kind": "step_completed",
+      "step": "publish",
+      "data": {
+        "error": null,
+        "result": {
+          "business_key": "fd6b4a14-d1e3-4cd4-9b17-410e0145d9d0",
+          "publications": 1
+        },
+        "attempt": 2,
+        "retry_delay": 0
+      },
+      "commands": [
+        "terminal:completed"
+      ]
+    }
+  ],
+  "metrics": {
+    "tasks": {
+      "completed": 6
+    },
+    "runs": {
+      "completed": 1
+    },
+    "retries": 1,
+    "created_to_start_p95_seconds": 0.8559847999999995,
+    "ready_to_start_p95_seconds": 0.6800267999999996,
+    "expired_leases": 1,
+    "database_size_bytes": 565248
+  }
+}
