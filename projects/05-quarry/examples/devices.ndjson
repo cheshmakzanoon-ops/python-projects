@@ -1,0 +1,2 @@
+{"source_namespace":"devices","key":"sensor-1","version":1,"operation":"upsert","payload":{"device":"sensor-1","day":"2026-01-01","value":21.5}}
+{"source_namespace":"devices","key":"sensor-2","version":1,"operation":"upsert","payload":{"device":"sensor-2","day":"2026-01-01","value":19.0}}

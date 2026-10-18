@@ -3,7 +3,7 @@ name = "pp-quarry"
 version = "0.1.0"
 description = "Quarry: independent Python portfolio project"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = ["pyarrow>=21", "duckdb>=1.4"]
 [project.scripts]
 quarry = "pp_quarry.cli:main"
 [build-system]
@@ -21,3 +21,15 @@ python_version = "3.13"
 strict = true
 [tool.ruff]
 extend = "../../ruff.toml"
+
+[[tool.mypy.overrides]]
+module = ["pyarrow", "pyarrow.*"]
+ignore_missing_imports = true
+
+[tool.coverage.run]
+branch = true
+source = ["pp_quarry"]
+omit = ["*/cli.py", "*/evidence.py", "*/workloads.py"]
+
+[tool.coverage.report]
+show_missing = true

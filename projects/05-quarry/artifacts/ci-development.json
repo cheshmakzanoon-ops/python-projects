@@ -1,0 +1,491 @@
+{
+  "schema_version": 1,
+  "project": "quarry",
+  "source_commit": "6e857f4f226e30b7d25a261902fe1bde2e78a45f",
+  "source_dirty": true,
+  "source_scope": "project",
+  "source_content_sha256": "c2d532eb22b507168c771d915203437b50cc985e7f4fdf0db9397078a1e15af3",
+  "root_contract_sha256": "5dd5196a8f9d6c5aa13e65df2af35e1597315bbd2c8096625fe804f1eef4cf15",
+  "lockfile_sha256": "71898d3b0636bd6d3ed606a933766b7c6849d8da3766504686d8599fd5fbe00f",
+  "python": "3.14.8",
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "cpu": "unknown",
+  "memory_limit_bytes": null,
+  "seed": 1729,
+  "profile": "ci",
+  "memory_metadata_note": "OS peak RSS measured; cgroup maximum not inferred",
+  "dataset_id": "synthetic-device-v1:ba1a1f68cfa6ba7efa2a2cef97e1de47142d4675f46a8c210e60b6dcb5b6770c",
+  "parameters": {
+    "original_events": 20000,
+    "corrections": 2000,
+    "deletes": 400,
+    "schema_additions": 100,
+    "buckets": 8,
+    "batch_rows": 1024,
+    "max_record_bytes": 65536,
+    "duckdb_memory_mb": 128,
+    "duckdb_threads": 1,
+    "cache_state": "source read cache primed by independent oracle; engine warmed with 20,000 events; fresh catalogs per run"
+  },
+  "source_identities": [
+    {
+      "file": "original.ndjson",
+      "sha256": "ba1a1f68cfa6ba7efa2a2cef97e1de47142d4675f46a8c210e60b6dcb5b6770c",
+      "bytes": 2924448
+    },
+    {
+      "file": "late-updates.ndjson",
+      "sha256": "cf509e8968338e22cfa0fc179f4e276242e38d71bd7bc2ebf086963ee2263e91",
+      "bytes": 290340
+    },
+    {
+      "file": "deletes.ndjson",
+      "sha256": "b010e432b564b7c8489da4a7a8ba069173d79f77ae9a80a5efa1c6fc520e0858",
+      "bytes": 36290
+    },
+    {
+      "file": "schema-evolution.ndjson",
+      "sha256": "236de7fb0e92e8862a7d0f103c158766a613f5f29b25bc8a533efa855a18ad0d",
+      "bytes": 15580
+    }
+  ],
+  "warmup_parameters": {
+    "original_events": 20000,
+    "corrections": 2000,
+    "deletes": 400,
+    "schema_additions": 100,
+    "buckets": 8,
+    "fresh_catalog": true
+  },
+  "warmup_runs": 1,
+  "measurement_runs": 5,
+  "repetition_note": "CI has five measurements; standard has one measured run with 5,000,000 originals plus a bounded warmup with 20,000 originals to avoid duplicating the full historical catalog; the costly-run exception explicitly applies",
+  "metrics": {
+    "samples": [
+      {
+        "original_seconds": 1.3624959170001603,
+        "incremental_seconds": 1.2062171479997232,
+        "rows_per_second": 14678.94307091538,
+        "query_seconds": 0.1195113109997692,
+        "recovery_seconds": 0.002393871000094805,
+        "bytes_written": 2908964,
+        "parquet_transform_bytes_read": 3607840,
+        "full_rebuild_seconds": 0.36586496499967325,
+        "rewritten_buckets": 8,
+        "reused_nodes": 0,
+        "incremental_full_ratio": 3.296891649630351,
+        "full_oracle_ratio": 3.8045721696580292,
+        "orphan_count": 0,
+        "registry_identities": 22500,
+        "publication_summaries": [
+          {
+            "snapshot": 1,
+            "manifest_sha256": "f810ecafe4f50b9648a5d2ff31821564f492d8b0bec69875a95aa54d096ce902",
+            "files": 24,
+            "live_rows": 20000,
+            "stats": {
+              "bytes_written": 723344,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 716829,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 2,
+            "manifest_sha256": "1b2b0069af31e75fbae99be6ee32f64e148f065633670bd7d3cfc8ded01cddb6",
+            "files": 24,
+            "live_rows": 20000,
+            "stats": {
+              "bytes_written": 734269,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 727763,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 3,
+            "manifest_sha256": "4e187e3a03845169914ea5531065349f770328a43a1e0a6af17c534884b5f2ac",
+            "files": 24,
+            "live_rows": 19600,
+            "stats": {
+              "bytes_written": 719901,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 713378,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 4,
+            "manifest_sha256": "d555bc0270177d3358561188253b5570d8aa1ff48b3aec4d7ab3aa6d3f567e5a",
+            "files": 24,
+            "live_rows": 19700,
+            "stats": {
+              "bytes_written": 731450,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 724935,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 5,
+            "manifest_sha256": "4047c88531d5010c36ad64e018fc57be2a0c97d6d7b24e88f168e46169c69cd2",
+            "files": 24,
+            "live_rows": 19700,
+            "stats": {
+              "bytes_written": 731450,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 724935,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          }
+        ]
+      },
+      {
+        "original_seconds": 1.1056766809997498,
+        "incremental_seconds": 1.1920237669996823,
+        "rows_per_second": 18088.470475759746,
+        "query_seconds": 0.12346508799964795,
+        "recovery_seconds": 0.0021544210003412445,
+        "bytes_written": 2908964,
+        "parquet_transform_bytes_read": 3607840,
+        "full_rebuild_seconds": 0.3780740700003662,
+        "rewritten_buckets": 8,
+        "reused_nodes": 0,
+        "incremental_full_ratio": 3.152884213928048,
+        "full_oracle_ratio": 3.759804324634721,
+        "orphan_count": 0,
+        "registry_identities": 22500,
+        "publication_summaries": [
+          {
+            "snapshot": 1,
+            "manifest_sha256": "e502ece393aed139f9fb16beb99cc0fdf8b4a68676dcd7d084a6b3939d99f181",
+            "files": 24,
+            "live_rows": 20000,
+            "stats": {
+              "bytes_written": 723344,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 716829,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 2,
+            "manifest_sha256": "900bb5494af1c0989ee0bb5ea51811b2b5ac277a21af3910d472b270f11ad2f4",
+            "files": 24,
+            "live_rows": 20000,
+            "stats": {
+              "bytes_written": 734269,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 727763,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 3,
+            "manifest_sha256": "6e495598aca0810da3f620f8a9ad501d266bf67dff8e1c19a1042c4841f3cc5b",
+            "files": 24,
+            "live_rows": 19600,
+            "stats": {
+              "bytes_written": 719901,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 713378,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 4,
+            "manifest_sha256": "0f46a31543650d43b309ee9ebffa338c235ba9c0e755650be04896f0d7ddaad4",
+            "files": 24,
+            "live_rows": 19700,
+            "stats": {
+              "bytes_written": 731450,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 724935,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 5,
+            "manifest_sha256": "98e94ebf577042f329a8654bc099d05b08c5d517476129f887444bc07119ddb8",
+            "files": 24,
+            "live_rows": 19700,
+            "stats": {
+              "bytes_written": 731450,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 724935,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          }
+        ]
+      },
+      {
+        "original_seconds": 1.0852610980000463,
+        "incremental_seconds": 1.2467781069999546,
+        "rows_per_second": 18428.74496916607,
+        "query_seconds": 0.12123832599991147,
+        "recovery_seconds": 0.002142678999916825,
+        "bytes_written": 2908964,
+        "parquet_transform_bytes_read": 3607840,
+        "full_rebuild_seconds": 0.3875054969998928,
+        "rewritten_buckets": 8,
+        "reused_nodes": 0,
+        "incremental_full_ratio": 3.2174462469633034,
+        "full_oracle_ratio": 3.9325069250566123,
+        "orphan_count": 0,
+        "registry_identities": 22500,
+        "publication_summaries": [
+          {
+            "snapshot": 1,
+            "manifest_sha256": "a712891092c9c9127f5b41ec84b5bfcdde490897a01afa66b64edca3d38ff1f5",
+            "files": 24,
+            "live_rows": 20000,
+            "stats": {
+              "bytes_written": 723344,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 716829,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 2,
+            "manifest_sha256": "b428f6fc92843f802148092e46b1a0173733e96a6a1f60c09a334812b962007e",
+            "files": 24,
+            "live_rows": 20000,
+            "stats": {
+              "bytes_written": 734269,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 727763,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 3,
+            "manifest_sha256": "85cfcad919d9dc7ccd197b05ea3e984781c46556d918b0d86fe974d12a795eea",
+            "files": 24,
+            "live_rows": 19600,
+            "stats": {
+              "bytes_written": 719901,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 713378,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 4,
+            "manifest_sha256": "ae284b6095a0e713da7732f1f260205d1e0671db5f5e43048e0c43e71cbc5343",
+            "files": 24,
+            "live_rows": 19700,
+            "stats": {
+              "bytes_written": 731450,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 724935,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 5,
+            "manifest_sha256": "5631e1d5536632a1be95a52b615036717bd4affded617267d93b4ab1813add30",
+            "files": 24,
+            "live_rows": 19700,
+            "stats": {
+              "bytes_written": 731450,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 724935,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          }
+        ]
+      },
+      {
+        "original_seconds": 1.0856817389999378,
+        "incremental_seconds": 1.3136091970000052,
+        "rows_per_second": 18421.604860391915,
+        "query_seconds": 0.14606132100016112,
+        "recovery_seconds": 0.002728407000176958,
+        "bytes_written": 2908964,
+        "parquet_transform_bytes_read": 3607840,
+        "full_rebuild_seconds": 0.4494657290001669,
+        "rewritten_buckets": 8,
+        "reused_nodes": 0,
+        "incremental_full_ratio": 2.9226014626790766,
+        "full_oracle_ratio": 4.143301229799959,
+        "orphan_count": 0,
+        "registry_identities": 22500,
+        "publication_summaries": [
+          {
+            "snapshot": 1,
+            "manifest_sha256": "6a210802dbf92bfaa5473cef9553862c66d22462a56d22f1ca112529709a1644",
+            "files": 24,
+            "live_rows": 20000,
+            "stats": {
+              "bytes_written": 723344,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 716829,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 2,
+            "manifest_sha256": "03af16069036ced37555de33a199d6d0ab3c91bdb5e66e19e0bd5432df843af8",
+            "files": 24,
+            "live_rows": 20000,
+            "stats": {
+              "bytes_written": 734269,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 727763,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 3,
+            "manifest_sha256": "8c0ed60764e0b3ceb2b0378ccb301d1503f7da68540a22369203e51c5771a839",
+            "files": 24,
+            "live_rows": 19600,
+            "stats": {
+              "bytes_written": 719901,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 713378,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 4,
+            "manifest_sha256": "e934d67aa66e57a898f7fb18b647a19c56699d81e199f7bb1bf5bfe66b05a89b",
+            "files": 24,
+            "live_rows": 19700,
+            "stats": {
+              "bytes_written": 731450,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 724935,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 5,
+            "manifest_sha256": "7f1257a7b5cf393fdec6cc3c6057b5c571fcd6f081276af39c7ba00532cf89db",
+            "files": 24,
+            "live_rows": 19700,
+            "stats": {
+              "bytes_written": 731450,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 724935,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          }
+        ]
+      },
+      {
+        "original_seconds": 1.2796041669998885,
+        "incremental_seconds": 1.4240614260002076,
+        "rows_per_second": 15629.83344051719,
+        "query_seconds": 0.1241235229999802,
+        "recovery_seconds": 0.002825915999892459,
+        "bytes_written": 2908964,
+        "parquet_transform_bytes_read": 3607840,
+        "full_rebuild_seconds": 0.36690756899997723,
+        "rewritten_buckets": 8,
+        "reused_nodes": 0,
+        "incremental_full_ratio": 3.881253880593278,
+        "full_oracle_ratio": 4.491682511916304,
+        "orphan_count": 0,
+        "registry_identities": 22500,
+        "publication_summaries": [
+          {
+            "snapshot": 1,
+            "manifest_sha256": "f21babe9a8dbd76de87a19d9c75ac93161b1b0d51f119af6d6761f0cbc4e48f0",
+            "files": 24,
+            "live_rows": 20000,
+            "stats": {
+              "bytes_written": 723344,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 716829,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 2,
+            "manifest_sha256": "7c1b1f087ac27d2bc4e404e6f54a64012c01b3ebe581b05f2a08c3f76254f422",
+            "files": 24,
+            "live_rows": 20000,
+            "stats": {
+              "bytes_written": 734269,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 727763,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 3,
+            "manifest_sha256": "2a7729e62a340ee4d21865f38131ea26ecc7df82a36be7e5d8ce9672c6397937",
+            "files": 24,
+            "live_rows": 19600,
+            "stats": {
+              "bytes_written": 719901,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 713378,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 4,
+            "manifest_sha256": "e644f59590a78d62b25f7c0127eaec012b20906cd03390966d46e28729e5d34a",
+            "files": 24,
+            "live_rows": 19700,
+            "stats": {
+              "bytes_written": 731450,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 724935,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          },
+          {
+            "snapshot": 5,
+            "manifest_sha256": "2e94c00b0c4a485ef458d703c0d587a158dd6ae6998c36d8687e336d968125b2",
+            "files": 24,
+            "live_rows": 19700,
+            "stats": {
+              "bytes_written": 731450,
+              "max_batch_rows": 1024,
+              "parquet_input_bytes": 724935,
+              "reused_nodes": 0,
+              "rewritten_buckets": 8
+            }
+          }
+        ]
+      }
+    ],
+    "rows_per_second_median": 18088.470475759746,
+    "peak_rss_bytes": 131145728,
+    "source_bytes_read_per_run": 13066632,
+    "oracle_seconds": 0.31704409699977987
+  },
+  "correctness_checks": {
+    "independent_full_rebuild": true,
+    "latest_digest": "0e2df3853d8f62a7b097c329c925a023bac4ef738cbc04d0b942c16ee422426c"
+  },
+  "status": "passed"
+}
