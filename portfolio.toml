@@ -11,7 +11,7 @@ default_python = "3.13.16"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = ["postgresql"]
-status = "queued"
+status = "building"
 demo_module = "pp_anchor.cli"
 
 [[projects]]
@@ -24,7 +24,7 @@ default_python = "3.13.16"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "queued"
+status = "building"
 demo_module = "pp_strata.cli"
 
 [[projects]]
@@ -37,7 +37,7 @@ default_python = "3.13.16"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "queued"
+status = "building"
 demo_module = "pp_current.cli"
 
 [[projects]]
@@ -50,7 +50,7 @@ default_python = "3.13.16"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = ["postgresql"]
-status = "queued"
+status = "building"
 demo_module = "pp_meridian.cli"
 
 [[projects]]
@@ -63,7 +63,7 @@ default_python = "3.13.16"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "queued"
+status = "building"
 demo_module = "pp_quarry.cli"
 
 [[projects]]
@@ -76,7 +76,7 @@ default_python = "3.13.16"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "queued"
+status = "building"
 demo_module = "pp_pytrace.cli"
 
 [[projects]]

@@ -28,8 +28,35 @@ def main():
             env=environment,
             check=True,
         )
+        constraints = Path(folder) / "constraints.txt"
         subprocess.run(
-            ["uv", "pip", "install", "--python", str(python), str(wheels[-1])],
+            [
+                "uv",
+                "export",
+                "--locked",
+                "--no-dev",
+                "--no-emit-project",
+                "--format",
+                "requirements-txt",
+                "--output-file",
+                str(constraints),
+            ],
+            cwd=project,
+            env=environment,
+            check=True,
+            stdout=subprocess.DEVNULL,
+        )
+        subprocess.run(
+            [
+                "uv",
+                "pip",
+                "install",
+                "--python",
+                str(python),
+                "--constraint",
+                str(constraints),
+                str(wheels[-1]),
+            ],
             env=environment,
             check=True,
         )
@@ -37,6 +64,12 @@ def main():
             [str(python), "-I", "-c", f"import {sys.argv[2]}; print({sys.argv[2]}.__file__)"],
             cwd=folder,
             check=True,
+        )
+        subprocess.run(
+            [str(python), "-I", "-m", f"{sys.argv[2]}.cli", "--help"],
+            cwd=folder,
+            check=True,
+            stdout=subprocess.DEVNULL,
         )
 
 
