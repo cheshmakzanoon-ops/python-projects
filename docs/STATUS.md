@@ -9,7 +9,7 @@ All ten original implementations exist and have passed local quality, packaging 
 | Current |30tests, independent raw-control oracle | Coordinator and stream-lake | RSS fix: affected checks and million-event profiles pending |
 | Meridian |46tests, PostgreSQL constraints/races/reporting | Tenant/history/cost findings closed | Standard passed: 250k journals and 100k statement rows |
 | Quarry |37tests, exact historical identities | Bounded input/source race findings closed | Standard passed: 5m originals plus corrections/deletes |
-| PyTrace |77tests, CFG/codemod/SARIF | Bounded read findings closed | Clean clone,250k LOC |
+| PyTrace |77tests, CFG/codemod/SARIF | Bounded read findings closed | Standard passed: 250,899 lines, independent cache/closure checks |
 | Atlas |40tests, visible scores/ACLs | Judgment audit and code-search | Clean clone,100k documents |
 | Proving Ground |103tests, leakage/CAS/serving |58independent closure checks | Clean clone,250k×40 data |
 | Routecraft |74tests, including canonical-order regression |180independent static+24rolling cases | Standard pending |

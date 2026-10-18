@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "project": "pytrace",
+  "source_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+  "source_dirty": false,
+  "source_scope": "project",
+  "provenance_limitation": null,
+  "source_content_sha256": "2190249903f5caae44319390d13bf8fb518fc77e0ab1aa8814a2466a916bbf43",
+  "root_contract_sha256": "3d49d75f3224a6934d9b2bad749de92ac6e9fae92a2e5a4f29cd7d6ee69c3bcd",
+  "lockfile_sha256": "4e0752505efdd7261423861af80c8e7fb9f89ce9569d5f09be728826d5507660",
+  "source_digest_inputs": [
+    "src/**",
+    "tests/**",
+    "benchmarks/**",
+    "examples/**",
+    "pyproject.toml",
+    "uv.lock",
+    ".python-version"
+  ],
+  "python": "3.14.8",
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+  "memory_limit_bytes": 34359738368,
+  "seed": 1729,
+  "profile": "standard",
+  "parameters": {
+    "threads": 1,
+    "parser_processes": 1,
+    "OMP_NUM_THREADS": "1",
+    "files": 234,
+    "fixture_files": 2240,
+    "lines": 250899,
+    "corpus": "original synthetic source, contextual variants; no independent real-world accuracy claim",
+    "standard_cold_runs": 1
+  },
+  "warmup_runs": 1,
+  "measurement_runs": 5,
+  "dataset_id": "pytrace-reviewed-v1:3d32ea280ee980f1890c29505325b251ff308e779efb65206044db19a795f63f",
+  "metrics": {
+    "cold_seconds": [
+      72.57654431800074
+    ],
+    "warm_seconds": [
+      2.78437567400033,
+      3.2548182390000875,
+      3.4970814580010483,
+      3.184808445001181,
+      3.308252545999494
+    ],
+    "warm_median_seconds": 3.2548182390000875,
+    "cold_median_seconds": 72.57654431800074,
+    "incremental_seconds": 1.0859800369998993,
+    "files_invalidated": 10,
+    "parse_failures": 0,
+    "peak_python_tracemalloc_bytes": 339695450,
+    "precision": null,
+    "recall": null,
+    "labeled_cases": 0,
+    "files_per_second_cold": 3.2241821679289067,
+    "peak_analyzer_rss_bytes": 960466944,
+    "max_parser_child_peak_rss_bytes": 960466944
+  },
+  "correctness_checks": {
+    "labels_exact": true,
+    "incremental_equals_clean": true,
+    "dependency_closure_invalidated": true,
+    "no_parse_failures": true
+  },
+  "status": "passed",
+  "timing_limitation": "One cold run to bound subprocess cost; five measured warm runs. Cold versus warm is descriptive, not a five-run statistical comparison. Labeled contextual variants are correlated.",
+  "source_digest_unchanged": true
+}

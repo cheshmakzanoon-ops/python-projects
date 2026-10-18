@@ -1,10 +1,12 @@
-# Status: verifying — local gates passed; coordinator standard/review pending
+# Status: complete — final standard and compatibility verified
 
 A06 PyTrace implements the original CFG/worklist/lattice engine, import aliases and lexical shadowing, contextual shell/SQL taint and async blocking rules, bounded parser subprocess, dependency invalidation, official OASIS SARIF, conservative LibCST transforms and recoverable selected-file apply. Work is contained in projects/06-pytrace; no worker Git mutations.
 
 **PY-01–PY-08:** all local acceptance scenarios implemented and passing. See ACCEPTANCE.md for exact tests. The 50 reviewed expression/context/alias/Unicode fixture variants contain 5,600 source lines and 350 independently declared positives with negative contrasts. No claim of independent real-world accuracy.
 
-Final development commands, all exit 0:
+The coordinator accepted the immutable standard run at `59443e2bcdfc6a1dd81f8334c108474eef2d3030`: [raw measurements](../../../docs/evidence/final/standard/pytrace-3.14.8-benchmark-benchmark.json), [verification wrapper](../../../docs/evidence/final/standard/pytrace-3.14.8.json). Both required compatibility suites retain 77 passing tests: [Python 3.13.16 evidence](../../../docs/evidence/final/python313/pytrace-3.13.16.json) and [Python 3.14.8 evidence](../../../docs/evidence/final/python314/pytrace-3.14.8.json).
+
+Historical development commands, all exit 0:
 
 - `uv sync --locked --python 3.13.16` and isolated `UV_PROJECT_ENVIRONMENT=/tmp/pytrace-venv314 uv sync --locked --python 3.14.8`.
 - `uv run --locked --python 3.14.8 ruff format --check .`, `ruff check .`, `mypy src`: 24 own source files strict checked. Ruff fixture exclusion preserves authored line labels; acceptance still parses/compiles every fixture.
@@ -17,4 +19,6 @@ Default is now CPython **3.14.8**, with **3.13.16** still required/supported. Co
 
 Defects corrected during verification: string-valued suppression text must not suppress diagnostics; nested `str(str("text"))` must finish in one pass while preserving docstring abstention; sources need a stat check plus bounded read against growth races before parsing; rejected oversized files must not be fully read to hash them; tiny invalid parser memory budgets must fail before allocation; a pinned fixture API hash legitimately changed after formatting and was reviewed/repinned. Regression tests cover each.
 
-**Not yet claimed complete:** standard 250,880-line benchmark, final immutable committed-source evidence and coordinator independent review. The coordinator explicitly owns that serialized standard run so this worker can release its slot. No standard run or clean-commit evidence is claimed here. Latest development evidence records actual commit plus dirty flag and exact source/lock hashes. Next action: coordinator review/commit, immutable checks and standard benchmark. Worker source writes paused at handoff.
+**Final standard:** passed on CPython 3.14.8, 234 files/250,899 lines including 19 graph lines. One cold measurement was 72.576544 s under the documented cost exception; five warm measurements had median 3.254818 s. Incremental analysis took 1.085980 s and invalidated exactly ten files; cache/clean equivalence and closure checks passed with zero parse failures. Tracemalloc peak was 339,695,450 bytes; analyzer RSS and maximum child RSS were each 960,466,944 bytes. These RSS values are neither summed nor a simultaneous machine peak. Standard precision/recall remain null with zero labeled cases: generated scale does not establish accuracy.
+
+PY-01–PY-08 and the required standard workload now have accepted evidence. Historical dirty development artifacts remain unchanged; the final root reports identify their own clean source commit, input scopes and exact hashes. Remaining algorithmic/platform limits are documented in DECISIONS.md and are not claims of full Python soundness or production security certification. No project acceptance gate remains pending in this handoff. Source writes remain paused; the coordinator owns final repository publication.
