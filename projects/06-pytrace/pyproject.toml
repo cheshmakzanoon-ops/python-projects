@@ -22,9 +22,3 @@ strict = true
 [tool.ruff]
 extend = "../../ruff.toml"
 extend-exclude = ["tests/fixtures/labeled"]
-[tool.hatch.build.targets.wheel.force-include]
-"tests/fixtures/labeled" = "pp_pytrace/data/labeled"
-"uv.lock" = "pp_pytrace/data/uv.lock"
-"pyproject.toml" = "pp_pytrace/data/pyproject.toml"
-"docs/OASIS_LICENSE.txt" = "pp_pytrace/data/OASIS_LICENSE.txt"
-"docs/THIRD_PARTY.md" = "pp_pytrace/data/THIRD_PARTY.md"

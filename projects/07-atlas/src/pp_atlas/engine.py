@@ -1,6 +1,5 @@
 """Permission-first lexical engine with immutable reader generations."""
 
-import hashlib
 import heapq
 import json
 import math
@@ -212,13 +211,12 @@ class Engine:
         with self._lock:
             snapshot, generation = self._snapshot(principal.tenant)
             visible = self._visible(principal, snapshot, parsed)
-            digest = hashlib.sha256(
-                json.dumps(sorted(visible), separators=(",", ":")).encode()
-            ).hexdigest()
+            # ACL and group mutations advance acl_revision; data writes advance
+            # generation. These revisions safely key cache identity without
+            # sorting the entire visible document set on every query.
             key = (
                 principal.tenant,
                 principal.subject,
-                digest,
                 snapshot.acl_revision,
                 snapshot.generation,
                 parsed.key,
@@ -264,8 +262,11 @@ class Engine:
                     for term in parsed.terms
                 }
 
+            # Build each score explanation once and reuse it in the result.
+            explanations = {ident: explain(ident) for ident in candidates}
             ranked = heapq.nsmallest(
-                offset + limit, ((-sum(explain(ident).values()), ident) for ident in candidates)
+                offset + limit,
+                ((-sum(parts.values()), ident) for ident, parts in explanations.items()),
             )
             hits = tuple(
                 Hit(
@@ -278,7 +279,7 @@ class Engine:
                         tokenize(generation.records[ident].text),
                         frozenset(parsed.terms),
                     ),
-                    explain(ident),
+                    explanations[ident],
                 )
                 for negative, ident in ranked[offset:]
             )
