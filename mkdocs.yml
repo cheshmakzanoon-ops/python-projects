@@ -8,6 +8,7 @@ nav:
   - Reviewer guide: PORTFOLIO_GUIDE.md
   - Status: STATUS.md
   - Environment: ENVIRONMENT.md
+  - Verification evidence: evidence/README.md
   - Independent review: evidence/INDEPENDENT_REVIEW.md
   - Relevance review: evidence/atlas-judgment-review.md
   - Architecture: architecture/REPOSITORY.md

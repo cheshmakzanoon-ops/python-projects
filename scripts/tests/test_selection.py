@@ -1,6 +1,10 @@
 import importlib.util
+import os
 import subprocess
+from copy import deepcopy
 from pathlib import Path
+
+import pytest
 
 MODULE = Path(__file__).resolve().parents[1] / "select_projects.py"
 spec = importlib.util.spec_from_file_location("selection", MODULE)
@@ -11,6 +15,16 @@ spec.loader.exec_module(selection)
 
 def test_all_manifest_identities():
     assert len(selection.load_projects()) == 10
+
+
+def test_canonical_directory_alias_cannot_omit_a_project(monkeypatch):
+    projects = deepcopy(selection.load_projects())
+    next(p for p in projects if p["slug"] == "strata")["directory"] = (
+        "projects/01-anchor/../01-anchor"
+    )
+    monkeypatch.setattr(selection.tomllib, "load", lambda stream: {"projects": projects})
+    with pytest.raises(ValueError, match="duplicate directory"):
+        selection.load_projects()
 
 
 def test_added_modified_deleted_and_cross_project_rename():
@@ -58,3 +72,10 @@ def test_actual_rename_deleted_and_empty_diff(tmp_path):
     git("commit", "-qm", "rename")
     assert set(selection.diff_paths(base, "HEAD", tmp_path)) == {"old.py", "new.py"}
     assert selection.diff_paths("HEAD", "HEAD", tmp_path) == []
+    # Git permits byte paths that cannot be decoded as UTF-8 on the required POSIX runner.
+    if os.name == "posix":
+        (tmp_path / os.fsdecode(b"invalid-\xff.py")).write_text("x=2\n")
+        git("add", "-A")
+        git("commit", "-qm", "non UTF8 filename")
+        assert selection.diff_paths("HEAD~1", "HEAD", tmp_path) is None
+        assert len(selection.select(None, selection.load_projects())) == 10

@@ -29,15 +29,15 @@ def load_projects(root: Path = ROOT) -> list[dict[str, Any]]:
         projects: list[dict[str, Any]] = tomllib.load(stream)["projects"]
     if len(projects) != 10 or {p["slug"] for p in projects} != EXPECTED:
         raise ValueError("manifest must declare exactly all ten unique projects")
-    directories: set[str] = set()
+    directories: set[Path] = set()
     for p in projects:
         directory = p["directory"]
         resolved = (root / directory).resolve()
         if not resolved.is_relative_to(root.resolve()) or resolved == root.resolve():
             raise ValueError("project path must be a nonempty path within the repository")
-        if directory in directories or not p["required_python_versions"]:
+        if resolved in directories or not p["required_python_versions"]:
             raise ValueError("duplicate directory or empty interpreter matrix")
-        directories.add(directory)
+        directories.add(resolved)
     return projects
 
 
@@ -66,9 +66,9 @@ def diff_paths(base: str | None, head: str, root: Path = ROOT) -> list[str] | No
             capture_output=True,
             timeout=30,
         )
-    except (subprocess.SubprocessError, OSError):
+        return [p for p in result.stdout.decode("utf-8", errors="strict").split("\0") if p]
+    except (subprocess.SubprocessError, OSError, UnicodeDecodeError):
         return None
-    return [p for p in result.stdout.decode("utf-8", errors="strict").split("\0") if p]
 
 
 def main() -> None:
