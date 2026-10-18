@@ -14,7 +14,14 @@ from pp_routecraft.domain.instance import (
     SolveResult,
     Status,
 )
-from pp_routecraft.neighborhoods.moves import destroy_repair, relocate, reverse_segment, swap
+from pp_routecraft.neighborhoods.moves import (
+    cross_exchange,
+    destroy_repair,
+    relocate,
+    reverse_segment,
+    swap,
+    two_opt_star,
+)
 from pp_routecraft.validation.verifier import input_errors, verify
 
 
@@ -78,7 +85,15 @@ def solve(
     reason = "iteration_budget"
     trajectory: list[tuple[int, int, int]] = []
     rng = random.Random(seed)
-    names = ("relocate", "swap", "reverse", "random_destroy", "related_destroy")
+    names = (
+        "relocate",
+        "swap",
+        "reverse",
+        "random_destroy",
+        "related_destroy",
+        "two_opt_star",
+        "cross_exchange",
+    )
     weights = [1.0] * len(names)
     counts = [0] * len(names)
     if best is None:
@@ -122,8 +137,12 @@ def solve(
             candidate = swap(instance, current, rng)
         elif operator == 2:
             candidate = reverse_segment(instance, current, rng)
-        else:
+        elif operator in (3, 4):
             candidate = destroy_repair(instance, current, rng, related=operator == 4)
+        elif operator == 5:
+            candidate = two_opt_star(instance, current, rng)
+        else:
+            candidate = cross_exchange(instance, current, rng)
         reward = 0.2
         if candidate is not None:
             report = verify(instance, candidate)

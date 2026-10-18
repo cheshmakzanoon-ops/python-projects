@@ -1,4 +1,4 @@
-"""Offline bounded-input pipeline; output trajectory memory grows with duration."""
+"""Chunk-fed offline analysis; retains full trajectories (not bounded-memory streaming)."""
 
 from collections.abc import Iterable
 
@@ -16,6 +16,12 @@ from pp_resonance.streaming.framing import Framer
 def analyze_chunks(
     chunks: Iterable[Samples], rate: int, config: AnalysisConfig = AnalysisConfig()
 ) -> AnalysisReport:
+    """Analyze chunks offline; pitch and onset trajectories are retained in memory.
+
+    Framing uses a bounded buffer, but output trajectories grow with recording
+    length to support temporal decoding and diagnostics. This interface does
+    not promise true bounded-memory, indefinite-duration streaming.
+    """
     AudioSpec(rate)
     framer = Framer(config.frame)
     pitches, fluxes, starts = [], [], []

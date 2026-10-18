@@ -77,3 +77,42 @@ def destroy_repair(
     routes = [tuple(j for j in route.stops if j not in removed) for route in plan.routes]
     repaired = repair(instance, routes, sorted(removed), regret=True)
     return make_plan(instance, repaired) if repaired is not None else None
+
+def two_opt_star(instance: RoutingInstance, plan: Plan, rng: random.Random) -> Plan | None:
+    """Exchange two suffixes without modifying committed replanning prefixes."""
+    if len(plan.routes) < 2:
+        return None
+    a, b = rng.sample(range(len(plan.routes)), 2)
+    states = {state.vehicle_id: state for state in instance.states}
+    first, second = plan.routes[a], plan.routes[b]
+    minimum_a = len(states[first.vehicle_id].executed) if first.vehicle_id in states else 0
+    minimum_b = len(states[second.vehicle_id].executed) if second.vehicle_id in states else 0
+    cut_a = rng.randrange(minimum_a, len(first.stops) + 1)
+    cut_b = rng.randrange(minimum_b, len(second.stops) + 1)
+    if cut_a == len(first.stops) and cut_b == len(second.stops):
+        return None
+    routes = [route.stops for route in plan.routes]
+    routes[a] = first.stops[:cut_a] + second.stops[cut_b:]
+    routes[b] = second.stops[:cut_b] + first.stops[cut_a:]
+    return make_plan(instance, routes)
+
+
+def cross_exchange(instance: RoutingInstance, plan: Plan, rng: random.Random) -> Plan | None:
+    """Exchange short contiguous blocks across mutable routes."""
+    if len(plan.routes) < 2:
+        return None
+    a, b = rng.sample(range(len(plan.routes)), 2)
+    states = {state.vehicle_id: state for state in instance.states}
+    first, second = plan.routes[a], plan.routes[b]
+    minimum_a = len(states[first.vehicle_id].executed) if first.vehicle_id in states else 0
+    minimum_b = len(states[second.vehicle_id].executed) if second.vehicle_id in states else 0
+    if minimum_a >= len(first.stops) or minimum_b >= len(second.stops):
+        return None
+    start_a = rng.randrange(minimum_a, len(first.stops))
+    start_b = rng.randrange(minimum_b, len(second.stops))
+    end_a = rng.randrange(start_a + 1, min(len(first.stops), start_a + 3) + 1)
+    end_b = rng.randrange(start_b + 1, min(len(second.stops), start_b + 3) + 1)
+    routes = [route.stops for route in plan.routes]
+    routes[a] = first.stops[:start_a] + second.stops[start_b:end_b] + first.stops[end_a:]
+    routes[b] = second.stops[:start_b] + first.stops[start_a:end_a] + second.stops[end_b:]
+    return make_plan(instance, routes)
