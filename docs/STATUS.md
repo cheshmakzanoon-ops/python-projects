@@ -1,5 +1,13 @@
 # Verification status
 
+The subsequent [correctness and reliability review](REVIEW.md) fixes additional defects
+across all ten products and shared tooling. Its immutable snapshot passed **1,680 test
+executions** across Python 3.13.16 and 3.14.8, including **259 additional cases**, plus
+builds, installed-wheel demos, and all three integrations on both versions. Its
+[validation record](evidence/review-2026-10-18.json) retains exact source/lock hashes and
+counts. Current's checkpoint compatibility change is documented in that review. The
+acceptance and performance records below describe their original source revisions.
+
 All ten projects have passed their local required acceptance gates and coordinator review. The 80 project IDs map to concrete implementations, tests and workload evidence in each `docs/ACCEPTANCE.md`; the [inventory](evidence/final/gate-inventory.json) is navigation, not a substitute for execution. No required implementation or local workload is left pending. Hosted CI is separately unverified.
 
 The clean-source CPython 3.13.16/3.14.8 matrix passed **1,136 project test executions**, without skips or expected failures. Every project/interpreter check includes locked installation, formatting/lint, strict types, wheel/sdist builds, runtime-only wheel installation and a full installed-wheel demo outside source. All ten standard workload profiles passed; [evidence](evidence/README.md) retains actual commands, source revisions, input hashes, outputs and limitations. Later documentation commits do not relabel earlier measurements.

@@ -7,6 +7,7 @@ use_directory_urls: false
 nav:
   - Reviewer guide: PORTFOLIO_GUIDE.md
   - Status: STATUS.md
+  - Correctness review: REVIEW.md
   - Environment: ENVIRONMENT.md
   - Verification evidence: evidence/README.md
   - Independent review: evidence/INDEPENDENT_REVIEW.md

@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "verified_at_utc": "2026-10-18T05:26:51.960156+00:00",
+  "snapshot_commit": "554e0ba461793657c6279068e361a35b3097ecf6",
+  "working_branch_commit": "32d5715f6efcbb24597a47fefe2570b5b381c2d3",
+  "working_branch_and_index_unchanged": true,
+  "root_contract_sha256": "8bcbee82f6370bb17acc28321e80cc1f15732aa044fc0608a647c4ce6a94607d",
+  "working_implementation_matches_snapshot": true,
+  "source_unchanged_after_verification": true,
+  "status": "passed",
+  "required_interpreters": [
+    "3.13.16",
+    "3.14.8"
+  ],
+  "total_passing_test_executions": 1680,
+  "test_cases_per_interpreter": 840,
+  "additional_test_cases_over_previous_accepted_suite": 259,
+  "projects": {
+    "anchor": {
+      "tests": {
+        "3.13.16": {
+          "passed": 60,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        },
+        "3.14.8": {
+          "passed": 60,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        }
+      },
+      "source_content_sha256": "eda2b6f3eb835093d49be646e45bd606750328275162611183727d6aa71faac7",
+      "lockfile_sha256": "cb58668e71ccbc29112a367ef6cd358115039a96bffa666ba83c402e7929fdac"
+    },
+    "atlas": {
+      "tests": {
+        "3.13.16": {
+          "passed": 45,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        },
+        "3.14.8": {
+          "passed": 45,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        }
+      },
+      "source_content_sha256": "13d6644015fef58b471d21ee5daf9c95910fdcbd3e2a474552636d54ddf43c6c",
+      "lockfile_sha256": "afadf806fdbb623044aa563e65234d12d3a49b57e907308cab46198ecad717f8"
+    },
+    "current": {
+      "tests": {
+        "3.13.16": {
+          "passed": 79,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        },
+        "3.14.8": {
+          "passed": 79,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        }
+      },
+      "source_content_sha256": "4f2e5209c0c2487ac31e4c09f4c082f67e2ac98e863068e50cc2bce9ec0b00c4",
+      "lockfile_sha256": "baf15ac83a35752ad671410a6466a49a8b6f5b43d6210beed3cb3bd6982239a3"
+    },
+    "meridian": {
+      "tests": {
+        "3.13.16": {
+          "passed": 59,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        },
+        "3.14.8": {
+          "passed": 59,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        }
+      },
+      "source_content_sha256": "58046b9107667bb766ac5f2cdcef9caf231146cdf6b628c8dca215247b28e32d",
+      "lockfile_sha256": "278057ae9b5d37f8ac2d66073891b25e2d51b15d13f7f753129aea59e01bb54d"
+    },
+    "proving-ground": {
+      "tests": {
+        "3.13.16": {
+          "passed": 117,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        },
+        "3.14.8": {
+          "passed": 117,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        }
+      },
+      "source_content_sha256": "d39e60561ef44a50cf2e1e4e0fff085e3ef88293560725a80033bf1142530d3a",
+      "lockfile_sha256": "48ddce6dd70acac05a8094cf70e3d40ee7feb534591e49776292ef00436a508f"
+    },
+    "pytrace": {
+      "tests": {
+        "3.13.16": {
+          "passed": 127,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        },
+        "3.14.8": {
+          "passed": 127,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        }
+      },
+      "source_content_sha256": "297ff79207cca4d4063a8162341b3c105680a0bb8e3ed388220351af7f803b07",
+      "lockfile_sha256": "4e0752505efdd7261423861af80c8e7fb9f89ce9569d5f09be728826d5507660"
+    },
+    "quarry": {
+      "tests": {
+        "3.13.16": {
+          "passed": 51,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        },
+        "3.14.8": {
+          "passed": 51,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        }
+      },
+      "source_content_sha256": "2adfdbf55a151bd80188d9927ebb92c2f876f696b9ea5bd85460f9b158e7a3a3",
+      "lockfile_sha256": "71898d3b0636bd6d3ed606a933766b7c6849d8da3766504686d8599fd5fbe00f"
+    },
+    "resonance": {
+      "tests": {
+        "3.13.16": {
+          "passed": 51,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        },
+        "3.14.8": {
+          "passed": 51,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        }
+      },
+      "source_content_sha256": "68e8d79613df77d0a7199dcb3bc579317bd0a14eb0016043847e1b3775f93fce",
+      "lockfile_sha256": "8ac205930d14ebd160772d9950380e6e966aa61e740a0f3cd169c195f15cbefc"
+    },
+    "routecraft": {
+      "tests": {
+        "3.13.16": {
+          "passed": 103,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        },
+        "3.14.8": {
+          "passed": 103,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        }
+      },
+      "source_content_sha256": "7c8075adc0b8dc2430d9a5ea81498a3debdffbe92d9dc9e7733c95e8c3a65d21",
+      "lockfile_sha256": "9aef9e96a988bfdd7403447241e67af694abf1c7d3910e57cae691e55643a011"
+    },
+    "strata": {
+      "tests": {
+        "3.13.16": {
+          "passed": 102,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        },
+        "3.14.8": {
+          "passed": 102,
+          "failed": 0,
+          "skipped": 0,
+          "expected_failures": 0
+        }
+      },
+      "source_content_sha256": "3a8e795b29ab3eb11d26e819c3885ebb340a470795460c23e41974c60eaa0147",
+      "lockfile_sha256": "33d8e55d6e7773df668c53066b89481c06c274b4e3989b5cba83d33581f7667d"
+    }
+  },
+  "shared_tooling_tests": {
+    "3.13.16": {
+      "passed": 46,
+      "failed": 0,
+      "skipped": 0,
+      "expected_failures": 0
+    },
+    "3.14.8": {
+      "passed": 46,
+      "failed": 0,
+      "skipped": 0,
+      "expected_failures": 0
+    }
+  },
+  "project_checks": [
+    "locked installation",
+    "formatting",
+    "lint",
+    "strict mypy",
+    "pytest",
+    "source and wheel build",
+    "runtime-only installed-wheel demo outside source",
+    "public seeded demo"
+  ],
+  "shared_tooling_checks": [
+    "pytest scripts/tests",
+    "formatting and lint of scripts/integrations",
+    "documentation link validation",
+    "strict MkDocs build"
+  ],
+  "required_services": {
+    "anchor": "real PostgreSQL 17",
+    "meridian": "real PostgreSQL 17"
+  },
+  "integrations": {
+    "settlement": {
+      "3.13.16": "passed",
+      "3.14.8": "passed"
+    },
+    "stream-lake": {
+      "3.13.16": "passed",
+      "3.14.8": "passed"
+    },
+    "code-search": {
+      "3.13.16": "passed",
+      "3.14.8": "passed"
+    }
+  },
+  "limits": [
+    "Hosted GitHub Actions was not executed.",
+    "Full standard workloads were not rerun; existing performance reports retain their original source revisions.",
+    "Local trust-authenticated PostgreSQL does not validate a remote certificate-verified TLS handshake.",
+    "Current current-1 checkpoints require a controlled rebuild with the original configuration and explicit result reconciliation."
+  ]
+}

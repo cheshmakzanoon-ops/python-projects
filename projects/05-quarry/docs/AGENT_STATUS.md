@@ -1,5 +1,10 @@
 # A05 Quarry — verified delivery
 
+The coordinator's final snapshot adds a literal-wildcard filename regression and explicitly
+rejects glob characters in manifest entries. The final full suite is **51 passed on each
+supported interpreter**; see the [repository review](../../../docs/REVIEW.md) and its
+source-hashed validation record. The reviewer's 50-test result below predates this last fix.
+
 Status: complete for Quarry acceptance and required workload verification; implementation writes remain paused. QU-01–08, both supported interpreter checks and the full standard 5,000,000-original/128-bucket workload passed in the coordinator's immutable committed verification trees. Repository publication remains coordinator-owned.
 
 Default Python 3.14.8; supported/tested CPython 3.13.16 and 3.14.8. Linux is required for directory-fsync/process-fault suites and Unix RSS accounting. Runtime lock: PyArrow 26.0.0, DuckDB 1.5.6. Historical development source snapshot SHA-256: `c2d532eb22b507168c771d915203437b50cc985e7f4fdf0db9397078a1e15af3` (project scope, dirty working tree at source commit 6e857f4f226e30b7d25a261902fe1bde2e78a45f). Exact source/lock/root provenance is in artifacts/ci-development.json; docs/status/artifacts are excluded from self-referential source digests.
