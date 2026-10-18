@@ -1,7 +1,7 @@
 """Guard against accidentally shipping developer fixtures in the wheel."""
 
-from pathlib import Path
 import tomllib
+from pathlib import Path
 
 
 def test_wheel_excludes_development_files() -> None:
