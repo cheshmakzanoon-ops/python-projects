@@ -258,17 +258,17 @@ def benchmark(
             clean_demo(run_path)
             run_path.mkdir()
             (run_path / "report.json").write_text(json.dumps(reports[-1], indent=2) + "\n")
+    hot = execute(output / "hot", count, seed, hot=True, oracle=True)
+    if profile == Profile.standard:
+        clean_demo(output / "hot")
+        (output / "hot").mkdir()
+        (output / "hot" / "report.json").write_text(json.dumps(hot, indent=2) + "\n")
     try:
         import resource
 
         memory: int | None = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024
     except ImportError:
         memory = None
-    hot = execute(output / "hot", count, seed, hot=True, oracle=True)
-    if profile == Profile.standard:
-        clean_demo(output / "hot")
-        (output / "hot").mkdir()
-        (output / "hot" / "report.json").write_text(json.dumps(hot, indent=2) + "\n")
     result = provenance(seed, profile.value)
     if result["source_content_sha256"] != identity_before["source_content_sha256"]:
         raise RuntimeError("source changed while benchmark ran; discard affected evidence")
