@@ -1,12 +1,12 @@
 # Verification status
 
-All ten original implementations exist and have passed local quality, packaging and substantive tests on CPython3.13/3.14. Independent findings have been corrected. The clean-commit compatibility matrix now passes all20project/interpreter combinations (1,136 project tests), including actual installed-wheel demos and CI-size benchmarks. All three committed-source integrations pass. Standard workloads are running serially; whole-portfolio completion is not yet claimed. Current subsequently received an RSS-accounting correction at `5c04cd5`; its affected compatibility reruns passed and its full-size rerun remains pending, and its cancelled old standard attempt is not counted.
+All ten original implementations exist and have passed local quality, packaging and substantive tests on CPython3.13/3.14. Independent findings have been corrected. The clean-commit compatibility matrix now passes all20project/interpreter combinations (1,136 project tests), including actual installed-wheel demos and CI-size benchmarks. All three committed-source integrations pass. Standard workloads are running serially; whole-portfolio completion is not yet claimed. Current subsequently received an RSS-accounting correction at `5c04cd5`; its affected compatibility reruns passed and its full-size ordinary and hot reruns passed, and its cancelled old standard attempt is not counted.
 
 | Product | Local suite | Review | Remaining final work |
 | --- | --- | --- | --- |
 | Anchor |54tests, real PostgreSQL/process faults | Coordinator and live settlement | Standard passed |
 | Strata |79tests, MVCC/corruption/crash | Descriptor/format findings closed |100×5000 passed; corrected standard passed |
-| Current |32tests, independent raw-control oracle | Coordinator and stream-lake | RSS fix: matrix passed; million-event profiles pending |
+| Current |32tests, independent raw-control oracle | Coordinator and stream-lake | RSS fix: matrix and both million-event profiles passed |
 | Meridian |46tests, PostgreSQL constraints/races/reporting | Tenant/history/cost findings closed | Standard passed: 250k journals and 100k statement rows |
 | Quarry |37tests, exact historical identities | Bounded input/source race findings closed | Standard passed: 5m originals plus corrections/deletes |
 | PyTrace |77tests, CFG/codemod/SARIF | Bounded read findings closed | Standard passed: 250,899 lines, independent cache/closure checks |
