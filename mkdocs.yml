@@ -1,0 +1,10 @@
+site_name: Python Systems Portfolio
+site_description: Ten independent, verified Python engineering projects
+use_directory_urls: false
+nav:
+  - Reviewer guide: PORTFOLIO_GUIDE.md
+  - Status: STATUS.md
+  - Architecture: architecture/REPOSITORY.md
+  - Evidence policy: architecture/EVIDENCE.md
+exclude_docs: |
+  handoffs/

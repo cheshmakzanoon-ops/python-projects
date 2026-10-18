@@ -1,0 +1,49 @@
+name: Extended portfolio checks
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  full:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: portfolio
+          POSTGRES_DB: portfolio
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports: ['5432:5432']
+        options: --health-cmd "pg_isready -U portfolio" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      ANCHOR_DATABASE_URL: postgresql://portfolio@127.0.0.1:5432/portfolio
+      MERIDIAN_DATABASE_URL: postgresql://portfolio@127.0.0.1:5432/portfolio
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - run: python -m pip install uv==0.12.23
+      - run: uv python install 3.13 3.14
+      - run: |
+          python - <<'PY'
+          import subprocess, tomllib
+          for project in tomllib.load(open('portfolio.toml', 'rb'))['projects']:
+              subprocess.run(['python', 'scripts/portfolio.py', 'setup', project['slug']], check=True)
+          PY
+      - run: python scripts/portfolio.py verify-all --jobs 2
+      - run: |
+          python - <<'PY'
+          import subprocess, tomllib
+          for project in tomllib.load(open('portfolio.toml', 'rb'))['projects']:
+              subprocess.run(['python', 'scripts/portfolio.py', 'benchmark', project['slug'], '--profile', 'standard'], check=True)
+          for integration in ['settlement', 'stream-lake', 'code-search']:
+              subprocess.run(['python', 'scripts/portfolio.py', 'integration', integration], check=True)
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: extended-evidence
+          path: .local/
+          include-hidden-files: true
