@@ -1,9 +1,15 @@
 site_name: Python Systems Portfolio
 site_description: Ten independent, verified Python engineering projects
+repo_url: https://github.com/cheshmakzanoon-ops/python-projects
+hooks:
+  - scripts/mkdocs_source_links.py
 use_directory_urls: false
 nav:
   - Reviewer guide: PORTFOLIO_GUIDE.md
   - Status: STATUS.md
+  - Environment: ENVIRONMENT.md
+  - Independent review: evidence/INDEPENDENT_REVIEW.md
+  - Relevance review: evidence/atlas-judgment-review.md
   - Architecture: architecture/REPOSITORY.md
   - Evidence policy: architecture/EVIDENCE.md
 exclude_docs: |

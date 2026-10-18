@@ -1,34 +1,41 @@
 # Verification status
 
-All ten assignments have started. Six implementation owners have submitted working packages; Atlas, Proving Ground, Routecraft, and Resonance are completing their tests and interfaces. The coordinator continues independent review, integration, committed-source checks, and required full-size workloads. No whole-portfolio completion claim is made.
+All ten original implementations exist and have passed local quality, packaging and substantive tests on CPython3.13/3.14. Independent findings have been corrected. Final clean-commit compatibility, standard workloads and integration evidence are being collected; this page does not yet claim whole-portfolio completion.
 
-| Product | State | Observed local evidence | Remaining |
+| Product | Local suite | Review | Remaining final work |
 | --- | --- | --- | --- |
-| Anchor | verifying | 54 tests on 3.13/3.14; coordinator check and installed-wheel export demo pass; committed/pushed `eb88f10` | Immutable evidence, full standard |
-| Strata | verifying | 79 tests after independent FD-leak/backup-format corrections; both interpreters; installed wheel demo | Coordinator updated check passes; committed/pushed `0909bba`; 100×5000 extended and standard remain |
-| Current | verifying | 30 tests on both interpreters; coordinator check passes; committed/pushed `6e857f4` | Immutable evidence, full standard |
-| Meridian | needs-fix | 30 local tests and installed-wheel PostgreSQL demo; independent review found missing relational constraints | Correct tenant-idempotency/account-history constraints; reverify; standard |
-| Quarry | verifying | 37 tests, bounded CSV/source-mutation regressions; coordinator check/installed-wheel demo; committed/pushed `b98e69e` | Immutable evidence, 5m standard |
-| PyTrace | verifying | 77 tests, bounded-source/codemod regressions; coordinator check and independent fixture export pass | Committed/pushed `a76e5a3`; immutable evidence, 250k-LOC standard |
-| Atlas | building | Owner reports 40 tests on both interpreters; original index/ACL API and relevance corpus runnable | Final matrix/packaging/benchmarks and independent integration |
-| Proving Ground | building | First actual training/promotion/serving lifecycle implemented | Required failure/race/leakage tests and verification |
-| Routecraft | building | Actual 25-stop directed search and cargo-safe replanning demo | Required oracle/property/negative suites and verification |
-| Resonance | building | Fixed pitch grid and clean-pluck numerical slice runnable | Remaining chunk/STFT/alignment/MIDI/report acceptance and verification |
+| Anchor |54tests, real PostgreSQL/process faults | Coordinator and live settlement | Clean clone, standard |
+| Strata |79tests, MVCC/corruption/crash | Descriptor/format findings closed |100×5000 running; clean clone, standard |
+| Current |30tests, independent raw-control oracle | Coordinator and stream-lake | Clean clone, million-event profiles |
+| Meridian |40tests, PostgreSQL constraints/races | Tenant/history/cost findings closed | Clean clone,250k journals |
+| Quarry |37tests, exact historical identities | Bounded input/source race findings closed | Clean clone,5m originals/corrections |
+| PyTrace |77tests, CFG/codemod/SARIF | Bounded read findings closed | Clean clone,250k LOC |
+| Atlas |40tests, visible scores/ACLs | Judgment audit and code-search | Clean clone,100k documents |
+| Proving Ground |103tests, leakage/CAS/serving |58independent closure checks | Clean clone,250k×40 data |
+| Routecraft |73full tests before ordering fix;61affected tests both versions after fix |180independent static+24rolling cases | Full updated74tests in clean clone, standard |
+| Resonance |25tests,6,272fixed pitch frames | Reattack/subtick/tempo findings closed | Clean clone,600s standard |
+
+See [independent review](evidence/INDEPENDENT_REVIEW.md) and each project's acceptance map, case study and operations guide. Counts describe tests actually run; the final evidence will identify exact revisions and exit codes. Local branch coverage for each defined domain core exceeds85%; whole-package coverage is separately reported by each owner.
 
 ## Integrations
 
-IN-01 settlement passed a development-tree run through live Meridian HTTP and a separate Anchor environment. An actual killed worker retried one ledger identity, and the confirmed-post reversal scenario completed. IN-02 stream-lake passed revisions 1/1/2/1, correction 10→17, retained historical value 10, independent reduction, and historical conflict rejection. Both need final committed-source runs. IN-03 code-search also passed through separate PyTrace/Atlas environments: current findings, deletion of obsolete evidence, project/source filters, restricted fetch/export, hidden-score invariance, merge, cross-tenant isolation, and next-request revocation. All three integrations still need final committed-source runs.
+IN-01 settlement, IN-02 stream-lake and IN-03 code-search passed development-tree runs through separate package environments/public interfaces. All three require final committed-source reruns. Settlement includes live HTTP effect/process death/retry/reversal. Stream-lake includes revisions1/1/2/1 and historical pin isolation. Code-search includes current/obsolete findings, restricted direct access, hidden-score invariance, merge and revocation.
 
-## Independent review
+## Global gates
 
-Strata's constructor sync-failure descriptor leak and unsupported backup format acceptance were reproduced, corrected, and regression-tested. Meridian's cross-tenant idempotency relation and account mutation after statement use were reproduced in isolated schemas; corrections are underway. Positive independent checks include MVCC/compaction/corruption/poison recovery, ledger deferred balance/immutability/reversal/sequence behavior, concurrent reconciliation approval, and 1,000 exhaustive tiny matching comparisons.
+| Gate | Current evaluation |
+| --- | --- |
+|G01|Implemented: ten identifiable original cores|
+|G02|Local locked installs pass; final fresh-clone matrix pending|
+|G03|Local mandatory suites pass; full workload portions pending|
+|G04|Local lint/types/tests/build/installed-wheel demos pass; final matrix pending|
+|G05|All ten real seeded demos pass locally; clean-clone runs pending|
+|G06|Independent oracles, actual PostgreSQL/process/filesystem boundaries; review corrections closed|
+|G07|Development measurements are labeled; committed standard evidence underway|
+|G08|Architecture/decisions/operations/case studies and evidence policy present; final link build pending|
+|G09|All three pass development runs; final immutable reruns pending|
+|G10|Selector/failure propagation tests pass locally; real remote workflows observed queued|
+|G11|Current's database-free quickstart and reviewer routes runnable locally|
+|G12|All ten source implementations committed; remaining evidence/shared docs and final push pending|
 
-Atlas's authored relevance judgments received a separate [semantic review](evidence/atlas-judgment-review.md); its narrow template corpus is not a real-user relevance study.
-
-## Global gates and remote state
-
-G01–G12 remain open until all required product checks and workloads, independent review corrections, IN-01–03, documentation, and committed-source evidence are evaluated together. Root selector, subprocess cleanup/exit propagation, source-scope, CI-state parsing, and demo-cleanup routing tests pass locally. Documentation is checked as owners finish it; missing in-progress targets remain failures.
-
-GitHub Actions runs are visible through the public web page and were observed queued, not passed. REST API access returned proxy403; `api.github.com` was saved as a custom domain addition in the environment configuration draft, without replacing package-manager presets. Saving that draft does not activate or publish it. No remote CI success or environment publication is claimed.
-
-No code license has been selected. Full Linux gates are required; unsupported platform results are not invented.
+Remote CI is a separate observation. Actual public GitHub Actions runs were observed queued, including Meridian source3f2c220; no runner success is inferred. API access returned proxy403; the public-page fallback exposes actual run state. No code license has been selected; no public release/deployment is authorized. Full required suites are Linux-only; other platforms remain unverified. Environment configuration saving and publication are separate from these code gates.

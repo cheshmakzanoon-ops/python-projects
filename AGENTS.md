@@ -2,7 +2,7 @@
 
 The owner requests full implementation of PYTHON_PORTFOLIO_MASTER_EXECUTION_BRIEF.md. Read that document and the relevant product contract. Delegate A01–A10 implementations to specialist sub-agents, up to the real runtime capacity; queue the remainder. Only the coordinator mutates Git and root/shared files. Workers edit only their assigned projects/NN-name directory, including tests and docs. Never stage, commit, branch, reset, clean, merge, or push from a worker. Preserve unrelated work. Do not create worktrees.
 
-Use `UV_CACHE_DIR=/workspace/.cache/uv UV_PYTHON_INSTALL_DIR=/workspace/.python` on this cloud machine. Independent uv projects, no root workspace. Python default initially 3.13.16; 3.14.8 evaluation follows. Use `uv sync --locked --python 3.13.16` in each project. Set BLAS/OpenMP threads to 1 for benchmarks. Keep heavy benchmarks serialized. No required test may silently skip a required service.
+Use `UV_CACHE_DIR=/workspace/.cache/uv UV_PYTHON_INSTALL_DIR=/workspace/.python` on this cloud machine. Independent uv projects, no root workspace. Python default is 3.14.8 after full dependency/test evaluation; 3.13.16 remains required. Do not run different interpreters concurrently in one .venv; use separate clones or UV_PROJECT_ENVIRONMENT paths. Use `uv sync --locked --python 3.13.16` in each project. Set BLAS/OpenMP threads to 1 for benchmarks. Keep heavy benchmarks serialized. No required test may silently skip a required service.
 
 Root commands: `python scripts/portfolio.py list|doctor`, `setup|check|demo|benchmark PROJECT`, `verify-all --jobs 2`, `docs`, and `integration settlement|stream-lake|code-search`.
 

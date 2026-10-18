@@ -133,7 +133,7 @@ default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "needs-fix"
+status = "verifying"
 demo_module = "pp_proving_ground.cli"
 
 default_port = 8108
@@ -168,7 +168,7 @@ default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "needs-fix"
+status = "verifying"
 demo_module = "pp_resonance.cli"
 format_arguments = ["ruff", "format", "--check", "."]
 lint_arguments = ["ruff", "check", "."]

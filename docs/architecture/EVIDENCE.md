@@ -1,6 +1,6 @@
 # Evidence and claim boundaries
 
-A report identifies the source commit it actually tested. Adding a report later creates another commit; evidence never pretends to include its own future commit. Before final verification, pause implementation writers and export the committed source tree into a clean temporary directory. Install independent environments there and run the required commands. This is an immutable verification copy, not a development worktree.
+A report identifies the source commit it actually tested. Adding a report later creates another commit; evidence never pretends to include its own future commit. Before final verification, pause implementation writers and clone the local repository into a clean temporary directory and check out the exact detached commit. Preserve .git for product provenance. Install independent environments there and run the required commands. This is an immutable verification copy, not a development worktree.
 
 Project digests include implementation, tests, fixtures, pyproject, uv.lock, Python declaration, benchmarks, examples, and the root dispatcher/configuration inputs. Generated results, build outputs, virtual environments, caches, project artifacts, and evidence/status documents are excluded to avoid self-reference. Record the exact inclusion list with each report. Compare the digest before and after verification. Dirty development measurements are useful but do not replace a final committed-source run.
 

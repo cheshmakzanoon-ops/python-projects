@@ -144,6 +144,9 @@ def main() -> int:
             output = copy / ".local" / project["slug"]
             for filename in (
                 "demo/report.json",
+                "demo/demo.json",
+                "demo/history.json",
+                "demo/analysis.json",
                 "benchmark/benchmark.json",
                 "benchmark/report.json",
             ):
@@ -153,6 +156,40 @@ def main() -> int:
                         args.output
                         / f"{project['slug']}-{args.python}-{filename.replace('/', '-')}"
                     ).write_bytes(artifact.read_bytes())
+            # Drop only schemas named by product-owned markers before deleting the clone.
+            if project["slug"] in {"anchor", "meridian"}:
+                for kind in ("demo", "benchmark"):
+                    owned = output / kind
+                    if not owned.exists():
+                        continue
+                    command = [
+                        "uv",
+                        "run",
+                        "--locked",
+                        "--python",
+                        args.python,
+                        "python",
+                        "-m",
+                        f"{project['package']}.cli",
+                        "clean-demo",
+                        "--output",
+                        str(owned),
+                    ]
+                    log = args.output / f"{project['slug']}-{args.python}-cleanup-{kind}.log"
+                    with log.open("w") as stream:
+                        result = subprocess.run(
+                            command,
+                            cwd=scope,
+                            env=environment,
+                            stdout=stream,
+                            stderr=subprocess.STDOUT,
+                            timeout=60,
+                        )
+                    checks.append(
+                        {"command": command, "exit_code": result.returncode, "log": log.name}
+                    )
+                if any(c["exit_code"] for c in checks):
+                    report["status"] = "failed"
             (args.output / f"{project['slug']}-{args.python}.json").write_text(
                 json.dumps(report, indent=2) + "\n"
             )
