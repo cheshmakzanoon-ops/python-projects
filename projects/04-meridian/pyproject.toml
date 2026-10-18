@@ -3,21 +3,25 @@ name = "pp-meridian"
 version = "0.1.0"
 description = "Meridian: independent Python portfolio project"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = ["Django>=5.2.12,<5.3", "psycopg[binary]>=3.2,<4"]
 [project.scripts]
 meridian = "pp_meridian.cli:main"
 [build-system]
 requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 [dependency-groups]
-dev = ["pytest>=8", "pytest-cov>=6", "hypothesis>=6", "ruff>=0.11", "mypy>=1.15"]
+dev = ["pytest>=8", "pytest-cov>=6", "hypothesis>=6", "ruff>=0.11", "mypy>=1.15", "django-stubs>=5.2", "pytest-django>=4.11"]
 [tool.hatch.build.targets.wheel]
 packages = ["src/pp_meridian"]
 [tool.pytest.ini_options]
 addopts = "--import-mode=importlib"
 testpaths = ["tests"]
+DJANGO_SETTINGS_MODULE = "pp_meridian.config.settings"
 [tool.mypy]
 python_version = "3.13"
 strict = true
+plugins = ["mypy_django_plugin.main"]
+[tool.django-stubs]
+django_settings_module = "pp_meridian.config.settings"
 [tool.ruff]
 extend = "../../ruff.toml"

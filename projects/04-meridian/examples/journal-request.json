@@ -1,0 +1,1 @@
+{"currency":"USD","reference":"fictional-rental-invoice-100","postings":[{"account_id":"00000000-0000-0000-0000-000000000001","amount":"100.00"},{"account_id":"00000000-0000-0000-0000-000000000002","amount":"-100.00"}]}

@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "project": "meridian",
+  "source_commit": "6e857f4f226e30b7d25a261902fe1bde2e78a45f",
+  "source_dirty": true,
+  "source_scope": "project",
+  "packaging_context": "source-checkout",
+  "source_content_sha256": "b30fc62d4fbbe67c21a53318448c72b63c100da2e99ffbfaab253e9504b4720f",
+  "root_contract_sha256": "8505278a5d5c3ff9a972d2bb06e2fb17ed17f2dd641de1239f1b4829b8c8fce6",
+  "lockfile_sha256": "278057ae9b5d37f8ac2d66073891b25e2d51b15d13f7f753129aea59e01bb54d",
+  "digest_inputs": "src/**,tests/**,benchmarks/**,examples/** excluding __pycache__/pyc; pyproject.toml; uv.lock; .python-version",
+  "metadata_limitations": null,
+  "root_digest_inputs": [
+    "ruff.toml",
+    "AGENTS.md",
+    "portfolio.toml",
+    "scripts/portfolio.py"
+  ],
+  "python": "3.13.16",
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+  "memory_limit_bytes": 34359738368,
+  "seed": 1729,
+  "dataset_id": "fictional-equipment-rental-v1",
+  "status": "passed",
+  "invoice": {
+    "id": "d11b5d70-377b-47b8-bd93-840c9eb4ff03",
+    "journal_id": "d11b5d70-377b-47b8-bd93-840c9eb4ff03",
+    "tenant_id": "5af3e550-e099-4469-86b1-55c6e24f654a",
+    "currency": "USD",
+    "sequence": 1,
+    "reference": "invoice-100",
+    "reversal_of": null,
+    "postings": [
+      {
+        "id": "396cf95d-6399-4ec6-9951-ed3813c231cf",
+        "account_id": "6609b0f1-3f83-403d-987a-4f31573b474b",
+        "minor_units": 10000
+      },
+      {
+        "id": "597bf469-5fb5-4af6-8506-3d6163dbe985",
+        "account_id": "9e4bee3b-07b8-4f57-9a31-79b50a4fafc9",
+        "minor_units": -10000
+      }
+    ]
+  },
+  "duplicate_journal_identical": true,
+  "reversal": {
+    "id": "efdceddc-ce14-4d53-8159-ea32592f6756",
+    "journal_id": "efdceddc-ce14-4d53-8159-ea32592f6756",
+    "tenant_id": "5af3e550-e099-4469-86b1-55c6e24f654a",
+    "currency": "USD",
+    "sequence": 3,
+    "reference": "invoice-100",
+    "reversal_of": "d11b5d70-377b-47b8-bd93-840c9eb4ff03",
+    "postings": [
+      {
+        "id": "5c2c716d-d766-4805-8380-f5fdae050f3e",
+        "account_id": "9e4bee3b-07b8-4f57-9a31-79b50a4fafc9",
+        "minor_units": 10000
+      },
+      {
+        "id": "a5634817-2e43-4292-973e-d66131ac2dff",
+        "account_id": "6609b0f1-3f83-403d-987a-4f31573b474b",
+        "minor_units": -10000
+      }
+    ]
+  },
+  "concurrent_transfers": 8,
+  "reimport_idempotent": true,
+  "reconciliation": {
+    "rows": 2,
+    "postings": 10,
+    "edges": 2,
+    "components": 1,
+    "ambiguous_components": 1,
+    "cost": 250
+  },
+  "ambiguous_proposal_reviewed": true,
+  "projection_corruption_detected": true,
+  "rebuild_consistent": true,
+  "tenant_id": "5af3e550-e099-4469-86b1-55c6e24f654a",
+  "bank_account_id": "4b187091-838c-4617-aa42-489da64b1dc6"
+}
