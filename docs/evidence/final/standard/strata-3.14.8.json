@@ -2,11 +2,11 @@
   "schema_version": 1,
   "project": "strata",
   "interpreter": "3.14.8",
-  "verified_at_utc": "2026-10-18T01:56:29.652249+00:00",
-  "source_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+  "verified_at_utc": "2026-10-18T03:54:12.421225+00:00",
+  "source_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
   "source_dirty": false,
   "source_scope": "project",
-  "source_content_sha256": "659a97a504ee94224f58776d0ba763e8cc35b5293173c255c54c90049890b0ca",
+  "source_content_sha256": "1cdc88c267fb33729306baf20f97761fa8774e191f657d961f5c1f2777840efd",
   "source_inputs": [
     "projects/02-strata/.python-version",
     "projects/02-strata/README.md",
@@ -36,7 +36,7 @@
     "projects/02-strata/tests/unit/test_formats.py",
     "projects/02-strata/uv.lock"
   ],
-  "root_contract_sha256": "032f893eb291ffbb92b9b9606acd87149c5c64afe0c6d9c14a5bf000e623245f",
+  "root_contract_sha256": "b6cd5e99e80442d13aa0c3b7d6c7423f181f6572242dab63f8f2d9f2597be363",
   "root_contract_inputs": [
     ".github/workflows/ci.yml",
     ".github/workflows/extended.yml",
@@ -84,7 +84,7 @@
         "strata"
       ],
       "exit_code": 0,
-      "seconds": 2.0760774370000945,
+      "seconds": 1.751881152000351,
       "log": "strata-3.14.8-demo.log"
     },
     {
@@ -97,7 +97,7 @@
         "standard"
       ],
       "exit_code": 0,
-      "seconds": 171.6676129590005,
+      "seconds": 172.97491819599963,
       "log": "strata-3.14.8-benchmark.log"
     }
   ],

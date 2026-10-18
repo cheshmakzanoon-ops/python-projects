@@ -55,7 +55,8 @@ Accepted committed-source closure:
 - All ST-01–08 acceptance scenarios and the 79-test suite passed on both required
   interpreters. The immutable compatibility runs also passed formatting, lint,
   strict typing, sdist/wheel build, runtime-only installed-wheel demos, and CI
-  benchmarks at source `7114e39c7e9e8af177e84fe8cd990fe5a09bde63`:
+  benchmarks after the reporting-scope correction at source
+  `ec1d0106df086a48923016c33199cfbda0aebbc0`:
   [CPython 3.13.16 wrapper](../../../docs/evidence/final/python313/strata-3.13.16.json)
   and [CPython 3.14.8 wrapper](../../../docs/evidence/final/python314/strata-3.14.8.json).
   The default remains 3.14.8; 3.13.16 remains required and verified.
@@ -66,17 +67,32 @@ Accepted committed-source closure:
   [raw per-seed results](../../../docs/evidence/final/strata-extended/strata-extended.json)
   and [clean/unchanged-source wrapper](../../../docs/evidence/final/strata-extended/strata-3.14.8.json).
   This accepted full run supersedes the intentionally stopped historical run.
+  It was not executed again after the report-string correction. The
+  [retained impact analysis](../../../docs/evidence/final/strata-extended/reporter-impact-analysis.json)
+  proves that storage algorithms, tests, dependencies and extended entry point
+  are unchanged, and the sole source change is an AST string constant in the
+  benchmark reporter, which the extended runner does not execute. Its original
+  revision and whole-project digest remain unchanged in the evidence.
 - The standard workload and public demo passed at source
-  `59443e2bcdfc6a1dd81f8334c108474eef2d3030`: **250,000 initial records,
+  `ec1d0106df086a48923016c33199cfbda0aebbc0`: **250,000 initial records,
   200,000 mixed operations, and 50,000 hot-set churn operations**. See the
   [raw standard measurements](../../../docs/evidence/final/standard/strata-3.14.8-benchmark-benchmark.json),
   [demo report](../../../docs/evidence/final/standard/strata-3.14.8-demo-demo.json),
   and [clean/unchanged-source wrapper](../../../docs/evidence/final/standard/strata-3.14.8.json).
   [BENCHMARKS.md](BENCHMARKS.md) interprets the measured limits.
-- All accepted outer wrappers report clean and unchanged source and the same
-  project content digest, `659a97a504ee94224f58776d0ba763e8cc35b5293173c255c54c90049890b0ca`.
-  They retain their actual source revisions and shared-contract hashes. The
-  prior development captures remain historical, not substitute release evidence.
+- The new compatibility and standard wrappers report clean and unchanged
+  source with project digest
+  `1cdc88c267fb33729306baf20f97761fa8774e191f657d961f5c1f2777840efd`.
+  The earlier extended run retains its different whole-project digest; the
+  impact analysis supports its unchanged-storage-core relevance, not a new
+  extended execution or a claim that the whole-project digests match.
+- The counter-scope [erratum](../../../docs/evidence/final/attempts/strata-counter-scope/coordinator-erratum.json)
+  and [original standard report](../../../docs/evidence/final/attempts/strata-counter-scope/standard/strata-3.14.8-benchmark-benchmark.json)
+  preserve the former wording and measurements at their actual source. Read
+  amplification samples the first owner through compaction, excluding later
+  validation and reopened recovery reads. The corrected full standard run and
+  both compatibility runs above execute the corrected reporter. Development
+  captures and superseded reports remain historical evidence.
 
 No Strata implementation or local required validation gate remains pending.
 Repository-wide Git synchronization and hosted CI reporting remain coordinator

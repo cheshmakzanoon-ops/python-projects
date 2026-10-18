@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "scope": "Impact analysis only, not a new500000-operation execution. Preserve the original extended result at its exact tested revision.",
+  "extended_tested_commit": "9218b77769cef807700d67f8a0c2b97512b9cc0e",
+  "corrected_reporter_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+  "changed_executable_or_test_inputs": [
+    "projects/02-strata/src/pp_strata/workloads.py"
+  ],
+  "workload_ast_identical_after_restoring_only_limitation_string": true,
+  "workload_file_old_sha256": "c92e38ba8b175220b2f162796b54c9ef9eeb2ab47f3f778717fe92fd0152c8e8",
+  "workload_file_new_sha256": "b8c38f04310234d875001996b1b1e37d72cf4a14937916cd5a5a34656586936a",
+  "extended_entrypoint_imports": [
+    "pp_strata.Conflict",
+    "pp_strata.Database",
+    "pp_strata.evidence.provenance"
+  ],
+  "storage_algorithms_and_extended_entrypoint_unchanged": true,
+  "note": "The extended runner does not execute workloads.py. New compatibility and standard runs execute the corrected reporter; original extended evidence remains valid for unchanged storage code without relabeling its source digest."
+}

@@ -23,4 +23,13 @@ Coverage scope is the actual codec, WAL, memtable, SSTable, metadata I/O, error,
 and transaction/recovery modules; demo, provenance, and benchmark adapters are
 excluded explicitly. CLI behavior has real subprocess acceptance tests anyway.
 See `AGENT_STATUS.md` for exact current results and `BENCHMARKS.md` for measured
-artifacts. Final immutable committed-tree verification is coordinator-owned.
+artifacts. Both accepted [3.13.16](../../../docs/evidence/final/python313/strata-3.13.16.json)
+and [3.14.8](../../../docs/evidence/final/python314/strata-3.14.8.json) compatibility
+wrappers and the [full standard run](../../../docs/evidence/final/standard/strata-3.14.8.json)
+now identify corrected-reporting source `ec1d0106df086a48923016c33199cfbda0aebbc0`.
+The original [500,000-operation extended result](../../../docs/evidence/final/strata-extended/strata-extended.json)
+retains source `9218b77769cef807700d67f8a0c2b97512b9cc0e`. Its
+[reporter-impact analysis](../../../docs/evidence/final/strata-extended/reporter-impact-analysis.json)
+proves unchanged storage algorithms/tests/entry point and only one changed
+reporter string that the extended runner does not execute; no new extended
+execution or equality of whole-project digests is claimed.

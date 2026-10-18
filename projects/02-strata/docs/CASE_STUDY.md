@@ -63,8 +63,8 @@ The first CI workload measured 0.06822 s full compaction and 0.01793 s validated
 reopen for 2,000 starting records with 2,000 mixed operations. Durable batches
 of 100 amortized synchronization compared with single writes, but timings vary between runs on the shared host; see [benchmark evidence](BENCHMARKS.md).
 These are small generated workloads, not production usage or hardware
-power-loss evidence. Standard measurements and final clean-source verification
-are separate required gates owned by the coordinator.
+power-loss evidence. The accepted committed measurements and fresh compatibility
+checks below supply the separate final verification.
 
 An interview explanation: the central invariant is that a durable manifest
 never references an unsynchronized replacement table or retires still-needed
@@ -76,4 +76,41 @@ snapshot iterators and compaction planning, then rerun the same fault matrix.
 
 ## Committed standard measurement
 
-The [standard report](../../../docs/evidence/final/standard/strata-3.14.8-benchmark-benchmark.json) at source `59443e2` passed 250,000 initial records, 200,000 mixed operations and 50,000 hot-set churn operations against independent dictionary/recovery checks. Initial batches of 100 reached 40,927 records/s; mixed-read p95 was 1.14 ms, the measured full compaction stall 2.23 s and reopen/recovery 1.68 s. Churn compacted 10,196,594 bytes to 19,641 bytes. Five separate 2,000-record durable-commit measurements gave median single-record rates of 2,177/s for Strata and 2,026/s for SQLite; batches of 100 gave 63,963/s and 69,959/s respectively. These variable, cache-uncontrolled local measurements demonstrate the batch/durability tradeoff; they do not establish general superiority over SQLite. The separate required 100×5,000 stateful suite also passed in full.
+The [corrected standard report](../../../docs/evidence/final/standard/strata-3.14.8-benchmark-benchmark.json)
+and [verification wrapper](../../../docs/evidence/final/standard/strata-3.14.8.json)
+at source `ec1d0106df086a48923016c33199cfbda0aebbc0` passed the full 250,000
+initial records, 200,000 mixed operations and 50,000 hot-set churn operations
+against independent dictionary/recovery checks. Initial batches of 100 took
+6.048369 seconds, or 41,333.46 records/s; mixed-read p95 was 1.237005 ms, full
+compaction stalled 2.261025 s and reopen/recovery took 1.219946 s. Peak RSS was
+316,469,248 bytes. Churn compacted 10,196,594 bytes to 19,641 bytes.
+
+Five separate 2,000-record durable-commit measurements gave median single-record
+rates of 3,142.95/s for Strata and 4,175.59/s for SQLite; batches of 100 gave
+74,758.99/s and 158,757.46/s respectively. SQLite was faster in both measured
+configurations. These variable, cache-uncontrolled synthetic measurements show
+the batch/durability tradeoff and do not establish a general engine ranking.
+The fresh [3.13.16](../../../docs/evidence/final/python313/strata-3.13.16.json)
+and [3.14.8](../../../docs/evidence/final/python314/strata-3.14.8.json) compatibility
+runs each passed all 79 tests and the quality/build/installed-wheel/demo/CI gates
+at that same corrected-reporting source; default remains 3.14.8.
+
+Final review also caught a measurement-description error: the read-amplification
+counter is sampled immediately after the first owner's compaction, before its
+next validation scan and the separate recovery owner. The old limitation string
+incorrectly included recovery reads. Only that report string changed; the
+corrected full standard and compatibility runs above exercise it. The
+[erratum](../../../docs/evidence/final/attempts/strata-counter-scope/coordinator-erratum.json)
+and [old standard capture](../../../docs/evidence/final/attempts/strata-counter-scope/standard/strata-3.14.8-benchmark-benchmark.json)
+preserve the former wording and numeric results at their actual earlier source.
+The current 216.55× ratio describes the measured phase, not all recovery I/O.
+
+The separate required **100 × 5,000 = 500,000-operation** stateful suite passed
+at source `9218b77769cef807700d67f8a0c2b97512b9cc0e`; its
+[raw per-seed results](../../../docs/evidence/final/strata-extended/strata-extended.json)
+and [wrapper](../../../docs/evidence/final/strata-extended/strata-3.14.8.json)
+retain that exact revision. The [impact analysis](../../../docs/evidence/final/strata-extended/reporter-impact-analysis.json)
+shows that storage algorithms, tests, dependencies and the extended entry point
+are unchanged and that its execution never invokes the changed reporter.
+This retains the original extended evidence for the unchanged storage core;
+it does not claim a new execution or equal whole-project digests.

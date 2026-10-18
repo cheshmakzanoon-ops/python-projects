@@ -3,7 +3,7 @@
 ## Accepted committed standard run
 
 The standard workload passed on CPython 3.14.8, Linux x86-64, seed 1729, at
-source `59443e2bcdfc6a1dd81f8334c108474eef2d3030`. It generated **250,000
+source `ec1d0106df086a48923016c33199cfbda0aebbc0`. It generated **250,000
 initial 16-byte keys / 256-byte values, 200,000 mixed operations, and a separate
 50,000-operation hot-key churn phase**. The [raw report](../../../docs/evidence/final/standard/strata-3.14.8-benchmark-benchmark.json)
 contains exact parameters, repetitions, environment, hashes and correctness
@@ -18,12 +18,12 @@ uv run --locked python -m pp_strata.cli benchmark --profile standard --output /a
 
 | Metric | Accepted standard run |
 | --- | --- |
-| Initial durable batches of 100 | 250,000 records / 6.108 s; 40,927 records/s |
-| Mixed point-read latency, median / p95 | 0.4527 ms / 1.143 ms |
-| Write-or-batch latency, median / p95 | 0.5131 ms / 1.615 ms |
-| Full compaction stall | 2.231 s |
-| Reopen and validated recovery | 1.682 s |
-| Peak process RSS including independent oracle | 316,174,336 bytes |
+| Initial durable batches of 100 | 250,000 records / 6.048369 s; 41,333.46 records/s |
+| Mixed point-read latency, median / p95 | 0.4606 ms / 1.237005 ms |
+| Write-or-batch latency, median / p95 | 0.5270 ms / 1.540930 ms |
+| Full compaction stall | 2.261025 s |
+| Reopen and validated recovery | 1.219946 s |
+| Peak process RSS including independent oracle | 316,469,248 bytes |
 | Final disk size / live-byte space amplification | 67,490,354 bytes / 1.066× |
 | WAL + table bytes / logical mutation bytes | 2.774× |
 | Block-read bytes / requested read-value bytes, first owner through compaction | 216.55× |
@@ -36,28 +36,40 @@ one thread: Strata syncs the WAL per commit, while SQLite uses WAL mode and
 
 | Configuration | Median seconds for 2,000 records | Range over five runs | Median records/s |
 | --- | --- | --- | --- |
-| Strata, durable single writes | 0.9188 | 0.8459–1.1383 | 2,177 |
-| Strata, durable batches of 100 | 0.03127 | 0.02874–0.06790 | 63,963 |
-| SQLite, durable single writes | 0.9872 | 0.6778–1.5516 | 2,026 |
-| SQLite, durable batches of 100 | 0.02859 | 0.01771–0.03525 | 69,959 |
+| Strata, durable single writes | 0.636345 | 0.603772–0.641256 | 3,142.95 |
+| Strata, durable batches of 100 | 0.026753 | 0.024866–0.138419 | 74,758.99 |
+| SQLite, durable single writes | 0.478974 | 0.469325–0.494487 | 4,175.59 |
+| SQLite, durable batches of 100 | 0.012598 | 0.011477–0.018834 | 158,757.46 |
 
 All independent mixed point-read, full-scan before/after compaction, recovered
 scan, comparison-count and unchanged-source checks passed. The larger read
 amplification reflects block-granularity reads and maintenance in the numerator;
 it is a phase byte ratio rather than an isolated per-request I/O count. Counters
 are sampled immediately after compaction and exclude the subsequent validation
-scan and the separate reopened recovery owner. The historical raw limitation
-described a broader scope incorrectly; see the [retained erratum](../../../docs/evidence/final/attempts/strata-counter-scope/coordinator-erratum.json).
+scan and the separate reopened recovery owner. The former raw limitation described a broader scope incorrectly; the current
+reporter states the actual boundary. The [retained erratum](../../../docs/evidence/final/attempts/strata-counter-scope/coordinator-erratum.json)
+and [superseded standard capture](../../../docs/evidence/final/attempts/strata-counter-scope/standard/strata-3.14.8-benchmark-benchmark.json)
+preserve that historical wording and the earlier measurements at source
+`59443e2bcdfc6a1dd81f8334c108474eef2d3030`. The numbers above come from the
+new full-sized run, rather than a relabeling of that capture.
 The OS page cache was not dropped. These variable local synthetic measurements
 show the synchronization/batching tradeoff and the cost of larger tables; they
 do not establish a general ranking against SQLite or production capacity.
+SQLite was faster in both measured commit configurations in this capture; the
+comparison does not support a claim of Strata superiority.
 
 The separate full extended correctness workload passed **100 seeds × 5,000
 operations = 500,000 operations**, using independent dictionary and historical
 snapshot oracles at source `9218b77769cef807700d67f8a0c2b97512b9cc0e`. Its
 [raw results](../../../docs/evidence/final/strata-extended/strata-extended.json)
 and [verification wrapper](../../../docs/evidence/final/strata-extended/strata-3.14.8.json)
-record every seed, clean source and unchanged hashes. Compatibility also passed
+record every seed, clean source and unchanged hashes at their original tested
+revision. This is not a new extended execution at `ec1d010`: the retained
+[reporter-impact analysis](../../../docs/evidence/final/strata-extended/reporter-impact-analysis.json)
+proves the storage algorithms and extended entry point are unchanged, with only
+one non-executed reporter string constant changed. Its whole-project digest
+therefore differs from the corrected-reporting snapshot. Compatibility was
+rerun at `ec1d010` and passed
 on both [3.13.16](../../../docs/evidence/final/python313/strata-3.13.16.json) and
 [3.14.8](../../../docs/evidence/final/python314/strata-3.14.8.json); the default is
 3.14.8.
@@ -86,7 +98,7 @@ uv run --locked python -m pp_strata.cli benchmark --profile ci --output /absolut
 | Peak process RSS including independent oracle | 25,010,176 bytes |
 | Final disk size / live-byte space amplification | 527,782 bytes / 1.066× |
 | WAL + table bytes / logical mutation bytes | 2.723× |
-| Whole-workload block-read bytes / requested read-value bytes | 2.488× |
+| Block-read bytes / requested read-value bytes, first owner through compaction | 2.488× |
 | Churn disk bytes before / after compaction | 427,301 / 19,640 |
 
 The mixed workload and churn each run once. Durable-commit comparisons use one
