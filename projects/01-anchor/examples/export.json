@@ -1,0 +1,123 @@
+{
+  "name": "synthetic-export",
+  "version": 1,
+  "steps": [
+    {
+      "name": "validate",
+      "activity": "validate",
+      "after": [],
+      "kind": "activity",
+      "delay": 0,
+      "signal": "",
+      "compensate": null,
+      "max_attempts": 3,
+      "retry_delay": 0.02
+    },
+    {
+      "name": "partition_0",
+      "activity": "fetch",
+      "after": [
+        "validate"
+      ],
+      "kind": "activity",
+      "delay": 0,
+      "signal": "",
+      "compensate": null,
+      "max_attempts": 3,
+      "retry_delay": 0.02
+    },
+    {
+      "name": "partition_1",
+      "activity": "fetch",
+      "after": [
+        "validate"
+      ],
+      "kind": "activity",
+      "delay": 0,
+      "signal": "",
+      "compensate": null,
+      "max_attempts": 3,
+      "retry_delay": 0.02
+    },
+    {
+      "name": "partition_2",
+      "activity": "fetch",
+      "after": [
+        "validate"
+      ],
+      "kind": "activity",
+      "delay": 0,
+      "signal": "",
+      "compensate": null,
+      "max_attempts": 3,
+      "retry_delay": 0.02
+    },
+    {
+      "name": "join",
+      "activity": "identity",
+      "after": [
+        "partition_0",
+        "partition_1",
+        "partition_2"
+      ],
+      "kind": "join",
+      "delay": 0,
+      "signal": "",
+      "compensate": null,
+      "max_attempts": 3,
+      "retry_delay": 0.02
+    },
+    {
+      "name": "archive",
+      "activity": "archive",
+      "after": [
+        "join"
+      ],
+      "kind": "activity",
+      "delay": 0,
+      "signal": "",
+      "compensate": "cleanup",
+      "max_attempts": 3,
+      "retry_delay": 0.02
+    },
+    {
+      "name": "cooldown",
+      "activity": "identity",
+      "after": [
+        "archive"
+      ],
+      "kind": "timer",
+      "delay": 0.01,
+      "signal": "",
+      "compensate": null,
+      "max_attempts": 3,
+      "retry_delay": 0.02
+    },
+    {
+      "name": "approval",
+      "activity": "identity",
+      "after": [
+        "cooldown"
+      ],
+      "kind": "signal",
+      "delay": 0,
+      "signal": "approve",
+      "compensate": null,
+      "max_attempts": 3,
+      "retry_delay": 0.02
+    },
+    {
+      "name": "publish",
+      "activity": "publish",
+      "after": [
+        "approval"
+      ],
+      "kind": "activity",
+      "delay": 0,
+      "signal": "",
+      "compensate": "cleanup",
+      "max_attempts": 3,
+      "retry_delay": 0.02
+    }
+  ]
+}

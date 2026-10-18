@@ -1,16 +1,16 @@
 [project]
 name = "pp-anchor"
 version = "0.1.0"
-description = "Anchor: independent Python portfolio project"
+description = "Durable PostgreSQL workflows with replay and epoch-fenced activities"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = ["psycopg[binary,pool]>=3.2", "fastapi>=0.115", "uvicorn>=0.34", "typer>=0.15"]
 [project.scripts]
 anchor = "pp_anchor.cli:main"
 [build-system]
 requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 [dependency-groups]
-dev = ["pytest>=8", "pytest-cov>=6", "hypothesis>=6", "ruff>=0.11", "mypy>=1.15"]
+dev = ["pytest>=8", "pytest-cov>=6", "hypothesis>=6", "ruff>=0.11", "mypy>=1.15", "httpx>=0.28"]
 [tool.hatch.build.targets.wheel]
 packages = ["src/pp_anchor"]
 [tool.pytest.ini_options]

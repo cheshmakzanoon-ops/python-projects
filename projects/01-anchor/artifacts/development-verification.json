@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "project": "anchor",
+  "source_commit": "6e857f4f226e30b7d25a261902fe1bde2e78a45f",
+  "source_dirty": true,
+  "source_scope": "project",
+  "source_content_sha256": "f90db80e42586bbf971ff951dd1077d3fd81011539bc2f9490a8eefd50c7e1ee",
+  "root_contract_sha256": "558e4b94e3a529df15d160788c6c4da297c6c27cfe3435c538db7db565dc8817",
+  "lockfile_sha256": "cb58668e71ccbc29112a367ef6cd358115039a96bffa666ba83c402e7929fdac",
+  "python": "3.13.16 (main, Oct  3 2026, 01:06:22) [Clang 22.1.3 ]",
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+  "memory_limit_bytes": 34359738368,
+  "seed": 1729,
+  "dataset_id": "95f8b771e649d1a55ad1500c56aeb5bdd155b8fbb2fcc9abdb43d9bd07246b83",
+  "profile": "development-verification",
+  "parameters": {
+    "required_python_versions": [
+      "3.13.16",
+      "3.14.8"
+    ],
+    "tests_per_interpreter": 54
+  },
+  "warmup_runs": 1,
+  "measurement_runs": 5,
+  "status": "passed",
+  "source_capture_timing": "Captured after checks; implementation writers paused during both final suites. Final immutable pre/post capture is coordinator-owned.",
+  "checks": {
+    "ruff_format": 0,
+    "ruff_check": 0,
+    "strict_mypy": 0,
+    "pytest_3_13": {
+      "exit_code": 0,
+      "passed": 54,
+      "seconds": 81.39
+    },
+    "pytest_3_14": {
+      "exit_code": 0,
+      "passed": 54,
+      "seconds": 67.15
+    },
+    "build": 0,
+    "clean_wheel_install_and_outside_tree_import_cli": 0
+  },
+  "coverage_scope": [
+    "definitions",
+    "replay",
+    "persistence",
+    "workers",
+    "scheduler"
+  ],
+  "coverage": {
+    "covered_lines": 591,
+    "num_statements": 607,
+    "percent_covered": 96.35479951397326,
+    "percent_covered_display": "96",
+    "missing_lines": 16,
+    "excluded_lines": 0,
+    "percent_statements_covered": 97.36408566721582,
+    "percent_statements_covered_display": "97",
+    "num_branches": 216,
+    "num_partial_branches": 12,
+    "covered_branches": 202,
+    "missing_branches": 14,
+    "percent_branches_covered": 93.51851851851852,
+    "percent_branches_covered_display": "94"
+  }
+}
