@@ -10,6 +10,7 @@ import sys
 import tempfile
 import time
 import tomllib
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -40,6 +41,8 @@ def main() -> int:
         parser.error("extended requires exactly --project strata")
     environment = os.environ.copy()
     environment["PORTFOLIO_PYTHON"] = args.python
+    # Concurrent interpreters share a server, never a Django test database.
+    environment["MERIDIAN_TEST_DB_NAME"] = "pp_verify_" + uuid.uuid4().hex
     for name in ("UV_CACHE_DIR", "UV_PYTHON_INSTALL_DIR"):
         if name not in environment and Path("/workspace").exists():
             environment[name] = (
