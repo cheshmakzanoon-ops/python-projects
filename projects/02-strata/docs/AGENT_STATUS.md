@@ -1,4 +1,4 @@
-# Status: verifying — stable handoff, writers paused
+# Status: complete — accepted local verification, writers paused
 
 Owner A02; edits confined to `projects/02-strata`. No Git mutations performed.
 
@@ -10,7 +10,7 @@ versions, safe tombstone removal and durable manifest publication; process owner
 locks; uncertain-I/O poisoned writer; consistent historical backup/restore;
 operator CLI, two-process crash demo, CI/standard workload generators.
 
-Verified local results:
+Historical development verification (retained for provenance):
 
 - CPython 3.13.16: final 79-test full suite passed, 3.77 seconds.
 - CPython 3.14.8: final 79-test full suite passed, 4.14 seconds. Default selected
@@ -50,18 +50,37 @@ at the coordinator's request. This is preliminary evidence, not the full gate;
 process remains running. Profiling one 5,000-operation seed measured 29.684 s,
 with 15.650 s in fsync and 9.315 s in scans on the shared host.
 
-Remaining required gates, now coordinator-owned:
+Accepted committed-source closure:
 
-1. Commit/review this stable source, run the complete 100 seeds × 5,000 operation
-   suite from its immutable exported copy:
-   `uv run --locked python benchmarks/extended_stateful.py --jobs 2 --output ABS/strata-extended.json`.
-   Default is one process; two is the explicit resource cap. Atomic per-seed
-   checkpoints support `--resume` only with matching source/interpreter/workload.
-2. Run `benchmark --profile standard` under the exclusive resource lease from
-   the immutable committed tree; the implementation generates all required
-   250,000 initial rows, 200,000 mixed operations and a separate churn workload.
-3. Final committed-tree matrix/packaging checks and independent coordinator
-   review; publish accurate final provenance. No complete status is claimed yet.
+- All ST-01–08 acceptance scenarios and the 79-test suite passed on both required
+  interpreters. The immutable compatibility runs also passed formatting, lint,
+  strict typing, sdist/wheel build, runtime-only installed-wheel demos, and CI
+  benchmarks at source `7114e39c7e9e8af177e84fe8cd990fe5a09bde63`:
+  [CPython 3.13.16 wrapper](../../../docs/evidence/final/python313/strata-3.13.16.json)
+  and [CPython 3.14.8 wrapper](../../../docs/evidence/final/python314/strata-3.14.8.json).
+  The default remains 3.14.8; 3.13.16 remains required and verified.
+- The complete extended suite passed **100 seeds × 5,000 operations = 500,000
+  operations**, with two independent owning processes, dictionary/snapshot
+  oracles, conflict and abort histories, compaction and recovery checks, at
+  source `9218b77769cef807700d67f8a0c2b97512b9cc0e`:
+  [raw per-seed results](../../../docs/evidence/final/strata-extended/strata-extended.json)
+  and [clean/unchanged-source wrapper](../../../docs/evidence/final/strata-extended/strata-3.14.8.json).
+  This accepted full run supersedes the intentionally stopped historical run.
+- The standard workload and public demo passed at source
+  `59443e2bcdfc6a1dd81f8334c108474eef2d3030`: **250,000 initial records,
+  200,000 mixed operations, and 50,000 hot-set churn operations**. See the
+  [raw standard measurements](../../../docs/evidence/final/standard/strata-3.14.8-benchmark-benchmark.json),
+  [demo report](../../../docs/evidence/final/standard/strata-3.14.8-demo-demo.json),
+  and [clean/unchanged-source wrapper](../../../docs/evidence/final/standard/strata-3.14.8.json).
+  [BENCHMARKS.md](BENCHMARKS.md) interprets the measured limits.
+- All accepted outer wrappers report clean and unchanged source and the same
+  project content digest, `659a97a504ee94224f58776d0ba763e8cc35b5293173c255c54c90049890b0ca`.
+  They retain their actual source revisions and shared-contract hashes. The
+  prior development captures remain historical, not substitute release evidence.
+
+No Strata implementation or local required validation gate remains pending.
+Repository-wide Git synchronization and hosted CI reporting remain coordinator
+responsibilities and are separate from these accepted local results.
 
 No essential service/credential blocker exists. Required low-level durability
 platform is Linux/local POSIX filesystem. Process termination and simulated

@@ -32,4 +32,6 @@ python scripts/verify_snapshot.py --python 3.14.8 --temp-root /workspace --outpu
 
 Outputs must be fresh. Explicit `--project` filters are available. Required services are inherited from exported URLs or the helper metadata. Clean clones install locked dependencies independently, build wheels, run full installed-wheel demos outside source and retain command exit statuses and hashes.
 
+Concurrent Meridian test suites must use distinct `MERIDIAN_TEST_DB_NAME` values, as well as separate interpreter environments. `verify_snapshot.py` assigns a unique test database name automatically. Direct test invocations otherwise share Django's default test database and can interfere with each other.
+
 The tested install script and service startup instructions are also saved as a cloud configuration draft. Saving is separate from applying settings or publishing a snapshot. Fresh-task restoration and other operating systems are not claimed without separate evidence. Core workflows need no paid API, GPU or external dataset.
