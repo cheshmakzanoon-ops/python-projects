@@ -1,11 +1,12 @@
 {
-  "comparison_commit": "8661cb5fe49ffbd691f492ba20aefb8f84f67cb6",
+  "comparison_commit": "dd808544337ab6a4f8bf0797dccaf010bf636371",
   "status": "passed",
-  "scope": "Project input bytes and locks; shared verification driver isolation fix rerun for Meridian. Documents/evidence are excluded according to recorded scopes.",
+  "scope": "Thirty accepted clean-source project/interpreter/profile wrappers and raw workloads, three public-interface integrations; current project and lock bytes match each accepted outer wrapper. Each raw report retains its own explicitly declared digest scope. Root/extended/remote status is recorded separately.",
   "comparisons": [
     {
       "project": "anchor",
       "interpreter": "3.13.16",
+      "profile": "python313",
       "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
@@ -14,7 +15,17 @@
     {
       "project": "anchor",
       "interpreter": "3.14.8",
+      "profile": "python314",
       "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "6efba1556543a98b8c0a36ff990d085569902ad50849b21bedd679fbf5f8e2f7"
+    },
+    {
+      "project": "anchor",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
       "source_content_sha256": "6efba1556543a98b8c0a36ff990d085569902ad50849b21bedd679fbf5f8e2f7"
@@ -22,38 +33,61 @@
     {
       "project": "strata",
       "interpreter": "3.13.16",
-      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "profile": "python313",
+      "verified_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
-      "source_content_sha256": "659a97a504ee94224f58776d0ba763e8cc35b5293173c255c54c90049890b0ca"
+      "source_content_sha256": "1cdc88c267fb33729306baf20f97761fa8774e191f657d961f5c1f2777840efd"
     },
     {
       "project": "strata",
       "interpreter": "3.14.8",
-      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "profile": "python314",
+      "verified_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
-      "source_content_sha256": "659a97a504ee94224f58776d0ba763e8cc35b5293173c255c54c90049890b0ca"
+      "source_content_sha256": "1cdc88c267fb33729306baf20f97761fa8774e191f657d961f5c1f2777840efd"
+    },
+    {
+      "project": "strata",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "1cdc88c267fb33729306baf20f97761fa8774e191f657d961f5c1f2777840efd"
     },
     {
       "project": "current",
       "interpreter": "3.13.16",
-      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "profile": "python313",
+      "verified_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
-      "source_content_sha256": "0e2a2b3cf102109102599055e7fbe0f591f7fbb78df02eb4374ed5393315d696"
+      "source_content_sha256": "c8f3435c518bd48e45805db9a11c8d91d08108d59471f10e776735d7f3106eca"
     },
     {
       "project": "current",
       "interpreter": "3.14.8",
-      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "profile": "python314",
+      "verified_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
-      "source_content_sha256": "0e2a2b3cf102109102599055e7fbe0f591f7fbb78df02eb4374ed5393315d696"
+      "source_content_sha256": "c8f3435c518bd48e45805db9a11c8d91d08108d59471f10e776735d7f3106eca"
+    },
+    {
+      "project": "current",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "c8f3435c518bd48e45805db9a11c8d91d08108d59471f10e776735d7f3106eca"
     },
     {
       "project": "meridian",
       "interpreter": "3.13.16",
+      "profile": "python313",
       "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
@@ -62,6 +96,16 @@
     {
       "project": "meridian",
       "interpreter": "3.14.8",
+      "profile": "python314",
+      "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "3920c2d41862f82459827bcdbb585c2fbb2f6c1db3ee93ef1e34737f80c6f746"
+    },
+    {
+      "project": "meridian",
+      "interpreter": "3.14.8",
+      "profile": "standard",
       "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
@@ -70,6 +114,7 @@
     {
       "project": "quarry",
       "interpreter": "3.13.16",
+      "profile": "python313",
       "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
@@ -78,7 +123,17 @@
     {
       "project": "quarry",
       "interpreter": "3.14.8",
+      "profile": "python314",
       "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "4f4fcbc49022feab9f8d7474972a5f9bd6d50e462d266c1065e8f8089acf53e8"
+    },
+    {
+      "project": "quarry",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
       "source_content_sha256": "4f4fcbc49022feab9f8d7474972a5f9bd6d50e462d266c1065e8f8089acf53e8"
@@ -86,6 +141,7 @@
     {
       "project": "pytrace",
       "interpreter": "3.13.16",
+      "profile": "python313",
       "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
@@ -94,7 +150,17 @@
     {
       "project": "pytrace",
       "interpreter": "3.14.8",
+      "profile": "python314",
       "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "3f6145be374e2914ee466534dac4691189d4a7531e678972353e2832ed47f2ac"
+    },
+    {
+      "project": "pytrace",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
       "source_content_sha256": "3f6145be374e2914ee466534dac4691189d4a7531e678972353e2832ed47f2ac"
@@ -102,6 +168,7 @@
     {
       "project": "atlas",
       "interpreter": "3.13.16",
+      "profile": "python313",
       "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
@@ -110,7 +177,17 @@
     {
       "project": "atlas",
       "interpreter": "3.14.8",
+      "profile": "python314",
       "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "08abfe0070f177f88f69841226ed525d8d6d64036192f9868ad60d4ee113898f"
+    },
+    {
+      "project": "atlas",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
       "source_content_sha256": "08abfe0070f177f88f69841226ed525d8d6d64036192f9868ad60d4ee113898f"
@@ -118,6 +195,7 @@
     {
       "project": "proving-ground",
       "interpreter": "3.13.16",
+      "profile": "python313",
       "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
@@ -126,7 +204,17 @@
     {
       "project": "proving-ground",
       "interpreter": "3.14.8",
+      "profile": "python314",
       "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "eeea22a62454d2e7ae28c739abf45172110edab8f5ebcc24d5037d1a94e39552"
+    },
+    {
+      "project": "proving-ground",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
       "source_content_sha256": "eeea22a62454d2e7ae28c739abf45172110edab8f5ebcc24d5037d1a94e39552"
@@ -134,22 +222,34 @@
     {
       "project": "routecraft",
       "interpreter": "3.13.16",
-      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "profile": "python313",
+      "verified_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
-      "source_content_sha256": "183ee8796cff65012ca533165044c0d2731f9a6dc1cf9bc50bd22c4571ec41e7"
+      "source_content_sha256": "75771d0bde227d959163d644c0ffd95ed62cfc4c4e53b4ad337ef2679bc325ee"
     },
     {
       "project": "routecraft",
       "interpreter": "3.14.8",
-      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "profile": "python314",
+      "verified_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
-      "source_content_sha256": "183ee8796cff65012ca533165044c0d2731f9a6dc1cf9bc50bd22c4571ec41e7"
+      "source_content_sha256": "75771d0bde227d959163d644c0ffd95ed62cfc4c4e53b4ad337ef2679bc325ee"
+    },
+    {
+      "project": "routecraft",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "75771d0bde227d959163d644c0ffd95ed62cfc4c4e53b4ad337ef2679bc325ee"
     },
     {
       "project": "resonance",
       "interpreter": "3.13.16",
+      "profile": "python313",
       "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
@@ -158,7 +258,17 @@
     {
       "project": "resonance",
       "interpreter": "3.14.8",
+      "profile": "python314",
       "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "b8b1d5d2662ad6d12b76b83da99b08ed1e271bcc471e68b8c300e5f9439497d6"
+    },
+    {
+      "project": "resonance",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
       "project_content_unchanged": true,
       "lockfile_unchanged": true,
       "source_content_sha256": "b8b1d5d2662ad6d12b76b83da99b08ed1e271bcc471e68b8c300e5f9439497d6"

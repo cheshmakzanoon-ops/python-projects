@@ -35,10 +35,43 @@ costs 8, while its reversal costs 30, with arrivals 6,14,23. Reusing a symmetric
 2-opt boundary delta would conceal 22 travel units and a shift violation. The
 optimizer fully reschedules and the independent test asserts the hand result.
 
-The seeded 25-stop demo retained a feasible incumbent, recorded rejection of a
-duplicated route, and produced actual JSON/maps/timelines for the new request.
-Large-scale optimality remains unknown. Cooperative deadlines can overrun one
-operation; bounded eight-job regret lookahead trades completeness for runtime.
-The next justified optimization is profiling schedule recomputation, then caching
-only under an unchanged independent-verifier contract. Benchmark measurements
-and their source identities are linked through the repository evidence index.
+Independent review also supplied an SDK instance whose customer records were
+out of matrix-node order. The keyed verifier accepted it while the positional
+scheduler used the wrong service/window record. The exact reproduction now fails
+explicit canonical-order validation; sorting the records produces a verified
+schedule. `test_noncanonical_sdk_customer_order_is_consistently_invalid` checks
+both rejection and the corrected waiting/service calculation.
+
+The accepted clean matrix at `b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2` passed
+75 tests on each required interpreter, builds, strict checks and an actual
+wheel-installed demo outside source. The seeded demo improved `(4,999)` to
+`(4,657)`, rejected a duplicate and emitted JSON/maps/timelines for a new-request
+plan `(4,606)`. Replanning changes the instance, so those two final objectives do
+not define a comparable improvement ratio.
+
+The corrected serial standard run at
+`ec1d0106df086a48923016c33199cfbda0aebbc0` found verified plans in all 180
+measured scale trials. Its 90 paired comparisons all improved travel at unchanged
+fleet count; median reductions were 20.71%, 31.23% and 9.73% for 25/100/500 stops.
+An earlier improvement-only run exposed an evaluation omission: those scenarios
+did not demonstrate non-improvement. The corrected benchmark separately measures
+a tiny baseline already at an independently enumerated optimum `(1,8)`. One
+warmup and five real pairs execute 20 iterations each and produce five verified
+ties. An inferior but feasible injected baseline is rejected by the control test.
+Accepted CI also publishes four losses among its ten scale comparisons. These
+results establish neither universal search dominance nor large-instance optimality.
+
+The standard command took 709.636 s and process peak RSS reached 81,141,760 bytes.
+Timing exposed the next practical limitation: 86 of 180 measured scale algorithm
+trials exceeded their cooperative wall allowance. At 500 stops, an 8-second
+allowance produced a maximum 10.839 s baseline reconstruction and 8.554 s search.
+The incumbent survived, but these are not strict realtime deadlines. Bounded
+regret lookahead trades completeness for runtime; profile schedule recomputation
+before introducing independently tested caches or finer cancellation boundaries.
+
+[Benchmark measurements and provenance](BENCHMARKS.md) link the accepted raw
+report and outer immutable verification wrapper. Their source hashes cover
+different enumerated inputs and are intentionally distinct. Large-instance gaps
+remain unknown; synthetic geometry and generous capacity are not production-road
+performance evidence. Reloads, transfers, traffic updates and mid-edge snapshots
+remain unsupported.

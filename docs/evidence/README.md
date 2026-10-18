@@ -21,6 +21,8 @@ Strata's [extended suite](final/strata-extended/strata-extended.json) passed all
 
 All three public-interface integrations passed in clean committed snapshots: [settlement](final/integrations/settlement/integration.json), [stream-lake](final/integrations/stream-lake/integration.json), and [code-search](final/integrations/code-search/integration.json). Separate installed package environments exchange HTTP or JSON; no integration imports sibling source. Each record retains its actual source commit and commands.
 
+The [acceptance audit](final/acceptance-summary.json) checks 30 accepted project/interpreter/profile records, their raw workload artifacts and three integrations. It independently recounts 1,136 project test executions and compares every accepted project/lock digest with the reviewed current bytes. It retains artifact SHA-256 values and actual tested commits; shared root tooling, the extended suite and hosted status are separate. The [current source comparison](final/current-source-comparison.json) has the same explicit scope.
+
 All ten full standard profiles are accepted:
 
 | Product | Standard execution record | Principal scale |

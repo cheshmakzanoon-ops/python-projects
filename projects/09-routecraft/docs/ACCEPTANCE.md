@@ -1,22 +1,38 @@
 # Acceptance and evidence mapping
 
+All eight Routecraft gates passed coordinator verification. Clean source commit
+`b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2` passed format, lint, strict mypy,
+**75 tests on each of Python 3.13.16 and 3.14.8**, sdist/wheel builds, an isolated
+wheel-installed demo/cleanup, the public demo and CI benchmark. The accepted
+corrected standard run passed at `ec1d0106df086a48923016c33199cfbda0aebbc0`.
+All three outer wrappers identify the same Routecraft code/test/lock source digest.
+
 | Gate | Independent evidence |
 | --- | --- |
-| RC-01 | `test_reference_objective_and_truthful_unknown`, `test_rc01_six_customer_complete_enumeration`; known directed optimum 8, uniform 6-customer optimum 7 and exactly 5040 labeled enumerations; generated matrices compare feasibility and lower objective bound against complete enumeration |
-| RC-02 | `test_verifier.py` rejects missing/duplicate/unknown stops, capacity, window, service/return shift, cache objective/return/schedule corruption and malformed instances |
-| RC-03 | Forward tour has cost 8; reverse costs 30 with arrivals 6,14,23; `test_directed_route_recalculation` checks the optimizer and hand result; random directed move outputs separately verified |
-| RC-04 | `test_cancel_timeout_rejected_moves_keep_incumbent`, `test_cancel_after_progress`; injected duplicate operator result rejected, original immutable incumbent retained through cancellation and zero wall deadline |
-| RC-05 | `test_same_seed_iteration_result_repeats` checks exact plans, trajectories, operator counts and 80 actual iterations; monotone best trajectory |
-| RC-06 | `test_rc06_equal_budget_ci_publishes_every_trial` uses real seeded runs, 5 paired measurements and identical caps; benchmark publishes gain/tie/loss/unavailable, feasibility, time, efforts, trajectory, verifier latency, peak memory; a separate exhaustive-optimal tiny control executes one warmup and five real pairs to demonstrate measured non-improvement |
-| RC-07 | `test_replanning.py` tests delayed actual boundary, successful added request, no invented cargo, transfer/manifests/prefix/definition/matrix/mid-edge failures; demo drives public replanning CLI |
-| RC-08 | JSON parser round-trip, actual subprocess CLI from outside source, independent verify, SVG map/timeline assertions; timeout unknown distinguished from exhaustive infeasibility |
+| RC-01 | `test_reference_objective_and_truthful_unknown`, `test_rc01_six_customer_complete_enumeration`; directed optimum 8, uniform six-customer optimum 7 and exactly 5040 labeled enumerations; generated directed matrices compare feasibility and objective bounds against complete enumeration |
+| RC-02 | `test_verifier.py` rejects missing/duplicate/unknown stops, capacity, window, service/return shift and cache corruption; the independent-review SDK tuple-order regression now returns explicit invalid input rather than a scheduler/verifier disagreement |
+| RC-03 | Forward cost 8 versus reverse cost 30, arrivals 6/14/23; hand calculations test the optimizer and independent checker; randomized directed moves are verified separately |
+| RC-04 | Injected invalid moves, cancellation, cancellation after progress and zero wall deadline retain the immutable verified incumbent; cooperative deadline overrun limits are disclosed in BENCHMARKS |
+| RC-05 | Identical input/seed/iteration budgets reproduce plans, trajectories, operator counts and actual 80 iterations; retained-best trajectory is monotone |
+| RC-06 | Accepted standard: 18 scale cases, 90 paired gains, 180 feasible algorithm trials; separate exact-optimal control records five actual ties after one warmup; both CI matrix runs retain six gains/four losses; valid-but-suboptimal control injection is rejected |
+| RC-07 | Delayed actual boundary and added request succeed; transfer, invented cargo, manifest, frozen-prefix/definition, matrix and mid-edge failures are rejected; repeated replanning cannot reset started status, shorten history or move time backward |
+| RC-08 | Strict JSON roundtrip, subprocess public CLI and isolated installed wheel; independently verified JSON and actual SVG route/timeline reports; heuristic unknown remains distinct from exhaustive infeasibility; stale success outputs and unverified publication are rejected |
 
 `tests/property/test_oracle.py` explores generated directed matrices, capacity
-infeasibility and valid island schedules. The solver and oracle share the
-independent verifier, not production route evaluation or neighborhood code.
-Known costs and independent formula bounds prevent circular expected answers.
+infeasibility and island schedules. The oracle uses no production neighborhood
+or scheduling code. It shares the independent verifier, while hand-derived costs
+and formula bounds provide an additional independent check.
 
-Local development verification and exact results are in `AGENT_STATUS.md`.
-Final immutable-commit evidence is coordinator-owned and must be read with its
-recorded source digest; local dirty runs are not a substitute for that release
-verification. Standard benchmark evidence is pending the serial coordinator run.
+Accepted immutable evidence:
+
+- [Python 3.13.16 wrapper](../../../docs/evidence/final/python313/routecraft-3.13.16.json)
+  and [75-test/build/wheel log](../../../docs/evidence/final/python313/routecraft-3.13.16-check.log).
+- [Python 3.14.8 wrapper](../../../docs/evidence/final/python314/routecraft-3.14.8.json)
+  and [75-test/build/wheel log](../../../docs/evidence/final/python314/routecraft-3.14.8-check.log).
+- [Corrected standard wrapper](../../../docs/evidence/final/standard/routecraft-3.14.8.json)
+  and [actual standard measurements](../../../docs/evidence/final/standard/routecraft-3.14.8-benchmark-benchmark.json).
+
+Read the wrappers' enumerated source scopes separately from the application raw
+hashes; their input sets differ. Historical dirty development samples remain
+labeled as such and do not replace this evidence. Numerical results, observed
+atomic wall overruns and unsupported scenarios are in [BENCHMARKS](BENCHMARKS.md).

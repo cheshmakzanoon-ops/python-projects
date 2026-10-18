@@ -1,0 +1,167 @@
+{
+  "comparison_commit": "8661cb5fe49ffbd691f492ba20aefb8f84f67cb6",
+  "status": "passed",
+  "scope": "Project input bytes and locks; shared verification driver isolation fix rerun for Meridian. Documents/evidence are excluded according to recorded scopes.",
+  "comparisons": [
+    {
+      "project": "anchor",
+      "interpreter": "3.13.16",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "6efba1556543a98b8c0a36ff990d085569902ad50849b21bedd679fbf5f8e2f7"
+    },
+    {
+      "project": "anchor",
+      "interpreter": "3.14.8",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "6efba1556543a98b8c0a36ff990d085569902ad50849b21bedd679fbf5f8e2f7"
+    },
+    {
+      "project": "strata",
+      "interpreter": "3.13.16",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "659a97a504ee94224f58776d0ba763e8cc35b5293173c255c54c90049890b0ca"
+    },
+    {
+      "project": "strata",
+      "interpreter": "3.14.8",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "659a97a504ee94224f58776d0ba763e8cc35b5293173c255c54c90049890b0ca"
+    },
+    {
+      "project": "current",
+      "interpreter": "3.13.16",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "0e2a2b3cf102109102599055e7fbe0f591f7fbb78df02eb4374ed5393315d696"
+    },
+    {
+      "project": "current",
+      "interpreter": "3.14.8",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "0e2a2b3cf102109102599055e7fbe0f591f7fbb78df02eb4374ed5393315d696"
+    },
+    {
+      "project": "meridian",
+      "interpreter": "3.13.16",
+      "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "3920c2d41862f82459827bcdbb585c2fbb2f6c1db3ee93ef1e34737f80c6f746"
+    },
+    {
+      "project": "meridian",
+      "interpreter": "3.14.8",
+      "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "3920c2d41862f82459827bcdbb585c2fbb2f6c1db3ee93ef1e34737f80c6f746"
+    },
+    {
+      "project": "quarry",
+      "interpreter": "3.13.16",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "4f4fcbc49022feab9f8d7474972a5f9bd6d50e462d266c1065e8f8089acf53e8"
+    },
+    {
+      "project": "quarry",
+      "interpreter": "3.14.8",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "4f4fcbc49022feab9f8d7474972a5f9bd6d50e462d266c1065e8f8089acf53e8"
+    },
+    {
+      "project": "pytrace",
+      "interpreter": "3.13.16",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "3f6145be374e2914ee466534dac4691189d4a7531e678972353e2832ed47f2ac"
+    },
+    {
+      "project": "pytrace",
+      "interpreter": "3.14.8",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "3f6145be374e2914ee466534dac4691189d4a7531e678972353e2832ed47f2ac"
+    },
+    {
+      "project": "atlas",
+      "interpreter": "3.13.16",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "08abfe0070f177f88f69841226ed525d8d6d64036192f9868ad60d4ee113898f"
+    },
+    {
+      "project": "atlas",
+      "interpreter": "3.14.8",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "08abfe0070f177f88f69841226ed525d8d6d64036192f9868ad60d4ee113898f"
+    },
+    {
+      "project": "proving-ground",
+      "interpreter": "3.13.16",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "eeea22a62454d2e7ae28c739abf45172110edab8f5ebcc24d5037d1a94e39552"
+    },
+    {
+      "project": "proving-ground",
+      "interpreter": "3.14.8",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "eeea22a62454d2e7ae28c739abf45172110edab8f5ebcc24d5037d1a94e39552"
+    },
+    {
+      "project": "routecraft",
+      "interpreter": "3.13.16",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "183ee8796cff65012ca533165044c0d2731f9a6dc1cf9bc50bd22c4571ec41e7"
+    },
+    {
+      "project": "routecraft",
+      "interpreter": "3.14.8",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "183ee8796cff65012ca533165044c0d2731f9a6dc1cf9bc50bd22c4571ec41e7"
+    },
+    {
+      "project": "resonance",
+      "interpreter": "3.13.16",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "b8b1d5d2662ad6d12b76b83da99b08ed1e271bcc471e68b8c300e5f9439497d6"
+    },
+    {
+      "project": "resonance",
+      "interpreter": "3.14.8",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "b8b1d5d2662ad6d12b76b83da99b08ed1e271bcc471e68b8c300e5f9439497d6"
+    }
+  ]
+}

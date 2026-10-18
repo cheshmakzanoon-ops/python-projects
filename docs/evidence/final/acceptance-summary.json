@@ -1,0 +1,720 @@
+{
+  "schema_version": 1,
+  "audited_at_utc": "2026-10-18T04:22:35.875409+00:00",
+  "comparison_commit": "dd808544337ab6a4f8bf0797dccaf010bf636371",
+  "status": "passed",
+  "scope": "Thirty accepted clean-source project/interpreter/profile wrappers and raw workloads, three public-interface integrations; current project and lock bytes match each accepted outer wrapper. Each raw report retains its own explicitly declared digest scope. Root/extended/remote status is recorded separately.",
+  "project_test_executions": 1136,
+  "counts": {
+    "anchor": {
+      "3.13.16": 54,
+      "3.14.8": 54
+    },
+    "strata": {
+      "3.13.16": 79,
+      "3.14.8": 79
+    },
+    "current": {
+      "3.13.16": 32,
+      "3.14.8": 32
+    },
+    "meridian": {
+      "3.13.16": 46,
+      "3.14.8": 46
+    },
+    "quarry": {
+      "3.13.16": 37,
+      "3.14.8": 37
+    },
+    "pytrace": {
+      "3.13.16": 77,
+      "3.14.8": 77
+    },
+    "atlas": {
+      "3.13.16": 40,
+      "3.14.8": 40
+    },
+    "proving-ground": {
+      "3.13.16": 103,
+      "3.14.8": 103
+    },
+    "routecraft": {
+      "3.13.16": 75,
+      "3.14.8": 75
+    },
+    "resonance": {
+      "3.13.16": 25,
+      "3.14.8": 25
+    }
+  },
+  "reports": [
+    {
+      "path": "docs/evidence/final/python313/anchor-3.13.16.json",
+      "sha256": "72b95156bc45297d27908cdf803ce5a668b905022928e076039933ab57f3f1b0",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/anchor-3.13.16-benchmark-benchmark.json",
+      "sha256": "e4de9b9af06f6bb9949722823999460b9bc2a6c59976b802a483c057b837101e",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/anchor-3.14.8.json",
+      "sha256": "e70fc34f6f90ef445523994a124c71d517567196c6a809d4065b371df8c8ba16",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/anchor-3.14.8-benchmark-benchmark.json",
+      "sha256": "083ce7628f3d7273c189fa02d5d0d6b8f54ca4b88cdc1686c05c90a83d02e470",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/anchor-3.14.8.json",
+      "sha256": "8c767f7cf70b0702987d14710a331e09f7f3b7f11bd2880f006bf368936897d7",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/anchor-3.14.8-benchmark-benchmark.json",
+      "sha256": "e4e2e9b32f698edb26086bc624cf13e9ffdfb6010caa0d0eae3fe21dc29e24d5",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/strata-3.13.16.json",
+      "sha256": "e3fc000167eb45248f4ead90d1ccee8213ef94c5ccaa633445edc0ef6b2d9c1a",
+      "tested_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/strata-3.13.16-benchmark-benchmark.json",
+      "sha256": "aabd67543394c46779d56907b3285ad75c8939b37862aa2244774ceae1e6de75",
+      "tested_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/strata-3.14.8.json",
+      "sha256": "d5e96c4133740312e39dc3ebdbf4c99baee51f8fb07020c6516aece533601943",
+      "tested_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/strata-3.14.8-benchmark-benchmark.json",
+      "sha256": "677ff1f2f6892493884d62adfb2ab27dd3b3869c385005b2126417f66f8f523e",
+      "tested_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/strata-3.14.8.json",
+      "sha256": "6d82514ccf67792fd43fc91a0caf3532d12f891fc6cc6623ee673e39fb155243",
+      "tested_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/strata-3.14.8-benchmark-benchmark.json",
+      "sha256": "f6278587d7e98b52c601dbd0f403ba911380e3496bf68f261db934e1eea7808a",
+      "tested_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/current-3.13.16.json",
+      "sha256": "b8595e510a961860ffa8b49c638e56495386c020b1f508d00beba265f39d6188",
+      "tested_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/current-3.13.16-benchmark-benchmark.json",
+      "sha256": "fd2ac116506955f73782c84193ce651ce7d2ec4491387d9d5dac481a40f6807b",
+      "tested_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/current-3.14.8.json",
+      "sha256": "5d8b5a4a7b0d8c26813857830aa99e7da13bcd1f3276888c82ebe4f2a18b4bef",
+      "tested_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/current-3.14.8-benchmark-benchmark.json",
+      "sha256": "1868928e6ec54a6f6107b01fc036708288e44fce1e6a25636f736140a2918689",
+      "tested_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/current-3.14.8.json",
+      "sha256": "03b06d79be35f2609b390d0b1bc215fdc87e73116581a53db265c217da7fb643",
+      "tested_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/current-3.14.8-benchmark-benchmark.json",
+      "sha256": "d66905b828476ed1f06e414878d673bceb159b99d55bfad620bad5f60a17b3c5",
+      "tested_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/meridian-3.13.16.json",
+      "sha256": "f84f875cd925dacdcd437dbee44a5e620f63c5d004bffe7bc0d67689df88860a",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/meridian-3.13.16-benchmark-benchmark.json",
+      "sha256": "7a04c048d95fb8e538a6353ff815d92eb11fc2a1d777495e05cc19dc656d438a",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/meridian-3.14.8.json",
+      "sha256": "0b6c0fc68b07079f42c49beeee600923076c6f1038ebc920f8b4b5be4755e152",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/meridian-3.14.8-benchmark-benchmark.json",
+      "sha256": "53679ff04e586c404d38756b76de03e94772d315abafa240ed0041b19c6bd76c",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/meridian-3.14.8.json",
+      "sha256": "05bd59fbe0153ddfd7638a1c6224875ff74d79306d1a3022a3f399741d3e35b4",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/meridian-3.14.8-benchmark-benchmark.json",
+      "sha256": "31931e9dcc8b3887479aa8d83cac9c54438827d2a057bbf3ff4c59c870b31838",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/quarry-3.13.16.json",
+      "sha256": "0fbc32b2c5afae395ab601c4e667288a4dccc239a7f1b3410e136fc0632c6db6",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/quarry-3.13.16-benchmark-benchmark.json",
+      "sha256": "b67bcb5be4a258bdfad3e8df2725e809b650864ed536c6a291d7ed7814766b69",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/quarry-3.14.8.json",
+      "sha256": "3606a1c8862595b98223983587f5772495b5d388f1b687fcd97f4da671c69ce3",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/quarry-3.14.8-benchmark-benchmark.json",
+      "sha256": "5e56775ba0b2dd15ad80346afa423cb5390cb5ee61cfaaeaee6566b3758bb7e3",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/quarry-3.14.8.json",
+      "sha256": "78a73758acce49cb3e57214b9c7558dada67daaeef47642fcd93a7a4a644c1f1",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/quarry-3.14.8-benchmark-benchmark.json",
+      "sha256": "c2c4bad1fe214555b7c0d021506f8fadaf28cf4351c8e066c2c3c2b9f36ee0fe",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/pytrace-3.13.16.json",
+      "sha256": "4383a3bf944d438bc7b394901a0eec195d38c55c245f86ecabb7e60c8bbd5619",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/pytrace-3.13.16-benchmark-benchmark.json",
+      "sha256": "12eaf8e59a14e479b25e0b4d261fb75a321262df8ce3cfccf6a183c901be236e",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/pytrace-3.14.8.json",
+      "sha256": "571c050ea4a75b578b87b318a8c92dbc5229fd45f714f6f295076f958dbf87d4",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/pytrace-3.14.8-benchmark-benchmark.json",
+      "sha256": "bca8456fbd9578f4f176bb3d4d30600650415af2a58cb14ceb131b76faaed373",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/pytrace-3.14.8.json",
+      "sha256": "c5d388c7e9e20a89208500e60c0bba57c7181c0ee799b1b337c4a26fbc62d454",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/pytrace-3.14.8-benchmark-benchmark.json",
+      "sha256": "a10f2b8720ab7bc5dbe49fa9467ad6067723482e978515b7c510296bd7f384ca",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/atlas-3.13.16.json",
+      "sha256": "3b839ccb1937a3255929ea4395267638279831c0a683d3bad4ed724e52f6b71a",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/atlas-3.13.16-benchmark-benchmark.json",
+      "sha256": "3b82f50f31d91591a2426f190dbf99cf1ce6d9d3695f21bea8d0fd90cd71f7a2",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/atlas-3.14.8.json",
+      "sha256": "d35656f6dc1598af534eac16c49e64aebc5a2b838055d4bef66a363f8e01c8f2",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/atlas-3.14.8-benchmark-benchmark.json",
+      "sha256": "157843c53202edf8cbb3f351605bee2722dcceeb680bcb70baff2bd28bbfd104",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/atlas-3.14.8.json",
+      "sha256": "d2883aaefdb0fb0bf2c0eb06886dca5e1dfaf49b758cca407773b20c0e9c51f9",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/atlas-3.14.8-benchmark-benchmark.json",
+      "sha256": "25d6863292655532280c14170fddc03a2949db54ba9b31c3b580a65e8ffdfee2",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/proving-ground-3.13.16.json",
+      "sha256": "da28c4387225c07b2c2596255bca341316ef6a1a97d97a848e746df89eee2ab0",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/proving-ground-3.13.16-benchmark-benchmark.json",
+      "sha256": "aeef8b98cae8ca4400ef3d369c3e3f2e13cfa10c873d82ae9eb6a596d1d598ff",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/proving-ground-3.13.16-benchmark-report.json",
+      "sha256": "aeef8b98cae8ca4400ef3d369c3e3f2e13cfa10c873d82ae9eb6a596d1d598ff",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/proving-ground-3.14.8.json",
+      "sha256": "14a6d364c835f0f4367d4a32bad7d61dcd69c6148dc0fce89d6ca9d8a69ef93b",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/proving-ground-3.14.8-benchmark-benchmark.json",
+      "sha256": "cb64c991e6f63f7358b3b3521fb7795ad8a1f6238ed340d664e0ecf9c89a6b96",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/proving-ground-3.14.8-benchmark-report.json",
+      "sha256": "cb64c991e6f63f7358b3b3521fb7795ad8a1f6238ed340d664e0ecf9c89a6b96",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/proving-ground-3.14.8.json",
+      "sha256": "9fbda5200190b4cf966b6155377103d315f44c793aa59a84df839a2ebf714f4e",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/proving-ground-3.14.8-benchmark-benchmark.json",
+      "sha256": "e15ad0b784d98ea150a809d0ee9eb04b193804d2747eb151ddee5690cd2d88c0",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/proving-ground-3.14.8-benchmark-report.json",
+      "sha256": "e15ad0b784d98ea150a809d0ee9eb04b193804d2747eb151ddee5690cd2d88c0",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/routecraft-3.13.16.json",
+      "sha256": "bb312524d663a98d7de04350d4e41465fb611686972266da7bccd74d9de128b9",
+      "tested_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/routecraft-3.13.16-benchmark-benchmark.json",
+      "sha256": "0b3c33ab839a44f5b4381723061dbfe66e673c6a20a7561f8249f2650a787c44",
+      "tested_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/routecraft-3.14.8.json",
+      "sha256": "783499e6acefa5808e57b56237367f3bbce7f8699c646be827a8e7aac0c622d9",
+      "tested_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/routecraft-3.14.8-benchmark-benchmark.json",
+      "sha256": "432b0d448349cd4903dbdfd541b1b4e13bed50803c6c6873b8429805910769a1",
+      "tested_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/routecraft-3.14.8.json",
+      "sha256": "f9bc822b4108e1bbd0ae7d462cf4371ccceae144a7a55f573af547a9cff3f002",
+      "tested_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/routecraft-3.14.8-benchmark-benchmark.json",
+      "sha256": "0112693c3b2ddf7af2cbe568fe3a57baf465cc404c02be4cdfe3c87cb020aacc",
+      "tested_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/resonance-3.13.16.json",
+      "sha256": "6e343775a671f7b1d5fbe25a5d30a1fede7897096cd3833a4f57551a6e4379b0",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python313/resonance-3.13.16-benchmark-benchmark.json",
+      "sha256": "7786a63d40f019e7d30e709fb8bfb23965f7f5dd0edf2db8f5278937b79e2ae9",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/resonance-3.14.8.json",
+      "sha256": "b91ce709d043fc51158f43e03d87f3d27ff039ff39c0acf8e29536f828d89b3b",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/python314/resonance-3.14.8-benchmark-benchmark.json",
+      "sha256": "13ac8c9cf776f32028954e757f2e26c16d0c6ec0bdb4125db8290e9224dd81ff",
+      "tested_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/resonance-3.14.8.json",
+      "sha256": "4cc145eab8fe17ba03f9497ded6e776449e0759d44b66fdb09e2ae420c2491f2",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/standard/resonance-3.14.8-benchmark-benchmark.json",
+      "sha256": "a476329142f0eb76bef73767ce3f97acfd6181813fa8c697e7b4b45168ce4c62",
+      "tested_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/integrations/settlement/integration.json",
+      "sha256": "ae97b1a2aa0c131fcc7352cd1f60d86420d50d9526d753c375d85c08f763a8fe",
+      "tested_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/integrations/stream-lake/integration.json",
+      "sha256": "82c057926457272e7c7db0bb74886fa0e42c78bef44080d62b1764fb8133cbb8",
+      "tested_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "status": "passed"
+    },
+    {
+      "path": "docs/evidence/final/integrations/code-search/integration.json",
+      "sha256": "75c736ad14f53255df103383d83288f1de157cbc39ca2ac2e71616fc79a4a6e4",
+      "tested_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "status": "passed"
+    }
+  ],
+  "comparisons": [
+    {
+      "project": "anchor",
+      "interpreter": "3.13.16",
+      "profile": "python313",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "6efba1556543a98b8c0a36ff990d085569902ad50849b21bedd679fbf5f8e2f7"
+    },
+    {
+      "project": "anchor",
+      "interpreter": "3.14.8",
+      "profile": "python314",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "6efba1556543a98b8c0a36ff990d085569902ad50849b21bedd679fbf5f8e2f7"
+    },
+    {
+      "project": "anchor",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "6efba1556543a98b8c0a36ff990d085569902ad50849b21bedd679fbf5f8e2f7"
+    },
+    {
+      "project": "strata",
+      "interpreter": "3.13.16",
+      "profile": "python313",
+      "verified_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "1cdc88c267fb33729306baf20f97761fa8774e191f657d961f5c1f2777840efd"
+    },
+    {
+      "project": "strata",
+      "interpreter": "3.14.8",
+      "profile": "python314",
+      "verified_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "1cdc88c267fb33729306baf20f97761fa8774e191f657d961f5c1f2777840efd"
+    },
+    {
+      "project": "strata",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "1cdc88c267fb33729306baf20f97761fa8774e191f657d961f5c1f2777840efd"
+    },
+    {
+      "project": "current",
+      "interpreter": "3.13.16",
+      "profile": "python313",
+      "verified_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "c8f3435c518bd48e45805db9a11c8d91d08108d59471f10e776735d7f3106eca"
+    },
+    {
+      "project": "current",
+      "interpreter": "3.14.8",
+      "profile": "python314",
+      "verified_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "c8f3435c518bd48e45805db9a11c8d91d08108d59471f10e776735d7f3106eca"
+    },
+    {
+      "project": "current",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "c8f3435c518bd48e45805db9a11c8d91d08108d59471f10e776735d7f3106eca"
+    },
+    {
+      "project": "meridian",
+      "interpreter": "3.13.16",
+      "profile": "python313",
+      "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "3920c2d41862f82459827bcdbb585c2fbb2f6c1db3ee93ef1e34737f80c6f746"
+    },
+    {
+      "project": "meridian",
+      "interpreter": "3.14.8",
+      "profile": "python314",
+      "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "3920c2d41862f82459827bcdbb585c2fbb2f6c1db3ee93ef1e34737f80c6f746"
+    },
+    {
+      "project": "meridian",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "3920c2d41862f82459827bcdbb585c2fbb2f6c1db3ee93ef1e34737f80c6f746"
+    },
+    {
+      "project": "quarry",
+      "interpreter": "3.13.16",
+      "profile": "python313",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "4f4fcbc49022feab9f8d7474972a5f9bd6d50e462d266c1065e8f8089acf53e8"
+    },
+    {
+      "project": "quarry",
+      "interpreter": "3.14.8",
+      "profile": "python314",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "4f4fcbc49022feab9f8d7474972a5f9bd6d50e462d266c1065e8f8089acf53e8"
+    },
+    {
+      "project": "quarry",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "4f4fcbc49022feab9f8d7474972a5f9bd6d50e462d266c1065e8f8089acf53e8"
+    },
+    {
+      "project": "pytrace",
+      "interpreter": "3.13.16",
+      "profile": "python313",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "3f6145be374e2914ee466534dac4691189d4a7531e678972353e2832ed47f2ac"
+    },
+    {
+      "project": "pytrace",
+      "interpreter": "3.14.8",
+      "profile": "python314",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "3f6145be374e2914ee466534dac4691189d4a7531e678972353e2832ed47f2ac"
+    },
+    {
+      "project": "pytrace",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "3f6145be374e2914ee466534dac4691189d4a7531e678972353e2832ed47f2ac"
+    },
+    {
+      "project": "atlas",
+      "interpreter": "3.13.16",
+      "profile": "python313",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "08abfe0070f177f88f69841226ed525d8d6d64036192f9868ad60d4ee113898f"
+    },
+    {
+      "project": "atlas",
+      "interpreter": "3.14.8",
+      "profile": "python314",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "08abfe0070f177f88f69841226ed525d8d6d64036192f9868ad60d4ee113898f"
+    },
+    {
+      "project": "atlas",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "08abfe0070f177f88f69841226ed525d8d6d64036192f9868ad60d4ee113898f"
+    },
+    {
+      "project": "proving-ground",
+      "interpreter": "3.13.16",
+      "profile": "python313",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "eeea22a62454d2e7ae28c739abf45172110edab8f5ebcc24d5037d1a94e39552"
+    },
+    {
+      "project": "proving-ground",
+      "interpreter": "3.14.8",
+      "profile": "python314",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "eeea22a62454d2e7ae28c739abf45172110edab8f5ebcc24d5037d1a94e39552"
+    },
+    {
+      "project": "proving-ground",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "eeea22a62454d2e7ae28c739abf45172110edab8f5ebcc24d5037d1a94e39552"
+    },
+    {
+      "project": "routecraft",
+      "interpreter": "3.13.16",
+      "profile": "python313",
+      "verified_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "75771d0bde227d959163d644c0ffd95ed62cfc4c4e53b4ad337ef2679bc325ee"
+    },
+    {
+      "project": "routecraft",
+      "interpreter": "3.14.8",
+      "profile": "python314",
+      "verified_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "75771d0bde227d959163d644c0ffd95ed62cfc4c4e53b4ad337ef2679bc325ee"
+    },
+    {
+      "project": "routecraft",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "75771d0bde227d959163d644c0ffd95ed62cfc4c4e53b4ad337ef2679bc325ee"
+    },
+    {
+      "project": "resonance",
+      "interpreter": "3.13.16",
+      "profile": "python313",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "b8b1d5d2662ad6d12b76b83da99b08ed1e271bcc471e68b8c300e5f9439497d6"
+    },
+    {
+      "project": "resonance",
+      "interpreter": "3.14.8",
+      "profile": "python314",
+      "verified_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "b8b1d5d2662ad6d12b76b83da99b08ed1e271bcc471e68b8c300e5f9439497d6"
+    },
+    {
+      "project": "resonance",
+      "interpreter": "3.14.8",
+      "profile": "standard",
+      "verified_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+      "project_content_unchanged": true,
+      "lockfile_unchanged": true,
+      "source_content_sha256": "b8b1d5d2662ad6d12b76b83da99b08ed1e271bcc471e68b8c300e5f9439497d6"
+    }
+  ]
+}
