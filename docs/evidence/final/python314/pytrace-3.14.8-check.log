@@ -1,0 +1,68 @@
+[06-pytrace] uv run --locked --python 3.14.8 ruff format --check .
+Using CPython 3.14.8
+Creating virtual environment at: .venv
+   Building pp-pytrace @ file:///workspace/portfolio-verify-s21ujvba/source/projects/06-pytrace
+      Built pp-pytrace @ file:///workspace/portfolio-verify-s21ujvba/source/projects/06-pytrace
+Installed 25 packages in 479ms
+44 files already formatted
+[06-pytrace] uv run --locked --python 3.14.8 ruff check .
+All checks passed!
+[06-pytrace] uv run --locked --python 3.14.8 mypy src
+Success: no issues found in 24 source files
+[06-pytrace] uv run --locked --python 3.14.8 pytest
+============================= test session starts ==============================
+platform linux -- Python 3.14.8, pytest-9.1.1, pluggy-1.7.0
+rootdir: /workspace/portfolio-verify-s21ujvba/source/projects/06-pytrace
+configfile: pyproject.toml
+testpaths: tests
+plugins: cov-7.1.0, hypothesis-6.170.1
+collected 77 items
+
+tests/acceptance/test_contract.py ....                                   [  5%]
+tests/integration/test_apply.py ..........                               [ 18%]
+tests/integration/test_cache_and_parser.py ..........                    [ 31%]
+tests/property/test_lattice.py ..                                        [ 33%]
+tests/unit/test_codemods.py .....................                        [ 61%]
+tests/unit/test_engine.py ..............................                 [100%]
+
+============================= 77 passed in 17.21s ==============================
+[06-pytrace] uv build --no-sources --python 3.14.8
+Building source distribution...
+Building wheel from source distribution...
+Successfully built dist/pp_pytrace-0.1.0.tar.gz
+Successfully built dist/pp_pytrace-0.1.0-py3-none-any.whl
+[06-pytrace] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/portfolio-verify-s21ujvba/source/scripts/wheel_smoke.py /workspace/portfolio-verify-s21ujvba/source/projects/06-pytrace pp_pytrace
+Using CPython 3.14.8
+Creating virtual environment at: /tmp/portfolio-wheel-rlu8pj4g/venv
+Activate with: source /tmp/portfolio-wheel-rlu8pj4g/venv/bin/activate
+Resolved 27 packages in 1ms
+Using Python 3.14.8 environment at: /tmp/portfolio-wheel-rlu8pj4g/venv
+Resolved 8 packages in 280ms
+Prepared 1 package in 16ms
+Installed 8 packages in 13ms
+ + attrs==26.1.0
+ + jsonschema==4.26.0
+ + jsonschema-specifications==2025.9.1
+ + libcst==1.9.0
+ + pp-pytrace==0.1.0 (from file:///workspace/portfolio-verify-s21ujvba/source/projects/06-pytrace/dist/pp_pytrace-0.1.0-py3-none-any.whl)
+ + pyyaml==6.0.3
+ + referencing==0.37.0
+ + rpds-py==2026.9.1
+/tmp/portfolio-wheel-rlu8pj4g/venv/lib/python3.14/site-packages/pp_pytrace/__init__.py
+{
+  "schema_version": 1,
+  "project": "pytrace",
+  "seed": 1729,
+  "findings": [
+    "PT001",
+    "PT003",
+    "PT002",
+    "PT003"
+  ],
+  "safe_edits": 1,
+  "transformations": 2,
+  "patch": "preview.patch",
+  "idempotent": true,
+  "security_findings_preserved": true,
+  "status": "passed"
+}

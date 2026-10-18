@@ -1,0 +1,133 @@
+{
+  "initial_shell": {
+    "generation": 1,
+    "acl_revision": 2,
+    "total": 1,
+    "hits": [
+      {
+        "id": "public_service.py:790b07c46cef5c7c6d8e49dd",
+        "revision": "eac1623e824b4db38315eb366697c553",
+        "title": "PT001 public_service.py",
+        "score": 0.6630103466225564,
+        "snippet": "<mark>PT001</mark> public_service.py Untrusted value flows to a shell-enabled process     command = input()     sp.run(command, shell=True)  configured untrusted source Untrusted value flows to a shell-enabled process",
+        "explanation": {
+          "pt001": 0.6630103466225564
+        }
+      }
+    ],
+    "facets": {
+      "diagnostic": 1
+    },
+    "visible_documents": 2,
+    "statistics": {
+      "N": 2,
+      "average_length": 27.0,
+      "document_frequency": {
+        "pt001": 1
+      },
+      "k1": 1.2,
+      "b": 0.75
+    }
+  },
+  "after_fix_shell_count": 0,
+  "source_filter_query": {
+    "generation": 3,
+    "acl_revision": 4,
+    "total": 1,
+    "hits": [
+      {
+        "id": "public_service.py:c195ab0e4cce21b573b5cf36",
+        "revision": "2a37d4bad51d4933ac102ccad5c14f8b",
+        "title": "PT003 public_service.py",
+        "score": 0.2876820724517809,
+        "snippet": "<mark>PT003</mark> public_service.py Configured synchronous blocking call inside async function async def poll():     clock.sleep(1) Configured synchronous blocking call inside async function",
+        "explanation": {
+          "pt003": 0.2876820724517809
+        }
+      }
+    ],
+    "facets": {
+      "diagnostic": 1
+    },
+    "visible_documents": 1,
+    "statistics": {
+      "N": 1,
+      "average_length": 24.0,
+      "document_frequency": {
+        "pt003": 1
+      },
+      "k1": 1.2,
+      "b": 0.75
+    }
+  },
+  "evidence_query": {
+    "generation": 3,
+    "acl_revision": 4,
+    "total": 1,
+    "hits": [
+      {
+        "id": "public_service.py:c195ab0e4cce21b573b5cf36",
+        "revision": "2a37d4bad51d4933ac102ccad5c14f8b",
+        "title": "PT003 public_service.py",
+        "score": 0.8476346777597116,
+        "snippet": "PT003 public_service.py Configured synchronous <mark>blocking</mark> call inside <mark>async</mark> function <mark>async</mark> def poll():     clock.sleep(1) Configured synchronous <mark>blocking</mark> call inside <mark>async</mark> function",
+        "explanation": {
+          "async": 0.4520718281385129,
+          "blocking": 0.3955628496211987
+        }
+      }
+    ],
+    "facets": {
+      "diagnostic": 1
+    },
+    "visible_documents": 1,
+    "statistics": {
+      "N": 1,
+      "average_length": 24.0,
+      "document_frequency": {
+        "async": 1,
+        "blocking": 1
+      },
+      "k1": 1.2,
+      "b": 0.75
+    }
+  },
+  "public_before_hidden_update": {
+    "total": 1,
+    "facets": {
+      "diagnostic": 1
+    },
+    "visible_documents": 1,
+    "hits": [
+      {
+        "id": "public_service.py:c195ab0e4cce21b573b5cf36",
+        "score": 0.2876820724517809,
+        "snippet": "<mark>PT003</mark> public_service.py Configured synchronous blocking call inside async function async def poll():     clock.sleep(1) Configured synchronous blocking call inside async function",
+        "title": "PT003 public_service.py"
+      }
+    ]
+  },
+  "public_after_hidden_update": {
+    "total": 1,
+    "facets": {
+      "diagnostic": 1
+    },
+    "visible_documents": 1,
+    "hits": [
+      {
+        "id": "public_service.py:c195ab0e4cce21b573b5cf36",
+        "score": 0.2876820724517809,
+        "snippet": "<mark>PT003</mark> public_service.py Configured synchronous blocking call inside async function async def poll():     clock.sleep(1) Configured synchronous blocking call inside async function",
+        "title": "PT003 public_service.py"
+      }
+    ]
+  },
+  "obsolete_ids_deleted": [
+    "public_service.py:790b07c46cef5c7c6d8e49dd"
+  ],
+  "restricted_direct_fetch_denied": true,
+  "exports_authorized": true,
+  "revocation_observed_next_request": true,
+  "cross_tenant_isolated": true,
+  "merge_preserved_ranking": true
+}

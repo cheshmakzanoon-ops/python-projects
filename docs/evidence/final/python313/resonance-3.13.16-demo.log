@@ -1,0 +1,9 @@
+[10-resonance] uv run --locked --python 3.13.16 python -m pp_resonance.cli demo --output /workspace/portfolio-verify-q_j50t9a/source/.local/resonance/demo --seed 1729
+{
+  "notes": 6,
+  "midi_checked": 6,
+  "report": "/workspace/portfolio-verify-q_j50t9a/source/.local/resonance/demo/analysis.html",
+  "diagnostics": [
+    "46 non-silent frames were uncertain; no criticism inferred"
+  ]
+}

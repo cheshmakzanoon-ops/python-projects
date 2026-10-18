@@ -1,0 +1,137 @@
+[01-anchor] uv run --locked --python 3.14.8 python -m pp_anchor.cli benchmark --output /workspace/portfolio-verify-s21ujvba/source/.local/anchor/benchmark --seed 1729 --profile ci
+{
+  "repetitions": [
+    {
+      "elapsed_seconds": 6.360034553000332,
+      "admission_seconds": 0.8899479780002366,
+      "offered_workflows": 100,
+      "completed_workflows": 100,
+      "activities": 500,
+      "execution_attempts": 505,
+      "injected_failures": 5,
+      "admitted_queue_depth": 100,
+      "workflows_per_second": 15.72318501836208,
+      "metrics": {
+        "tasks": {
+          "completed": 500
+        },
+        "runs": {
+          "completed": 100
+        },
+        "retries": 5,
+        "created_to_start_p95_seconds": 5.1554766,
+        "ready_to_start_p95_seconds": 4.103395599999996,
+        "expired_leases": 0,
+        "database_size_bytes": 2301952
+      }
+    },
+    {
+      "elapsed_seconds": 5.867872284999976,
+      "admission_seconds": 0.6250906159998522,
+      "offered_workflows": 100,
+      "completed_workflows": 100,
+      "activities": 500,
+      "execution_attempts": 505,
+      "injected_failures": 5,
+      "admitted_queue_depth": 100,
+      "workflows_per_second": 17.041952370986277,
+      "metrics": {
+        "tasks": {
+          "completed": 500
+        },
+        "runs": {
+          "completed": 100
+        },
+        "retries": 5,
+        "created_to_start_p95_seconds": 4.899745800000001,
+        "ready_to_start_p95_seconds": 3.8438079999999997,
+        "expired_leases": 0,
+        "database_size_bytes": 2252800
+      }
+    },
+    {
+      "elapsed_seconds": 5.913705641999968,
+      "admission_seconds": 0.6521596269999463,
+      "offered_workflows": 100,
+      "completed_workflows": 100,
+      "activities": 500,
+      "execution_attempts": 505,
+      "injected_failures": 5,
+      "admitted_queue_depth": 100,
+      "workflows_per_second": 16.909871078091196,
+      "metrics": {
+        "tasks": {
+          "completed": 500
+        },
+        "runs": {
+          "completed": 100
+        },
+        "retries": 5,
+        "created_to_start_p95_seconds": 4.9338945999999995,
+        "ready_to_start_p95_seconds": 3.890135799999999,
+        "expired_leases": 0,
+        "database_size_bytes": 2301952
+      }
+    },
+    {
+      "elapsed_seconds": 6.568040720000226,
+      "admission_seconds": 0.6181430589999763,
+      "offered_workflows": 100,
+      "completed_workflows": 100,
+      "activities": 500,
+      "execution_attempts": 505,
+      "injected_failures": 5,
+      "admitted_queue_depth": 100,
+      "workflows_per_second": 15.225240564585986,
+      "metrics": {
+        "tasks": {
+          "completed": 500
+        },
+        "runs": {
+          "completed": 100
+        },
+        "retries": 5,
+        "created_to_start_p95_seconds": 5.6393946,
+        "ready_to_start_p95_seconds": 4.637333799999999,
+        "expired_leases": 0,
+        "database_size_bytes": 2236416
+      }
+    },
+    {
+      "elapsed_seconds": 9.332263672000408,
+      "admission_seconds": 0.8162432610001815,
+      "offered_workflows": 100,
+      "completed_workflows": 100,
+      "activities": 500,
+      "execution_attempts": 505,
+      "injected_failures": 5,
+      "admitted_queue_depth": 100,
+      "workflows_per_second": 10.715513782580963,
+      "metrics": {
+        "tasks": {
+          "completed": 500
+        },
+        "runs": {
+          "completed": 100
+        },
+        "retries": 5,
+        "created_to_start_p95_seconds": 6.4793822,
+        "ready_to_start_p95_seconds": 3.9275571999999994,
+        "expired_leases": 0,
+        "database_size_bytes": 2269184
+      }
+    }
+  ],
+  "median_workflows_per_second": 15.72318501836208,
+  "min_workflows_per_second": 10.715513782580963,
+  "maxrss_kib": 43308,
+  "future_timer_probe": {
+    "timers": 100000,
+    "loaded_seconds": 2.732719911999993,
+    "idle_tick_seconds": 0.05943772099999478,
+    "fired": 0,
+    "maxrss_growth_kib": 0,
+    "fixture": "isolated bulk future timer projection; no suspended timer coroutines"
+  },
+  "lease_recovery_seconds": 0.26434695100033423
+}

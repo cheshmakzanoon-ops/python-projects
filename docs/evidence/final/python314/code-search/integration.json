@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "integration": "code-search",
+  "source_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+  "source_dirty": false,
+  "status": "passed",
+  "stages": [
+    {
+      "project": "pytrace",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.14.8",
+        "python",
+        "/workspace/portfolio-verify-s21ujvba/source/integrations/03-code-search/pytrace_stage.py",
+        "--output",
+        "/workspace/python-projects/.local/final-evidence/python314/code-search"
+      ],
+      "exit_code": 0,
+      "seconds": 0.5160907109993786,
+      "stage_sha256": "6d8fea671585a42ff03fc271f5cedca9feb7ad797c3cb1d9f5bd6fdf918390f2"
+    },
+    {
+      "project": "atlas",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.14.8",
+        "python",
+        "/workspace/portfolio-verify-s21ujvba/source/integrations/03-code-search/atlas_stage.py",
+        "--output",
+        "/workspace/python-projects/.local/final-evidence/python314/code-search"
+      ],
+      "exit_code": 0,
+      "seconds": 0.21493411399933393,
+      "stage_sha256": "0eef1863071afaca9ff38ee6e3930c7282dd93def3ed4d36e06f4e7de34ae8c1"
+    }
+  ]
+}

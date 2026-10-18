@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "project": "pytrace",
+  "source_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+  "source_dirty": false,
+  "source_scope": "project",
+  "provenance_limitation": null,
+  "source_content_sha256": "2190249903f5caae44319390d13bf8fb518fc77e0ab1aa8814a2466a916bbf43",
+  "root_contract_sha256": "3d49d75f3224a6934d9b2bad749de92ac6e9fae92a2e5a4f29cd7d6ee69c3bcd",
+  "lockfile_sha256": "4e0752505efdd7261423861af80c8e7fb9f89ce9569d5f09be728826d5507660",
+  "source_digest_inputs": [
+    "src/**",
+    "tests/**",
+    "benchmarks/**",
+    "examples/**",
+    "pyproject.toml",
+    "uv.lock",
+    ".python-version"
+  ],
+  "python": "3.13.16",
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+  "memory_limit_bytes": 34359738368,
+  "seed": 1729,
+  "profile": "ci",
+  "parameters": {
+    "threads": 1,
+    "parser_processes": 1,
+    "OMP_NUM_THREADS": "1",
+    "files": 60,
+    "fixture_files": 50,
+    "lines": 5619,
+    "corpus": "original synthetic source, contextual variants; no independent real-world accuracy claim",
+    "standard_cold_runs": 5
+  },
+  "warmup_runs": 1,
+  "measurement_runs": 5,
+  "dataset_id": "pytrace-reviewed-v1:e434296bdd2ce1e2122f0560776205b6857f7eae7ee7f4595db25e708428cf42",
+  "metrics": {
+    "cold_seconds": [
+      4.9890809209996405,
+      5.1723670839996885,
+      4.391743357999985,
+      5.813039615999969,
+      8.03127606199996
+    ],
+    "warm_seconds": [
+      0.2700529200001256,
+      0.34458851700037485,
+      0.31352286400033336,
+      0.3012821089996578,
+      0.3058017220000693
+    ],
+    "warm_median_seconds": 0.3058017220000693,
+    "cold_median_seconds": 5.1723670839996885,
+    "incremental_seconds": 0.6893239829996674,
+    "files_invalidated": 10,
+    "parse_failures": 0,
+    "peak_python_tracemalloc_bytes": 68390051,
+    "precision": 1.0,
+    "recall": 1.0,
+    "labeled_cases": 350,
+    "files_per_second_cold": 11.600104753896005,
+    "peak_analyzer_rss_bytes": 53395456,
+    "max_parser_child_peak_rss_bytes": 53395456
+  },
+  "correctness_checks": {
+    "labels_exact": true,
+    "incremental_equals_clean": true,
+    "dependency_closure_invalidated": true,
+    "no_parse_failures": true
+  },
+  "status": "passed",
+  "source_digest_unchanged": true
+}

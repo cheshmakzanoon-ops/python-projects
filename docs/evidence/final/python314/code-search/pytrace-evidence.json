@@ -1,0 +1,14 @@
+{
+  "initial_risks": 3,
+  "updated_risks": 2,
+  "removed_document_ids": [
+    "public_service.py:790b07c46cef5c7c6d8e49dd"
+  ],
+  "target_programs_executed": false,
+  "source_to_document_identity": "relative path + stable diagnostic ID",
+  "judged_queries": {
+    "PT001": "public shell finding initially; absent after update",
+    "PT002": "restricted SQL finding; operators only",
+    "PT003": "public async blocking finding throughout"
+  }
+}

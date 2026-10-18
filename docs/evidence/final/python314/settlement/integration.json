@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "integration": "settlement",
+  "source_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+  "source_dirty": false,
+  "status": "passed",
+  "stages": [
+    {
+      "project": "meridian",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.14.8",
+        "python",
+        "/workspace/portfolio-verify-s21ujvba/source/integrations/01-settlement/meridian_stage.py",
+        "--output",
+        "/workspace/python-projects/.local/final-evidence/python314/settlement"
+      ],
+      "exit_code": 0,
+      "seconds": 4.225795436000226,
+      "stage_sha256": "1c61b0a0d6d7c60afd1e1efa049c73201c3fac5791a7cf7eb73cb738d7d44185"
+    }
+  ]
+}

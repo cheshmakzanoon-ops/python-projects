@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "project": "atlas",
+  "seed": 1729,
+  "query": "\"wal recovery\"",
+  "ranked_authorized_results": {
+    "generation": 4,
+    "acl_revision": 5,
+    "total": 1,
+    "hits": [
+      {
+        "id": "runbook",
+        "revision": "b80f0647d8fb4cfeb14c031140a40063",
+        "title": "Recovering the journal",
+        "score": 0.628834555559538,
+        "snippet": "WAL <mark>recovery</mark> replays committed records. Escape &lt;script&gt;alert(&quot;unsafe&quot;)&lt;/script&gt;.",
+        "explanation": {
+          "recovery": 0.628834555559538
+        }
+      }
+    ],
+    "facets": {
+      "runbook": 1
+    },
+    "visible_documents": 2,
+    "statistics": {
+      "N": 2,
+      "average_length": 8.0,
+      "document_frequency": {
+        "recovery": 1
+      },
+      "k1": 1.2,
+      "b": 0.75
+    }
+  },
+  "checks": {
+    "grant_observed": true,
+    "revoke_observed": true,
+    "obsolete_revision_absent": true,
+    "merge_scores_preserved": true,
+    "escaped_snippet": true
+  },
+  "catalog": {
+    "generation": 4,
+    "acl_revision": 5,
+    "documents": 2,
+    "segments": 1,
+    "terms": 15
+  },
+  "status": "passed"
+}

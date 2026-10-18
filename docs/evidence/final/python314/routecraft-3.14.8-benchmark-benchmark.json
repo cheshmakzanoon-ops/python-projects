@@ -1,0 +1,1189 @@
+{
+  "correctness_checks": {
+    "all_search_trials_feasible": true,
+    "replanning": true,
+    "source_stable": true,
+    "tiny_exact": true
+  },
+  "cpu": "unknown",
+  "dataset_id": "island-v1:d59df98a7b525dff8143c6914cc4197eb3f1fde768b78e96ecbc036b994ae939",
+  "lockfile_sha256": "9aef9e96a988bfdd7403447241e67af694abf1c7d3910e57cae691e55643a011",
+  "measurement_runs": 5,
+  "memory_limit_bytes": null,
+  "metrics": {
+    "cases": [
+      {
+        "baseline": [
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.04130143499969563,
+            "first_feasible_seconds": 0.0016506599995409488,
+            "iterations": 20,
+            "objective": [
+              4,
+              869
+            ],
+            "operator_counts": [
+              [
+                "construction_restarts",
+                20
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                4,
+                4,
+                888
+              ],
+              [
+                12,
+                4,
+                869
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.038953150999986974,
+            "first_feasible_seconds": 0.002118090999829292,
+            "iterations": 20,
+            "objective": [
+              4,
+              869
+            ],
+            "operator_counts": [
+              [
+                "construction_restarts",
+                20
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                3,
+                4,
+                888
+              ],
+              [
+                11,
+                4,
+                869
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.042589985000631714,
+            "first_feasible_seconds": 0.0016189580001082504,
+            "iterations": 20,
+            "objective": [
+              4,
+              869
+            ],
+            "operator_counts": [
+              [
+                "construction_restarts",
+                20
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                2,
+                4,
+                888
+              ],
+              [
+                10,
+                4,
+                869
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.04006518200003484,
+            "first_feasible_seconds": 0.0016463829997519497,
+            "iterations": 20,
+            "objective": [
+              4,
+              869
+            ],
+            "operator_counts": [
+              [
+                "construction_restarts",
+                20
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                1,
+                4,
+                888
+              ],
+              [
+                9,
+                4,
+                869
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.049553036999895994,
+            "first_feasible_seconds": 0.0019612340001913253,
+            "iterations": 20,
+            "objective": [
+              4,
+              869
+            ],
+            "operator_counts": [
+              [
+                "construction_restarts",
+                20
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                1,
+                4,
+                969
+              ],
+              [
+                8,
+                4,
+                869
+              ]
+            ]
+          }
+        ],
+        "baseline_feasible_rate": 1.0,
+        "budget": {
+          "iterations": 20,
+          "seconds": 0.4
+        },
+        "customers": 25,
+        "paired_outcomes": [
+          "loss",
+          "loss",
+          "gain",
+          "gain",
+          "gain"
+        ],
+        "search": [
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.03622472600000037,
+            "first_feasible_seconds": 0.002259728000353789,
+            "iterations": 20,
+            "objective": [
+              4,
+              960
+            ],
+            "operator_counts": [
+              [
+                "relocate",
+                4
+              ],
+              [
+                "swap",
+                2
+              ],
+              [
+                "reverse",
+                3
+              ],
+              [
+                "random_destroy",
+                1
+              ],
+              [
+                "related_destroy",
+                10
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                4,
+                4,
+                979
+              ],
+              [
+                7,
+                4,
+                977
+              ],
+              [
+                9,
+                4,
+                964
+              ],
+              [
+                12,
+                4,
+                961
+              ],
+              [
+                15,
+                4,
+                960
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.03656300100010412,
+            "first_feasible_seconds": 0.0016252719997282838,
+            "iterations": 20,
+            "objective": [
+              4,
+              879
+            ],
+            "operator_counts": [
+              [
+                "relocate",
+                5
+              ],
+              [
+                "swap",
+                1
+              ],
+              [
+                "reverse",
+                0
+              ],
+              [
+                "random_destroy",
+                7
+              ],
+              [
+                "related_destroy",
+                7
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                3,
+                4,
+                979
+              ],
+              [
+                7,
+                4,
+                963
+              ],
+              [
+                11,
+                4,
+                932
+              ],
+              [
+                12,
+                4,
+                931
+              ],
+              [
+                13,
+                4,
+                926
+              ],
+              [
+                18,
+                4,
+                906
+              ],
+              [
+                19,
+                4,
+                879
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.04045628299991222,
+            "first_feasible_seconds": 0.001979640999707044,
+            "iterations": 20,
+            "objective": [
+              4,
+              748
+            ],
+            "operator_counts": [
+              [
+                "relocate",
+                4
+              ],
+              [
+                "swap",
+                2
+              ],
+              [
+                "reverse",
+                2
+              ],
+              [
+                "random_destroy",
+                10
+              ],
+              [
+                "related_destroy",
+                2
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                4,
+                4,
+                996
+              ],
+              [
+                6,
+                4,
+                842
+              ],
+              [
+                10,
+                4,
+                812
+              ],
+              [
+                14,
+                4,
+                762
+              ],
+              [
+                17,
+                4,
+                759
+              ],
+              [
+                18,
+                4,
+                752
+              ],
+              [
+                19,
+                4,
+                750
+              ],
+              [
+                20,
+                4,
+                748
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.02667594300055498,
+            "first_feasible_seconds": 0.0016074850000222796,
+            "iterations": 20,
+            "objective": [
+              4,
+              832
+            ],
+            "operator_counts": [
+              [
+                "relocate",
+                4
+              ],
+              [
+                "swap",
+                3
+              ],
+              [
+                "reverse",
+                4
+              ],
+              [
+                "random_destroy",
+                8
+              ],
+              [
+                "related_destroy",
+                1
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                2,
+                4,
+                987
+              ],
+              [
+                8,
+                4,
+                933
+              ],
+              [
+                12,
+                4,
+                881
+              ],
+              [
+                15,
+                4,
+                843
+              ],
+              [
+                16,
+                4,
+                832
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.03560027599996829,
+            "first_feasible_seconds": 0.002312416000677331,
+            "iterations": 20,
+            "objective": [
+              4,
+              822
+            ],
+            "operator_counts": [
+              [
+                "relocate",
+                2
+              ],
+              [
+                "swap",
+                2
+              ],
+              [
+                "reverse",
+                3
+              ],
+              [
+                "random_destroy",
+                9
+              ],
+              [
+                "related_destroy",
+                4
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                2,
+                4,
+                935
+              ],
+              [
+                3,
+                4,
+                902
+              ],
+              [
+                7,
+                4,
+                893
+              ],
+              [
+                8,
+                4,
+                887
+              ],
+              [
+                10,
+                4,
+                868
+              ],
+              [
+                11,
+                4,
+                829
+              ],
+              [
+                12,
+                4,
+                822
+              ]
+            ]
+          }
+        ],
+        "search_feasible_rate": 1.0,
+        "seed": 1729,
+        "tight_windows": false,
+        "verifier_seconds_median": 8.534800053894287e-05
+      },
+      {
+        "baseline": [
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.04078553399995144,
+            "first_feasible_seconds": 0.0023965800000951276,
+            "iterations": 20,
+            "objective": [
+              4,
+              869
+            ],
+            "operator_counts": [
+              [
+                "construction_restarts",
+                20
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                4,
+                4,
+                888
+              ],
+              [
+                12,
+                4,
+                869
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.045132737000130874,
+            "first_feasible_seconds": 0.002086090000375407,
+            "iterations": 20,
+            "objective": [
+              4,
+              869
+            ],
+            "operator_counts": [
+              [
+                "construction_restarts",
+                20
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                3,
+                4,
+                888
+              ],
+              [
+                11,
+                4,
+                869
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.04003376600030606,
+            "first_feasible_seconds": 0.0019850369999403483,
+            "iterations": 20,
+            "objective": [
+              4,
+              869
+            ],
+            "operator_counts": [
+              [
+                "construction_restarts",
+                20
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                2,
+                4,
+                888
+              ],
+              [
+                10,
+                4,
+                869
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.07708787699993991,
+            "first_feasible_seconds": 0.0038579000001845998,
+            "iterations": 20,
+            "objective": [
+              4,
+              869
+            ],
+            "operator_counts": [
+              [
+                "construction_restarts",
+                20
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                1,
+                4,
+                888
+              ],
+              [
+                9,
+                4,
+                869
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.07973155000036058,
+            "first_feasible_seconds": 0.003692467000291799,
+            "iterations": 20,
+            "objective": [
+              4,
+              869
+            ],
+            "operator_counts": [
+              [
+                "construction_restarts",
+                20
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                1,
+                4,
+                969
+              ],
+              [
+                8,
+                4,
+                869
+              ]
+            ]
+          }
+        ],
+        "baseline_feasible_rate": 1.0,
+        "budget": {
+          "iterations": 20,
+          "seconds": 0.4
+        },
+        "customers": 25,
+        "paired_outcomes": [
+          "loss",
+          "loss",
+          "gain",
+          "gain",
+          "gain"
+        ],
+        "search": [
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.030559786999219796,
+            "first_feasible_seconds": 0.0020872420000159764,
+            "iterations": 20,
+            "objective": [
+              4,
+              960
+            ],
+            "operator_counts": [
+              [
+                "relocate",
+                4
+              ],
+              [
+                "swap",
+                2
+              ],
+              [
+                "reverse",
+                3
+              ],
+              [
+                "random_destroy",
+                1
+              ],
+              [
+                "related_destroy",
+                10
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                4,
+                4,
+                979
+              ],
+              [
+                7,
+                4,
+                977
+              ],
+              [
+                9,
+                4,
+                964
+              ],
+              [
+                12,
+                4,
+                961
+              ],
+              [
+                15,
+                4,
+                960
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.0394681589996253,
+            "first_feasible_seconds": 0.0022427610001614084,
+            "iterations": 20,
+            "objective": [
+              4,
+              879
+            ],
+            "operator_counts": [
+              [
+                "relocate",
+                5
+              ],
+              [
+                "swap",
+                1
+              ],
+              [
+                "reverse",
+                0
+              ],
+              [
+                "random_destroy",
+                7
+              ],
+              [
+                "related_destroy",
+                7
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                3,
+                4,
+                979
+              ],
+              [
+                7,
+                4,
+                963
+              ],
+              [
+                11,
+                4,
+                932
+              ],
+              [
+                12,
+                4,
+                931
+              ],
+              [
+                13,
+                4,
+                926
+              ],
+              [
+                18,
+                4,
+                906
+              ],
+              [
+                19,
+                4,
+                879
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.056795182000314526,
+            "first_feasible_seconds": 0.0017997240001932369,
+            "iterations": 20,
+            "objective": [
+              4,
+              748
+            ],
+            "operator_counts": [
+              [
+                "relocate",
+                4
+              ],
+              [
+                "swap",
+                2
+              ],
+              [
+                "reverse",
+                2
+              ],
+              [
+                "random_destroy",
+                10
+              ],
+              [
+                "related_destroy",
+                2
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                4,
+                4,
+                996
+              ],
+              [
+                6,
+                4,
+                842
+              ],
+              [
+                10,
+                4,
+                812
+              ],
+              [
+                14,
+                4,
+                762
+              ],
+              [
+                17,
+                4,
+                759
+              ],
+              [
+                18,
+                4,
+                752
+              ],
+              [
+                19,
+                4,
+                750
+              ],
+              [
+                20,
+                4,
+                748
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.057756932000302186,
+            "first_feasible_seconds": 0.004848151000260259,
+            "iterations": 20,
+            "objective": [
+              4,
+              832
+            ],
+            "operator_counts": [
+              [
+                "relocate",
+                4
+              ],
+              [
+                "swap",
+                3
+              ],
+              [
+                "reverse",
+                4
+              ],
+              [
+                "random_destroy",
+                8
+              ],
+              [
+                "related_destroy",
+                1
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                2,
+                4,
+                987
+              ],
+              [
+                8,
+                4,
+                933
+              ],
+              [
+                12,
+                4,
+                881
+              ],
+              [
+                15,
+                4,
+                843
+              ],
+              [
+                16,
+                4,
+                832
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.07496536199960246,
+            "first_feasible_seconds": 0.0037441670001499006,
+            "iterations": 20,
+            "objective": [
+              4,
+              822
+            ],
+            "operator_counts": [
+              [
+                "relocate",
+                2
+              ],
+              [
+                "swap",
+                2
+              ],
+              [
+                "reverse",
+                3
+              ],
+              [
+                "random_destroy",
+                9
+              ],
+              [
+                "related_destroy",
+                4
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                4,
+                999
+              ],
+              [
+                2,
+                4,
+                935
+              ],
+              [
+                3,
+                4,
+                902
+              ],
+              [
+                7,
+                4,
+                893
+              ],
+              [
+                8,
+                4,
+                887
+              ],
+              [
+                10,
+                4,
+                868
+              ],
+              [
+                11,
+                4,
+                829
+              ],
+              [
+                12,
+                4,
+                822
+              ]
+            ]
+          }
+        ],
+        "search_feasible_rate": 1.0,
+        "seed": 1729,
+        "tight_windows": true,
+        "verifier_seconds_median": 0.0001570839995110873
+      }
+    ],
+    "memory_scope": "Linux process cumulative peak RSS, includes warmups and rendering imports",
+    "process_peak_rss_bytes": 73039872
+  },
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "parameters": {
+    "budget_semantics": "identical wall-clock and iteration caps, one initial constructor; baseline iterations are construction restarts, search iterations are neighborhoods; atomic operations may overrun wall cap",
+    "processes": 1,
+    "seeds": [
+      1729
+    ],
+    "threads": 1,
+    "tiers": [
+      25
+    ]
+  },
+  "profile": "ci",
+  "project": "routecraft",
+  "python": "3.14.8",
+  "root_contract_sha256": "f6eb7c7bfabd022f608c34f774f8007dc0f8310ed2c936cb60bcdb349494af58",
+  "schema_version": 1,
+  "seed": 1729,
+  "source_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+  "source_content_sha256": "4bc6043864f3321f2b64d594efad64245d44fed0e0865631e03cfcf6d2adac2d",
+  "source_dirty": false,
+  "source_scope": "project",
+  "status": "passed",
+  "warmup_runs": 1
+}

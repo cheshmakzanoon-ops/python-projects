@@ -1,0 +1,151 @@
+{
+  "first_run": "6e3802e0-fe36-4f89-b1a3-05f227a98851",
+  "first_journal_id": "f9b1cf2d-603d-4c71-83ae-975630e8418b",
+  "worker_was_killed_after_commit": true,
+  "first_status": "completed",
+  "first_history": [
+    {
+      "seq": 1,
+      "kind": "started",
+      "step": "",
+      "data": {
+        "digest": "666108174c11a59d92051a618a926d468cfc30aa11e1d4d51704fb61934cf28b"
+      },
+      "commands": [
+        "step:post"
+      ]
+    },
+    {
+      "seq": 2,
+      "kind": "activity_claimed",
+      "step": "post",
+      "data": {
+        "epoch": 1,
+        "attempt": 1,
+        "command_id": "step:post"
+      },
+      "commands": []
+    },
+    {
+      "seq": 3,
+      "kind": "activity_claimed",
+      "step": "post",
+      "data": {
+        "epoch": 2,
+        "attempt": 2,
+        "command_id": "step:post"
+      },
+      "commands": []
+    },
+    {
+      "seq": 4,
+      "kind": "step_completed",
+      "step": "post",
+      "data": {
+        "error": null,
+        "result": {
+          "journal_id": "f9b1cf2d-603d-4c71-83ae-975630e8418b"
+        },
+        "attempt": 2,
+        "retry_delay": 0
+      },
+      "commands": [
+        "terminal:completed"
+      ]
+    }
+  ],
+  "compensation_run": "ce206c02-af43-4816-b672-23c78f61744f",
+  "compensation_status": "compensated",
+  "compensation_history": [
+    {
+      "seq": 1,
+      "kind": "started",
+      "step": "",
+      "data": {
+        "digest": "b1515a4a794dbd571106d0940734421df06e498f20eff0e8783cc30adf994e3c"
+      },
+      "commands": [
+        "step:post"
+      ]
+    },
+    {
+      "seq": 2,
+      "kind": "activity_claimed",
+      "step": "post",
+      "data": {
+        "epoch": 1,
+        "attempt": 1,
+        "command_id": "step:post"
+      },
+      "commands": []
+    },
+    {
+      "seq": 3,
+      "kind": "step_completed",
+      "step": "post",
+      "data": {
+        "error": null,
+        "result": {
+          "journal_id": "36c99015-6719-4f8a-8d85-cb8d1c6b25c1"
+        },
+        "attempt": 1,
+        "retry_delay": 0
+      },
+      "commands": [
+        "step:later-failure"
+      ]
+    },
+    {
+      "seq": 4,
+      "kind": "activity_claimed",
+      "step": "later-failure",
+      "data": {
+        "epoch": 1,
+        "attempt": 1,
+        "command_id": "step:later-failure"
+      },
+      "commands": []
+    },
+    {
+      "seq": 5,
+      "kind": "step_failed",
+      "step": "later-failure",
+      "data": {
+        "error": "RuntimeError: Injected later-stage failure",
+        "result": {},
+        "attempt": 1,
+        "retry_delay": 0
+      },
+      "commands": [
+        "compensate:post"
+      ]
+    },
+    {
+      "seq": 6,
+      "kind": "activity_claimed",
+      "step": "post",
+      "data": {
+        "epoch": 1,
+        "attempt": 1,
+        "command_id": "compensate:post"
+      },
+      "commands": []
+    },
+    {
+      "seq": 7,
+      "kind": "compensation_completed",
+      "step": "post",
+      "data": {
+        "error": null,
+        "result": {
+          "reversal_id": "1cd100a3-57fd-4249-bdaf-92102d147d49"
+        },
+        "attempt": 1,
+        "retry_delay": 0
+      },
+      "commands": [
+        "terminal:compensated"
+      ]
+    }
+  ]
+}

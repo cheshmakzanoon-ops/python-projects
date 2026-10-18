@@ -1,0 +1,2 @@
+[08-proving-ground] uv run --locked --python 3.14.8 python -m pp_proving_ground.cli demo --output /workspace/portfolio-verify-s21ujvba/source/.local/proving-ground/demo --seed 1729
+{"status": "passed", "output": "/workspace/portfolio-verify-s21ujvba/source/.local/proving-ground/demo", "chosen_model": "logistic", "serving": {"ready": true, "requested_generation": 8, "applied_generation": 8, "model_version": 2, "load_error": null}}

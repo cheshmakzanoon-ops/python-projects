@@ -1,0 +1,27 @@
+[03-current] uv run --locked --python 3.14.8 python -m pp_current.cli demo --output /workspace/portfolio-verify-s21ujvba/source/.local/current/demo --seed 1729
+{
+  "events": 10000,
+  "records": 10046,
+  "dispositions": {
+    "accepted-late": 65,
+    "on-time": 9902,
+    "rejected-late": 33
+  },
+  "outputs": 25345,
+  "oracle_matches": true,
+  "processing_seconds": 1.292646866999803,
+  "checkpoint_seconds": [
+    0.2956416270003501,
+    0.044525409000016225
+  ],
+  "max_watermark_lag_ms": 101900,
+  "max_finalization_lag_ms": 113000,
+  "controlled_crash_exit": 73,
+  "admission_seconds": 0.4321675520000099,
+  "throughput_events_s": 7736.064856761474,
+  "restore_seconds": 0.00012500499997258885,
+  "buffer_peak": 48,
+  "state_peak": 4560,
+  "watermark": 9223372036854775807,
+  "disk_bytes": 24457224
+}

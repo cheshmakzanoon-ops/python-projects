@@ -1,0 +1,6 @@
+[04-meridian] uv run --locked --python 3.13.16 python -m pp_meridian.cli demo --output /workspace/portfolio-verify-mlsinfvy/source/.local/meridian/demo --seed 1729
+{
+  "status": "passed",
+  "failed_checks": [],
+  "report": "/workspace/portfolio-verify-mlsinfvy/source/.local/meridian/demo/report.html"
+}

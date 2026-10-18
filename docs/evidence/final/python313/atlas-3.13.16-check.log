@@ -1,0 +1,115 @@
+[07-atlas] uv run --locked --python 3.13.16 ruff format --check .
+Using CPython 3.13.16
+Creating virtual environment at: .venv
+   Building pp-atlas @ file:///workspace/portfolio-verify-q_j50t9a/source/projects/07-atlas
+      Built pp-atlas @ file:///workspace/portfolio-verify-q_j50t9a/source/projects/07-atlas
+Installed 33 packages in 1.47s
+35 files already formatted
+[07-atlas] uv run --locked --python 3.13.16 ruff check .
+All checks passed!
+[07-atlas] uv run --locked --python 3.13.16 mypy src
+Success: no issues found in 17 source files
+[07-atlas] uv run --locked --python 3.13.16 pytest
+============================= test session starts ==============================
+platform linux -- Python 3.13.16, pytest-9.1.1, pluggy-1.7.0
+rootdir: /workspace/portfolio-verify-q_j50t9a/source/projects/07-atlas
+configfile: pyproject.toml
+testpaths: tests
+plugins: cov-7.1.0, anyio-4.15.1, hypothesis-6.170.1
+collected 40 items
+
+tests/acceptance/test_cli_quality.py .....                               [ 12%]
+tests/integration/test_failures.py ..........                            [ 37%]
+tests/integration/test_persistence_auth.py ..........                    [ 62%]
+tests/property/test_history.py ..                                        [ 67%]
+tests/unit/test_lexical.py .............                                 [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /workspace/portfolio-verify-q_j50t9a/source/projects/07-atlas/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 40 passed, 1 warning in 7.48s =========================
+[07-atlas] uv build --no-sources --python 3.13.16
+Building source distribution...
+Building wheel from source distribution...
+Successfully built dist/pp_atlas-0.1.0.tar.gz
+Successfully built dist/pp_atlas-0.1.0-py3-none-any.whl
+[07-atlas] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/portfolio-verify-q_j50t9a/source/scripts/wheel_smoke.py /workspace/portfolio-verify-q_j50t9a/source/projects/07-atlas pp_atlas
+Using CPython 3.13.16
+Creating virtual environment at: /tmp/portfolio-wheel-znrohedg/venv
+Activate with: source /tmp/portfolio-wheel-znrohedg/venv/bin/activate
+Using CPython 3.14.8
+Resolved 34 packages in 9ms
+Using Python 3.13.16 environment at: /tmp/portfolio-wheel-znrohedg/venv
+Resolved 15 packages in 59ms
+Prepared 1 package in 21ms
+Installed 15 packages in 32ms
+ + annotated-doc==0.0.5
+ + annotated-types==0.8.0
+ + anyio==4.15.1
+ + click==8.5.0
+ + fastapi==0.143.3
+ + h11==0.16.0
+ + idna==3.20
+ + opentelemetry-api==1.45.1
+ + pp-atlas==0.1.0 (from file:///workspace/portfolio-verify-q_j50t9a/source/projects/07-atlas/dist/pp_atlas-0.1.0-py3-none-any.whl)
+ + pydantic==2.14.1
+ + pydantic-core==2.50.1
+ + starlette==1.8.0
+ + typing-extensions==4.16.0
+ + typing-inspection==0.4.4
+ + uvicorn==0.54.0
+/tmp/portfolio-wheel-znrohedg/venv/lib/python3.13/site-packages/pp_atlas/__init__.py
+{
+  "schema_version": 1,
+  "project": "atlas",
+  "seed": 1729,
+  "query": "\"wal recovery\"",
+  "ranked_authorized_results": {
+    "generation": 4,
+    "acl_revision": 5,
+    "total": 1,
+    "hits": [
+      {
+        "id": "runbook",
+        "revision": "91ba311be4df4f05b42db6b1f4d04b2c",
+        "title": "Recovering the journal",
+        "score": 0.628834555559538,
+        "snippet": "WAL <mark>recovery</mark> replays committed records. Escape &lt;script&gt;alert(&quot;unsafe&quot;)&lt;/script&gt;.",
+        "explanation": {
+          "recovery": 0.628834555559538
+        }
+      }
+    ],
+    "facets": {
+      "runbook": 1
+    },
+    "visible_documents": 2,
+    "statistics": {
+      "N": 2,
+      "average_length": 8.0,
+      "document_frequency": {
+        "recovery": 1
+      },
+      "k1": 1.2,
+      "b": 0.75
+    }
+  },
+  "checks": {
+    "grant_observed": true,
+    "revoke_observed": true,
+    "obsolete_revision_absent": true,
+    "merge_scores_preserved": true,
+    "escaped_snippet": true
+  },
+  "catalog": {
+    "generation": 4,
+    "acl_revision": 5,
+    "documents": 2,
+    "segments": 1,
+    "terms": 15
+  },
+  "status": "passed"
+}

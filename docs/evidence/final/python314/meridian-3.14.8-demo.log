@@ -1,0 +1,6 @@
+[04-meridian] uv run --locked --python 3.14.8 python -m pp_meridian.cli demo --output /workspace/portfolio-verify-4is8faf5/source/.local/meridian/demo --seed 1729
+{
+  "status": "passed",
+  "failed_checks": [],
+  "report": "/workspace/portfolio-verify-4is8faf5/source/.local/meridian/demo/report.html"
+}

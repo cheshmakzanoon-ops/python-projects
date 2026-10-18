@@ -1,0 +1,55 @@
+[04-meridian] uv run --locked --python 3.13.16 ruff format --check .
+Using CPython 3.13.16
+Creating virtual environment at: .venv
+   Building pp-meridian @ file:///workspace/portfolio-verify-mlsinfvy/source/projects/04-meridian
+      Built pp-meridian @ file:///workspace/portfolio-verify-mlsinfvy/source/projects/04-meridian
+Installed 26 packages in 1.98s
+53 files already formatted
+[04-meridian] uv run --locked --python 3.13.16 ruff check .
+All checks passed!
+[04-meridian] uv run --locked --python 3.13.16 mypy src
+Success: no issues found in 33 source files
+[04-meridian] uv run --locked --python 3.13.16 pytest
+============================= test session starts ==============================
+platform linux -- Python 3.13.16, pytest-9.1.1, pluggy-1.7.0
+django: version: 5.2.18, settings: pp_meridian.config.settings (from ini)
+rootdir: /workspace/portfolio-verify-mlsinfvy/source/projects/04-meridian
+configfile: pyproject.toml
+testpaths: tests
+plugins: cov-7.1.0, hypothesis-6.170.1, django-4.14.0
+collected 46 items
+
+tests/acceptance/test_workload_failure_reporting.py ......               [ 13%]
+tests/integration/test_ledger_pg.py .........................            [ 67%]
+tests/acceptance/test_cli_boundaries.py ...                              [ 73%]
+tests/property/test_history_model.py .                                   [ 76%]
+tests/unit/test_domain.py ...........                                    [100%]
+
+============================= 46 passed in 47.63s ==============================
+[04-meridian] uv build --no-sources --python 3.13.16
+Building source distribution...
+Building wheel from source distribution...
+Successfully built dist/pp_meridian-0.1.0.tar.gz
+Successfully built dist/pp_meridian-0.1.0-py3-none-any.whl
+[04-meridian] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/portfolio-verify-mlsinfvy/source/scripts/wheel_smoke.py /workspace/portfolio-verify-mlsinfvy/source/projects/04-meridian pp_meridian
+Using CPython 3.13.16
+Creating virtual environment at: /tmp/portfolio-wheel-shwatjb2/venv
+Activate with: source /tmp/portfolio-wheel-shwatjb2/venv/bin/activate
+Using CPython 3.14.8
+Resolved 28 packages in 2ms
+Using Python 3.13.16 environment at: /tmp/portfolio-wheel-shwatjb2/venv
+Resolved 6 packages in 12ms
+Prepared 1 package in 9ms
+Installed 6 packages in 125ms
+ + asgiref==3.12.1
+ + django==5.2.18
+ + pp-meridian==0.1.0 (from file:///workspace/portfolio-verify-mlsinfvy/source/projects/04-meridian/dist/pp_meridian-0.1.0-py3-none-any.whl)
+ + psycopg==3.3.6
+ + psycopg-binary==3.3.6
+ + sqlparse==0.6.0
+/tmp/portfolio-wheel-shwatjb2/venv/lib/python3.13/site-packages/pp_meridian/__init__.py
+{
+  "status": "passed",
+  "failed_checks": [],
+  "report": "/tmp/portfolio-wheel-shwatjb2/owned-demo/report.html"
+}

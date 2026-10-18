@@ -1,0 +1,691 @@
+[05-quarry] uv run --locked --python 3.14.8 ruff format --check .
+Using CPython 3.14.8
+Creating virtual environment at: .venv
+   Building pp-quarry @ file:///workspace/portfolio-verify-s21ujvba/source/projects/05-quarry
+      Built pp-quarry @ file:///workspace/portfolio-verify-s21ujvba/source/projects/05-quarry
+Installed 19 packages in 1.40s
+42 files already formatted
+[05-quarry] uv run --locked --python 3.14.8 ruff check .
+All checks passed!
+[05-quarry] uv run --locked --python 3.14.8 mypy src
+Success: no issues found in 19 source files
+[05-quarry] uv run --locked --python 3.14.8 pytest
+============================= test session starts ==============================
+platform linux -- Python 3.14.8, pytest-9.1.1, pluggy-1.7.0
+rootdir: /workspace/portfolio-verify-s21ujvba/source/projects/05-quarry
+configfile: pyproject.toml
+testpaths: tests
+plugins: cov-7.1.0, hypothesis-6.170.1
+collected 37 items
+
+tests/acceptance/test_quarry.py .............                            [ 35%]
+tests/integration/test_crash.py ...                                      [ 43%]
+tests/integration/test_interfaces.py ..............                      [ 81%]
+tests/property/test_histories.py .                                       [ 83%]
+tests/unit/test_contracts.py ......                                      [100%]
+
+============================== 37 passed in 5.58s ==============================
+[05-quarry] uv build --no-sources --python 3.14.8
+Building source distribution...
+Building wheel from source distribution...
+Successfully built dist/pp_quarry-0.1.0.tar.gz
+Successfully built dist/pp_quarry-0.1.0-py3-none-any.whl
+[05-quarry] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/portfolio-verify-s21ujvba/source/scripts/wheel_smoke.py /workspace/portfolio-verify-s21ujvba/source/projects/05-quarry pp_quarry
+Using CPython 3.14.8
+Creating virtual environment at: /tmp/portfolio-wheel-vv0klu1_/venv
+Activate with: source /tmp/portfolio-wheel-vv0klu1_/venv/bin/activate
+Resolved 20 packages in 2ms
+Using Python 3.14.8 environment at: /tmp/portfolio-wheel-vv0klu1_/venv
+Resolved 3 packages in 260ms
+Prepared 1 package in 7ms
+Installed 3 packages in 108ms
+ + duckdb==1.5.6
+ + pp-quarry==0.1.0 (from file:///workspace/portfolio-verify-s21ujvba/source/projects/05-quarry/dist/pp_quarry-0.1.0-py3-none-any.whl)
+ + pyarrow==26.0.0
+/tmp/portfolio-wheel-vv0klu1_/venv/lib/python3.14/site-packages/pp_quarry/__init__.py
+{
+  "schema_version": 1,
+  "project": "quarry",
+  "source_commit": "unavailable",
+  "source_dirty": null,
+  "source_scope": "installed-package",
+  "source_content_sha256": "21ae1dd75a09adeceffc618f1057de2e0839344e8cfab8c4059053d5e5c9f45f",
+  "root_contract_sha256": null,
+  "lockfile_sha256": null,
+  "python": "3.14.8",
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "cpu": "unknown",
+  "memory_limit_bytes": null,
+  "seed": 1729,
+  "profile": "demo",
+  "provenance_note": "Installed distribution has no checkout or lockfile; digest covers installed package source. Run source-tree verification for commit/lock provenance.",
+  "status": "passed",
+  "initial_snapshot": 1,
+  "latest_snapshot": 5,
+  "one_bucket_plan": {
+    "partitions": {
+      "0": {
+        "normalized": {
+          "fingerprint": "426169d9501e3b1a40cb68a20c163f1f97c2aa5581e4db0b5504e284dc7c3cb1",
+          "action": "reuse",
+          "old": {
+            "bytes": 3068,
+            "fingerprint": "426169d9501e3b1a40cb68a20c163f1f97c2aa5581e4db0b5504e284dc7c3cb1",
+            "input_fingerprints": [
+              "fd83ea7638314f05eb9680e9b4967fde3f41fc40ce85013c4b033b299cd0baf9"
+            ],
+            "parents": [],
+            "path": "data/normalized-0-0e0da7a4e5b941fea2598868c30dc7c4.parquet",
+            "reused": false,
+            "rows": 26,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "5d0cc4146484f8a4b979c818e50ab86f0fb73f3ca43014746d97f80a264dd0a9",
+            "transform": "normalize"
+          }
+        },
+        "facts": {
+          "fingerprint": "328e424f8c74068950bcf460829765af77b79718dbbe176b693858672948c921",
+          "action": "reuse",
+          "old": {
+            "bytes": 2772,
+            "fingerprint": "328e424f8c74068950bcf460829765af77b79718dbbe176b693858672948c921",
+            "input_fingerprints": [
+              "426169d9501e3b1a40cb68a20c163f1f97c2aa5581e4db0b5504e284dc7c3cb1"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-0-eab8a34558c4465f81dffa6d3efb4dd1.parquet",
+            "reused": false,
+            "rows": 26,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64",
+            "sha256": "674ac67f880e6bf2f9ece83cb68d14d0771ac6c069ca2c9a7779281a50da5377",
+            "transform": "facts"
+          }
+        },
+        "daily": {
+          "fingerprint": "c332a4647423c1d0c38b6d69b5cc8b22c47706b3266782665ac4c4451e1347fe",
+          "action": "reuse",
+          "old": {
+            "bytes": 746,
+            "fingerprint": "c332a4647423c1d0c38b6d69b5cc8b22c47706b3266782665ac4c4451e1347fe",
+            "input_fingerprints": [
+              "328e424f8c74068950bcf460829765af77b79718dbbe176b693858672948c921"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-0-76cc2b1529194637ba13f5959f319bbb.parquet",
+            "reused": false,
+            "rows": 18,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "48ad79fea13b79d593cb7d20fd599c33193f8fd0ac5c2bc1b2b876a4a5d46e5d",
+            "transform": "daily"
+          }
+        }
+      },
+      "1": {
+        "normalized": {
+          "fingerprint": "323a8fd604ddfd4e428f77d8f1680009ec8034c058fdbc3b4deffa49690d5812",
+          "action": "reuse",
+          "old": {
+            "bytes": 3114,
+            "fingerprint": "323a8fd604ddfd4e428f77d8f1680009ec8034c058fdbc3b4deffa49690d5812",
+            "input_fingerprints": [
+              "4d1a0f7979d9de843e6f3dd35d740ed3b38ddc8aa0d88f36ace49f6df6bec2da"
+            ],
+            "parents": [],
+            "path": "data/normalized-1-29835b813f88489ab928032f63756102.parquet",
+            "reused": false,
+            "rows": 28,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "2c0cf89f6d02139fe48d88781d0f139056f1a567ef4374a9c7641f3bcf713047",
+            "transform": "normalize"
+          }
+        },
+        "facts": {
+          "fingerprint": "39f69c2c3b337dc5f1919ec084ddede05c46ad684f08079314a08153d3d6acfb",
+          "action": "reuse",
+          "old": {
+            "bytes": 2808,
+            "fingerprint": "39f69c2c3b337dc5f1919ec084ddede05c46ad684f08079314a08153d3d6acfb",
+            "input_fingerprints": [
+              "323a8fd604ddfd4e428f77d8f1680009ec8034c058fdbc3b4deffa49690d5812"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-1-59fefd8491e140329f3900412eb5e271.parquet",
+            "reused": false,
+            "rows": 28,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64",
+            "sha256": "44ed76d6ca304029bd4b47bfebb0baa5c452894e9890b81971c332d7f31bd13f",
+            "transform": "facts"
+          }
+        },
+        "daily": {
+          "fingerprint": "75cb42d46f89c39641488de6f6b350fafd345db9bb0f10a21b9c563174e72e96",
+          "action": "reuse",
+          "old": {
+            "bytes": 762,
+            "fingerprint": "75cb42d46f89c39641488de6f6b350fafd345db9bb0f10a21b9c563174e72e96",
+            "input_fingerprints": [
+              "39f69c2c3b337dc5f1919ec084ddede05c46ad684f08079314a08153d3d6acfb"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-1-c4fd0520a73b477e8f8d2d1548f8f7cc.parquet",
+            "reused": false,
+            "rows": 21,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "8f708ea27eae2bc1254d9f33a2d633a0d1002b7f66a887080fa0b0902f17aaf7",
+            "transform": "daily"
+          }
+        }
+      },
+      "2": {
+        "normalized": {
+          "fingerprint": "62540008a1bffd6858a44ef496bc7ce34e266fcc69372c935cb97e51e9ef6296",
+          "action": "reuse",
+          "old": {
+            "bytes": 3026,
+            "fingerprint": "62540008a1bffd6858a44ef496bc7ce34e266fcc69372c935cb97e51e9ef6296",
+            "input_fingerprints": [
+              "e51b91c0a3a0e1a2805108667ae6ed7ff89a430354f9b3745306a4a018203478"
+            ],
+            "parents": [],
+            "path": "data/normalized-2-768e2243dc824ca4a108baee89b3e126.parquet",
+            "reused": false,
+            "rows": 22,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "c20b919264353ccd55888a76f219c488f48c55f732ddbd1933034c1ebcbdf2d4",
+            "transform": "normalize"
+          }
+        },
+        "facts": {
+          "fingerprint": "3e31361cc50ea2babab3be454bb96f68f06d9cf8efc2d2c55c7e54a57ec70ba1",
+          "action": "reuse",
+          "old": {
+            "bytes": 2659,
+            "fingerprint": "3e31361cc50ea2babab3be454bb96f68f06d9cf8efc2d2c55c7e54a57ec70ba1",
+            "input_fingerprints": [
+              "62540008a1bffd6858a44ef496bc7ce34e266fcc69372c935cb97e51e9ef6296"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-2-905a6fd0c82a42febb7ae4adecd0a5a1.parquet",
+            "reused": false,
+            "rows": 22,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64",
+            "sha256": "f08bdc822e22dabe8ab447bd0109e7aae7267c211dcd21b28085c7605ac92765",
+            "transform": "facts"
+          }
+        },
+        "daily": {
+          "fingerprint": "188876ce8f3aa759aee6c432b1504bb1853e14a091dd9c7e41b2306b8f5f88f5",
+          "action": "reuse",
+          "old": {
+            "bytes": 723,
+            "fingerprint": "188876ce8f3aa759aee6c432b1504bb1853e14a091dd9c7e41b2306b8f5f88f5",
+            "input_fingerprints": [
+              "3e31361cc50ea2babab3be454bb96f68f06d9cf8efc2d2c55c7e54a57ec70ba1"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-2-2d63537d0d094786adb8c857901879a6.parquet",
+            "reused": false,
+            "rows": 15,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "c5949c986766604a03effd062499267d3ace13d2258376e0fedd0c3e076b3aee",
+            "transform": "daily"
+          }
+        }
+      },
+      "3": {
+        "normalized": {
+          "fingerprint": "2c05dc288128101457d38f5343f4b648838e513e67f6da9fa56db2bd53d48876",
+          "action": "build",
+          "old": {
+            "bytes": 3105,
+            "fingerprint": "0eefe395c0445ddea6758b69aa068feb0222fecd13960a35e42d2adef28d4123",
+            "input_fingerprints": [
+              "7be8b37522e565dd154e11eca2a3d26a253f527393f8aa17318d382699864843"
+            ],
+            "parents": [],
+            "path": "data/normalized-3-b407ad0e7889489f98412d4bb2c8cd67.parquet",
+            "reused": false,
+            "rows": 28,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "a65be7c8b8da2e9d82864746581eff0cd0d35b4b6e4303112c884ce990f299a2",
+            "transform": "normalize"
+          }
+        },
+        "facts": {
+          "fingerprint": "127fd0466744b2ee475abff1a27b71cf90dccd9b3e743074a3266f26c44ce8a5",
+          "action": "build",
+          "old": {
+            "bytes": 2802,
+            "fingerprint": "16461ca0f7da38659b39d2ac199a05e492bf2498d39bed43bcb5a4e89ae9d4a8",
+            "input_fingerprints": [
+              "0eefe395c0445ddea6758b69aa068feb0222fecd13960a35e42d2adef28d4123"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-3-816dac0bae3747d596caeeff1a76bc74.parquet",
+            "reused": false,
+            "rows": 28,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64",
+            "sha256": "48b8659d29f65bde1ed202565d28722815d00935c4f4a9f9f5ccfda1acad5aed",
+            "transform": "facts"
+          }
+        },
+        "daily": {
+          "fingerprint": "f6e55eb96db137fdc840d546ac9f73612a9423b0be152f02a6aa7323a0000e39",
+          "action": "build",
+          "old": {
+            "bytes": 767,
+            "fingerprint": "97256eea73f9eccc3414077eb5f7f136261c3c24b34a43d2b4986779235521a9",
+            "input_fingerprints": [
+              "16461ca0f7da38659b39d2ac199a05e492bf2498d39bed43bcb5a4e89ae9d4a8"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-3-e5cde5cfce1a43e78189d7ebfababf72.parquet",
+            "reused": false,
+            "rows": 21,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "f63d0407d1c418d0ffc4c45412ffa28d70507318b2d6bbf78fceb873a193b3ff",
+            "transform": "daily"
+          }
+        }
+      },
+      "4": {
+        "normalized": {
+          "fingerprint": "54ec57f1b1f522d4a2a40cfb6bc769cf81e625bd7760e7fd0f3b5ead4c2d3579",
+          "action": "reuse",
+          "old": {
+            "bytes": 3034,
+            "fingerprint": "54ec57f1b1f522d4a2a40cfb6bc769cf81e625bd7760e7fd0f3b5ead4c2d3579",
+            "input_fingerprints": [
+              "56cf6ffe268e27076c5c4c9e20539206dc48af8aa10626a1c1a2abf97a3d7991"
+            ],
+            "parents": [],
+            "path": "data/normalized-4-b6682067df4e41bbbb1cbc9dd9c0f5a9.parquet",
+            "reused": false,
+            "rows": 25,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "4223a423e67ee5acc04854f312559fad9112c447279fb6882b2c8a77aa8458d8",
+            "transform": "normalize"
+          }
+        },
+        "facts": {
+          "fingerprint": "8375f1648eb754c3db1c80350f73f20789c51f903c5458e284c8bf1de37e506b",
+          "action": "reuse",
+          "old": {
+            "bytes": 2716,
+            "fingerprint": "8375f1648eb754c3db1c80350f73f20789c51f903c5458e284c8bf1de37e506b",
+            "input_fingerprints": [
+              "54ec57f1b1f522d4a2a40cfb6bc769cf81e625bd7760e7fd0f3b5ead4c2d3579"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-4-850cf291f7cc4031b3d1cf7c19ce89b7.parquet",
+            "reused": false,
+            "rows": 25,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64",
+            "sha256": "75596fd580ece6e8115159bdca61c37f7a6a5ca5fb5e65746c44fc13c42ae9cc",
+            "transform": "facts"
+          }
+        },
+        "daily": {
+          "fingerprint": "4288ae80688c091c9de9ecc72dc3b3ae91fb1bf755e346f0b1a4b9fa4bd052d8",
+          "action": "reuse",
+          "old": {
+            "bytes": 741,
+            "fingerprint": "4288ae80688c091c9de9ecc72dc3b3ae91fb1bf755e346f0b1a4b9fa4bd052d8",
+            "input_fingerprints": [
+              "8375f1648eb754c3db1c80350f73f20789c51f903c5458e284c8bf1de37e506b"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-4-90906e9cdb434ea5bcb98cafcf7e7f96.parquet",
+            "reused": false,
+            "rows": 18,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "0bc60131ada490dc457608908676366241c844e032ae02f6f06b7709bacdf373",
+            "transform": "daily"
+          }
+        }
+      },
+      "5": {
+        "normalized": {
+          "fingerprint": "fcde0390f6a119864781886e2879f5efe84a02faa8e39feab99512ac57d2040d",
+          "action": "reuse",
+          "old": {
+            "bytes": 3010,
+            "fingerprint": "fcde0390f6a119864781886e2879f5efe84a02faa8e39feab99512ac57d2040d",
+            "input_fingerprints": [
+              "afd1c62fc6518c9d58fb226fc32cb84285c1b4bf8faaddb692f44a1bf578fac9"
+            ],
+            "parents": [],
+            "path": "data/normalized-5-e1d0d0df419849608cc88e0b6db525b9.parquet",
+            "reused": false,
+            "rows": 20,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "04de5f7e59b16eb4ba424d447304f394ca4853a37c2c2d2c9eee6680583985ff",
+            "transform": "normalize"
+          }
+        },
+        "facts": {
+          "fingerprint": "f090846d07bf82882bcd761317e92a2511803c4821dbe3efd934cb11f56e11a4",
+          "action": "reuse",
+          "old": {
+            "bytes": 2632,
+            "fingerprint": "f090846d07bf82882bcd761317e92a2511803c4821dbe3efd934cb11f56e11a4",
+            "input_fingerprints": [
+              "fcde0390f6a119864781886e2879f5efe84a02faa8e39feab99512ac57d2040d"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-5-b2255ed84f5149a68092113eb3fd599a.parquet",
+            "reused": false,
+            "rows": 20,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64",
+            "sha256": "e53a5f1e44ee12a09881e68e524b7ff43968cfa7ab5e14529f1a0cd641b97baa",
+            "transform": "facts"
+          }
+        },
+        "daily": {
+          "fingerprint": "d8bce52887d8127cdc4155f924a1a78bc82098eb291a01ba7e986a2c70fdcbef",
+          "action": "reuse",
+          "old": {
+            "bytes": 716,
+            "fingerprint": "d8bce52887d8127cdc4155f924a1a78bc82098eb291a01ba7e986a2c70fdcbef",
+            "input_fingerprints": [
+              "f090846d07bf82882bcd761317e92a2511803c4821dbe3efd934cb11f56e11a4"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-5-b8ed5d5cc6974cd09630d08ba88bab03.parquet",
+            "reused": false,
+            "rows": 15,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "9dda913a2519b8f96f5df73f5a9d17bc2017143608aa1f41c08fb58cc566cf9e",
+            "transform": "daily"
+          }
+        }
+      },
+      "6": {
+        "normalized": {
+          "fingerprint": "61b2914389d0d980eaba397bbfb7b7f9f60238aa128f007e43416efeea2fcd90",
+          "action": "reuse",
+          "old": {
+            "bytes": 3097,
+            "fingerprint": "61b2914389d0d980eaba397bbfb7b7f9f60238aa128f007e43416efeea2fcd90",
+            "input_fingerprints": [
+              "13f57e6a1208dda27e6ffa91ab11b259f8224a0ee87a57a1be1499c62229b296"
+            ],
+            "parents": [],
+            "path": "data/normalized-6-8b26a614631d4476b0be1ab873c990a5.parquet",
+            "reused": false,
+            "rows": 28,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "7b6caa26720b7e29976c1dccf06562e200a0483de5666511188b5e8b33067346",
+            "transform": "normalize"
+          }
+        },
+        "facts": {
+          "fingerprint": "f30aa78ca885ec214bf8d1de5fcb0d7d42f4dccda094924f2ddfe90acbb2099f",
+          "action": "reuse",
+          "old": {
+            "bytes": 2805,
+            "fingerprint": "f30aa78ca885ec214bf8d1de5fcb0d7d42f4dccda094924f2ddfe90acbb2099f",
+            "input_fingerprints": [
+              "61b2914389d0d980eaba397bbfb7b7f9f60238aa128f007e43416efeea2fcd90"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-6-8ac00bff43404a0c9051671bbc1296e9.parquet",
+            "reused": false,
+            "rows": 28,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64",
+            "sha256": "0ec25f6486770b9d8d9f37121329e51400b67c9f6a04e3e3cea3c157b9b2bb58",
+            "transform": "facts"
+          }
+        },
+        "daily": {
+          "fingerprint": "f23db4dc7ca3bec606136eb037027f65f6d64402545231578548ec311606c57f",
+          "action": "reuse",
+          "old": {
+            "bytes": 672,
+            "fingerprint": "f23db4dc7ca3bec606136eb037027f65f6d64402545231578548ec311606c57f",
+            "input_fingerprints": [
+              "f30aa78ca885ec214bf8d1de5fcb0d7d42f4dccda094924f2ddfe90acbb2099f"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-6-59ee72b7b5344db78edf2cbbe7cf185a.parquet",
+            "reused": false,
+            "rows": 17,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "2b470a0ea4ffd79282abbed5385a0adf042d09497008dab35a6abae1dea74215",
+            "transform": "daily"
+          }
+        }
+      },
+      "7": {
+        "normalized": {
+          "fingerprint": "c75936ff0d5175b5d0b6e6d3f4758e98f5963fde59074fc3dfd364f9aa72af24",
+          "action": "reuse",
+          "old": {
+            "bytes": 3039,
+            "fingerprint": "c75936ff0d5175b5d0b6e6d3f4758e98f5963fde59074fc3dfd364f9aa72af24",
+            "input_fingerprints": [
+              "d7a503dc7d1357675f28f8366fea35b9d39a1cfcbf3e697153a52a0d48bbc771"
+            ],
+            "parents": [],
+            "path": "data/normalized-7-20a409e335504b53980b00d33861dcc6.parquet",
+            "reused": false,
+            "rows": 23,
+            "schema": "namespace: string\nkey: string\nversion: int64\noperation: string\npayload: string\nsource: string\noffset: int64",
+            "sha256": "e5df311b7bc37865ac31c45cc2341f37770ca76fe23dadc3f8d307d955d4d074",
+            "transform": "normalize"
+          }
+        },
+        "facts": {
+          "fingerprint": "b7c40cb3d57a6b9aea483f2ac1d73b78062aa50761724555657155a9875f23a6",
+          "action": "reuse",
+          "old": {
+            "bytes": 2676,
+            "fingerprint": "b7c40cb3d57a6b9aea483f2ac1d73b78062aa50761724555657155a9875f23a6",
+            "input_fingerprints": [
+              "c75936ff0d5175b5d0b6e6d3f4758e98f5963fde59074fc3dfd364f9aa72af24"
+            ],
+            "parents": [
+              "normalized"
+            ],
+            "path": "data/facts-7-f54d1af302894b96a9f90d15c61b42b9.parquet",
+            "reused": false,
+            "rows": 23,
+            "schema": "namespace: string\nkey: string\nversion: int64\ndevice: string\nday: string\nvalue: double\npayload: string\nsource: string\noffset: int64",
+            "sha256": "b5205121336ed7e169b7904bc1144a78030db753fb19646b29cef54ef2d51253",
+            "transform": "facts"
+          }
+        },
+        "daily": {
+          "fingerprint": "612850c0d2f51958a5b7ef71faaf8cbe950a05720b51f4ba34c3ca2ab0a185d5",
+          "action": "reuse",
+          "old": {
+            "bytes": 734,
+            "fingerprint": "612850c0d2f51958a5b7ef71faaf8cbe950a05720b51f4ba34c3ca2ab0a185d5",
+            "input_fingerprints": [
+              "b7c40cb3d57a6b9aea483f2ac1d73b78062aa50761724555657155a9875f23a6"
+            ],
+            "parents": [
+              "facts"
+            ],
+            "path": "data/daily-7-aa29705978994322a2b17597b6eef9cd.parquet",
+            "reused": false,
+            "rows": 17,
+            "schema": "day: string\ncount: int64\ntotal: double",
+            "sha256": "47fd75cfa7c2bd077a918e791a5f4ee0faf818fb995c609bc9bdf11c5f356e3d",
+            "transform": "daily"
+          }
+        }
+      }
+    },
+    "contract": {
+      "fields": {
+        "day": {
+          "kind": "string",
+          "nullable": false
+        },
+        "device": {
+          "kind": "string",
+          "nullable": false
+        },
+        "value": {
+          "kind": "number",
+          "nullable": false
+        }
+      },
+      "minimum": null,
+      "maximum": null,
+      "min_rows": 0,
+      "max_rows": null
+    },
+    "base_snapshot": 1,
+    "code_digest": "555064dd234025373f3b46f02c6065c39cde862c055e65931fdb11560366d03e"
+  },
+  "one_bucket_stats": {
+    "bytes_written": 6822,
+    "max_batch_rows": 28,
+    "parquet_input_bytes": 6063,
+    "reused_nodes": 21,
+    "rewritten_buckets": 1
+  },
+  "validation_failure": "102: value below minimum 0",
+  "recovery": {
+    "removed_orphans": [
+      "daily-6-a63198f3ce264d0b97e6e5e45eb8122b.parquet",
+      "facts-6-e889f543835c4852a4cabb421a407a61.parquet",
+      "normalized-6-5c8ea74aea694d428b99cb0dd4486450.parquet",
+      "daily-4-ed11622eab44441b8fc110140a45fd6e.parquet",
+      "facts-4-4a8fd4aacbe742d98f39a672bf77fcda.parquet",
+      "normalized-4-56b7e1c6011c44a8a271348b90235eee.parquet",
+      "daily-3-c73a14348076426abe969c14d68832e6.parquet",
+      "facts-3-31277a44cb154beebfdc478b6e64124b.parquet",
+      "normalized-3-f291bfd8ca3444bbbae70dcd16bf864d.parquet",
+      "daily-2-90bd6076c86a45b087a1914e1718d47e.parquet",
+      "facts-2-51bbc748d1ca40f6a4e0c80a6dae5dd2.parquet",
+      "normalized-2-03e6154a17ab4fe0963ea9800fa04858.parquet",
+      "daily-1-6745b836b8ca40588a01ec0f5b33e0d0.parquet",
+      "facts-1-47b022344f024c6997c39d031259bd51.parquet",
+      "normalized-1-6ac50f57ed924a029df4b4e16a09b0f3.parquet",
+      "daily-0-2f3e10ad907e45ac9f358abbf2bb0fa6.parquet",
+      "facts-0-54e9859feff64078b8a59f3c4903d821.parquet",
+      "normalized-0-38e9412a3a884b53860d6aafe6ff1040.parquet"
+    ],
+    "snapshots": [
+      1,
+      2
+    ],
+    "active_pins": 1
+  },
+  "recovery_seconds": 0.0017726179999044689,
+  "full_rebuild_seconds": 0.010430312000153208,
+  "old_snapshot_sample": [
+    {
+      "namespace": "synthetic",
+      "key": "0",
+      "version": 1,
+      "device": "device-0",
+      "day": "2026-01-01",
+      "value": 669.0,
+      "payload": "{\"day\":\"2026-01-01\",\"device\":\"device-0\",\"value\":669.0}",
+      "source": "9bde5caeef0a1b35a8d9aba90f0dc4a1954633c320688ab276c76212c85786d1",
+      "offset": 141
+    },
+    {
+      "namespace": "synthetic",
+      "key": "1",
+      "version": 1,
+      "device": "device-1",
+      "day": "2026-01-02",
+      "value": 906.0,
+      "payload": "{\"day\":\"2026-01-02\",\"device\":\"device-1\",\"value\":906.0}",
+      "source": "9bde5caeef0a1b35a8d9aba90f0dc4a1954633c320688ab276c76212c85786d1",
+      "offset": 282
+    },
+    {
+      "namespace": "synthetic",
+      "key": "10",
+      "version": 1,
+      "device": "device-10",
+      "day": "2026-01-11",
+      "value": 888.0,
+      "payload": "{\"day\":\"2026-01-11\",\"device\":\"device-10\",\"value\":888.0}",
+      "source": "9bde5caeef0a1b35a8d9aba90f0dc4a1954633c320688ab276c76212c85786d1",
+      "offset": 1551
+    }
+  ],
+  "old_digest": "ec73b051fa2f3348fa0062ae5cdc6b551147ab182e6318353fd3acf14916a18c",
+  "current_digest": "d831f63db5278a23bb7179a707a566a28b7d157463cb80d91d8757e279594aa6",
+  "correctness_checks": {
+    "independent_rebuild": true,
+    "one_bucket_only": true,
+    "old_snapshot_unchanged": true
+  },
+  "lineage": {
+    "namespace": "synthetic",
+    "key": "101",
+    "versions": [
+      {
+        "version": 1,
+        "fingerprint": "cbe8b6ffde41c8ed0987c3b6bbd02d38e8dfaf7c03e5a231926e536949d7ecfc",
+        "source_sha256": "9bde5caeef0a1b35a8d9aba90f0dc4a1954633c320688ab276c76212c85786d1",
+        "offset": 14559,
+        "operation": "upsert"
+      },
+      {
+        "version": 2,
+        "fingerprint": "a7fc18921f75fdc1c85cd3de24c97cce19d51ca3fc74a45f36326ae8a27b0cdd",
+        "source_sha256": "6a1561fec27472006289c0e563a20a9f367a2c1c48c78852d24f82313bb82bf1",
+        "offset": 143,
+        "operation": "upsert"
+      }
+    ],
+    "columns": {
+      "daily.count": "count(facts.key)",
+      "daily.total": "sum(facts.value)",
+      "facts.day": "normalized.payload.day",
+      "facts.device": "normalized.payload.device",
+      "facts.value": "normalized.payload.value"
+    }
+  },
+  "quality": {
+    "files": 24,
+    "rows": 541
+  },
+  "metrics": {
+    "bytes_written": 55096,
+    "max_batch_rows": 28,
+    "parquet_input_bytes": 49337,
+    "reused_nodes": 0,
+    "rewritten_buckets": 8
+  }
+}
+{
+  "cleaned": "/tmp/portfolio-wheel-vv0klu1_/owned-demo"
+}

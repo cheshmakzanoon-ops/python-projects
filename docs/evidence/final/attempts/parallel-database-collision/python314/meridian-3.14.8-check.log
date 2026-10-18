@@ -1,0 +1,802 @@
+[04-meridian] uv run --locked --python 3.14.8 ruff format --check .
+Using CPython 3.14.8
+Creating virtual environment at: .venv
+   Building pp-meridian @ file:///workspace/portfolio-verify-s21ujvba/source/projects/04-meridian
+      Built pp-meridian @ file:///workspace/portfolio-verify-s21ujvba/source/projects/04-meridian
+Installed 26 packages in 3.98s
+52 files already formatted
+[04-meridian] uv run --locked --python 3.14.8 ruff check .
+All checks passed!
+[04-meridian] uv run --locked --python 3.14.8 mypy src
+Success: no issues found in 33 source files
+[04-meridian] uv run --locked --python 3.14.8 pytest
+============================= test session starts ==============================
+platform linux -- Python 3.14.8, pytest-9.1.1, pluggy-1.7.0
+django: version: 5.2.18, settings: pp_meridian.config.settings (from ini)
+rootdir: /workspace/portfolio-verify-s21ujvba/source/projects/04-meridian
+configfile: pyproject.toml
+testpaths: tests
+plugins: cov-7.1.0, hypothesis-6.170.1, django-4.14.0
+collected 40 items
+
+tests/integration/test_ledger_pg.py ..E.FFEF.FE...F...........           [ 62%]
+tests/acceptance/test_cli_boundaries.py ...                              [ 70%]
+tests/property/test_history_model.py .                                   [ 72%]
+tests/unit/test_domain.py ...........                                    [100%]
+
+==================================== ERRORS ====================================
+___ ERROR at setup of test_me04_atomic_fault_and_direct_database_constraints ___
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7f93ae269af0>
+sql = 'INSERT INTO "auth_user" ("password", "last_login", "is_superuser", "username", "first_name", "last_name", "email", "is_staff", "is_active", "date_joined") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING "auth_user"."id"'
+params = ('pbkdf2_sha256$1000000$F1ntH7xOR8cSz6q1qcud1C$KTDzB1wuIoU2ZEMzsFd5pep9X2Z/AmtEHZ1SLBW1e+I=', None, False, '3b2f0025-277e-405f-a3e3-0d9d95bdd262', '', '', ...)
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='postgresql' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7f93ae269af0>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        # Raise a warning during app initialization (stored_app_configs is only
+        # ever set during testing).
+        if not apps.ready and not apps.stored_app_configs:
+            warnings.warn(self.APPS_NOT_READY_WARNING_MSG, category=RuntimeWarning)
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.14/site-packages/django/db/backends/utils.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <django.db.backends.postgresql.base.Cursor [closed] [IDLE] (host=127.0.0.1 port=32771 user=meridian database=test_meridian) at 0x7f93ae3a35b0>
+query = 'INSERT INTO "auth_user" ("password", "last_login", "is_superuser", "username", "first_name", "last_name", "email", "is_staff", "is_active", "date_joined") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING "auth_user"."id"'
+params = ('pbkdf2_sha256$1000000$F1ntH7xOR8cSz6q1qcud1C$KTDzB1wuIoU2ZEMzsFd5pep9X2Z/AmtEHZ1SLBW1e+I=', None, False, '3b2f0025-277e-405f-a3e3-0d9d95bdd262', '', '', ...)
+prepare = None, binary = None
+
+    def execute(
+        self,
+        query: Query,
+        params: Params | None = None,
+        *,
+        prepare: bool | None = None,
+        binary: bool | None = None,
+    ) -> Self:
+        """
+        Execute a query or command to the database.
+        """
+        try:
+            with self._conn.lock:
+                self._conn.wait(
+                    self._execute_gen(query, params, prepare=prepare, binary=binary)
+                )
+        except e._NO_TRACEBACK as ex:
+>           raise ex.with_traceback(None)
+E           psycopg.errors.UndefinedTable: relation "auth_user" does not exist
+E           LINE 1: INSERT INTO "auth_user" ("password", "last_login", "is_super...
+E                               ^
+
+.venv/lib/python3.14/site-packages/psycopg/cursor.py:117: UndefinedTable
+
+The above exception was the direct cause of the following exception:
+
+db = None
+
+    @pytest.fixture
+    def ledger(db: None) -> Iterator[tuple[int, Tenant, list[object]]]:
+>       user = get_user_model().objects.create_user(
+            username=str(uuid4()), password="synthetic-password"
+        )
+
+tests/conftest.py:13: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.14/site-packages/django/contrib/auth/models.py:175: in create_user
+    return self._create_user(username, email, password, **extra_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/django/contrib/auth/models.py:163: in _create_user
+    user.save(using=self._db)
+.venv/lib/python3.14/site-packages/django/contrib/auth/base_user.py:65: in save
+    super().save(*args, **kwargs)
+.venv/lib/python3.14/site-packages/django/db/models/base.py:902: in save
+    self.save_base(
+.venv/lib/python3.14/site-packages/django/db/models/base.py:1008: in save_base
+    updated = self._save_table(
+.venv/lib/python3.14/site-packages/django/db/models/base.py:1169: in _save_table
+    results = self._do_insert(
+.venv/lib/python3.14/site-packages/django/db/models/base.py:1210: in _do_insert
+    return manager._insert(
+.venv/lib/python3.14/site-packages/django/db/models/manager.py:87: in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/django/db/models/query.py:1873: in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/django/db/models/sql/compiler.py:1882: in execute_sql
+    cursor.execute(sql, params)
+.venv/lib/python3.14/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.14/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.14/site-packages/django/db/backends/utils.py:105: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <django.db.backends.postgresql.base.Cursor [closed] [IDLE] (host=127.0.0.1 port=32771 user=meridian database=test_meridian) at 0x7f93ae3a35b0>
+query = 'INSERT INTO "auth_user" ("password", "last_login", "is_superuser", "username", "first_name", "last_name", "email", "is_staff", "is_active", "date_joined") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING "auth_user"."id"'
+params = ('pbkdf2_sha256$1000000$F1ntH7xOR8cSz6q1qcud1C$KTDzB1wuIoU2ZEMzsFd5pep9X2Z/AmtEHZ1SLBW1e+I=', None, False, '3b2f0025-277e-405f-a3e3-0d9d95bdd262', '', '', ...)
+prepare = None, binary = None
+
+    def execute(
+        self,
+        query: Query,
+        params: Params | None = None,
+        *,
+        prepare: bool | None = None,
+        binary: bool | None = None,
+    ) -> Self:
+        """
+        Execute a query or command to the database.
+        """
+        try:
+            with self._conn.lock:
+                self._conn.wait(
+                    self._execute_gen(query, params, prepare=prepare, binary=binary)
+                )
+        except e._NO_TRACEBACK as ex:
+>           raise ex.with_traceback(None)
+E           django.db.utils.ProgrammingError: relation "auth_user" does not exist
+E           LINE 1: INSERT INTO "auth_user" ("password", "last_login", "is_super...
+E                               ^
+
+.venv/lib/python3.14/site-packages/psycopg/cursor.py:117: ProgrammingError
+______ ERROR at teardown of test_me06_api_all_endpoints_tenant_isolation _______
+
+self = <DatabaseWrapper vendor='postgresql' alias='default'>
+
+    def _commit(self):
+        if self.connection is not None:
+            with debug_transaction(self, "COMMIT"), self.wrap_database_errors:
+>               return self.connection.commit()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.14/site-packages/django/db/backends/base/base.py:303: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.14/site-packages/psycopg/connection.py:309: in commit
+    self.wait(self._commit_gen())
+.venv/lib/python3.14/site-packages/psycopg/connection.py:495: in wait
+    return waiting.wait(
+psycopg_binary/_psycopg/waiting.pyx:255: in psycopg_binary._psycopg.wait_c
+    ???
+.venv/lib/python3.14/site-packages/psycopg/_connection_base.py:592: in _commit_gen
+    yield from self._exec_command(b"COMMIT")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <psycopg.Connection [IDLE] (host=127.0.0.1 port=32771 user=meridian database=test_meridian) at 0x7f93ae25e120>
+command = b'COMMIT', result_format = <Format.TEXT: 0>
+
+    def _exec_command(
+        self, command: QueryNoTemplate, result_format: pq.Format = TEXT
+    ) -> PQGen[PGresult | None]:
+        """
+        Generator to send a command and receive the result to the backend.
+    
+        Only used to implement internal commands such as "commit", with eventual
+        arguments bound client-side. The cursor can do more complex stuff.
+        """
+        self._check_connection_ok()
+    
+        if isinstance(command, str):
+            command = command.encode(self.pgconn._encoding)
+        elif isinstance(command, Composable):
+            command = command.as_bytes(self)
+    
+        if self._pipeline:
+            cmd = partial(
+                self.pgconn.send_query_params,
+                command,
+                None,
+                result_format=result_format,
+            )
+            self._pipeline.command_queue.append(cmd)
+            self._pipeline.result_queue.append(None)
+            return None
+    
+        # Unless needed, use the simple query protocol, e.g. to interact with
+        # pgbouncer. In pipeline mode we always use the advanced query protocol
+        # instead, see #350
+        if result_format == TEXT:
+            self.pgconn.send_query(command)
+        else:
+            self.pgconn.send_query_params(command, None, result_format=result_format)
+    
+        results: list[PGresult] = (yield from generators.execute(self.pgconn))
+        if len(results) != 1:
+            raise e.InternalError(
+                f"received {len(results)} results from command {command.decode()!r}"
+            )
+    
+        result = results[0]
+        if result.status != COMMAND_OK and result.status != TUPLES_OK:
+            if result.status == FATAL_ERROR:
+>               raise e.error_from_result(result, encoding=self.pgconn._encoding)
+E               psycopg.errors.ForeignKeyViolation: insert or update on table "auth_permission" violates foreign key constraint "auth_permission_content_type_id_2f476e4b_fk_django_co"
+E               DETAIL:  Key (content_type_id)=(106) is not present in table "django_content_type".
+
+.venv/lib/python3.14/site-packages/psycopg/_connection_base.py:487: ForeignKeyViolation
+
+The above exception was the direct cause of the following exception:
+
+request = <SubRequest '_django_db_helper' for <Function test_me06_api_all_endpoints_tenant_isolation>>
+django_db_setup = None
+django_db_blocker = <pytest_django.plugin.DjangoDbBlocker object at 0x7f93b22d0c20>
+
+    @pytest.fixture
+    def _django_db_helper(
+        request: pytest.FixtureRequest,
+        django_db_setup: None,  # noqa: ARG001
+        django_db_blocker: DjangoDbBlocker,
+    ) -> Generator[None]:
+        if is_django_unittest(request):
+            yield
+            return
+    
+        from django import VERSION
+    
+        marker = request.node.get_closest_marker("django_db")
+        if marker:
+            (
+                transactional,
+                reset_sequences,
+                databases,
+                serialized_rollback,
+                available_apps,
+            ) = validate_django_db(marker)
+        else:
+            (
+                transactional,
+                reset_sequences,
+                databases,
+                serialized_rollback,
+                available_apps,
+            ) = False, False, None, False, None
+    
+        transactional = (
+            transactional
+            or reset_sequences
+            or ("transactional_db" in request.fixturenames or "live_server" in request.fixturenames)
+        )
+        reset_sequences = reset_sequences or ("django_db_reset_sequences" in request.fixturenames)
+        serialized_rollback = serialized_rollback or (
+            "django_db_serialized_rollback" in request.fixturenames
+        )
+    
+        with django_db_blocker.unblock():
+            import django.db
+            import django.test
+    
+            if transactional:
+                test_case_class = django.test.TransactionTestCase
+            else:
+                test_case_class = django.test.TestCase
+    
+            _reset_sequences = reset_sequences
+            _serialized_rollback = serialized_rollback
+            _databases = databases
+            _available_apps = available_apps
+    
+            class PytestDjangoTestCase(test_case_class):  # type: ignore[misc,valid-type]
+                reset_sequences = _reset_sequences
+                serialized_rollback = _serialized_rollback
+                if _databases is not None:
+                    databases = _databases
+                if _available_apps is not None:
+                    available_apps = _available_apps
+    
+                # For non-transactional tests, skip executing `django.test.TestCase`'s
+                # `setUpClass`/`tearDownClass`, only execute the super class ones.
+                #
+                # `TestCase`'s class setup manages the `setUpTestData`/class-level
+                # transaction functionality. We don't use it; instead we (will) offer
+                # our own alternatives. So it only adds overhead, and does some things
+                # which conflict with our (planned) functionality, particularly, it
+                # closes all database connections in `tearDownClass` which inhibits
+                # wrapping tests in higher-scoped transactions.
+                #
+                # It's possible a new version of Django will add some unrelated
+                # functionality to these methods, in which case skipping them completely
+                # would not be desirable. Let's cross that bridge when we get there...
+                if not transactional:
+    
+                    @classmethod
+                    def setUpClass(cls) -> None:
+                        super(django.test.TestCase, cls).setUpClass()
+    
+                    @classmethod
+                    def tearDownClass(cls) -> None:
+                        super(django.test.TestCase, cls).tearDownClass()
+    
+            PytestDjangoTestCase.setUpClass()
+    
+            test_case = PytestDjangoTestCase(methodName="__init__")
+            if VERSION >= (6, 0):
+                pre_setup_ran_eagerly = PytestDjangoTestCase._pre_setup_ran_eagerly
+            else:
+                pre_setup_ran_eagerly = getattr(PytestDjangoTestCase, "_pre_setup_ran_eagerly", False)
+            if not pre_setup_ran_eagerly:
+                # For a TransactionTestCase, setUpClass() has already run _pre_setup() and set
+                # this flag to say so.
+                test_case._pre_setup()
+    
+            yield
+    
+>           test_case._post_teardown()
+
+.venv/lib/python3.14/site-packages/pytest_django/fixtures.py:305: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.14/site-packages/django/test/testcases.py:1231: in _post_teardown
+    self._fixture_teardown()
+.venv/lib/python3.14/site-packages/django/test/testcases.py:1266: in _fixture_teardown
+    call_command(
+.venv/lib/python3.14/site-packages/django/core/management/__init__.py:194: in call_command
+    return command.execute(*args, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/django/core/management/commands/flush.py:88: in handle
+    emit_post_migrate_signal(verbosity, interactive, database)
+.venv/lib/python3.14/site-packages/django/core/management/sql.py:52: in emit_post_migrate_signal
+    models.signals.post_migrate.send(
+.venv/lib/python3.14/site-packages/django/dispatch/dispatcher.py:189: in send
+    response = receiver(signal=self, sender=sender, **named)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/django/contrib/auth/management/__init__.py:105: in create_permissions
+    Permission.objects.using(using).bulk_create(perms)
+.venv/lib/python3.14/site-packages/django/db/models/query.py:805: in bulk_create
+    with transaction.atomic(using=self.db, savepoint=False):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/django/db/transaction.py:263: in __exit__
+    connection.commit()
+.venv/lib/python3.14/site-packages/django/utils/asyncio.py:26: in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/django/db/backends/base/base.py:327: in commit
+    self._commit()
+.venv/lib/python3.14/site-packages/django/db/backends/base/base.py:302: in _commit
+    with debug_transaction(self, "COMMIT"), self.wrap_database_errors:
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.14/site-packages/django/db/backends/base/base.py:303: in _commit
+    return self.connection.commit()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/psycopg/connection.py:309: in commit
+    self.wait(self._commit_gen())
+.venv/lib/python3.14/site-packages/psycopg/connection.py:495: in wait
+    return waiting.wait(
+psycopg_binary/_psycopg/waiting.pyx:255: in psycopg_binary._psycopg.wait_c
+    ???
+.venv/lib/python3.14/site-packages/psycopg/_connection_base.py:592: in _commit_gen
+    yield from self._exec_command(b"COMMIT")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <psycopg.Connection [IDLE] (host=127.0.0.1 port=32771 user=meridian database=test_meridian) at 0x7f93ae25e120>
+command = b'COMMIT', result_format = <Format.TEXT: 0>
+
+    def _exec_command(
+        self, command: QueryNoTemplate, result_format: pq.Format = TEXT
+    ) -> PQGen[PGresult | None]:
+        """
+        Generator to send a command and receive the result to the backend.
+    
+        Only used to implement internal commands such as "commit", with eventual
+        arguments bound client-side. The cursor can do more complex stuff.
+        """
+        self._check_connection_ok()
+    
+        if isinstance(command, str):
+            command = command.encode(self.pgconn._encoding)
+        elif isinstance(command, Composable):
+            command = command.as_bytes(self)
+    
+        if self._pipeline:
+            cmd = partial(
+                self.pgconn.send_query_params,
+                command,
+                None,
+                result_format=result_format,
+            )
+            self._pipeline.command_queue.append(cmd)
+            self._pipeline.result_queue.append(None)
+            return None
+    
+        # Unless needed, use the simple query protocol, e.g. to interact with
+        # pgbouncer. In pipeline mode we always use the advanced query protocol
+        # instead, see #350
+        if result_format == TEXT:
+            self.pgconn.send_query(command)
+        else:
+            self.pgconn.send_query_params(command, None, result_format=result_format)
+    
+        results: list[PGresult] = (yield from generators.execute(self.pgconn))
+        if len(results) != 1:
+            raise e.InternalError(
+                f"received {len(results)} results from command {command.decode()!r}"
+            )
+    
+        result = results[0]
+        if result.status != COMMAND_OK and result.status != TUPLES_OK:
+            if result.status == FATAL_ERROR:
+>               raise e.error_from_result(result, encoding=self.pgconn._encoding)
+E               django.db.utils.IntegrityError: insert or update on table "auth_permission" violates foreign key constraint "auth_permission_content_type_id_2f476e4b_fk_django_co"
+E               DETAIL:  Key (content_type_id)=(106) is not present in table "django_content_type".
+
+.venv/lib/python3.14/site-packages/psycopg/_connection_base.py:487: IntegrityError
+------------------------------ Captured log call -------------------------------
+WARNING  django.request:log.py:253 Forbidden: /api/v1/journals/d0476b39-3d3b-4e18-baca-815629ebacbe
+__ ERROR at setup of test_me03_retry_whole_aborted_transaction_real_sqlstate ___
+
+self = <django.db.backends.utils.CursorWrapper object at 0x7f93adecf950>
+sql = 'INSERT INTO "meridian_membership" ("user_id", "tenant_id", "verified") VALUES (%s, %s, %s) RETURNING "meridian_membership"."id"'
+params = (15, UUID('56c5ef42-7bda-4854-8067-f3ac4d1cf07d'), True)
+ignored_wrapper_args = (False, {'connection': <DatabaseWrapper vendor='postgresql' alias='default'>, 'cursor': <django.db.backends.utils.CursorWrapper object at 0x7f93adecf950>})
+
+    def _execute(self, sql, params, *ignored_wrapper_args):
+        # Raise a warning during app initialization (stored_app_configs is only
+        # ever set during testing).
+        if not apps.ready and not apps.stored_app_configs:
+            warnings.warn(self.APPS_NOT_READY_WARNING_MSG, category=RuntimeWarning)
+        self.db.validate_no_broken_transaction()
+        with self.db.wrap_database_errors:
+            if params is None:
+                # params default might be backend specific.
+                return self.cursor.execute(sql)
+            else:
+>               return self.cursor.execute(sql, params)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.14/site-packages/django/db/backends/utils.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <django.db.backends.postgresql.base.Cursor [closed] [IDLE] (host=127.0.0.1 port=32771 user=meridian database=test_meridian) at 0x7f93addc9fd0>
+query = 'INSERT INTO "meridian_membership" ("user_id", "tenant_id", "verified") VALUES (%s, %s, %s) RETURNING "meridian_membership"."id"'
+params = (15, UUID('56c5ef42-7bda-4854-8067-f3ac4d1cf07d'), True)
+prepare = None, binary = None
+
+    def execute(
+        self,
+        query: Query,
+        params: Params | None = None,
+        *,
+        prepare: bool | None = None,
+        binary: bool | None = None,
+    ) -> Self:
+        """
+        Execute a query or command to the database.
+        """
+        try:
+            with self._conn.lock:
+                self._conn.wait(
+                    self._execute_gen(query, params, prepare=prepare, binary=binary)
+                )
+        except e._NO_TRACEBACK as ex:
+>           raise ex.with_traceback(None)
+E           psycopg.errors.ForeignKeyViolation: insert or update on table "meridian_membership" violates foreign key constraint "meridian_membership_user_id_13298a47_fk_auth_user_id"
+E           DETAIL:  Key (user_id)=(15) is not present in table "auth_user".
+
+.venv/lib/python3.14/site-packages/psycopg/cursor.py:117: ForeignKeyViolation
+
+The above exception was the direct cause of the following exception:
+
+db = None
+
+    @pytest.fixture
+    def ledger(db: None) -> Iterator[tuple[int, Tenant, list[object]]]:
+        user = get_user_model().objects.create_user(
+            username=str(uuid4()), password="synthetic-password"
+        )
+        tenant = Tenant.objects.create(name="Synthetic equipment rental")
+>       Membership.objects.create(user=user, tenant=tenant, verified=True)
+
+tests/conftest.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.14/site-packages/django/db/models/manager.py:87: in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/django/db/models/query.py:665: in create
+    obj.save(force_insert=True, using=self.db)
+.venv/lib/python3.14/site-packages/django/db/models/base.py:902: in save
+    self.save_base(
+.venv/lib/python3.14/site-packages/django/db/models/base.py:1008: in save_base
+    updated = self._save_table(
+.venv/lib/python3.14/site-packages/django/db/models/base.py:1169: in _save_table
+    results = self._do_insert(
+.venv/lib/python3.14/site-packages/django/db/models/base.py:1210: in _do_insert
+    return manager._insert(
+.venv/lib/python3.14/site-packages/django/db/models/manager.py:87: in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/django/db/models/query.py:1873: in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/django/db/models/sql/compiler.py:1882: in execute_sql
+    cursor.execute(sql, params)
+.venv/lib/python3.14/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.14/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/django/db/utils.py:91: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.14/site-packages/django/db/backends/utils.py:105: in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <django.db.backends.postgresql.base.Cursor [closed] [IDLE] (host=127.0.0.1 port=32771 user=meridian database=test_meridian) at 0x7f93addc9fd0>
+query = 'INSERT INTO "meridian_membership" ("user_id", "tenant_id", "verified") VALUES (%s, %s, %s) RETURNING "meridian_membership"."id"'
+params = (15, UUID('56c5ef42-7bda-4854-8067-f3ac4d1cf07d'), True)
+prepare = None, binary = None
+
+    def execute(
+        self,
+        query: Query,
+        params: Params | None = None,
+        *,
+        prepare: bool | None = None,
+        binary: bool | None = None,
+    ) -> Self:
+        """
+        Execute a query or command to the database.
+        """
+        try:
+            with self._conn.lock:
+                self._conn.wait(
+                    self._execute_gen(query, params, prepare=prepare, binary=binary)
+                )
+        except e._NO_TRACEBACK as ex:
+>           raise ex.with_traceback(None)
+E           django.db.utils.IntegrityError: insert or update on table "meridian_membership" violates foreign key constraint "meridian_membership_user_id_13298a47_fk_auth_user_id"
+E           DETAIL:  Key (user_id)=(15) is not present in table "auth_user".
+
+.venv/lib/python3.14/site-packages/psycopg/cursor.py:117: IntegrityError
+=================================== FAILURES ===================================
+_____________________ test_me05_randomized_reversal_replay _____________________
+
+ledger = (3, <Tenant: Tenant object (b324ca5b-e4b6-4c27-8683-4b7948961aa4)>, [<Account: Account object (76619681-87c8-460b-b857...ount object (a33eae6e-4a0b-42a6-9dfd-cd5328472556)>, <Account: Account object (14318009-3379-4042-b15f-ae6b0f064aa7)>])
+
+    def test_me05_randomized_reversal_replay(ledger):
+        import random
+    
+        rng = random.Random(1729)
+        user, tenant, accounts = ledger
+        expected = {0: 0}
+        total = 0
+        for i in range(30):
+            amount = rng.randint(1, 10000) * (1 if i % 2 else -1)
+            j = service.post(user, journal_value(ledger, amount), f"random-{i}")
+            total += amount
+            expected[j.sequence] = total
+            if i % 4 == 0:
+                reversal = service.reverse(user, tenant.id, j.id, f"reverse-{i}")
+                total -= amount
+                expected[reversal.sequence] = total
+                assert service.reverse(user, tenant.id, j.id, f"reverse-{i}").id == reversal.id
+                with pytest.raises(service.Conflict):
+                    service.reverse(user, tenant.id, j.id, f"second-{i}")
+        for sequence, value in expected.items():
+>           assert service.balance(user, tenant.id, accounts[0].id, sequence) == value
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_ledger_pg.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/pp_meridian/application/ledger.py:206: in balance
+    authorize(user_id, tenant_id)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+user_id = 3, tenant_id = UUID('b324ca5b-e4b6-4c27-8683-4b7948961aa4')
+
+    def authorize(user_id: int, tenant_id: UUID) -> None:
+        if not Membership.objects.filter(
+            user_id=user_id, tenant_id=tenant_id, verified=True, user__is_active=True
+        ).exists():
+>           raise Forbidden("verified tenant membership required")
+E           pp_meridian.application.ledger.Forbidden: verified tenant membership required
+
+src/pp_meridian/application/ledger.py:54: Forbidden
+_________________ test_me06_api_all_endpoints_tenant_isolation _________________
+
+ledger = (6, <Tenant: Tenant object (62959be4-4a8a-4397-93f0-506864b0e668)>, [<Account: Account object (445a4024-caf1-412b-b229...ount object (ae38c189-9842-4910-b66f-772bf7c39871)>, <Account: Account object (03d3320a-d6c5-4895-8ac8-b3f9699443bf)>])
+
+    def test_me06_api_all_endpoints_tenant_isolation(ledger):
+        user, tenant, accounts = ledger
+        other = Tenant.objects.create(name="private")
+        foreign = Account.objects.create(tenant=other, name="secret", currency="USD")
+        client = Client()
+        headers = auth(user, tenant)
+        j = service.post(user, journal_value(ledger), "original")
+>       assert client.get(f"/api/v1/journals/{j.id}", **headers).status_code == 200
+E       assert 403 == 200
+E        +  where 403 = <JsonResponse status_code=403, "application/json">.status_code
+E        +    where <JsonResponse status_code=403, "application/json"> = get('/api/v1/journals/d0476b39-3d3b-4e18-baca-815629ebacbe', **{'HTTP_AUTHORIZATION': 'Basic ODI1ODI0YzQtMTgyZC00ODc2LWI1NmYtOGM2N2JlN2Q4ZjI3OnN5bnRoZXRpYy1wYXNzd29yZA==', 'HTTP_X_TENANT_ID': '62959be4-4a8a-4397-93f0-506864b0e668'})
+E        +      where get = <django.test.client.Client object at 0x7f93ae342580>.get
+
+tests/integration/test_ledger_pg.py:174: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  django.request:log.py:253 Forbidden: /api/v1/journals/d0476b39-3d3b-4e18-baca-815629ebacbe
+___________________ test_api_decimal_precision_and_reversal ____________________
+
+ledger = (9, <Tenant: Tenant object (1b9e0283-b4a3-433b-9009-db7366c68263)>, [<Account: Account object (3e0964e9-b096-474d-bb9e...ount object (063a7d90-7ffd-452e-8fa5-64a9dfa4ede9)>, <Account: Account object (afdf8850-777e-40e0-806a-893341821ec7)>])
+
+    def test_api_decimal_precision_and_reversal(ledger):
+        user, tenant, accounts = ledger
+        client = Client()
+        headers = auth(user, tenant)
+        payload = {
+            "currency": "USD",
+            "postings": [
+                {"account_id": str(accounts[0].id), "amount": "1.00"},
+                {"account_id": str(accounts[1].id), "amount": "-1.00"},
+            ],
+        }
+        result = client.post(
+            "/api/v1/journals",
+            json.dumps(payload),
+            content_type="application/json",
+            HTTP_IDEMPOTENCY_KEY="api",
+            **headers,
+        )
+        assert result.status_code == 201, result.content
+        identity = result.json()["id"]
+        response = client.post(
+            f"/api/v1/journals/{identity}/reversal",
+            "{}",
+            content_type="application/json",
+            HTTP_IDEMPOTENCY_KEY="reverse",
+            **headers,
+        )
+        assert response.status_code == 201, response.content
+        payload["postings"][0]["amount"] = "1.001"
+>       assert (
+            client.post(
+                "/api/v1/journals",
+                json.dumps(payload),
+                content_type="application/json",
+                HTTP_IDEMPOTENCY_KEY="precision",
+                **headers,
+            ).status_code
+            == 400
+        )
+E       assert 403 == 400
+E        +  where 403 = <JsonResponse status_code=403, "application/json">.status_code
+E        +    where <JsonResponse status_code=403, "application/json"> = post('/api/v1/journals', '{"currency": "USD", "postings": [{"account_id": "3e0964e9-b096-474d-bb9e-876e036339b6", "amount": "1.001"}, {"account_id": "063a7d90-7ffd-452e-8fa5-64a9dfa4ede9", "amount": "-1.00"}]}', content_type='application/json', HTTP_IDEMPOTENCY_KEY='precision', **{'HTTP_AUTHORIZATION': 'Basic NzRkZDUzNzItYzU4ZC00MjM3LWE0ODItNWY4YjU4MzI1YzhlOnN5bnRoZXRpYy1wYXNzd29yZA==', 'HTTP_X_TENANT_ID': '1b9e0283-b4a3-433b-9009-db7366c68263'})
+E        +      where post = <django.test.client.Client object at 0x7f93ae2d6850>.post
+E        +      and   '{"currency": "USD", "postings": [{"account_id": "3e0964e9-b096-474d-bb9e-876e036339b6", "amount": "1.001"}, {"account_id": "063a7d90-7ffd-452e-8fa5-64a9dfa4ede9", "amount": "-1.00"}]}' = <function dumps at 0x7f93b2e53ab0>({'currency': 'USD', 'postings': [{'account_id': '3e0964e9-b096-474d-bb9e-876e036339b6', 'amount': '1.001'}, {'account_id': '063a7d90-7ffd-452e-8fa5-64a9dfa4ede9', 'amount': '-1.00'}]})
+E        +        where <function dumps at 0x7f93b2e53ab0> = json.dumps
+
+tests/integration/test_ledger_pg.py:255: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  django.request:log.py:253 Forbidden: /api/v1/journals
+_______________ test_me07_two_rows_one_posting_and_authorization _______________
+
+ledger = (12, <Tenant: Tenant object (3da71900-2465-4f53-ae6b-2120a7e67d70)>, [<Account: Account object (8418577a-ce23-4422-9d5...ount object (18ee55f6-bed0-41f6-b44b-36159c5dc02c)>, <Account: Account object (6842a0e8-ced9-48f2-91d6-e7a37fce1b6f)>])
+
+    def test_me07_two_rows_one_posting_and_authorization(ledger):
+        user, tenant, accounts = ledger
+        _, rows = make_statements(ledger)
+        reconcile.import_rows(
+            user, tenant.id, accounts[0].id, "bank-2026", [{**rows[0], "id": "row-2"}]
+        )
+        runs = [reconcile.run(user, tenant.id, accounts[0].id) for _ in range(2)]
+        assert runs[0].proposals.get().ambiguous
+        foreign = Tenant.objects.create(name="foreign")
+        with pytest.raises(service.Forbidden):
+            reconcile.decide(user, foreign.id, runs[0].proposals.get().id, "approve")
+        headers = auth(user, tenant)
+        client = Client()
+        run = runs[0]
+        assert client.get(f"/api/v1/reconciliation/runs/{run.id}?limit=1", **headers).status_code == 200
+        assert (
+            client.get(f"/api/v1/reconciliation/runs/{run.id}?limit=101", **headers).status_code == 400
+        )
+        assert (
+            client.get(
+                f"/api/v1/reconciliation/runs/{run.id}",
+                **{**headers, "HTTP_X_TENANT_ID": str(foreign.id)},
+            ).status_code
+            == 403
+        )
+>       assert (
+            client.post(
+                f"/api/v1/reconciliation/proposals/{run.proposals.get().id}/decision",
+                json.dumps({"decision": "approve"}),
+                content_type="application/json",
+                **headers,
+            ).status_code
+            == 200
+        )
+E       assert 403 == 200
+E        +  where 403 = <JsonResponse status_code=403, "application/json">.status_code
+E        +    where <JsonResponse status_code=403, "application/json"> = post('/api/v1/reconciliation/proposals/3c07737e-b84b-4233-8ec0-7757a8a25bbc/decision', '{"decision": "approve"}', content_type='application/json', **{'HTTP_AUTHORIZATION': 'Basic Mzk4NzY1NjItZjc4YS00MjdmLWE4Y2EtZDdhOGVkNDJiZWMxOnN5bnRoZXRpYy1wYXNzd29yZA==', 'HTTP_X_TENANT_ID': '3da71900-2465-4f53-ae6b-2120a7e67d70'})
+E        +      where post = <django.test.client.Client object at 0x7f93ae1d26c0>.post
+E        +      and   '{"decision": "approve"}' = <function dumps at 0x7f93b2e53ab0>({'decision': 'approve'})
+E        +        where <function dumps at 0x7f93b2e53ab0> = json.dumps
+
+tests/integration/test_ledger_pg.py:333: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  django.request:log.py:253 Bad Request: /api/v1/reconciliation/runs/5d5d4c7b-0309-4f88-b560-2c1e2b44ef8d
+WARNING  django.request:log.py:253 Forbidden: /api/v1/reconciliation/runs/5d5d4c7b-0309-4f88-b560-2c1e2b44ef8d
+WARNING  django.request:log.py:253 Forbidden: /api/v1/reconciliation/proposals/3c07737e-b84b-4233-8ec0-7757a8a25bbc/decision
+__________ test_me04_killed_process_rolls_back_unacknowledged_posting __________
+
+ledger = (22, <Tenant: Tenant object (7ed0d9b2-ec45-43af-9335-8a0c52fb44a6)>, [<Account: Account object (95c1c877-79f5-43b3-90e...ount object (2de7e436-7bd2-4eeb-9ed6-6b20ae1e4419)>, <Account: Account object (5721d4b5-0f64-4f70-b36b-7d6ed1a482e0)>])
+
+    def test_me04_killed_process_rolls_back_unacknowledged_posting(ledger):
+        import os
+        import subprocess
+        import sys
+        from urllib.parse import quote
+    
+        from django.conf import settings
+    
+        user, tenant, accounts = ledger
+        config = settings.DATABASES["default"]
+        url = f"postgresql://{quote(str(config['USER']))}:{quote(str(config['PASSWORD']))}@{config['HOST']}:{config['PORT']}/{config['NAME']}"
+        code = """import os,django
+    from uuid import UUID
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE","pp_meridian.config.settings")
+    django.setup()
+    from pp_meridian.application.ledger import post
+    from pp_meridian.domain.journal import Entry,JournalValue
+    post(int(os.environ["TEST_USER"]),JournalValue(UUID(os.environ["TEST_TENANT"]),"USD",(Entry(UUID(os.environ["TEST_ACCOUNT_A"]),100),Entry(UUID(os.environ["TEST_ACCOUNT_B"]),-100))),"killed",fault=lambda:os._exit(91))
+    """
+        env = {
+            **os.environ,
+            "MERIDIAN_DATABASE_URL": url,
+            "TEST_USER": str(user),
+            "TEST_TENANT": str(tenant.id),
+            "TEST_ACCOUNT_A": str(accounts[0].id),
+            "TEST_ACCOUNT_B": str(accounts[1].id),
+        }
+        child = subprocess.run([sys.executable, "-c", code], env=env, capture_output=True, timeout=30)
+>       assert child.returncode == 91, child.stderr.decode()
+E       AssertionError: Traceback (most recent call last):
+E           File "<string>", line 7, in <module>
+E             post(int(os.environ["TEST_USER"]),JournalValue(UUID(os.environ["TEST_TENANT"]),"USD",(Entry(UUID(os.environ["TEST_ACCOUNT_A"]),100),Entry(UUID(os.environ["TEST_ACCOUNT_B"]),-100))),"killed",fault=lambda:os._exit(91))
+E             ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "/workspace/portfolio-verify-s21ujvba/source/projects/04-meridian/src/pp_meridian/application/ledger.py", line 178, in post
+E             return retry_transaction(execute)
+E           File "/workspace/portfolio-verify-s21ujvba/source/projects/04-meridian/src/pp_meridian/application/ledger.py", line 64, in retry_transaction
+E             return operation()
+E           File "/workspace/portfolio-verify-s21ujvba/source/projects/04-meridian/src/pp_meridian/application/ledger.py", line 118, in execute
+E             authorize(user_id, value.tenant_id)
+E             ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "/workspace/portfolio-verify-s21ujvba/source/projects/04-meridian/src/pp_meridian/application/ledger.py", line 54, in authorize
+E             raise Forbidden("verified tenant membership required")
+E         pp_meridian.application.ledger.Forbidden: verified tenant membership required
+E         
+E       assert 1 == 91
+E        +  where 1 = CompletedProcess(args=['/workspace/portfolio-verify-s21ujvba/source/projects/04-meridian/.venv/bin/python', '-c', 'imp...erified tenant membership required")\npp_meridian.application.ledger.Forbidden: verified tenant membership required\n').returncode
+
+tests/integration/test_ledger_pg.py:503: AssertionError
+=========================== short test summary info ============================
+FAILED tests/integration/test_ledger_pg.py::test_me05_randomized_reversal_replay
+FAILED tests/integration/test_ledger_pg.py::test_me06_api_all_endpoints_tenant_isolation
+FAILED tests/integration/test_ledger_pg.py::test_api_decimal_precision_and_reversal
+FAILED tests/integration/test_ledger_pg.py::test_me07_two_rows_one_posting_and_authorization
+FAILED tests/integration/test_ledger_pg.py::test_me04_killed_process_rolls_back_unacknowledged_posting
+ERROR tests/integration/test_ledger_pg.py::test_me04_atomic_fault_and_direct_database_constraints
+ERROR tests/integration/test_ledger_pg.py::test_me06_api_all_endpoints_tenant_isolation
+ERROR tests/integration/test_ledger_pg.py::test_me03_retry_whole_aborted_transaction_real_sqlstate
+=================== 5 failed, 33 passed, 3 errors in 24.19s ====================
+meridian: check failed (1)

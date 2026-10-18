@@ -1,0 +1,96 @@
+[01-anchor] uv run --locked --python 3.13.16 ruff format --check .
+Using CPython 3.13.16
+Creating virtual environment at: .venv
+   Building pp-anchor @ file:///workspace/portfolio-verify-q_j50t9a/source/projects/01-anchor
+      Built pp-anchor @ file:///workspace/portfolio-verify-q_j50t9a/source/projects/01-anchor
+Installed 41 packages in 954ms
+44 files already formatted
+[01-anchor] uv run --locked --python 3.13.16 ruff check .
+All checks passed!
+[01-anchor] uv run --locked --python 3.13.16 mypy src
+Success: no issues found in 22 source files
+[01-anchor] uv run --locked --python 3.13.16 pytest
+============================= test session starts ==============================
+platform linux -- Python 3.13.16, pytest-9.1.1, pluggy-1.7.0
+rootdir: /workspace/portfolio-verify-q_j50t9a/source/projects/01-anchor
+configfile: pyproject.toml
+testpaths: tests
+plugins: cov-7.1.0, anyio-4.15.1, hypothesis-6.170.1
+collected 54 items
+
+tests/acceptance/test_cli_demo.py .                                      [  1%]
+tests/integration/test_edge_cases.py .....                               [ 11%]
+tests/integration/test_postgres_contract.py .........                    [ 27%]
+tests/integration/test_process_fencing.py ..                             [ 31%]
+tests/integration/test_snapshot.py .                                     [ 33%]
+tests/property/test_dag_model.py .                                       [ 35%]
+tests/unit/test_boundaries.py ..............................             [ 90%]
+tests/unit/test_reducer.py .....                                         [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /workspace/portfolio-verify-q_j50t9a/source/projects/01-anchor/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 54 passed, 1 warning in 15.82s ========================
+[01-anchor] uv build --no-sources --python 3.13.16
+Building source distribution...
+Building wheel from source distribution...
+Successfully built dist/pp_anchor-0.1.0.tar.gz
+Successfully built dist/pp_anchor-0.1.0-py3-none-any.whl
+[01-anchor] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/portfolio-verify-q_j50t9a/source/scripts/wheel_smoke.py /workspace/portfolio-verify-q_j50t9a/source/projects/01-anchor pp_anchor
+Using CPython 3.13.16
+Creating virtual environment at: /tmp/portfolio-wheel-yclv0euj/venv
+Activate with: source /tmp/portfolio-wheel-yclv0euj/venv/bin/activate
+Using CPython 3.14.8
+Resolved 43 packages in 1ms
+Using Python 3.13.16 environment at: /tmp/portfolio-wheel-yclv0euj/venv
+Resolved 24 packages in 719ms
+Prepared 1 package in 10ms
+Installed 24 packages in 36ms
+ + annotated-doc==0.0.5
+ + annotated-types==0.8.0
+ + anyio==4.15.1
+ + click==8.5.0
+ + fastapi==0.143.3
+ + h11==0.16.0
+ + idna==3.20
+ + markdown-it-py==4.2.0
+ + mdurl==0.1.2
+ + opentelemetry-api==1.45.1
+ + pp-anchor==0.1.0 (from file:///workspace/portfolio-verify-q_j50t9a/source/projects/01-anchor/dist/pp_anchor-0.1.0-py3-none-any.whl)
+ + psycopg==3.3.6
+ + psycopg-binary==3.3.6
+ + psycopg-pool==3.3.3
+ + pydantic==2.14.1
+ + pydantic-core==2.50.1
+ + pygments==2.21.0
+ + rich==15.0.0
+ + shellingham==1.5.4
+ + starlette==1.8.0
+ + typer==0.27.3
+ + typing-extensions==4.16.0
+ + typing-inspection==0.4.4
+ + uvicorn==0.54.0
+/tmp/portfolio-wheel-yclv0euj/venv/lib/python3.13/site-packages/pp_anchor/__init__.py
+001 started                                   {'digest': 'af80cbd95a648c707ba6e3ec013ecca10691ba5a4ffdf42d55b8bc6bd34c9052'}
+002 signal                                    {'name': 'approve', 'payload': {'approved': True}}
+003 activity_claimed         validate         {'epoch': 1, 'attempt': 1, 'command_id': 'step:validate'}
+004 step_completed           validate         {'error': None, 'result': {'validated_rows': 60}, 'attempt': 1, 'retry_delay': 0}
+005 activity_claimed         partition_0      {'epoch': 1, 'attempt': 1, 'command_id': 'step:partition_0'}
+006 step_completed           partition_0      {'error': None, 'result': {'sha256': 'ad324847c02401be6c4c0d1532cd17865607f5aae3944fe46da8c67a284b1a70', 'partition': 0}, 'attempt': 1, 'retry_delay': 0}
+007 activity_claimed         partition_1      {'epoch': 1, 'attempt': 1, 'command_id': 'step:partition_1'}
+008 step_completed           partition_1      {'error': None, 'result': {'sha256': '9e00060d45005c86262cd7466c19db884d44002fe36e12c9e55c808ceba85976', 'partition': 1}, 'attempt': 1, 'retry_delay': 0}
+009 activity_claimed         partition_2      {'epoch': 1, 'attempt': 1, 'command_id': 'step:partition_2'}
+010 step_completed           partition_2      {'error': None, 'result': {'sha256': '22f597edc6293d807d1c94f7ac255a9fd6ed5be62ad52d3ff6c2ff5e23d3e5f2', 'partition': 2}, 'attempt': 1, 'retry_delay': 0}
+011 step_completed           join             {'source': 'internal'}
+012 activity_claimed         archive          {'epoch': 1, 'attempt': 1, 'command_id': 'step:archive'}
+013 step_completed           archive          {'error': None, 'result': {'bytes': 854, 'sha256': '6d8bd0623990268d2999001ac97278c2946e06d82899d1d0095bb58c38030a0e'}, 'attempt': 1, 'retry_delay': 0}
+014 step_completed           cooldown         {'source': 'timer'}
+015 step_completed           approval         {'source': 'internal'}
+016 activity_claimed         publish          {'epoch': 1, 'attempt': 1, 'command_id': 'step:publish'}
+017 activity_claimed         publish          {'epoch': 2, 'attempt': 2, 'command_id': 'step:publish'}
+018 step_completed           publish          {'error': None, 'result': {'business_key': 'fd94ba0e-e46b-4014-a518-5facb507bc47', 'publications': 1}, 'attempt': 2, 'retry_delay': 0}
+Completed fd94ba0e-e46b-4014-a518-5facb507bc47; one publication; killed worker recovered; replay verified.
+Removed only owned Anchor demo state

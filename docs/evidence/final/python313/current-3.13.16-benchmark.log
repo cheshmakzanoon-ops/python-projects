@@ -1,0 +1,196 @@
+[03-current] uv run --locked --python 3.13.16 python -m pp_current.cli benchmark --output /workspace/portfolio-verify-q_j50t9a/source/.local/current/benchmark --seed 1729 --profile ci
+{
+  "schema_version": 1,
+  "project": "current",
+  "source_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+  "source_dirty": false,
+  "source_scope": "project",
+  "source_content_sha256": "ababa3cb1e6836489b8fe1d0f475ecbcd2cc35e63b74aab2d030334b7a10491b",
+  "root_contract_sha256": "2fe52e3770f408debf487d4c075ce5261504f6e6ac72e897146d08fe869182c2",
+  "lockfile_sha256": "baf15ac83a35752ad671410a6466a49a8b6f5b43d6210beed3cb3bd6982239a3",
+  "python": "3.13.16",
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "cpu": "unknown",
+  "memory_limit_bytes": null,
+  "seed": 1729,
+  "dataset_id": "7e0c2c537892244369b534799cac6da1947eeff5a33a698af3fb904de97ae056",
+  "profile": "ci",
+  "warmup_runs": 1,
+  "measurement_runs": 5,
+  "repetition_reason": "Five CI repetitions; standard uses one full ordinary and one full hot million-event run because durable admission, output publication and full independent reconciliation are costly.",
+  "parameters": {
+    "events": 10000,
+    "workers": 4,
+    "threads": 1,
+    "checkpoint_interval": 10000,
+    "window_ms": 30000,
+    "lateness_ms": 10000,
+    "durability": "SQLite WAL synchronous FULL"
+  },
+  "metrics": {
+    "runs": [
+      {
+        "events": 10000,
+        "records": 10046,
+        "dispositions": {
+          "accepted-late": 65,
+          "on-time": 9902,
+          "rejected-late": 33
+        },
+        "outputs": 25345,
+        "oracle_matches": true,
+        "processing_seconds": 1.8151343680001446,
+        "checkpoint_seconds": [
+          0.40430989600008616,
+          0.04534611000008226
+        ],
+        "max_watermark_lag_ms": 101900,
+        "max_finalization_lag_ms": 113000,
+        "controlled_crash_exit": null,
+        "admission_seconds": 0.6132169160000558,
+        "throughput_events_s": 5509.234013908112,
+        "restore_seconds": 0.00016058699975474156,
+        "buffer_peak": 48,
+        "state_peak": 4560,
+        "watermark": 9223372036854775807,
+        "disk_bytes": 28568984
+      },
+      {
+        "events": 10000,
+        "records": 10046,
+        "dispositions": {
+          "accepted-late": 65,
+          "on-time": 9902,
+          "rejected-late": 33
+        },
+        "outputs": 25345,
+        "oracle_matches": true,
+        "processing_seconds": 2.1549567649999517,
+        "checkpoint_seconds": [
+          0.29719040899999527,
+          0.09885407500041765
+        ],
+        "max_watermark_lag_ms": 101900,
+        "max_finalization_lag_ms": 113000,
+        "controlled_crash_exit": null,
+        "admission_seconds": 0.6017747290002262,
+        "throughput_events_s": 4640.464329687015,
+        "restore_seconds": 0.00015948100008245092,
+        "buffer_peak": 48,
+        "state_peak": 4560,
+        "watermark": 9223372036854775807,
+        "disk_bytes": 28568984
+      },
+      {
+        "events": 10000,
+        "records": 10046,
+        "dispositions": {
+          "accepted-late": 65,
+          "on-time": 9902,
+          "rejected-late": 33
+        },
+        "outputs": 25345,
+        "oracle_matches": true,
+        "processing_seconds": 2.220702686000095,
+        "checkpoint_seconds": [
+          0.46958131399969716,
+          0.047438152999802696
+        ],
+        "max_watermark_lag_ms": 101900,
+        "max_finalization_lag_ms": 113000,
+        "controlled_crash_exit": null,
+        "admission_seconds": 0.579333036999742,
+        "throughput_events_s": 4503.0791663569735,
+        "restore_seconds": 0.0010558989997662138,
+        "buffer_peak": 48,
+        "state_peak": 4560,
+        "watermark": 9223372036854775807,
+        "disk_bytes": 28568984
+      },
+      {
+        "events": 10000,
+        "records": 10046,
+        "dispositions": {
+          "accepted-late": 65,
+          "on-time": 9902,
+          "rejected-late": 33
+        },
+        "outputs": 25345,
+        "oracle_matches": true,
+        "processing_seconds": 1.5205992629998946,
+        "checkpoint_seconds": [
+          0.31377407399986623,
+          0.08520830599991314
+        ],
+        "max_watermark_lag_ms": 101900,
+        "max_finalization_lag_ms": 113000,
+        "controlled_crash_exit": null,
+        "admission_seconds": 0.3680454870000176,
+        "throughput_events_s": 6576.3546276299185,
+        "restore_seconds": 0.00013356099998418358,
+        "buffer_peak": 48,
+        "state_peak": 4560,
+        "watermark": 9223372036854775807,
+        "disk_bytes": 28568984
+      },
+      {
+        "events": 10000,
+        "records": 10046,
+        "dispositions": {
+          "accepted-late": 65,
+          "on-time": 9902,
+          "rejected-late": 33
+        },
+        "outputs": 25345,
+        "oracle_matches": true,
+        "processing_seconds": 5.003881614999955,
+        "checkpoint_seconds": [
+          1.6945846090002306,
+          0.2000534560002052
+        ],
+        "max_watermark_lag_ms": 101900,
+        "max_finalization_lag_ms": 113000,
+        "controlled_crash_exit": null,
+        "admission_seconds": 0.5884006470000713,
+        "throughput_events_s": 1998.4485584197998,
+        "restore_seconds": 0.00042834199985009036,
+        "buffer_peak": 48,
+        "state_peak": 4560,
+        "watermark": 9223372036854775807,
+        "disk_bytes": 28568984
+      }
+    ],
+    "hot": {
+      "events": 10000,
+      "records": 10046,
+      "dispositions": {
+        "accepted-late": 67,
+        "on-time": 9899,
+        "rejected-late": 34
+      },
+      "outputs": 43714,
+      "oracle_matches": true,
+      "processing_seconds": 4.61422224800026,
+      "checkpoint_seconds": [
+        1.2844274200001564,
+        0.6270096180001019
+      ],
+      "max_watermark_lag_ms": 101900,
+      "max_finalization_lag_ms": 113000,
+      "controlled_crash_exit": null,
+      "admission_seconds": 0.6633840590002364,
+      "throughput_events_s": 2167.2124710364483,
+      "restore_seconds": 0.00046284100017146557,
+      "buffer_peak": 89,
+      "state_peak": 2891,
+      "watermark": 9223372036854775807,
+      "disk_bytes": 50386488
+    },
+    "peak_process_rss_bytes": 115388416,
+    "median_throughput": 4640.464329687015
+  },
+  "correctness_checks": {
+    "reconciled": true
+  },
+  "status": "passed"
+}

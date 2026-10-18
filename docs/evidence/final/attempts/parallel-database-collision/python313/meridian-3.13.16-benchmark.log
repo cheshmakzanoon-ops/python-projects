@@ -1,0 +1,5 @@
+[04-meridian] uv run --locked --python 3.13.16 python -m pp_meridian.cli benchmark --output /workspace/portfolio-verify-q_j50t9a/source/.local/meridian/benchmark --seed 1729 --profile ci
+{
+  "status": "passed",
+  "benchmark": "/workspace/portfolio-verify-q_j50t9a/source/.local/meridian/benchmark/benchmark.json"
+}

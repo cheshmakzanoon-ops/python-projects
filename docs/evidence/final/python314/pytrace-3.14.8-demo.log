@@ -1,0 +1,18 @@
+[06-pytrace] uv run --locked --python 3.14.8 python -m pp_pytrace.cli demo --output /workspace/portfolio-verify-s21ujvba/source/.local/pytrace/demo --seed 1729
+{
+  "schema_version": 1,
+  "project": "pytrace",
+  "seed": 1729,
+  "findings": [
+    "PT001",
+    "PT003",
+    "PT002",
+    "PT003"
+  ],
+  "safe_edits": 1,
+  "transformations": 2,
+  "patch": "preview.patch",
+  "idempotent": true,
+  "security_findings_preserved": true,
+  "status": "passed"
+}

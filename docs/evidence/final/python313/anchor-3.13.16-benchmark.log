@@ -1,0 +1,137 @@
+[01-anchor] uv run --locked --python 3.13.16 python -m pp_anchor.cli benchmark --output /workspace/portfolio-verify-q_j50t9a/source/.local/anchor/benchmark --seed 1729 --profile ci
+{
+  "repetitions": [
+    {
+      "elapsed_seconds": 6.229285166999944,
+      "admission_seconds": 0.8982955079995918,
+      "offered_workflows": 100,
+      "completed_workflows": 100,
+      "activities": 500,
+      "execution_attempts": 505,
+      "injected_failures": 5,
+      "admitted_queue_depth": 100,
+      "workflows_per_second": 16.053206318079113,
+      "metrics": {
+        "tasks": {
+          "completed": 500
+        },
+        "runs": {
+          "completed": 100
+        },
+        "retries": 5,
+        "created_to_start_p95_seconds": 5.070594,
+        "ready_to_start_p95_seconds": 4.1765854000000004,
+        "expired_leases": 0,
+        "database_size_bytes": 2285568
+      }
+    },
+    {
+      "elapsed_seconds": 5.777858217000357,
+      "admission_seconds": 0.7761580010001126,
+      "offered_workflows": 100,
+      "completed_workflows": 100,
+      "activities": 500,
+      "execution_attempts": 505,
+      "injected_failures": 5,
+      "admitted_queue_depth": 100,
+      "workflows_per_second": 17.30745135035802,
+      "metrics": {
+        "tasks": {
+          "completed": 500
+        },
+        "runs": {
+          "completed": 100
+        },
+        "retries": 5,
+        "created_to_start_p95_seconds": 4.736093599999999,
+        "ready_to_start_p95_seconds": 3.728199,
+        "expired_leases": 0,
+        "database_size_bytes": 2285568
+      }
+    },
+    {
+      "elapsed_seconds": 5.97497667000016,
+      "admission_seconds": 0.7071917390003364,
+      "offered_workflows": 100,
+      "completed_workflows": 100,
+      "activities": 500,
+      "execution_attempts": 505,
+      "injected_failures": 5,
+      "admitted_queue_depth": 100,
+      "workflows_per_second": 16.736467022890874,
+      "metrics": {
+        "tasks": {
+          "completed": 500
+        },
+        "runs": {
+          "completed": 100
+        },
+        "retries": 5,
+        "created_to_start_p95_seconds": 4.989325599999998,
+        "ready_to_start_p95_seconds": 3.8592961999999997,
+        "expired_leases": 0,
+        "database_size_bytes": 2277376
+      }
+    },
+    {
+      "elapsed_seconds": 6.786718902999837,
+      "admission_seconds": 0.9343581269999959,
+      "offered_workflows": 100,
+      "completed_workflows": 100,
+      "activities": 500,
+      "execution_attempts": 505,
+      "injected_failures": 5,
+      "admitted_queue_depth": 100,
+      "workflows_per_second": 14.734660655504447,
+      "metrics": {
+        "tasks": {
+          "completed": 500
+        },
+        "runs": {
+          "completed": 100
+        },
+        "retries": 5,
+        "created_to_start_p95_seconds": 5.6552846,
+        "ready_to_start_p95_seconds": 4.7252934,
+        "expired_leases": 0,
+        "database_size_bytes": 2318336
+      }
+    },
+    {
+      "elapsed_seconds": 9.660493174999829,
+      "admission_seconds": 0.9239758459998484,
+      "offered_workflows": 100,
+      "completed_workflows": 100,
+      "activities": 500,
+      "execution_attempts": 505,
+      "injected_failures": 5,
+      "admitted_queue_depth": 100,
+      "workflows_per_second": 10.351438398485467,
+      "metrics": {
+        "tasks": {
+          "completed": 500
+        },
+        "runs": {
+          "completed": 100
+        },
+        "retries": 5,
+        "created_to_start_p95_seconds": 8.1308926,
+        "ready_to_start_p95_seconds": 4.430675999999999,
+        "expired_leases": 0,
+        "database_size_bytes": 2334720
+      }
+    }
+  ],
+  "median_workflows_per_second": 16.053206318079113,
+  "min_workflows_per_second": 10.351438398485467,
+  "maxrss_kib": 41500,
+  "future_timer_probe": {
+    "timers": 100000,
+    "loaded_seconds": 2.402627873000256,
+    "idle_tick_seconds": 0.16002001400011068,
+    "fired": 0,
+    "maxrss_growth_kib": 0,
+    "fixture": "isolated bulk future timer projection; no suspended timer coroutines"
+  },
+  "lease_recovery_seconds": 0.38345945700029915
+}

@@ -1,0 +1,70 @@
+[10-resonance] uv run --locked --python 3.13.16 ruff format --check .
+Using CPython 3.13.16
+Creating virtual environment at: .venv
+   Building pp-resonance @ file:///workspace/portfolio-verify-q_j50t9a/source/projects/10-resonance
+      Built pp-resonance @ file:///workspace/portfolio-verify-q_j50t9a/source/projects/10-resonance
+Installed 32 packages in 1.59s
+47 files already formatted
+[10-resonance] uv run --locked --python 3.13.16 ruff check .
+All checks passed!
+[10-resonance] uv run --locked --python 3.13.16 mypy src
+Success: no issues found in 28 source files
+[10-resonance] uv run --locked --python 3.13.16 pytest
+============================= test session starts ==============================
+platform linux -- Python 3.13.16, pytest-9.1.1, pluggy-1.7.0
+rootdir: /workspace/portfolio-verify-q_j50t9a/source/projects/10-resonance
+configfile: pyproject.toml
+testpaths: tests
+plugins: cov-7.1.0, hypothesis-6.170.1
+collected 25 items
+
+tests/acceptance/test_acceptance.py ......                               [ 24%]
+tests/integration/test_outputs.py ......                                 [ 48%]
+tests/property/test_framing.py ...                                       [ 60%]
+tests/unit/test_audio.py .......                                         [ 88%]
+tests/unit/test_numerics.py ...                                          [100%]
+
+============================= 25 passed in 24.14s ==============================
+[10-resonance] uv build --no-sources --python 3.13.16
+Building source distribution...
+Building wheel from source distribution...
+Successfully built dist/pp_resonance-0.1.0.tar.gz
+Successfully built dist/pp_resonance-0.1.0-py3-none-any.whl
+[10-resonance] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/portfolio-verify-q_j50t9a/source/scripts/wheel_smoke.py /workspace/portfolio-verify-q_j50t9a/source/projects/10-resonance pp_resonance
+Using CPython 3.13.16
+Creating virtual environment at: /tmp/portfolio-wheel-ylz8rv3b/venv
+Activate with: source /tmp/portfolio-wheel-ylz8rv3b/venv/bin/activate
+Using CPython 3.14.8
+Resolved 33 packages in 2ms
+Using Python 3.13.16 environment at: /tmp/portfolio-wheel-ylz8rv3b/venv
+Resolved 18 packages in 10ms
+Prepared 1 package in 13ms
+Installed 18 packages in 220ms
+ + cffi==2.1.1
+ + contourpy==1.4.0
+ + cycler==0.12.1
+ + fonttools==4.67.0
+ + kiwisolver==1.5.1
+ + matplotlib==3.11.2
+ + mido==1.3.3
+ + numpy==2.5.4
+ + packaging==26.3
+ + pillow==13.0.0
+ + pp-resonance==0.1.0 (from file:///workspace/portfolio-verify-q_j50t9a/source/projects/10-resonance/dist/pp_resonance-0.1.0-py3-none-any.whl)
+ + pycparser==3.11
+ + pyparsing==3.3.3
+ + python-dateutil==2.9.0.post0
+ + scipy==1.18.1
+ + six==1.17.0
+ + soundfile==0.14.0
+ + typing-extensions==4.16.0
+/tmp/portfolio-wheel-ylz8rv3b/venv/lib/python3.13/site-packages/pp_resonance/__init__.py
+{
+  "notes": 6,
+  "midi_checked": 6,
+  "report": "/tmp/portfolio-wheel-ylz8rv3b/owned-demo/analysis.html",
+  "diagnostics": [
+    "46 non-silent frames were uncertain; no criticism inferred"
+  ]
+}
+Removed only Resonance-owned files
