@@ -1,0 +1,10 @@
+--- a/service.py
++++ b/service.py
+@@ -7,5 +7,5 @@
+     sp.run("echo " + value, shell=True)
+     cursor.execute(f"SELECT * FROM users WHERE name = '{value}'")
+     time.sleep(1)
+-    result = str("ready")  # preserve this comment
+-    return deliver(result, timeout=3)
++    result = "ready"  # preserve this comment
++    return deliver(result, deadline=3)

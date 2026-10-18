@@ -1,0 +1,1507 @@
+{
+  "schema_version": 1,
+  "provenance": "Original hand-authored semantic scenarios with deterministic contextual/alias/Unicode variants; labels declared independently of implementation",
+  "files": {
+    "service_00.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_01.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_02.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_03.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_04.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_05.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_06.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_07.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_08.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_09.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_10.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_11.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_12.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_13.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_14.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_15.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_16.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_17.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_18.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_19.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_20.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_21.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_22.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_23.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_24.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_25.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_26.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_27.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_28.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_29.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_30.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_31.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_32.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_33.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_34.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_35.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_36.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_37.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_38.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_39.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_40.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_41.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_42.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_43.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_44.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_45.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_46.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_47.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_48.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ],
+    "service_49.py": [
+      {
+        "line": 14,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 41,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 59,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 76,
+        "rule_id": "PT003"
+      },
+      {
+        "line": 92,
+        "rule_id": "PT001"
+      },
+      {
+        "line": 103,
+        "rule_id": "PT002"
+      },
+      {
+        "line": 111,
+        "rule_id": "PT003"
+      }
+    ]
+  },
+  "lines": 5600
+}

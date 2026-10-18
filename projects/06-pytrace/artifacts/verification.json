@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "project": "pytrace",
+  "source_commit": "eb88f10ebf577b8754e4982e6e22accec8355244",
+  "source_dirty": true,
+  "source_scope": "project",
+  "provenance_limitation": null,
+  "source_content_sha256": "2190249903f5caae44319390d13bf8fb518fc77e0ab1aa8814a2466a916bbf43",
+  "root_contract_sha256": "8ca1b815a4b3f5532b95d6d4ec4780213cc5b241e10cb4816b540e4f0d4808c7",
+  "lockfile_sha256": "4e0752505efdd7261423861af80c8e7fb9f89ce9569d5f09be728826d5507660",
+  "source_digest_inputs": [
+    "src/**",
+    "tests/**",
+    "benchmarks/**",
+    "examples/**",
+    "pyproject.toml",
+    "uv.lock",
+    ".python-version"
+  ],
+  "python": "3.14.8",
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+  "memory_limit_bytes": 34359738368,
+  "seed": 1729,
+  "profile": "ci",
+  "parameters": {
+    "threads": 1,
+    "parser_processes": 1,
+    "OMP_NUM_THREADS": "unset"
+  },
+  "warmup_runs": 1,
+  "measurement_runs": 5,
+  "artifact_kind": "development-verification",
+  "required_gates_local": [
+    "PY-01",
+    "PY-02",
+    "PY-03",
+    "PY-04",
+    "PY-05",
+    "PY-06",
+    "PY-07",
+    "PY-08"
+  ],
+  "tests": {
+    "3.13.16": {
+      "passed": 77,
+      "seconds": 14.61
+    },
+    "3.14.8": {
+      "passed": 77,
+      "seconds": 13.26
+    }
+  },
+  "core_scope": [
+    "analysis",
+    "cfg",
+    "semantics",
+    "codemods"
+  ],
+  "coverage": {
+    "covered_lines": 526,
+    "num_statements": 565,
+    "percent_covered": 91.71817058096416,
+    "percent_covered_display": "92",
+    "missing_lines": 39,
+    "excluded_lines": 0,
+    "percent_statements_covered": 93.09734513274336,
+    "percent_statements_covered_display": "93",
+    "num_branches": 244,
+    "num_partial_branches": 24,
+    "covered_branches": 216,
+    "missing_branches": 28,
+    "percent_branches_covered": 88.52459016393442,
+    "percent_branches_covered_display": "89"
+  },
+  "packaging": "sdist to wheel; locked hash-verified dependencies; installed outside source; demo passed",
+  "coordinator_pending": [
+    "standard benchmark",
+    "immutable committed snapshot",
+    "independent review"
+  ]
+}

@@ -1,0 +1,13 @@
+# Case study: conservative Python analysis and editing
+
+The problem is deceptively small: find risky Python calls and remove two redundant API forms. Searching names misses import aliases; rewriting textual call expressions can silently change behavior. PyTrace therefore separates bounded parsing, lexical meaning, control flow, finite may-analysis and formatting-preserving transformations.
+
+The core is an original worklist engine. A hand-drawn diamond checks CFG edges, and a loop fixture puts its sink before its source in source order. A one-pass scan misses that flow; fixed-point propagation revisits the earlier sink and carries contextual taint across the backedge. A shell-quoting summary clears only shell taint, allowing the SQL rule to preserve its distinct interpretation. Unsupported dynamic behavior becomes an explicit coverage warning.
+
+A difficult correctness hazard is `str("text")` as the first statement of a module, class or function. Removing the call turns an expression into a docstring and changes `__doc__`, even inside parentheses. A bounded AST prepass identifies those exact positions before LibCST edits; four lexical-scope regressions require abstention. Another failure discovered during development was the migration fixture's byte hash changing after formatting. The pinned manifest correctly rejected every migration; repinning the reviewed fixture bytes restored eligibility without weakening verification.
+
+The first profiling run also exposed repeated whole-tree walks when checking enclosing functions. A parent map and one lexical binding index replace that repeated search. Timing is measured rather than converted into a production capacity claim; parsing subprocess startup and shared-host contention dominate tiny files. The cache avoids both parse and semantic work on unchanged files, while local import closure forces dependent analyses to rebuild.
+
+The demo processes only synthetic source, exports source-to-sink evidence and official-schema SARIF, previews two safe transforms, journals application and reanalyzes. It intentionally retains shell/SQL/async findings. The 50 labeled variants exercise known contrasts; a larger generated corpus measures throughput and invalidation, not real-world accuracy.
+
+Remaining limits include intraprocedural path-insensitive reasoning, no general heap/type analysis, unknown closures, conservative SQL method protocols and incomplete exception semantics. A future bounded interprocedural summary pass should be justified by new independent fixtures before widening claims. No production users, employment history or independent security review are asserted.

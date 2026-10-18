@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "diagnostics": [
+    {
+      "id": "6392d7aae0a157388c38533a",
+      "rule_id": "PT001",
+      "severity": "error",
+      "confidence": "high",
+      "path": "service.py",
+      "location": {
+        "line": 7,
+        "column": 5,
+        "end_line": 7,
+        "end_column": 40
+      },
+      "sink_location": {
+        "line": 7,
+        "column": 5,
+        "end_line": 7,
+        "end_column": 40
+      },
+      "evidence": [
+        {
+          "line": 6,
+          "message": "configured untrusted source"
+        },
+        {
+          "line": 7,
+          "message": "Untrusted value flows to a shell-enabled process"
+        }
+      ],
+      "message": "Untrusted value flows to a shell-enabled process",
+      "coverage": "modeled"
+    },
+    {
+      "id": "b839121258e13480d0ef29bf",
+      "rule_id": "PT003",
+      "severity": "error",
+      "confidence": "high",
+      "path": "service.py",
+      "location": {
+        "line": 7,
+        "column": 5,
+        "end_line": 7,
+        "end_column": 40
+      },
+      "sink_location": {
+        "line": 7,
+        "column": 5,
+        "end_line": 7,
+        "end_column": 40
+      },
+      "evidence": [
+        {
+          "line": 7,
+          "message": "Configured synchronous blocking call inside async function"
+        }
+      ],
+      "message": "Configured synchronous blocking call inside async function",
+      "coverage": "modeled"
+    },
+    {
+      "id": "6576cc11289a333c957329c5",
+      "rule_id": "PT002",
+      "severity": "error",
+      "confidence": "high",
+      "path": "service.py",
+      "location": {
+        "line": 8,
+        "column": 5,
+        "end_line": 8,
+        "end_column": 66
+      },
+      "sink_location": {
+        "line": 8,
+        "column": 5,
+        "end_line": 8,
+        "end_column": 66
+      },
+      "evidence": [
+        {
+          "line": 6,
+          "message": "configured untrusted source"
+        },
+        {
+          "line": 8,
+          "message": "String-built or untrusted SQL flows to an execution method"
+        }
+      ],
+      "message": "String-built or untrusted SQL flows to an execution method",
+      "coverage": "modeled"
+    },
+    {
+      "id": "9efa46f24947806e66ee7c0e",
+      "rule_id": "PT003",
+      "severity": "error",
+      "confidence": "high",
+      "path": "service.py",
+      "location": {
+        "line": 9,
+        "column": 5,
+        "end_line": 9,
+        "end_column": 18
+      },
+      "sink_location": {
+        "line": 9,
+        "column": 5,
+        "end_line": 9,
+        "end_column": 18
+      },
+      "evidence": [
+        {
+          "line": 9,
+          "message": "Configured synchronous blocking call inside async function"
+        }
+      ],
+      "message": "Configured synchronous blocking call inside async function",
+      "coverage": "modeled"
+    },
+    {
+      "id": "39954d288d8baea6fb362c8d",
+      "rule_id": "PT900",
+      "severity": "warning",
+      "confidence": "uncertain",
+      "path": "service.py",
+      "location": {
+        "line": 10,
+        "column": 14,
+        "end_line": 10,
+        "end_column": 26
+      },
+      "sink_location": {
+        "line": 10,
+        "column": 14,
+        "end_line": 10,
+        "end_column": 26
+      },
+      "evidence": [
+        {
+          "line": 10,
+          "message": "Call return value has no configured summary"
+        }
+      ],
+      "message": "Call return value has no configured summary",
+      "coverage": "partial"
+    },
+    {
+      "id": "4ee18eea04ef97dc2e217df3",
+      "rule_id": "PT900",
+      "severity": "warning",
+      "confidence": "uncertain",
+      "path": "service.py",
+      "location": {
+        "line": 11,
+        "column": 12,
+        "end_line": 11,
+        "end_column": 38
+      },
+      "sink_location": {
+        "line": 11,
+        "column": 12,
+        "end_line": 11,
+        "end_column": 38
+      },
+      "evidence": [
+        {
+          "line": 11,
+          "message": "Call return value has no configured summary"
+        }
+      ],
+      "message": "Call return value has no configured summary",
+      "coverage": "partial"
+    }
+  ],
+  "invalidated": [
+    "service.py"
+  ],
+  "files": 1,
+  "iterations": 12,
+  "parse_failures": 0,
+  "cache_hits": 0
+}

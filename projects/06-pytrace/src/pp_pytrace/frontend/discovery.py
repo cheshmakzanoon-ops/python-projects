@@ -1,0 +1,134 @@
+"""Caller-selected discovery, source decoding and bounded subprocess parsing."""
+
+from __future__ import annotations
+
+import ast
+import io
+import json
+import subprocess
+import sys
+import time
+import tokenize
+from dataclasses import dataclass
+from fnmatch import fnmatch
+from pathlib import Path
+from typing import Any
+
+
+@dataclass(frozen=True)
+class Limits:
+    max_bytes: int = 512_000
+    max_nodes: int = 80_000
+    max_files: int = 10_000
+    timeout_seconds: float = 5
+    memory_bytes: int = 384 * 1024 * 1024
+
+
+class ParseFailure(ValueError):
+    def __init__(self, message: str, line: int = 1, column: int = 1) -> None:
+        super().__init__(message)
+        self.line = line
+        self.column = column
+
+
+def read_bounded(path: Path, max_bytes: int = Limits().max_bytes) -> bytes:
+    """Bound before allocation and on read, including a file-growth race."""
+    if path.stat().st_size > max_bytes:
+        raise ParseFailure("source byte limit exceeded")
+    with path.open("rb") as stream:
+        data = stream.read(max_bytes + 1)
+    if len(data) > max_bytes:
+        raise ParseFailure("source byte limit exceeded")
+    return data
+
+
+def decode_source(data: bytes) -> str:
+    try:
+        encoding, _ = tokenize.detect_encoding(io.BytesIO(data).readline)
+        return data.decode(encoding)
+    except (SyntaxError, UnicodeError) as exc:
+        raise ParseFailure(str(exc)) from exc
+
+
+def read_source(path: Path, limits: Limits = Limits()) -> str:
+    return decode_source(read_bounded(path, limits.max_bytes))
+
+
+def discover(
+    root: Path,
+    excludes: tuple[str, ...] = (".venv/*", ".git/*", "__pycache__/*"),
+    limits: Limits = Limits(),
+) -> list[Path]:
+    root = root.resolve(strict=True)
+    candidates = [root] if root.is_file() else root.rglob("*.py")
+    result = []
+    for path in candidates:
+        relative = path.name if root.is_file() else path.relative_to(root).as_posix()
+        if any(
+            fnmatch(relative, pattern)
+            or any(
+                fnmatch(part + "/", pattern)
+                for part in path.relative_to(root.parent if root.is_file() else root).parts
+            )
+            for pattern in excludes
+        ):
+            continue
+        if path.is_symlink() or not path.resolve().is_relative_to(
+            root.parent if root.is_file() else root
+        ):
+            raise ValueError(f"source symlink/path escape refused: {relative}")
+        result.append(path)
+        if len(result) > limits.max_files:
+            raise ValueError("source file count limit exceeded")
+    return sorted(result)
+
+
+def _decode(value: Any) -> Any:
+    if isinstance(value, dict) and "_type" in value:
+        node_type = getattr(ast, value["_type"], None)
+        if not isinstance(node_type, type) or not issubclass(node_type, ast.AST):
+            raise ParseFailure("invalid AST response")
+        fields = {key: _decode(item) for key, item in value.items() if key != "_type"}
+        return node_type(**fields)
+    if isinstance(value, dict) and "_constant" in value:
+        return None  # unsupported constant payloads are irrelevant to configured rules
+    if isinstance(value, list):
+        return [_decode(item) for item in value]
+    return value
+
+
+def parse(source: str, filename: str = "<source>", limits: Limits = Limits()) -> ast.Module:
+    if len(source.encode()) > limits.max_bytes:
+        raise ParseFailure("source byte limit exceeded")
+    worker = Path(__file__).with_name("parser_worker.py")
+    request = {
+        "source": source,
+        "filename": filename,
+        "memory_bytes": limits.memory_bytes,
+        "max_nodes": limits.max_nodes,
+    }
+    started = time.monotonic()
+    try:
+        completed = subprocess.run(
+            [sys.executable, "-I", str(worker)],
+            input=json.dumps(request),
+            capture_output=True,
+            text=True,
+            timeout=limits.timeout_seconds,
+            check=False,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise ParseFailure("parser timeout exceeded") from exc
+    if time.monotonic() - started > limits.timeout_seconds:
+        raise ParseFailure("parser timeout exceeded (including process startup)")
+    if completed.returncode != 0:
+        raise ParseFailure(f"bounded parser failed (exit {completed.returncode})")
+    if len(completed.stdout) > 32_000_000:
+        raise ParseFailure("parser response limit exceeded")
+    response = json.loads(completed.stdout)
+    if "error" in response:
+        raise ParseFailure(response["error"], response["line"], response["column"])
+    result = _decode(response["tree"])
+    if not isinstance(result, ast.Module):
+        raise ParseFailure("invalid parser root")
+    return result

@@ -1,0 +1,6 @@
+{
+  "sources": ["input", "os.getenv", "request.args.get"],
+  "shell_sanitizers": ["shlex.quote"],
+  "sql_methods": ["execute", "executemany"],
+  "sql_sanitizers": []
+}
