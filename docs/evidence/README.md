@@ -24,3 +24,5 @@ All three public-interface integrations passed committed source `7114e39`: [sett
 The required standard profiles are currently running serially from `59443e2bcdfc6a1dd81f8334c108474eef2d3030`, together with all ten demos and the three integrations. Completed standard reports will be added here. Large generated data, databases, environments and caches are excluded from Git.
 
 Local validation, Git synchronization and hosted CI are distinct. Hosted runs were observed queued; no remote pass is claimed. See [status](../STATUS.md), [environment](../ENVIRONMENT.md), [independent review](INDEPENDENT_REVIEW.md) and [evidence policy](../architecture/EVIDENCE.md).
+
+Current subsequently received the peak-RSS correction `5c04cd5`, with two regressions proven failing before the fix. Its initial standard attempt was deliberately [cancelled](final/attempts/current-rss-before-hot/standard/current-cancellation.json) and is excluded from accepted workload evidence. Affected compatibility and full-size reruns remain pending. The table above preserves the successful earlier compatibility snapshot and will be updated with those reruns.

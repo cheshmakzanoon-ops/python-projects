@@ -1,18 +1,18 @@
 # Verification status
 
-All ten original implementations exist and have passed local quality, packaging and substantive tests on CPython3.13/3.14. Independent findings have been corrected. The clean-commit compatibility matrix now passes all20project/interpreter combinations (1,130 project tests), including actual installed-wheel demos and CI-size benchmarks. All three committed-source integrations pass. Standard workloads are running serially; whole-portfolio completion is not yet claimed.
+All ten original implementations exist and have passed local quality, packaging and substantive tests on CPython3.13/3.14. Independent findings have been corrected. The clean-commit compatibility matrix now passes all20project/interpreter combinations (1,130 project tests), including actual installed-wheel demos and CI-size benchmarks. All three committed-source integrations pass. Standard workloads are running serially; whole-portfolio completion is not yet claimed. Current subsequently received an RSS-accounting correction at `5c04cd5`; its affected compatibility and full-size reruns remain pending, and its cancelled old standard attempt is not counted.
 
 | Product | Local suite | Review | Remaining final work |
 | --- | --- | --- | --- |
-| Anchor |54tests, real PostgreSQL/process faults | Coordinator and live settlement | Clean clone, standard |
-| Strata |79tests, MVCC/corruption/crash | Descriptor/format findings closed |100×5000 passed; standard remaining |
-| Current |30tests, independent raw-control oracle | Coordinator and stream-lake | Clean clone, million-event profiles |
+| Anchor |54tests, real PostgreSQL/process faults | Coordinator and live settlement | Standard passed |
+| Strata |79tests, MVCC/corruption/crash | Descriptor/format findings closed |100×5000 and standard passed |
+| Current |30tests, independent raw-control oracle | Coordinator and stream-lake | RSS fix: affected checks and million-event profiles pending |
 | Meridian |46tests, PostgreSQL constraints/races/reporting | Tenant/history/cost findings closed | Clean clone,250k journals |
 | Quarry |37tests, exact historical identities | Bounded input/source race findings closed | Clean clone,5m originals/corrections |
 | PyTrace |77tests, CFG/codemod/SARIF | Bounded read findings closed | Clean clone,250k LOC |
 | Atlas |40tests, visible scores/ACLs | Judgment audit and code-search | Clean clone,100k documents |
 | Proving Ground |103tests, leakage/CAS/serving |58independent closure checks | Clean clone,250k×40 data |
-| Routecraft |74tests, including canonical-order regression |180independent static+24rolling cases | Full updated74tests in clean clone, standard |
+| Routecraft |74tests, including canonical-order regression |180independent static+24rolling cases | Standard pending |
 | Resonance |25tests,6,272fixed pitch frames | Reattack/subtick/tempo findings closed | Clean clone,600s standard |
 
 See [independent review](evidence/INDEPENDENT_REVIEW.md) and each project's acceptance map, case study and operations guide. Counts describe tests actually run; the final evidence will identify exact revisions and exit codes. Local branch coverage for each defined domain core exceeds85%; whole-package coverage is separately reported by each owner.

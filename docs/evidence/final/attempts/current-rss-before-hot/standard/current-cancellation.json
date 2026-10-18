@@ -1,0 +1,7 @@
+{
+  "project": "current",
+  "source_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+  "status": "cancelled-not-accepted",
+  "exit_code": 143,
+  "reason": "Coordinator stopped the owned benchmark group after confirming peak RSS was sampled before the hot workload. Source fix5c04cd5 moves sampling afterhot andcleanup; complete affected checks and a fresh full standard rerun are required. No benchmark pass or complete measurement is claimed for this attempt."
+}

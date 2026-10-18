@@ -39,3 +39,7 @@ queue indexes and must not be presented as a controlled speedup comparison. Fina
 correctness is 54 passing tests on both interpreters with 93.5% branch coverage of the
 defined core. The case study's next justified optimization remains long-history snapshotting,
 after profiling an appropriate workload rather than chasing a synthetic throughput target.
+
+## Committed standard measurement
+
+The [full standard report](../../../docs/evidence/final/standard/anchor-3.14.8-benchmark-benchmark.json) records source `59443e2`: one measured 5,000-workflow run after bounded warmup, with 25,000 successful activities and 250 injected retries. All completed in 233.23 seconds including admission, or 21.44 workflows/s, with no orphan tasks. This burst intentionally queues all workflows before execution: created-to-start p95 was 189.68 seconds, so the throughput is not a low-latency service guarantee. The separate 100,000-future-timer probe fired none and took 24.15 ms for an idle tick. The one-full-run costly-workload exception and Linux resource context are retained with the evidence; historical development values above are not a controlled before/after comparison.

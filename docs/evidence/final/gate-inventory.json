@@ -1,0 +1,245 @@
+{
+  "scope": "Mapping inventory only; passing execution is established by compatibility and standard reports, not by text presence.",
+  "projects": [
+    {
+      "project": "anchor",
+      "acceptance_map": "projects/01-anchor/docs/ACCEPTANCE.md",
+      "required_ids": [
+        "AN-01",
+        "AN-02",
+        "AN-03",
+        "AN-04",
+        "AN-05",
+        "AN-06",
+        "AN-07",
+        "AN-08"
+      ],
+      "ids_explicit_in_map": [
+        "AN-01",
+        "AN-02",
+        "AN-03",
+        "AN-04",
+        "AN-05",
+        "AN-06",
+        "AN-07",
+        "AN-08"
+      ]
+    },
+    {
+      "project": "strata",
+      "acceptance_map": "projects/02-strata/docs/ACCEPTANCE.md",
+      "required_ids": [
+        "ST-01",
+        "ST-02",
+        "ST-03",
+        "ST-04",
+        "ST-05",
+        "ST-06",
+        "ST-07",
+        "ST-08"
+      ],
+      "ids_explicit_in_map": [
+        "ST-01",
+        "ST-02",
+        "ST-03",
+        "ST-04",
+        "ST-05",
+        "ST-06",
+        "ST-07",
+        "ST-08"
+      ]
+    },
+    {
+      "project": "current",
+      "acceptance_map": "projects/03-current/docs/ACCEPTANCE.md",
+      "required_ids": [
+        "CU-01",
+        "CU-02",
+        "CU-03",
+        "CU-04",
+        "CU-05",
+        "CU-06",
+        "CU-07",
+        "CU-08"
+      ],
+      "ids_explicit_in_map": [
+        "CU-01",
+        "CU-02",
+        "CU-03",
+        "CU-04",
+        "CU-05",
+        "CU-06",
+        "CU-07",
+        "CU-08"
+      ]
+    },
+    {
+      "project": "meridian",
+      "acceptance_map": "projects/04-meridian/docs/ACCEPTANCE.md",
+      "required_ids": [
+        "ME-01",
+        "ME-02",
+        "ME-03",
+        "ME-04",
+        "ME-05",
+        "ME-06",
+        "ME-07",
+        "ME-08"
+      ],
+      "ids_explicit_in_map": [
+        "ME-01",
+        "ME-02",
+        "ME-03",
+        "ME-04",
+        "ME-05",
+        "ME-06",
+        "ME-07",
+        "ME-08"
+      ]
+    },
+    {
+      "project": "quarry",
+      "acceptance_map": "projects/05-quarry/docs/ACCEPTANCE.md",
+      "required_ids": [
+        "QU-01",
+        "QU-02",
+        "QU-03",
+        "QU-04",
+        "QU-05",
+        "QU-06",
+        "QU-07",
+        "QU-08"
+      ],
+      "ids_explicit_in_map": [
+        "QU-01",
+        "QU-02",
+        "QU-03",
+        "QU-04",
+        "QU-05",
+        "QU-06",
+        "QU-07",
+        "QU-08"
+      ]
+    },
+    {
+      "project": "pytrace",
+      "acceptance_map": "projects/06-pytrace/docs/ACCEPTANCE.md",
+      "required_ids": [
+        "PY-01",
+        "PY-02",
+        "PY-03",
+        "PY-04",
+        "PY-05",
+        "PY-06",
+        "PY-07",
+        "PY-08"
+      ],
+      "ids_explicit_in_map": [
+        "PY-01",
+        "PY-02",
+        "PY-03",
+        "PY-04",
+        "PY-05",
+        "PY-06",
+        "PY-07",
+        "PY-08"
+      ]
+    },
+    {
+      "project": "atlas",
+      "acceptance_map": "projects/07-atlas/docs/ACCEPTANCE.md",
+      "required_ids": [
+        "AT-01",
+        "AT-02",
+        "AT-03",
+        "AT-04",
+        "AT-05",
+        "AT-06",
+        "AT-07",
+        "AT-08"
+      ],
+      "ids_explicit_in_map": [
+        "AT-01",
+        "AT-02",
+        "AT-03",
+        "AT-04",
+        "AT-05",
+        "AT-06",
+        "AT-07",
+        "AT-08"
+      ]
+    },
+    {
+      "project": "proving-ground",
+      "acceptance_map": "projects/08-proving-ground/docs/ACCEPTANCE.md",
+      "required_ids": [
+        "PG-01",
+        "PG-02",
+        "PG-03",
+        "PG-04",
+        "PG-05",
+        "PG-06",
+        "PG-07",
+        "PG-08"
+      ],
+      "ids_explicit_in_map": [
+        "PG-01",
+        "PG-02",
+        "PG-03",
+        "PG-04",
+        "PG-05",
+        "PG-06",
+        "PG-07",
+        "PG-08"
+      ]
+    },
+    {
+      "project": "routecraft",
+      "acceptance_map": "projects/09-routecraft/docs/ACCEPTANCE.md",
+      "required_ids": [
+        "RC-01",
+        "RC-02",
+        "RC-03",
+        "RC-04",
+        "RC-05",
+        "RC-06",
+        "RC-07",
+        "RC-08"
+      ],
+      "ids_explicit_in_map": [
+        "RC-01",
+        "RC-02",
+        "RC-03",
+        "RC-04",
+        "RC-05",
+        "RC-06",
+        "RC-07",
+        "RC-08"
+      ]
+    },
+    {
+      "project": "resonance",
+      "acceptance_map": "projects/10-resonance/docs/ACCEPTANCE.md",
+      "required_ids": [
+        "RE-01",
+        "RE-02",
+        "RE-03",
+        "RE-04",
+        "RE-05",
+        "RE-06",
+        "RE-07",
+        "RE-08"
+      ],
+      "ids_explicit_in_map": [
+        "RE-01",
+        "RE-02",
+        "RE-03",
+        "RE-04",
+        "RE-05",
+        "RE-06",
+        "RE-07",
+        "RE-08"
+      ]
+    }
+  ]
+}

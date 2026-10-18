@@ -1,0 +1,2 @@
+[03-current] uv run --locked --python 3.14.8 python -m pp_current.cli benchmark --output /workspace/portfolio-verify-8m2k525j/source/.local/current/benchmark --seed 1729 --profile standard
+current: benchmark failed (143)

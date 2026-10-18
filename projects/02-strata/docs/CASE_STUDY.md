@@ -73,3 +73,7 @@ the measured long-suite bottleneck is fsync plus historical scans. The hard
 failure is an exception after publication, not just a killed process. The next
 justified extension would preserve this boundary while adding bounded streaming
 snapshot iterators and compaction planning, then rerun the same fault matrix.
+
+## Committed standard measurement
+
+The [standard report](../../../docs/evidence/final/standard/strata-3.14.8-benchmark-benchmark.json) at source `59443e2` passed 250,000 initial records, 200,000 mixed operations and 50,000 hot-set churn operations against independent dictionary/recovery checks. Initial batches of 100 reached 40,927 records/s; mixed-read p95 was 1.14 ms, the measured full compaction stall 2.23 s and reopen/recovery 1.68 s. Churn compacted 10,196,594 bytes to 19,641 bytes. Five separate 2,000-record durable-commit measurements gave median single-record rates of 2,177/s for Strata and 2,026/s for SQLite; batches of 100 gave 63,963/s and 69,959/s respectively. These variable, cache-uncontrolled local measurements demonstrate the batch/durability tradeoff; they do not establish general superiority over SQLite. The separate required 100×5,000 stateful suite also passed in full.
