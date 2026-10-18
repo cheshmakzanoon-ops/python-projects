@@ -1,65 +1,69 @@
 # Atlas checkpoint
 
-Status: verifying. Phase P5/P6: stable implementation handed to coordinator for
-independent review, integration and immutable committed measurements.
+Status: complete for project acceptance, independent review, integration and
+required local workloads. The coordinator owns final repository commits, push
+and remote CI reporting. Project writes are paused after this documentation handoff.
 
-## Completed local gates
+## Verified gates
 
-- AT-01–AT-07: hand-calculated BM25, bounded Unicode/phrase/snippet behavior,
-  concurrent generation/merge publication, revision/delete exclusion, tenant/ACL
-  isolation, hidden-statistics invariance, next-request revocation, corrupted
-  segments and malformed input rejection. See docs/ACCEPTANCE.md for exact tests.
-- AT-08 implementation: 250 original technical documents and 60 independently
-  authored graded query intents; frozen 30 development / 30 heldout split;
-  actual baseline/phrase evaluation with every per-query ranking failure reported.
-  Independent coordinator semantic audit remains the review prerequisite.
-- CPython 3.13.16: format/lint/strict mypy pass; pytest **40 passed**, 97% whole-package
-  branch-inclusive coverage, measured via `uv run --locked --python 3.13.16 pytest
-  -q --cov=pp_atlas --cov-branch --cov-report=term-missing`.
-- CPython 3.14.8: same quality checks pass; pytest **40 passed**. Default interpreter
-  is now 3.14.8; 3.13 remains required/supported.
-- `uv build`: source distribution and wheel both built successfully.
-- Clean wheel CPython 3.14.8 environment `/tmp/atlas-wheel314`: locked runtime
-  dependencies installed with required hashes; package imported from site-packages
-  with `-I` outside source; actual demo + cleanup and CI benchmark + cleanup pass.
-  Installed distributions honestly report unavailable checkout provenance as null.
-- Development CI benchmark: 200 documents / 30 queries / five repetitions; all
-  correctness and source-stability checks pass. Actual dirty-source artifacts:
-  `artifacts/development-ci.json`, `artifacts/development-quality.json`.
+- **AT-01–AT-07:** hand-calculated BM25; bounded Unicode, phrase and snippet
+  behavior; concurrent generation and merge publication; revision/delete exclusion;
+  tenant and ACL isolation; hidden-statistics invariance; next-request revocation;
+  corrupted-segment and malformed-input rejection. See [acceptance](ACCEPTANCE.md).
+- **AT-08:** 250 original documents and 60 pre-authored graded query intents;
+  frozen 30 development / 30 heldout split; actual baseline and phrase evaluations
+  with every per-query failure retained. The independent coordinator semantic
+  [judgment audit](../../../docs/evidence/atlas-judgment-review.md) is complete.
+- CPython **3.13.16 and 3.14.8:** both compatibility runs pass **40 tests**, with
+  formatting, lint, strict mypy, build and installed-wheel checks passing.
+  Default is 3.14.8; 3.13 remains supported. Local whole-package branch-inclusive
+  coverage is **97%**; tokenizer, query parser and BM25 coverage is 100%.
+- Clean installed-wheel demo, cleanup and CI benchmark pass outside source, with
+  locked runtime dependencies verified by hashes. Installed distributions report
+  unavailable checkout provenance as null.
+- Code-search integration passes through real PyTrace JSON findings and Atlas
+  public interfaces: obsolete deletion, hidden-update score invariance, merge,
+  cross-tenant direct fetch/export, caches and revocation are exercised.
+- Final standard workload passes from clean immutable commit
+  `59443e2bcdfc6a1dd81f8334c108474eef2d3030`: 100,000 documents, 400 tokens each,
+  40,000,000 tokens total and 2,000 queries over five measured repetitions.
+  Authorization, expected visible count and source-stability checks are all true.
 
-Latest coverage run: 40 passed in 12.26s; engine 97%, tokenizer/query/BM25 100%.
-One upstream Starlette deprecation warning recommends httpx2 for TestClient;
-this is not suppressed and no required test skips/xfails exist.
+One upstream Starlette TestClient deprecation warning remains visible. No required
+test skips or xfails conceal missing behavior or services. No external credentials
+or database server are needed, and the worker performed no Git mutations.
 
-## Measured development evidence
+## Final standard evidence
 
-Source commit at execution: a76e5a376333b501ccc91496f99e3c82a7c09f1b; dirty=true.
-The artifact records exact source and root-contract hashes. It is a historical
-working snapshot, not final committed-release evidence. CI indexing 0.2303s;
-cold query 17.41ms; warm p50 0.598ms / p95 6.704ms; peak RSS 37.09MB. Heldout
-nDCG@10 0.69740→0.95150; MRR 0.56111→0.98333; pooled Recall@10 1.0.
-Fifty queries retain graded-order imperfections; they are preserved in reports.
+- [Measured benchmark](../../../docs/evidence/final/standard/atlas-3.14.8-benchmark-benchmark.json)
+- [Command and immutable-source verification](../../../docs/evidence/final/standard/atlas-3.14.8.json)
 
-## Remaining required work owned by coordinator
+The benchmark records source_dirty=false, exact source and root-contract input
+lists, and lock digest
+`afadf806fdbb623044aa563e65234d12d3a49b57e907308cab46198ecad717f8`.
+Indexing took **543.2294 s** at **184.084 documents/s**. Cold loading/query took
+**36.1966 s**. Warm p50/p95/p99 were **21.6806 / 57.1996 / 83.9298 ms**, with
+**32.8779 queries/s**. Disk size was **155,283,633 bytes** and peak RSS
+**2,778,984,448 bytes**. Authorization-plus-search median was **398.615 ms**;
+authorized-snapshot median was **59.3983 ms**. Visibility scans O(N) catalog
+entries before cache lookup and remains a measured scaling limitation.
 
-1. Complete independent semantic judgment audit and implementation review.
-2. Run code-search integration through stable public API.
-3. Commit stable Atlas source, then run final checks/evaluation from an immutable
-   clean clone. Standard benchmark requires exclusive serialized lease:
-   `OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 uv run --locked
-   python -m pp_atlas.cli benchmark --profile standard --output ABS --seed 1729`.
-   Workload is 100,000 documents × 400 tokens, 2,000 queries × five repetitions.
-   Worker has not run or invented this required standard result.
-4. Update root matrix to default 3.14.8, required 3.13.16 and 3.14.8; services none;
-   Linux tested for ingestion/fsync durability. Coordinator owns Git and root files.
+## Historical captures and quality limits
 
-No external credential/service blocker. No worker Git mutations. No writes are
-needed beyond review corrections and updating this checkpoint. Public API:
-Engine, Document, Principal; upsert/upsert_many/delete/set_acl/set_groups;
-search/fetch/export/authorized_ids/merge/inspect. CLI demo, benchmark, clean-demo,
-ingest, search, fetch, delete, acl, groups, inspect, merge, evaluate, serve.
+`artifacts/development-ci.json` and `artifacts/development-quality.json` preserve
+their actual dirty working-snapshot provenance at source commit
+`a76e5a376333b501ccc91496f99e3c82a7c09f1b`. They are historical captures, not
+claims to test their later artifact commit. Heldout nDCG@10 improves
+0.69740 → 0.95150 and MRR 0.56111 → 0.98333; pooled Recall@10 is 1.0.
+Fifty queries retain graded-order imperfections. The authored technical templates
+and pooled judgments do not establish broad natural-query relevance.
 
-Known boundaries: trusted local bearer bindings; body-only lexical indexing;
-conjunctive grammar; current-generation postings materialized in memory; old
-segments/orphans retained; privileged filesystem tampering can defeat stat-based
-cache invalidation; Linux fsync tested, not arbitrary power-loss hardware.
+Public API: Engine, Document, Principal; upsert/upsert_many/delete/set_acl/set_groups;
+search/fetch/export/authorized_ids/merge/inspect. CLI: demo, benchmark, clean-demo,
+ingest, search, fetch, delete, acl, groups, inspect, merge, evaluate and serve.
+
+Known boundaries: trusted local bearer bindings, body-only conjunctive lexical
+retrieval, materialized current-generation postings, retained old segments and
+orphans, stat-based cache invalidation on a trusted filesystem, and Linux fsync
+failure tests rather than arbitrary power-loss hardware guarantees. No required
+Atlas implementation, review, integration or workload gate remains pending.

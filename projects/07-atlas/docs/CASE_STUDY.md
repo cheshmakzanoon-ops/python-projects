@@ -1,55 +1,80 @@
 # Atlas case study
 
-The challenge was making search ranking itself respect permissions. Filtering
-only the final top-k is insufficient: private documents would change global term
-frequency and average length, revealing information through public score changes.
-Atlas intersects current revisions, ACLs and explicit filters before statistics,
+The challenge was making search ranking respect permissions. Filtering only the
+final top-k is insufficient: private documents can change global term frequency
+and average length, revealing information through public score changes. Atlas
+intersects current revisions, ACLs and explicit filters before statistics,
 matching, ranking, snippets, counts and facets. Its mutable catalog and immutable
 segment reader share one SQLite snapshot per request.
 
-SQLite provides transaction isolation and crash rollback; the original engineering
-core is the tokenizer, positional posting construction, query planner, visible
-BM25 calculation, top-k heap, external merge and coherent publication protocol.
-A global FTS query followed by result filtering was rejected because its statistics
-would violate this contract. Another tradeoff is deliberately keeping old files:
-reader safety is straightforward, while online garbage collection needs a separate
-lifetime protocol and remains outside this reference implementation.
+SQLite provides transaction isolation and crash rollback. The original engineering
+core is the tokenizer, positional postings, query planner, visible-statistics
+BM25, top-k heap, external merge and publication protocol. A global FTS query
+followed by filtering was rejected because its statistics would violate the
+visibility contract. Keeping old files makes pinned-reader safety straightforward;
+online garbage collection needs a separate lifetime protocol and is outside this
+reference implementation.
 
-A concrete defect emerged while checking Unicode boundaries. The initial tokenizer
-normalized a base character together with nonzero combining-class marks. This
-handled accents and ligatures, but Hangul Jamo are class-zero starters. The strings
+## A Unicode defect with an independent regression
+
+The initial tokenizer normalized a base character with nonzero combining-class
+marks. This handled accents and ligatures, but Hangul Jamo are class-zero starters.
 `가`, `ㄱㅏ` and `가` therefore produced different terms despite NFKC equivalence.
-The failure could hide a relevant document and move highlighting into the wrong
-source range if fixed by normalizing the string without offset mapping.
+The failure could hide a relevant document. Normalizing the complete string without
+retaining offsets would introduce a different defect in snippet highlighting.
 
 The correction recognizes Hangul L/V/T composition while forming normalization
 clusters, including compatibility Jamo. Each normalized expansion retains the
 original cluster's character span. Regression tests compare all three spellings
-and assert `<mark>가</mark>` highlights the original decomposed text. A generated
-Unicode normalization-equivalence property supplements these explicit cases.
-This tests an independent Unicode invariant rather than reproducing the tokenizer.
+and assert that `<mark>가</mark>` highlights the decomposed source. A generated
+normalization-equivalence property supplements the explicit cases. It tests an
+independent Unicode invariant rather than reproducing the tokenizer.
 
-A second adversarial review found nested mutable result dictionaries could poison
-an LRU entry when a trusted library caller modified a prior result. Cache insertion
-and retrieval now copy result values. A regression mutates facets, statistics and
-term contributions and proves subsequent searches retain the authentic values.
+Adversarial review also found that nested mutable result dictionaries could poison
+an LRU entry when a library caller modified a prior result. Cache insertion and
+retrieval now copy values. A regression mutates facets, statistics and term
+contributions and proves subsequent searches retain authentic results.
 
-Local Python3.13.16/3.14.8 runs pass40 tests. A preceding38 test whole-package run
-measured97% branch-inclusive coverage; named failures include concurrent writers,
+## Verification and measured limits
+
+Python 3.13.16 and 3.14.8 compatibility checks each pass 40 tests. Whole-package
+branch-inclusive coverage is 97%. Failure scenarios include concurrent writers,
 stale merges, process death before publication, SQLite rollback, hidden-document
-updates, next-request revocation and cached-file corruption. Coverage is supporting
-evidence; final committed verification and independent judgment review belong to
-the coordinator's handoff.
+updates, next-request revocation and cached-file corruption. The coordinator's
+code-search integration passes through real PyTrace findings and public Atlas
+interfaces, including deletion, merge, tenant isolation and permission changes.
 
-A real200 document development run indexed in0.2303 s with17.41 ms cold and0.598 ms
-median warm query latency. Those numbers establish a small local baseline only.
-The separate judged collection improved heldout nDCG@10 from0.69740 to0.95150 by
-honoring explicit phrase positions, with no heldout parameter tuning. Remaining
-graded-order failures are included per query. Standard100k document timing is
-reserved for serialized immutable-snapshot execution.
+The coordinator ran the full standard workload serially from clean immutable
+commit `59443e2bcdfc6a1dd81f8334c108474eef2d3030`. It indexed 100,000 documents
+of 400 tokens each in **543.2294 s**, or **184.084 documents/s**, then measured
+2,000 queries over five repetitions. Warm p50/p95/p99 were
+**21.6806 / 57.1996 / 83.9298 ms**, at **32.8779 queries/s**. Cold loading and
+query took **36.1966 s**. Disk size was **155,283,633 bytes** and peak process
+RSS **2,778,984,448 bytes**. All three correctness/source-stability flags passed.
+The [benchmark](../../../docs/evidence/final/standard/atlas-3.14.8-benchmark-benchmark.json)
+and [verification record](../../../docs/evidence/final/standard/atlas-3.14.8.json)
+preserve exact provenance and environment details.
 
-The next justified performance work is measuring current-generation Python-object
-memory at100k documents and replacing positional tuples with compact arrays if
-needed. Relevance next steps require new independently labeled development data
-before testing stemming or field weighting. Dense reranking, OCR and external
-crawling were not implemented because they are optional or excluded.
+This measurement exposes the next performance work: O(N) visibility construction
+runs before cache lookup, and materialized Python postings use approximately
+2.78 GB at this workload. Authorized-snapshot median cost was 59.3983 ms; the
+separate mixed-principal authorization-plus-search sample had a 398.615 ms median.
+Those samples use different scopes and cannot be subtracted from ordinary query
+timing. Indexed ACL visibility and compact positional arrays are justified next
+steps; they have not been implemented or assigned invented speedups.
+
+The separate judged collection improves heldout nDCG@10 from 0.69740 to 0.95150
+by honoring explicit phrase positions, without heldout parameter tuning. The
+coordinator completed an independent [semantic judgment audit](../../../docs/evidence/atlas-judgment-review.md)
+without consulting per-query scorer output. Fifty queries still have imperfect
+graded ordering, and all failures remain in the historical quality report.
+Repeated technical templates and pooled labels limit the relevance claim to this
+authored collection. New independently labeled development data is needed before
+testing stemming or field weighting.
+
+Historical dirty-source CI and quality captures remain in `artifacts/`, with the
+source hashes they actually tested. The final standard result above replaces the
+earlier pending-workload status; it does not turn the small development capture
+into release evidence. A single-machine synthetic benchmark does not establish
+production capacity, arbitrary language relevance or a latency service guarantee.
+Dense reranking, OCR and external crawling were optional or excluded.

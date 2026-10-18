@@ -1,0 +1,7 @@
+[08-proving-ground] uv run --locked --python 3.14.8 python -m pp_proving_ground.cli demo --output /workspace/portfolio-verify-8m2k525j/source/.local/proving-ground/demo --seed 1729
+Using CPython 3.14.8
+Creating virtual environment at: .venv
+   Building pp-proving-ground @ file:///workspace/portfolio-verify-8m2k525j/source/projects/08-proving-ground
+      Built pp-proving-ground @ file:///workspace/portfolio-verify-8m2k525j/source/projects/08-proving-ground
+Installed 44 packages in 1.41s
+{"status": "passed", "output": "/workspace/portfolio-verify-8m2k525j/source/.local/proving-ground/demo", "chosen_model": "logistic", "serving": {"ready": true, "requested_generation": 8, "applied_generation": 8, "model_version": 2, "load_error": null}}

@@ -1,0 +1,24 @@
+{
+  "observed_at_utc": "2026-10-18T03:34:28.864654+00:00",
+  "workload_source_commit": "59443e2bcdfc6a1dd81f8334c108474eef2d3030",
+  "scope": "Compact observation of actual generated frozen split.json; list memberships omitted. No additional acceptance pass inferred. Full input can be regenerated using the recorded seed/profile.",
+  "split_file_sha256": "2e95d2ac41926f6b7fa66c1a77e988d1f5504b3b601504e683e866799f0049ff",
+  "metadata": {
+    "dataset_digest": "7ab7b11b08606ab8e5d8b3c84368bf6ef000dee43486bdf3e7e2f92cc678cad7",
+    "embargo_hours": 2.0,
+    "identity": "84f03e97bb4a9d7bd07201f9578275dc459bcabe212069e0df15d71d38d5c7a6",
+    "policy": "temporal",
+    "question": "Forecast future observations of an existing asset fleet; assets may overlap.",
+    "test_boundary": 399.20000000001164,
+    "validation_boundary": 299.3999999999942,
+    "version": 1
+  },
+  "row_counts": {
+    "train": 147000,
+    "validation": 46000,
+    "test": 49000
+  },
+  "generated_rows": 250000,
+  "excluded_rows": 8000,
+  "memberships_unique_and_disjoint": true
+}

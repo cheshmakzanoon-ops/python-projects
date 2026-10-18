@@ -1,47 +1,71 @@
 # Benchmarks and relevance
 
 Workloads are implemented in `src/pp_atlas/benchmarks.py` and invoked through the
-installed CLI. Default seed1729; pin OMP_NUM_THREADS, OPENBLAS_NUM_THREADS and
-MKL_NUM_THREADS to1. Reports include code/lock/root-contract hashes, dirty status,
-source input lists, Python/OS/CPU/memory limit, workload ID and distributions.
-Checks capture hashes before and after execution. Source scope is src, tests,
-benchmarks, examples, pyproject, lock and interpreter pin; generated outputs,
-artifacts, documentation and caches are excluded. Root contract includes AGENTS,
-master brief, Ruff configuration, manifest and dispatcher.
+installed CLI. Seed 1729 fixes generated inputs. Pin OMP_NUM_THREADS,
+OPENBLAS_NUM_THREADS and MKL_NUM_THREADS to 1. Reports record source, lock and
+root-contract hashes, dirty status, exact input lists, interpreter, operating
+system, CPU, memory limit and workload distributions. Hashes are captured before
+and after execution; generated reports and project documentation are excluded
+from the measured code scope.
 
-| Profile | Documents | Tokens/document | Queries | Timing |
+| Profile | Documents | Tokens per document | Queries | Timing |
 |---|---:|---:|---:|---|
-| ci |200|80|30|one warmup, five measured repetitions|
-| standard |100000|400|2000|one warmup, five measured repetitions|
+| ci | 200 | 80 | 30 | One warmup, five measured repetitions |
+| standard | 100,000 | 400 | 2,000 | One warmup, five measured repetitions |
 
-The scale generator draws50% of tokens from20 common terms,40% from100 topic
-vocabularies of16 terms each, and10% from N rare identities. Queries alternate
+The scale generator draws 50% of tokens from 20 common terms, 40% from 100 topic
+vocabularies of 16 terms each, and 10% from N rare identities. Queries alternate
 between topic-selective, common and rare terms. Ten disjoint ACL groups divide
-documents; the measured principal sees group0. Scale data demonstrates correctness
-and cost, not semantic relevance. Batch size1000 bounds ingestion working state;
-normal query readers materialize the current generation. SQLite WAL uses
-synchronous FULL; segment contents and directory are fsynced before publication.
+documents; the measured reader sees group 0. Scale data establishes retrieval
+correctness and cost, not relevance quality. Batch size 1,000 bounds ingestion
+working state; the query reader materializes the current generation. SQLite WAL
+uses synchronous FULL; segments and their directory are fsynced before publication.
 
-Cold query includes a new reader, integrity validation and index construction.
-Warm timings include the128 entry result LRU; its state and query mix are recorded.
-Authorization snapshot timing includes catalog snapshot, visibility construction
-and sorted visible IDs. Authorization-plus-query is reported separately. Peak RSS
-is process-lifetime maximum, so launch the benchmark in its own process. Retained
-obsolete files count toward reported disk bytes. No throughput target is invented.
+## Final committed standard measurement
 
-## Measured development CI run
+The coordinator ran the standard profile serially from a clean immutable clone of
+commit `59443e2bcdfc6a1dd81f8334c108474eef2d3030`, using CPython 3.14.8 on Linux
+with an Intel Xeon Platinum 8573C, a 32 GiB memory limit, one process and thread
+limits of 1. The run indexed **100,000 documents / 40,000,000 tokens** and measured
+**2,000 queries over five repetitions**.
 
-`artifacts/development-ci.json` is a real dirty-source development measurement on
-CPython3.14.8; it is not final committed release evidence. Exact source hashes and
-machine details are in that report. Results:200 docs indexed in0.2303 s (868.4 docs/s),
-111912 disk bytes,37.09 MB peak RSS; cold query17.41 ms; warm p50/p95/p99
-0.598/6.704/7.987 ms. Median authorization snapshot0.528 ms. Authorization,
-visible count and source-stability checks passed. This tiny workload cannot
-predict100k document cost and ran while other development workers existed.
+| Metric | Actual result |
+|---|---:|
+| Indexing time | 543.2294 s |
+| Indexing throughput | 184.084 documents/s |
+| Cold query, including index loading | 36.1966 s |
+| Warm query p50 / p95 / p99 | 21.6806 / 57.1996 / 83.9298 ms |
+| Warm query throughput | 32.8779 queries/s |
+| Disk size | 155,283,633 bytes |
+| Peak process RSS | 2,778,984,448 bytes |
+| Authorization plus search median | 398.615 ms |
+| Authorized snapshot median | 59.3983 ms |
 
-The standard run is deliberately reserved for the coordinator's serialized lease
-on an immutable committed snapshot. No standard performance result is claimed
-until that run exists. Command:
+Authorization, expected cold-query visible count and unchanged-source checks all
+passed. The [benchmark record](../../../docs/evidence/final/standard/atlas-3.14.8-benchmark-benchmark.json)
+contains exact inputs, environment, measurements and source provenance. The
+[verification record](../../../docs/evidence/final/standard/atlas-3.14.8.json)
+records successful commands and source stability. The benchmark's project digest
+is `57a00efa3b263d8e9d5baf31e921b259fadb12f62d036627291c453a34aa64fb`;
+its lock digest is
+`afadf806fdbb623044aa563e65234d12d3a49b57e907308cab46198ecad717f8`.
+The surrounding verification record declares its own broader input list and digest.
+
+Cold timing includes a new reader, integrity checks and index construction. Warm
+timing includes the 128-entry result LRU and its recorded query mix. Authorization
+snapshot timing includes the catalog snapshot, visibility construction and sorted
+visible IDs. The separate authorization-plus-search sample alternates restricted
+and all-group readers; it cannot be subtracted from warm-query timing to estimate
+an isolated authorization cost. Peak RSS is the process-lifetime maximum. Disk
+size includes all files retained by the benchmark's index root.
+
+The scaling limit is explicit: visibility construction scans O(N) current
+catalog documents, including before a result-cache lookup. The materialized Python
+postings also consume approximately 2.78 GB of peak RSS at this workload. These
+measurements motivate an indexed ACL visibility representation and compact
+positional storage. Neither optimization is claimed to be implemented. This
+single-machine synthetic run does not establish production capacity or a latency
+service guarantee.
 
 ```sh
 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
@@ -49,35 +73,48 @@ OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
   --output /tmp/atlas-standard --seed 1729
 ```
 
-## Independently labeled quality collection
+## Historical development CI measurement
 
-The250 original technical documents and60 graded queries are separate from scale
-data. Query intents/labels were written before scoring; the frozen seeded split
-contains30 development and30 heldout queries. Grade3 means primary current procedure,
-2 useful design rationale,1 incident context. Omitted documents are unjudged and
-treated as0. Restricted operations notes are not visible. Recall uses the authored
-relevant pool, not an exhaustive judgment of every possible text relationship.
-The coordinator performs an independent semantic audit without scorer access.
+`artifacts/development-ci.json` preserves a real dirty-source CPython 3.14.8 run:
+200 documents indexed in 0.2303 s, 111,912 disk bytes, 37.09 MB peak RSS, 17.41 ms
+cold query and 0.598 / 6.704 / 7.987 ms warm p50 / p95 / p99. Authorization,
+visible-count and source-stability checks passed. This small concurrent-development
+capture is historical evidence; its exact tested hashes remain in the artifact.
+It is not the final committed standard measurement above.
 
-The documented weakness was short archival distractors containing the same words
-in a different order. A bag-of-words baseline strips query quotes; the improvement
-honors explicit phrase positions. Selection used development judgments only;
-BM25 defaults1.2/.75 were not tuned on heldout. This is an improvement to lexical
-query semantics, not a claim of solved semantic search.
+## Independently reviewed quality collection
 
-| Mode/split | nDCG@10 | MRR | pooled Recall@10 |
+The 250 original technical documents and 60 graded queries are separate from
+scale data. Query intents and labels were written before scoring; a fixed seeded
+split contains 30 development and 30 heldout queries. Grade 3 means the primary
+current procedure, 2 useful rationale and 1 incident context. Omitted documents
+are unjudged and treated as 0. Restricted operations notes are invisible to the
+public evaluation principal. Recall is over the authored relevant pool.
+
+The coordinator completed a separate semantic review without consulting
+per-query scorer output or changing judgments. The [judgment review](../../../docs/evidence/atlas-judgment-review.md)
+records corpus and judgment hashes, rubric agreement, semantic spot checks and
+limitations. This review does not establish agreement among human assessors or
+relevance for natural queries outside the authored collection.
+
+The documented weakness was short archival distractors containing the query's
+words in a different order. The baseline strips query quotes; the improvement
+honors exact phrase positions. Selection used development judgments only; BM25
+parameters 1.2 / 0.75 were not tuned on heldout queries.
+
+| Mode / split | nDCG@10 | MRR | Pooled Recall@10 |
 |---|---:|---:|---:|
-| baseline/development |0.72263|0.59444|1.00000|
-| phrases/development |0.96462|0.98333|1.00000|
-| baseline/heldout |0.69740|0.56111|1.00000|
-| phrases/heldout |0.95150|0.98333|1.00000|
+| Baseline / development | 0.72263 | 0.59444 | 1.00000 |
+| Phrases / development | 0.96462 | 0.98333 | 1.00000 |
+| Baseline / heldout | 0.69740 | 0.56111 | 1.00000 |
+| Phrases / heldout | 0.95150 | 0.98333 | 1.00000 |
 
-All60 per-query lists, intents, judgments, unjudged hits and ranking failures are
-in `artifacts/development-quality.json`. Fifty queries still have imperfect graded
-ordering after the change: design and incident lengths can rank contextual material
-above a higher judged grade. No heldout-based fix was applied. The collection has
-repeated document structures and narrow technical vocabulary; it does not estimate
-relevance for arbitrary users or language domains.
+`artifacts/development-quality.json` preserves all 60 per-query rankings, intents,
+judgments, unjudged hits and failures. Fifty queries retain imperfect graded
+ordering: document length can favor contextual material over a higher judged
+grade. No heldout-based correction was applied. The collection uses repeated
+technical templates and narrow vocabulary; the phrase experiment demonstrates
+this authored lexical weakness, not broad ranking superiority.
 
 ```sh
 uv run --locked python -m pp_atlas.cli evaluate --root /tmp/atlas-quality \
