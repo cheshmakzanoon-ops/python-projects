@@ -28,7 +28,7 @@ class Runtime:
         mapper: Callable[[int], int] = int,
         predicate: Callable[[Record], bool] = lambda _: True,
     ) -> None:
-        if capacity < 1:
+        if type(capacity) is not int or capacity < 1:
             raise ValueError("positive capacity required")
         self.journal = journal
         self.engine = engine
@@ -38,7 +38,7 @@ class Runtime:
         self.metrics = Metrics()
 
     async def run(self, *, checkpoint_interval: int = 1000) -> None:
-        if checkpoint_interval < 1:
+        if type(checkpoint_interval) is not int or checkpoint_interval < 1:
             raise ValueError("positive checkpoint interval required")
         queues: list[asyncio.Queue[tuple[Record, asyncio.Future[Record | None]] | None]] = [
             asyncio.Queue(self.capacity) for _ in range(self.engine.config.workers)
@@ -53,6 +53,8 @@ class Runtime:
                     result = record
                     if record.kind == "event":
                         mapped = self.mapper(record.value)
+                        if type(mapped) is not int:
+                            raise ValueError("mapper must return an integer")
                         result = record if mapped == record.value else replace(record, value=mapped)
                         if not self.predicate(result):
                             # Filtered records still advance the durable ordered prefix.
@@ -85,10 +87,7 @@ class Runtime:
                 for original, prepared in futures:
                     processed_record = await prepared
                     if processed_record is None:
-                        self.engine.position = original.ingress_ordinal
-                        self.engine.trace.append(
-                            (original.ingress_ordinal, "filtered", self.engine.progress.watermark)
-                        )
+                        self.engine.apply(original, filtered=True)
                     else:
                         self.engine.apply(processed_record)
                     self.metrics.processed += 1

@@ -51,7 +51,7 @@ def create_app(engine: Engine, tokens: dict[str, Identity]) -> FastAPI:
     ) -> Identity:
         if credentials:
             for token, value in tokens.items():
-                if secrets.compare_digest(token, credentials.credentials):
+                if secrets.compare_digest(token.encode(), credentials.credentials.encode()):
                     return value
         raise HTTPException(
             401, "valid bearer credential required", headers={"WWW-Authenticate": "Bearer"}
@@ -93,8 +93,9 @@ def create_app(engine: Engine, tokens: dict[str, Identity]) -> FastAPI:
         return {"status": "alive"}
 
     @app.get("/ready")
-    def ready(who: Annotated[Identity, Depends(identity)]) -> dict[str, object]:
-        return engine.inspect(who.principal.tenant)
+    def ready(who: Annotated[Identity, Depends(identity)]) -> dict[str, str]:
+        engine.inspect(who.principal.tenant)
+        return {"status": "ready"}
 
     @app.get("/search")
     def search(

@@ -5,6 +5,7 @@ from __future__ import annotations
 import ast
 import io
 import json
+import stat
 import subprocess
 import sys
 import time
@@ -33,7 +34,10 @@ class ParseFailure(ValueError):
 
 def read_bounded(path: Path, max_bytes: int = Limits().max_bytes) -> bytes:
     """Bound before allocation and on read, including a file-growth race."""
-    if path.stat().st_size > max_bytes:
+    metadata = path.stat()
+    if not stat.S_ISREG(metadata.st_mode):
+        raise ParseFailure("source must be a regular file")
+    if metadata.st_size > max_bytes:
         raise ParseFailure("source byte limit exceeded")
     with path.open("rb") as stream:
         data = stream.read(max_bytes + 1)
@@ -59,7 +63,11 @@ def discover(
     excludes: tuple[str, ...] = (".venv/*", ".git/*", "__pycache__/*"),
     limits: Limits = Limits(),
 ) -> list[Path]:
+    if root.is_symlink():
+        raise ValueError("source symlink/path escape refused")
     root = root.resolve(strict=True)
+    if not root.is_file() and not root.is_dir():
+        raise ValueError("source root must be a regular file or directory")
     candidates = [root] if root.is_file() else root.rglob("*.py")
     result = []
     for path in candidates:
@@ -77,6 +85,10 @@ def discover(
             root.parent if root.is_file() else root
         ):
             raise ValueError(f"source symlink/path escape refused: {relative}")
+        if path.is_dir():
+            continue
+        if not path.is_file():
+            raise ValueError(f"source must be a regular file: {relative}")
         result.append(path)
         if len(result) > limits.max_files:
             raise ValueError("source file count limit exceeded")
@@ -91,7 +103,13 @@ def _decode(value: Any) -> Any:
         fields = {key: _decode(item) for key, item in value.items() if key != "_type"}
         return node_type(**fields)
     if isinstance(value, dict) and "_constant" in value:
-        return None  # unsupported constant payloads are irrelevant to configured rules
+        if value["_constant"] == "bytes":
+            return bytes.fromhex(value["hex"])
+        if value["_constant"] == "complex":
+            return complex(value["real"], value["imag"])
+        if value["_constant"] == "ellipsis":
+            return Ellipsis
+        raise ParseFailure("unsupported constant response")
     if isinstance(value, list):
         return [_decode(item) for item in value]
     return value

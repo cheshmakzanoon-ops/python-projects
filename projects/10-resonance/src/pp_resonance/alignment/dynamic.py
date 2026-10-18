@@ -36,12 +36,18 @@ def load_score(path: Path, rate: int) -> list[ReferenceNote]:
         ):
             raise ValueError("Invalid or duplicate reference note")
         ids.add(n["id"])
+        onset_samples, end_samples = start * scale * rate, (start + duration) * scale * rate
+        if not math.isfinite(onset_samples) or not math.isfinite(end_samples):
+            raise ValueError("Reference times exceed finite sample range")
+        onset_sample, end_sample = round(onset_samples), round(end_samples)
+        if end_sample <= onset_sample:
+            raise ValueError("Reference note duration quantizes to less than one sample")
         result.append(
             ReferenceNote(
                 n["id"],
                 pitch,
-                round(start * scale * rate),
-                round((start + duration) * scale * rate),
+                onset_sample,
+                end_sample,
             )
         )
     if any(a.start > b.start for a, b in zip(result, result[1:])):

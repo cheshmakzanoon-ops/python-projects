@@ -15,6 +15,8 @@ def prepare_replan(
     report = verify(previous, previous_plan)
     if not report.valid:
         raise ValueError(f"previous plan is invalid: {report.errors}")
+    if not states:
+        raise ValueError("replanning requires exactly one state per vehicle")
     if expanded.vehicles != previous.vehicles or expanded.depot != previous.depot:
         raise ValueError("vehicles and depot cannot change in baseline replanning")
     if len(expanded.stops) < len(previous.stops):

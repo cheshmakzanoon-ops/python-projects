@@ -20,7 +20,7 @@ from pp_pytrace.frontend.discovery import (
     read_source,
 )
 from pp_pytrace.reporting.models import Diagnostic, Evidence, Location
-from pp_pytrace.rules.registry import Config
+from pp_pytrace.rules.registry import RULES, Config
 from pp_pytrace.semantics.symbols import dependencies
 
 ENGINE_VERSION = "pytrace-1.0.0"
@@ -48,6 +48,36 @@ class Result:
 
 
 def _diagnostic(value: dict[str, Any]) -> Diagnostic:
+    if not all(
+        isinstance(value.get(key), str)
+        for key in ("rule_id", "severity", "confidence", "path", "message", "coverage")
+    ):
+        raise ValueError("invalid cached diagnostic")
+    if (
+        value["rule_id"] not in RULES
+        or value["severity"] not in ("error", "warning")
+        or value["confidence"] not in ("high", "uncertain")
+        or value["coverage"] not in ("modeled", "partial", "unparsed")
+    ):
+        raise ValueError("invalid cached diagnostic metadata")
+    for key in ("location", "sink_location"):
+        position = value.get(key)
+        if (
+            not isinstance(position, dict)
+            or set(position) != {"line", "column", "end_line", "end_column"}
+            or not all(type(item) is int and item > 0 for item in position.values())
+        ):
+            raise ValueError("invalid cached location")
+    evidence = value.get("evidence")
+    if not isinstance(evidence, list) or any(
+        not isinstance(item, dict)
+        or set(item) != {"line", "message"}
+        or type(item["line"]) is not int
+        or item["line"] < 1
+        or not isinstance(item["message"], str)
+        for item in evidence
+    ):
+        raise ValueError("invalid cached evidence")
     return Diagnostic(
         value["rule_id"],
         value["severity"],
@@ -61,6 +91,32 @@ def _diagnostic(value: dict[str, Any]) -> Diagnostic:
     )
 
 
+def _load_cache(path: Path, root: Path) -> dict[str, Any]:
+    """Treat an incomplete or structurally corrupt cache as a cache miss."""
+    try:
+        data = json.loads(read_bounded(path, 64 * 1024 * 1024).decode("utf-8"))
+        if (
+            not isinstance(data, dict)
+            or data.get("version") != ENGINE_VERSION
+            or data.get("root") != str(root)
+            or not isinstance(data.get("entries"), dict)
+        ):
+            return {}
+        for record in data["entries"].values():
+            if (
+                not isinstance(record, dict)
+                or not all(isinstance(record.get(key), str) for key in ("key", "content", "parser"))
+                or not isinstance(record.get("dependencies"), list)
+                or not all(isinstance(item, str) for item in record["dependencies"])
+                or not isinstance(record.get("diagnostics"), list)
+                or not all(isinstance(item, dict) for item in record["diagnostics"])
+            ):
+                return {}
+        return dict(data["entries"])
+    except (ValueError, OSError, TypeError):
+        return {}
+
+
 def analyze(
     root: Path,
     cache: Path | None = None,
@@ -68,17 +124,10 @@ def analyze(
     limits: Limits = Limits(),
     excludes: tuple[str, ...] = (".venv/*", ".git/*", "__pycache__/*"),
 ) -> Result:
+    files = discover(root, excludes, limits)
     root = root.resolve(strict=True)
     base = root.parent if root.is_file() else root
-    files = discover(root, excludes, limits)
-    previous: dict[str, Any] = {}
-    if cache and cache.exists():
-        try:
-            data = json.loads(read_bounded(cache, 64 * 1024 * 1024).decode("utf-8"))
-            if data.get("version") == ENGINE_VERSION and data.get("root") == str(root):
-                previous = data["entries"]
-        except (ValueError, KeyError, TypeError):
-            previous = {}
+    previous = _load_cache(cache, root) if cache and cache.exists() else {}
     sources: dict[str, str] = {}
     hashes: dict[str, str] = {}
     trees: dict[str, ast.Module] = {}

@@ -109,3 +109,11 @@ def test_parameter_and_document_bounds(tmp_path):
         engine.upsert_many("t", [Document("a", "", ""), Document("a", "", "")])
     with pytest.raises(ValueError):
         engine.search(Principal("t", "a"), "", limit=101)
+
+
+@pytest.mark.parametrize("k1", [math.nan, math.inf, -math.inf])
+def test_nonfinite_ranking_parameters_are_rejected(tmp_path, k1):
+    with pytest.raises(ValueError):
+        Engine(tmp_path, k1=k1)
+    with pytest.raises(ValueError):
+        contribution(1, 1, 1, 1, 1, k1=k1)

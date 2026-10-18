@@ -19,10 +19,25 @@ class Verification:
     schedules: tuple[tuple[int, tuple[VisitSchedule, ...], int], ...]
 
 
+def _finite_coordinate(value: object) -> bool:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return False
+    try:
+        return isfinite(value)
+    except OverflowError:
+        return False
+
+
 def input_errors(instance: RoutingInstance) -> tuple[str, ...]:
     errors: list[str] = []
     ids = [s.id for s in instance.stops]
     vids = [v.id for v in instance.vehicles]
+    identifiers = [instance.depot, *ids, *vids]
+    for state in instance.states:
+        identifiers.extend((state.vehicle_id, state.node, *state.executed))
+        identifiers.extend(job.stop_id for job in state.loaded)
+    if any(type(value) is not int for value in identifiers):
+        return ("depot, customer, vehicle, and snapshot node IDs must be integers",)
     if instance.depot != 0:
         errors.append("only depot node zero is supported")
     if ids != list(range(1, len(ids) + 1)):
@@ -44,7 +59,7 @@ def input_errors(instance: RoutingInstance) -> tuple[str, ...]:
             errors.append(f"stop {stop.id}: nonnegative integer units required")
         elif stop.ready > stop.due or stop.demand == 0:
             errors.append(f"stop {stop.id}: invalid window or demand")
-        if not isfinite(stop.x) or not isfinite(stop.y):
+        if not _finite_coordinate(stop.x) or not _finite_coordinate(stop.y):
             errors.append(f"stop {stop.id}: coordinates must be finite")
     for vehicle in instance.vehicles:
         vehicle_values = (vehicle.id, vehicle.capacity, vehicle.start, vehicle.end)
@@ -60,6 +75,8 @@ def input_errors(instance: RoutingInstance) -> tuple[str, ...]:
     by_id = {s.id: s for s in instance.stops}
     vehicle_map = {v.id: v for v in instance.vehicles}
     for state in instance.states:
+        if type(state.started) is not bool:
+            errors.append("snapshot started flag must be boolean")
         state_vehicle = vehicle_map.get(state.vehicle_id)
         executed_all.extend(state.executed)
         loaded_all.extend(job.stop_id for job in state.loaded)
@@ -99,10 +116,31 @@ def verify(instance: RoutingInstance, plan: Plan) -> Verification:
     errors = list(input_errors(instance))
     if errors:
         return Verification(False, tuple(errors), (0, 0), ())
-    if any(type(value) is not int for value in plan.objective):
+    if len(plan.objective) != 2 or any(
+        type(value) is not int or value < 0 for value in plan.objective
+    ):
         errors.append("objective must use integer units")
-    if plan.schema_version != 1:
+    if type(plan.schema_version) is not int or plan.schema_version != 1:
         errors.append("unsupported plan schema version")
+    for route in plan.routes:
+        if any(type(value) is not int for value in (route.vehicle_id, *route.stops)):
+            errors.append("route vehicle and stop IDs must be integers")
+        if route.return_time is not None and type(route.return_time) is not int:
+            errors.append("cached return must use integer units")
+        for visit in route.schedule:
+            if any(
+                type(value) is not int
+                for value in (
+                    visit.stop_id,
+                    visit.arrival,
+                    visit.service_start,
+                    visit.departure,
+                    visit.onboard_after,
+                )
+            ):
+                errors.append("cached schedule must use integer units")
+    if errors:
+        return Verification(False, tuple(errors), (0, 0), ())
     stops = {s.id: s for s in instance.stops}
     vehicles = {v.id: v for v in instance.vehicles}
     states = {s.vehicle_id: s for s in instance.states}

@@ -43,7 +43,10 @@ def normalize_row(row: Mapping[str, object]) -> NormalizedRow:
     if len(reference) > 200:
         raise ValueError("reference too long")
     normalized = normalize_reference(reference)
-    instant = instant.astimezone(timezone.utc)
+    try:
+        instant = instant.astimezone(timezone.utc)
+    except OverflowError as error:
+        raise ValueError("timestamp is outside the supported UTC range") from error
     payload = json.dumps(
         [identity, amount, currency, instant.isoformat(), normalized], separators=(",", ":")
     )

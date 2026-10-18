@@ -49,6 +49,33 @@ def test_missing_nonfinite_metrics_fail(context, metric, value):
     assert GatePolicy().judge(report)
 
 
+@pytest.mark.parametrize(
+    "metric,value",
+    [
+        ("pr_auc", 1.1),
+        ("roc_auc", 1.1),
+        ("brier", -0.1),
+        ("class_balance", -0.1),
+        ("class_balance", 1.1),
+        ("class_balance", 0.5),
+        ("count", 200.5),
+        ("positives", 50.5),
+        ("pr_auc", "0.8"),
+    ],
+)
+def test_impossible_validation_metrics_are_ineligible(context, metric, value):
+    values = {
+        "count": 200,
+        "positives": 50,
+        "class_balance": 0.25,
+        "pr_auc": 0.8,
+        "roc_auc": 0.8,
+        "brier": 0.1,
+    }
+    report = replace(context.report, metrics={**values, metric: value})
+    assert GatePolicy().judge(report)
+
+
 def test_one_class_validation_and_test_cannot_authorize(context):
     report = replace(
         context.report, metrics=metrics(np.zeros(200, dtype=np.int64), np.full(200, 0.2))

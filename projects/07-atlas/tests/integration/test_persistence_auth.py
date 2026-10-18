@@ -177,6 +177,37 @@ def test_at05_api_authorization_boundary(tmp_path):
         create_app(engine, {"short": Identity(Principal("a", "b"))})
 
 
+def test_readiness_does_not_expose_hidden_corpus_statistics(tmp_path):
+    engine = Engine(tmp_path)
+    engine.upsert("a", Document("public", "Public", "visible"))
+    reader = {"Authorization": "Bearer reader-synthetic-token"}
+    client = TestClient(
+        create_app(engine, {"reader-synthetic-token": Identity(Principal("a", "alice"))})
+    )
+    assert client.get("/ready").status_code == 401
+    before = client.get("/ready", headers=reader)
+    assert before.status_code == 200
+    engine.upsert(
+        "a", Document("private", "Private", "classified vocabulary", frozenset({"user:admin"}))
+    )
+    after = client.get("/ready", headers=reader)
+    assert after.status_code == 200
+    assert before.json() == after.json() == {"status": "ready"}
+    assert client.get("/search?q=classified", headers=reader).json()["total"] == 0
+    next(tmp_path.rglob("*.gz")).write_bytes(b"corrupt")
+    assert client.get("/ready", headers=reader).status_code == 503
+
+
+def test_non_ascii_bearer_credentials_are_rejected_without_server_error(tmp_path):
+    client = TestClient(
+        create_app(Engine(tmp_path), {"reader-synthetic-token": Identity(Principal("a", "alice"))}),
+        raise_server_exceptions=False,
+    )
+    response = client.get("/search", headers=[(b"authorization", b"Bearer invalid-\xff-token")])
+    assert response.status_code == 401
+    assert response.headers["www-authenticate"] == "Bearer"
+
+
 def test_atomic_catalog_rollback_and_orphan_ignored(tmp_path):
     import subprocess
     import sys

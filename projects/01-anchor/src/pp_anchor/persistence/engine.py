@@ -15,7 +15,7 @@ from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
 from psycopg_pool import ConnectionPool
 
-from pp_anchor.definitions.model import JSON, Definition, canonical
+from pp_anchor.definitions.model import JSON, Definition, canonical, validate_activity_result
 from pp_anchor.history.events import HistoryEvent
 from pp_anchor.replay.reducer import WorkflowState, decide, replay
 
@@ -133,66 +133,73 @@ class Engine:
         row = self._run(c, run_id, lock=True)
         definition = Definition.from_dict(cast(JSON, row["definition"]))
         state = replay(definition, self._events(c, run_id))
-        event = HistoryEvent(state.seq + 1, kind, step, data or {})
-        commands = decide(state, event)
-        c.execute(
-            "INSERT INTO history_events(workflow_id,event_seq,kind,step,data,command_ids) VALUES(%s,%s,%s,%s,%s,%s)",
-            (
-                run_id,
-                event.seq,
-                kind,
-                step,
-                Jsonb(event.data),
-                Jsonb([x.command_id for x in commands]),
-            ),
-        )
-        c.execute(
-            "UPDATE workflow_runs SET event_seq=%s,terminal_status=%s WHERE workflow_id=%s",
-            (event.seq, state.status, run_id),
-        )
-        if kind in ("cancelled", "step_failed"):
-            c.execute(
-                "UPDATE activity_tasks SET status='cancelled' WHERE workflow_id=%s AND NOT compensation AND status IN ('pending','running')",
-                (run_id,),
-            )
-            # Fence first, even when the actual cleanup later fails. Late effects cannot resurrect.
-            c.execute(
-                "INSERT INTO provider_effects(business_key,payload,fenced) VALUES(%s,%s,true) ON CONFLICT(business_key) DO UPDATE SET fenced=true",
-                (run_id, Jsonb({})),
-            )
-        immediate: list[str] = []
         by_name = {s.name: s for s in definition.steps}
-        for command in commands:
-            if command.kind in ("Complete", "Fail"):
-                continue
-            item = by_name[command.step]
-            if command.kind in ("ScheduleActivity", "Compensate"):
+        # Preserve depth-first history order without a Python frame per internal step.
+        # The run lock protects this state and all projections until the transaction commits.
+        pending = [(kind, step, data)]
+        while pending:
+            kind, step, data = pending.pop()
+            event = HistoryEvent(state.seq + 1, kind, step, data or {})
+            commands = decide(state, event)
+            c.execute(
+                "INSERT INTO history_events(workflow_id,event_seq,kind,step,data,command_ids) VALUES(%s,%s,%s,%s,%s,%s)",
+                (
+                    run_id,
+                    event.seq,
+                    kind,
+                    step,
+                    Jsonb(event.data),
+                    Jsonb([x.command_id for x in commands]),
+                ),
+            )
+            c.execute(
+                "UPDATE workflow_runs SET event_seq=%s,terminal_status=%s WHERE workflow_id=%s",
+                (event.seq, state.status, run_id),
+            )
+            if kind in ("cancelled", "step_failed"):
                 c.execute(
-                    "INSERT INTO activity_tasks(workflow_id,command_id,step,activity,compensation,max_attempts,retry_delay) VALUES(%s,%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING",
-                    (
-                        run_id,
-                        command.command_id,
-                        item.name,
-                        item.compensate if command.kind == "Compensate" else item.activity,
-                        command.kind == "Compensate",
-                        item.max_attempts,
-                        item.retry_delay,
-                    ),
+                    "UPDATE activity_tasks SET status='cancelled' WHERE workflow_id=%s AND NOT compensation AND status IN ('pending','running')",
+                    (run_id,),
                 )
-            elif command.kind == "StartTimer":
+                # Fence first, even when the actual cleanup later fails. Late effects cannot resurrect.
                 c.execute(
-                    "INSERT INTO timers(workflow_id,command_id,step,due_at) VALUES(%s,%s,%s,clock_timestamp()+%s*interval '1 second') ON CONFLICT DO NOTHING",
-                    (run_id, command.command_id, item.name, item.delay),
+                    "INSERT INTO provider_effects(business_key,payload,fenced) VALUES(%s,%s,true) ON CONFLICT(business_key) DO UPDATE SET fenced=true",
+                    (run_id, Jsonb({})),
                 )
-            elif command.kind == "AwaitSignal":
-                if c.execute(
-                    "SELECT 1 FROM signals WHERE workflow_id=%s AND name=%s", (run_id, item.signal)
-                ).fetchone():
+            immediate: list[str] = []
+            for command in commands:
+                if command.kind in ("Complete", "Fail"):
+                    continue
+                item = by_name[command.step]
+                if command.kind in ("ScheduleActivity", "Compensate"):
+                    c.execute(
+                        "INSERT INTO activity_tasks(workflow_id,command_id,step,activity,compensation,max_attempts,retry_delay) VALUES(%s,%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING",
+                        (
+                            run_id,
+                            command.command_id,
+                            item.name,
+                            item.compensate if command.kind == "Compensate" else item.activity,
+                            command.kind == "Compensate",
+                            item.max_attempts,
+                            item.retry_delay,
+                        ),
+                    )
+                elif command.kind == "StartTimer":
+                    c.execute(
+                        "INSERT INTO timers(workflow_id,command_id,step,due_at) VALUES(%s,%s,%s,clock_timestamp()+%s*interval '1 second') ON CONFLICT DO NOTHING",
+                        (run_id, command.command_id, item.name, item.delay),
+                    )
+                elif command.kind == "AwaitSignal":
+                    if c.execute(
+                        "SELECT 1 FROM signals WHERE workflow_id=%s AND name=%s",
+                        (run_id, item.signal),
+                    ).fetchone():
+                        immediate.append(item.name)
+                elif command.kind == "Join":
                     immediate.append(item.name)
-            elif command.kind == "Join":
-                immediate.append(item.name)
-        for name in immediate:
-            self._append(c, run_id, "step_completed", name, {"source": "internal"})
+            pending.extend(
+                ("step_completed", name, {"source": "internal"}) for name in reversed(immediate)
+            )
 
     def _ingress(self, c: Connection[Row], kind: str, key: str, request: object) -> str | None:
         if not key or len(key) > 200:
@@ -429,12 +436,12 @@ class Engine:
             )
 
     def finish(self, task: Task, result: JSON | None = None, error: str | None = None) -> None:
-        if result is not None and len(canonical(result).encode()) > 1_048_576:
-            raise ValueError("Activity result exceeds 1 MiB")
+        validate_activity_result(result)
         with self.transaction() as c:
             row = self._active(c, task)
-            retry = error is not None and task.attempt_number < int(str(row["max_attempts"]))
-            status = "pending" if retry else ("failed" if error else "completed")
+            failed = error is not None
+            retry = failed and task.attempt_number < int(str(row["max_attempts"]))
+            status = "pending" if retry else ("failed" if failed else "completed")
             delay = float(str(row["retry_delay"])) * 2 ** (task.attempt_number - 1)
             c.execute(
                 "UPDATE activity_tasks SET status=%s,available_at=clock_timestamp()+%s*interval '1 second',lease_expiry=NULL WHERE workflow_id=%s AND command_id=%s",
@@ -443,18 +450,18 @@ class Engine:
             c.execute(
                 "UPDATE activity_attempts SET status=%s,finished_at=clock_timestamp() WHERE workflow_id=%s AND command_id=%s AND lease_epoch=%s",
                 (
-                    "failed" if error else "completed",
+                    "failed" if failed else "completed",
                     task.workflow_id,
                     task.command_id,
                     task.lease_epoch,
                 ),
             )
-            kind = "retry_scheduled" if retry else ("step_failed" if error else "step_completed")
+            kind = "retry_scheduled" if retry else ("step_failed" if failed else "step_completed")
             if task.compensation:
                 kind = (
                     "compensation_retry"
                     if retry
-                    else ("compensation_failed" if error else "compensation_completed")
+                    else ("compensation_failed" if failed else "compensation_completed")
                 )
             self._append(
                 c,

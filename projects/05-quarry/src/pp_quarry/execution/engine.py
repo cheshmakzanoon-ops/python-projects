@@ -20,8 +20,8 @@ from pp_quarry.model.events import canonical
 from pp_quarry.planning.dag import DEFAULT_DAG, Node, fingerprint, order
 from pp_quarry.planning.partitions import bucket
 from pp_quarry.sources import file_hash, read
-from pp_quarry.storage.catalog import connect
-from pp_quarry.storage.files import literal, persist
+from pp_quarry.storage.catalog import check_storage_paths, connect
+from pp_quarry.storage.files import literal, manifest_path, persist
 
 
 class Conflict(ValueError):
@@ -67,11 +67,7 @@ class Lakehouse:
         marker = self.root / ".quarry-owned"
         if not marker.exists() and any(self.root.iterdir()):
             raise ValueError("dataset root must be empty or owned by Quarry")
-        if any(
-            (self.root / name).is_symlink()
-            for name in ("data", "tmp", "catalog.sqlite", ".quarry-owned")
-        ):
-            raise ValueError("owned storage paths cannot be symlinks")
+        check_storage_paths(self.root)
         marker.touch(exist_ok=True)
         (self.root / "data").mkdir(exist_ok=True)
         (self.root / "tmp").mkdir(exist_ok=True)
@@ -425,6 +421,7 @@ class Lakehouse:
                 for node in self._graph(dag):
                     entry = nodes[node.name]
                     if entry["action"] == "reuse":
+                        manifest_path(self.root, entry["old"]["path"])
                         output[node.name] = dict(entry["old"], reused=True)
                         manifest["stats"]["reused_nodes"] += 1
                         continue
@@ -442,7 +439,7 @@ class Lakehouse:
                                     manifest["stats"]["max_batch_rows"], len(rows)
                                 )
                     else:
-                        parent = self.root / output[node.parents[0]]["path"]
+                        parent = manifest_path(self.root, output[node.parents[0]]["path"])
                         manifest["stats"]["parquet_input_bytes"] += parent.stat().st_size
                         if node.transform == "facts":
                             extras = []
@@ -464,8 +461,13 @@ class Lakehouse:
                                     if field.kind == "json"
                                     else "json_extract_string"
                                 )
+                                expression = f"{extract}(payload,{literal(pointer)})"
+                                if field.kind == "json":
+                                    # JSON null represents an absent nullable value; the
+                                    # JSON string "null" remains a distinct JSON scalar.
+                                    expression = f"nullif({expression},'null'::JSON)"
                                 extras.append(
-                                    f"try_cast({extract}(payload,{literal(pointer)}) AS {kinds[field.kind]}) AS {alias}"
+                                    f"try_cast({expression} AS {kinds[field.kind]}) AS {alias}"
                                 )
                             projection = "," + ",".join(extras) if extras else ""
                             sql = f"SELECT namespace,key,version,json_extract_string(payload,'$.device') device,json_extract_string(payload,'$.day') AS \"day\",coalesce(try_cast(json_extract_string(payload,'$.value') AS DOUBLE),0) AS \"value\",payload,source,\"offset\"{projection} FROM read_parquet({literal(str(parent))}) WHERE operation='upsert'"
@@ -522,9 +524,7 @@ class Lakehouse:
         files = rows = 0
         for nodes in manifest["partitions"].values():
             for entry in nodes.values():
-                path = self.root / entry["path"]
-                if not path.resolve().is_relative_to(self.root / "data") or path.is_symlink():
-                    raise ValueError("manifest path escapes owned data")
+                path = manifest_path(self.root, entry["path"])
                 if file_hash(path) != entry["sha256"] or path.stat().st_size != entry["bytes"]:
                     raise ValueError(f"checksum/size mismatch: {path.name}")
                 if str(pq.read_schema(path)) != entry["schema"]:

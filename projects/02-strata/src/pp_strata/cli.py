@@ -42,6 +42,8 @@ def output_directory(raw: str) -> Path:
             or marker.read_text() != "pp-strata-output-v1\n"
         ):
             raise ValueError("nonempty output is not owned by Strata")
+    if any((path / name).is_symlink() for name in OWNED):
+        raise ValueError("refusing symbolic link in owned output")
     durable_mkdir(path)
     (path / MARKER).write_text("pp-strata-output-v1\n")
     return path

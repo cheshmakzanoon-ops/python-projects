@@ -16,4 +16,6 @@ JSON integration uses paths relative to the selected root, stable diagnostic IDs
 
 Journal recovery covers process interruption after a valid prepared manifest exists. Backup/manifest and directory persistence are not fsynced as one protocol; sudden power loss is outside the recovery guarantee. File replacement fsync alone does not establish power-loss durability.
 
+An abrupt process termination can leave a uniquely named `.pytrace-*.tmp` beside a selected source file. Recovery uses a fresh temporary, so an orphan does not prevent restoring the journal. Failed writes clean up their own temporary; unrelated files are preserved.
+
 Default CPython is 3.14.8 after full evaluation; CPython 3.13.16 remains in the required compatibility matrix.

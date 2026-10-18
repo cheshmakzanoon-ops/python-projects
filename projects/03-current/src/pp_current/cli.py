@@ -22,16 +22,40 @@ from pp_current.diagnostics.workload import INPUTS, generate
 from pp_current.sources.ndjson import read_ndjson
 
 MARKER = ".current-owned-demo"
+MARKER_TEXT = "Current generated demo state v1\n"
+
+
+def safe_output(output: Path) -> Path:
+    output = output.absolute()
+    if any(path.is_symlink() for path in (output, *output.parents)):
+        raise ValueError("refusing symlink output or ancestor")
+    return output
+
+
+def has_ownership(output: Path) -> bool:
+    marker = output / MARKER
+    return (
+        not marker.is_symlink()
+        and marker.is_file()
+        and marker.stat().st_size == len(MARKER_TEXT.encode("utf-8"))
+        and marker.read_text(encoding="utf-8") == MARKER_TEXT
+    )
 
 
 def owned(output: Path) -> None:
-    if output.is_symlink():
-        raise ValueError("refusing symlink output")
-    output = output.resolve()
-    if output.exists() and any(output.iterdir()) and not (output / MARKER).is_file():
+    output = safe_output(output)
+    if output.exists() and any(output.iterdir()) and not has_ownership(output):
         raise ValueError("refusing nonempty output without Current ownership marker")
     output.mkdir(parents=True, exist_ok=True)
-    (output / MARKER).write_text("Current generated demo state v1\n")
+    if not has_ownership(output):
+        with (output / MARKER).open("x", encoding="utf-8") as marker:
+            marker.write(MARKER_TEXT)
+
+
+def fresh_output(output: Path) -> None:
+    owned(output)
+    if any(path.name != MARKER for path in output.iterdir()):
+        raise ValueError("run directory contains state; select fresh output or clean-demo")
 
 
 def execute(
@@ -43,7 +67,7 @@ def execute(
     oracle: bool = True,
     crash: bool = False,
 ) -> dict[str, object]:
-    owned(output)
+    fresh_output(output)
     path = output / "current.sqlite"
     if path.exists():
         raise ValueError("run directory already contains state; select fresh output or clean-demo")
@@ -216,28 +240,35 @@ def demo(output: Path = typer.Option(...), seed: int = 1729) -> None:
 
 @app.command("clean-demo")
 def clean_demo(output: Path = typer.Option(...)) -> None:
-    if not (output / MARKER).is_file() or output.is_symlink():
+    output = safe_output(output)
+    if not has_ownership(output):
         raise ValueError("refusing to remove unowned or symlink state")
     shutil.rmtree(output)
 
 
 @app.command()
 def inspect(output: Path = typer.Option(...)) -> None:
-    journal = Journal(output / "current.sqlite")
-    print(json.dumps(journal.export(), indent=2))
-    journal.close()
+    journal = Journal(output / "current.sqlite", read_only=True)
+    try:
+        print(json.dumps(journal.export(), indent=2))
+    finally:
+        journal.close()
 
 
 @app.command()
 def replay(output: Path = typer.Option(...), input: Path = typer.Option(...)) -> None:
-    owned(output)
+    fresh_output(output)
     journal = Journal(output / "current.sqlite")
-    records = list(read_ndjson(input))
-    journal.admit(records)
-    config = Config(tuple(sorted({record.input_id for record in records})))
-    asyncio.run(Runtime(journal, journal.recover(config)).run())
-    print(json.dumps(journal.export(), indent=2))
-    journal.close()
+    try:
+        records = list(read_ndjson(input))
+        if not records:
+            raise ValueError("replay input contains no records")
+        journal.admit(records)
+        config = Config(tuple(sorted({record.input_id for record in records})))
+        asyncio.run(Runtime(journal, journal.recover(config)).run())
+        print(json.dumps(journal.export(), indent=2))
+    finally:
+        journal.close()
 
 
 @app.command()
@@ -245,7 +276,7 @@ def benchmark(
     output: Path = typer.Option(...), profile: Profile = Profile.ci, seed: int = 1729
 ) -> None:
     identity_before = provenance(seed, profile.value)
-    owned(output)
+    fresh_output(output)
     count = 10_000 if profile.value == "ci" else 1_000_000
     execute(output / "warmup", min(count, 10_000), seed)
     reports = []

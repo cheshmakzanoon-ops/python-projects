@@ -103,3 +103,47 @@ platform is Linux/local POSIX filesystem. Process termination and simulated
 unsynced-rename outcomes are not a universal power-loss proof. Full compaction,
 materialized scans/backups, per-key conflict-head memory and snapshot retention
 are documented operating limits.
+
+## Code review follow-up — October 18, 2026
+
+The review found and fixed five classes of defect in the current working tree:
+
+- WAL rotation closed its old descriptor before reopening the replacement. A
+  failed reopen left a stale descriptor, and closing the owner then raised
+  `EBADF`. Rotation now keeps the replacement's writable descriptor through
+  publication and releases it on every failed synchronization/rename path.
+- Owner construction and shutdown could stop at the first cleanup error,
+  leaking tables and the process-owner lock. Cleanup now attempts every release,
+  including when WAL/table close or explicit owner unlock fails. A failed lock
+  acquisition also closes its descriptor. Errors still reach the caller.
+- Manifest validation accepted boolean/float format identifiers and checkpoint
+  sequences outside the persisted unsigned 64-bit format. These inputs now fail
+  as corruption before WAL recovery.
+- Reusing a marked CLI output directory could follow a report-file symlink.
+  Output setup now rejects symlinks at every directly owned child before writes.
+- The commit benchmark opened predictable child names directly in the output
+  directory and subsequently removed them. A regression reproduced deletion of
+  a preexisting database. Measurements now use a newly created private temporary
+  directory and preserve existing caller files byte for byte.
+
+Twenty-three regression cases were added. Before the corresponding fixes, the
+initial resource/schema checks reproduced five failures, and the output/benchmark
+checks reproduced ten failures, including the deleted preexisting database.
+
+Current verification on the uncommitted review source:
+
+- CPython 3.14.8: complete suite **102 passed**.
+- CPython 3.13.16, in a separate environment: complete suite **102 passed**.
+- Both interpreters: `ruff format --check .`, `ruff check .`, and `mypy src`
+  passed. `uv build --python 3.14.8` built the sdist and wheel.
+- The public CLI demo, crash subprocesses, snapshot/recovery model tests, and
+  descriptor fault tests ran as part of the complete suites.
+- The public CI benchmark passed on 3.14.8 with all dictionary, compaction,
+  recovery, comparison-count, and unchanged-source checks. Local report:
+  `/tmp/strata-review-ci-w1908sfo/benchmark.json`; source content SHA-256:
+  `190e1790dce666c5fdd566f13f3a8285b9fe5530e946e16d2f8bf65332b8d79a`.
+
+The historical 500,000-operation extended run and standard benchmark above were
+not repeated for this review and retain their original revision scope. Current
+validation makes no new full extended-run or power-loss claim. No dependency or
+lockfile changed, and no external services or credentials were required.

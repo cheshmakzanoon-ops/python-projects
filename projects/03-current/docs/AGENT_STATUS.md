@@ -1,6 +1,25 @@
 # Current agent status
 
-Status: complete for Current's required project behavior and accepted local verification. Owner A03. Source, tests, dependencies and runtime writes are paused. The coordinator owns final portfolio publication, remote synchronization and remote CI claims.
+## October 2026 code review addendum
+
+Current's review changes are locally verified in the working tree. The older committed evidence below predates these changes and does not certify the revised source. No standard or CI benchmark was rerun for this review.
+
+Fixed concrete defects in idle/end finalization, terminal-input validation, filtered-record admission checks, malformed integer and delivery identity validation, read-only inspection, output ownership/symlink handling, recovery job identity, outbox acknowledgement payload matching and committed replay metrics. Demo, replay and benchmark now require fresh output directories; inspect cannot create or initialize a database. Journal construction failures and inspect/replay error paths close their database connections.
+
+Checkpoint code version is now `current-2`; the journal and wire formats remain version one. Prior code could commit already-invalid lifecycle decisions that the checkpoint alone cannot identify. Version-one checkpoints fail closed without rewriting the database; retain the original journal and replay its raw ingress trace into a fresh journal. The regression suite checks checkpoint bytes and ingress preservation on rejection. This is an intentional compatibility change, not an automatic migration.
+
+Validation on this reviewed working tree:
+
+- CPython 3.14.8: `uv run --locked pytest -q -W error --cov --cov-report=term-missing` — **79 passed**, no warnings; **97% combined statement/branch coverage** across the configured event-time, journal, model, operator, runtime, sink and source core (514 statements, 188 branches).
+- CPython 3.13.16: `UV_PROJECT_ENVIRONMENT=/workspace/python-projects/.local/venvs/current-3.13.16 uv run --locked --python 3.13.16 pytest -q -W error` — **79 passed**, no warnings. Default `.venv` remains 3.14.8.
+- Ruff formatting/lint and strict mypy for all 21 source files passed. Source/wheel build passed. A separate Python 3.14.8 environment installed the wheel with locked, hash-verified runtime dependencies and passed CLI help, durable idle/end finalization, named-job recovery and read-only inspection from outside the checkout.
+- Full tests include the 10,000-event crash/recovery CLI demo and independent batch-oracle/property suites. No performance improvement, remote CI result, power-failure durability result or final committed release evidence is claimed.
+
+All review writes are paused for coordinator review. Existing single-owner, bounded-history, fixed-topology and batch-export limits remain. Files changed are confined to Current's source, focused regression tests and project documentation; no dependency or lockfile changed.
+
+## Historical accepted implementation and evidence
+
+Historical status: complete for Current's required project behavior and accepted local verification. Owner A03. The coordinator owns final portfolio publication, remote synchronization and remote CI claims.
 
 ## Implemented and verified
 

@@ -25,6 +25,11 @@ INPUT = canonical(["s", 0])
         dict(key=1),
         dict(partition="x"),
         dict(event_time=2**63),
+        dict(event_time="0"),
+        dict(event_time=None),
+        dict(event_time=True),
+        dict(ingress_ordinal=-1),
+        dict(source_offset=2**63),
     ],
 )
 def test_record_boundary_validation(kwargs: dict[str, object]) -> None:
@@ -102,3 +107,20 @@ def test_delivery_canonical_identity() -> None:
         Delivery("j", "o", "key", 0, "{}")
     with pytest.raises(ValueError, match="canonical"):
         Delivery("j", "o", "key", 1, '{ "x":1 }')
+
+
+@pytest.mark.parametrize(
+    "field", ["workers", "size", "slide", "lateness", "join_interval", "state_limit"]
+)
+@pytest.mark.parametrize("value", [True, 1.5, "1"])
+def test_configuration_rejects_noninteger_limits(field: str, value: object) -> None:
+    with pytest.raises(ValueError, match="integer"):
+        Config((INPUT,), **{field: value})  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize("identity", [(1, "op", "key"), ("job", 1, "key"), ("job", "op", None)])
+def test_delivery_rejects_nonstring_identity(identity: tuple[object, object, object]) -> None:
+    from pp_current import Delivery
+
+    with pytest.raises(ValueError, match="identity"):
+        Delivery(*identity, 1, "{}")  # type: ignore[arg-type]

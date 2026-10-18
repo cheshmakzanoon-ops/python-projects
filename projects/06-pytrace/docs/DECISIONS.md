@@ -12,6 +12,8 @@ The engine is flow-sensitive for names, and path-insensitive at joins. It does n
 
 The API migration supports exactly the pinned repository fixture version/hash. One explicit old keyword, no new spelling, no starred arguments, and one imported canonical binding are required. The value expression remains in exactly the same position and is not evaluated by PyTrace. Ambiguous imports, dynamic local aliases and stale manifests abstain. The trusted fixture's direct-call tests compare results and error types/messages for both spellings; target programs are never used as an execution oracle.
 
+A wildcard import causes the module to abstain from both codemods: qualified-name metadata cannot enumerate names introduced by that import, so it cannot prove a built-in or imported API binding remains unshadowed.
+
 **Recoverability over false atomicity.** Filesystem replacement is atomic per selected file, but multiple files are not one transaction. Apply validates all paths/hashes/replacements before creating the journal. Backups allow explicit recovery, which refuses subsequent external edits and corrupted backup hashes. Concurrent hostile filesystem mutation remains outside the local trusted editing threat model; do not apply while another writer edits the same selected files. No claim of a race-free hostile-filesystem sandbox is made.
 
 **No code license invented.** The repository owner has not chosen a code license. Original code and synthetic corpus have no assumed redistribution grant beyond repository availability. Recommend an explicit MIT or Apache-2.0 decision by the owner. Dependency and OASIS schema notices are tracked separately.

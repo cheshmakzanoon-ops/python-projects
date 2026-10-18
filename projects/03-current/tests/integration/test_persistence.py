@@ -156,3 +156,105 @@ def test_map_filter_and_replay_no_double_application(tmp_path: Path) -> None:
     assert journal.export() == before
     assert next(r["payload"] for r in before if r["operator_id"] == "tumbling")["sum"] == 16  # type: ignore[index]
     journal.close()
+
+
+@pytest.mark.parametrize("invalid", ["unknown", "idle", "ended"])
+def test_filtered_events_preserve_input_lifecycle_checks(tmp_path: Path, invalid: str) -> None:
+    journal = Journal(tmp_path / "filtered.db")
+    records = []
+    if invalid != "unknown":
+        records.append(Record("s", 0, 0, kind="idle" if invalid == "idle" else "end"))
+    records.append(Record("other" if invalid == "unknown" else "s", 0, 1))
+    journal.admit(records)
+    config = Config((INPUT,))
+    runtime = Runtime(journal, journal.recover(config), predicate=lambda _: False)
+    with pytest.raises(ExceptionGroup):
+        asyncio.run(runtime.run())
+    assert journal.recover(config).position == 0
+    journal.close()
+
+
+def test_recovery_rejects_different_job_identity(tmp_path: Path) -> None:
+    journal = Journal(tmp_path / "jobs.db")
+    config = Config((INPUT,))
+    journal.publish(journal.recover(config, job_id="original"))
+    with pytest.raises(ValueError, match="job"):
+        journal.recover(config, job_id="different")
+    assert journal.recover(config).job_id == "original"
+    journal.close()
+
+
+def test_acknowledgement_must_match_registered_payload(tmp_path: Path) -> None:
+    journal = Journal(tmp_path / "ack.db")
+    engine = journal.recover(Config((INPUT,)))
+    delivery = Delivery("demo", "window", "key", 1, '{"count":1}')
+    engine.pending.append(delivery)
+    journal.publish(engine)
+    with pytest.raises(ValueError, match="delivery"):
+        journal.acknowledge(replace(delivery, payload='{"count":2}'))
+    with pytest.raises(ValueError, match="delivery"):
+        journal.acknowledge(replace(delivery, revision=2))
+    assert journal.pending() == [delivery]
+    journal.acknowledge(delivery)
+    journal.acknowledge(delivery)
+    assert journal.pending() == []
+    journal.close()
+
+
+def test_failed_admission_does_not_increment_committed_replay_count(tmp_path: Path) -> None:
+    journal = Journal(tmp_path / "replays.db")
+    record = Record("s", 0, 0)
+    journal.admit([record])
+    with pytest.raises(ValueError, match="conflicting"):
+        journal.admit([record, replace(record, value=1)])
+    assert journal.replayed == 0
+    journal.admit([record])
+    assert journal.replayed == 1
+    journal.close()
+
+
+def test_mapper_cannot_smuggle_equal_float_through_integer_validation(tmp_path: Path) -> None:
+    journal = Journal(tmp_path / "mapper.db")
+    journal.admit([Record("s", 0, 0, value=1)])
+    runtime = Runtime(journal, journal.recover(Config((INPUT,))), mapper=lambda _: 1.0)  # type: ignore[arg-type,return-value]
+    with pytest.raises(ExceptionGroup):
+        asyncio.run(runtime.run())
+    assert journal.recover(Config((INPUT,))).position == 0
+    journal.close()
+
+
+def test_read_only_journal_enforces_sqlite_write_protection(tmp_path: Path) -> None:
+    import sqlite3
+
+    path = tmp_path / "read-only.db"
+    journal = Journal(path)
+    journal.admit([Record("s", 0, 0)])
+    journal.close()
+    journal = Journal(path, read_only=True)
+    assert len(journal.read(0)) == 1
+    with pytest.raises(sqlite3.OperationalError, match="readonly"):
+        journal.admit([Record("s", 0, 1)])
+    journal.close()
+
+
+def test_previous_code_checkpoint_rejection_preserves_database(tmp_path: Path) -> None:
+    from pp_current.runtime.engine import CODE_VERSION
+
+    path = tmp_path / "previous-version.db"
+    config = Config((INPUT,))
+    journal = Journal(path)
+    record = journal.admit([Record("s", 0, 0, value=7)])[0]
+    engine = journal.recover(config)
+    engine.apply(record)
+    journal.publish(engine)
+    previous = engine.dump().replace(CODE_VERSION, "current-1")
+    journal.db.execute("UPDATE checkpoint SET state=?", (previous,))
+    journal.close()
+    before = path.read_bytes()
+    journal = Journal(path, read_only=True)
+    with pytest.raises(ValueError, match="incompatible"):
+        journal.recover(config)
+    assert journal.db.execute("SELECT state FROM checkpoint").fetchone() == (previous,)
+    assert journal.read(0) == [record]
+    journal.close()
+    assert path.read_bytes() == before

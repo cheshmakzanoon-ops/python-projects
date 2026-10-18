@@ -17,6 +17,11 @@ def canonical(value: object) -> str:
         raise ValueError("Value must be finite JSON") from exc
 
 
+def validate_activity_result(result: JSON | None) -> None:
+    if result is not None and len(canonical(result).encode()) > 1_048_576:
+        raise ValueError("Activity result exceeds 1 MiB")
+
+
 @dataclass(frozen=True)
 class Step:
     name: str

@@ -1,7 +1,7 @@
 """Bounded sparse graph with amount/currency/date buckets and component guards."""
 
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import date, datetime
 
 from .normalize import normalize_reference
 
@@ -52,9 +52,13 @@ def candidates(rows: list[MatchEntry], postings: list[MatchEntry], days: int = 7
 
     edges = []
     for row in rows:
+        ordinal = row.timestamp.date().toordinal()
         for offset in range(-days, days + 1):
+            candidate_day = ordinal + offset
+            if not date.min.toordinal() <= candidate_day <= date.max.toordinal():
+                continue
             for posting in buckets.get(
-                (row.amount, row.currency, row.timestamp.date() + timedelta(days=offset)), []
+                (row.amount, row.currency, date.fromordinal(candidate_day)), []
             ):
                 a, b = root(("l", row.identity)), root(("r", posting.identity))
                 left_count, edge_count = counts[a]

@@ -21,8 +21,12 @@ def encode(value: Any) -> Any:
         }
     if isinstance(value, list):
         return [encode(item) for item in value]
-    if isinstance(value, (bytes, complex, tuple)) or value is Ellipsis:
-        return {"_constant": repr(value)}
+    if isinstance(value, bytes):
+        return {"_constant": "bytes", "hex": value.hex()}
+    if isinstance(value, complex):
+        return {"_constant": "complex", "real": value.real, "imag": value.imag}
+    if value is Ellipsis:
+        return {"_constant": "ellipsis"}
     return value
 
 

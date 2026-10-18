@@ -1,6 +1,7 @@
 """Deterministic monophonic MIDI, plus an independent standard-MIDI byte checker."""
 
 import struct
+from fractions import Fraction
 from pathlib import Path
 
 import mido
@@ -31,7 +32,7 @@ def export(path: Path, notes: list[NoteEvent], rate: int, tempo: int = 500000) -
             raise ValueError("MIDI baseline requires valid, ordered monophonic note intervals")
         last_end = note.end
         for sample, kind, velocity in ((note.start, "note_on", 90), (note.end, "note_off", 0)):
-            tick = round(sample / rate * 1_000_000 / tempo * 480)
+            tick = round(Fraction(sample * 1_000_000 * 480, rate * tempo))
             events.append((tick, 0 if kind == "note_off" else 1, note.midi, kind, velocity))
         if events[-1][0] <= events[-2][0]:
             raise ValueError(
@@ -39,7 +40,10 @@ def export(path: Path, notes: list[NoteEvent], rate: int, tempo: int = 500000) -
             )
     previous = 0
     for tick, _, pitch, kind, velocity in sorted(events):
-        track.append(mido.Message(kind, note=pitch, velocity=velocity, time=tick - previous))
+        delta = tick - previous
+        if delta > 0x0FFFFFFF:
+            raise ValueError("MIDI delta exceeds the standard 28-bit variable-length field")
+        track.append(mido.Message(kind, note=pitch, velocity=velocity, time=delta))
         previous = tick
     track.append(mido.MetaMessage("end_of_track", time=0))
     midi.save(path)
@@ -90,12 +94,16 @@ def check_bytes(path: Path) -> list[tuple[int, int, int]]:
                     raise ValueError("Require a positive explicit 24-bit MIDI tempo")
                 tempo_seen = True
             if kind == 47:
+                if length != 0 or position != len(raw):
+                    raise ValueError("End-of-track must be empty and final")
                 ended = True
         elif status in (128, 144):
             if position + 2 > len(raw):
                 raise ValueError("Truncated MIDI note event")
             pitch, velocity = raw[position : position + 2]
             position += 2
+            if pitch > 127 or velocity > 127:
+                raise ValueError("MIDI note data must be 7-bit")
             if status == 144 and velocity:
                 if pitch in active:
                     raise ValueError("Duplicate note-on")
@@ -103,6 +111,8 @@ def check_bytes(path: Path) -> list[tuple[int, int, int]]:
             else:
                 if pitch not in active:
                     raise ValueError("Unpaired note-off")
+                if tick <= active[pitch]:
+                    raise ValueError("MIDI note must have positive tick duration")
                 notes.append((pitch, active.pop(pitch), tick))
         else:
             raise ValueError("Unsupported status in generated MIDI")

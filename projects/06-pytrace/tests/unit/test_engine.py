@@ -127,3 +127,64 @@ def test_annotated_augmented_destructured_and_deleted_bindings() -> None:
     assert [item.location.line for item in risks] == [5, 7]
     assert all(item.confidence == "uncertain" for item in risks)
     assert risks[0].evidence[0].line == 2
+
+
+@pytest.mark.parametrize("shell", ["1", "42", "'yes'", "b'yes'", "1j", "..."])
+def test_truthy_shell_constants_enable_process_sink(shell: str) -> None:
+    source = f"import subprocess\nsubprocess.run(input(), shell={shell})\n"
+    assert findings(source) == [("PT001", 2, "high")]
+
+
+@pytest.mark.parametrize("shell", ["False", "0", "None", "''", "b''", "0j"])
+def test_falsey_shell_constants_do_not_enable_process_sink(shell: str) -> None:
+    assert not findings(f"import subprocess\nsubprocess.run(input(), shell={shell})\n")
+
+
+def test_unpacked_process_keywords_can_enable_shell() -> None:
+    assert findings("import subprocess\nsubprocess.run(input(), **options)\n") == [
+        ("PT001", 2, "uncertain")
+    ]
+    assert not findings("import subprocess\nsubprocess.run(input(), shell=False, **options)\n")
+
+
+def test_ambiguous_sanitizer_does_not_clear_taint() -> None:
+    source = "import shlex, os\nif flag:\n clean=shlex.quote\nelse:\n clean=str\nos.system(clean(input()))\n"
+    assert findings(source) == [("PT001", 6, "uncertain")]
+
+
+def test_annotation_without_value_does_not_overwrite_binding() -> None:
+    assert findings("import os\nx=input()\nx: str\nos.system(x)\n") == [("PT001", 4, "high")]
+
+
+@pytest.mark.parametrize(
+    "call",
+    [
+        'subprocess.run(x, shell=(x:="safe"))',
+        'subprocess.run(args=x, shell=(x:="safe"))',
+        'cursor.execute(x, parameters=(x:="safe"))',
+        'cursor.execute(query=x, parameters=(x:="safe"))',
+    ],
+)
+def test_sink_arguments_are_evaluated_once_in_order(call: str) -> None:
+    source = "import subprocess\nx=input()\n" + call + "\n"
+    risks = findings(source)
+    assert [item[:2] for item in risks] == [("PT001" if "subprocess" in call else "PT002", 3)]
+
+
+def test_format_receiver_is_evaluated_before_its_arguments() -> None:
+    source = 'import os\nx=input()\ny=x.format(x:="safe")\nos.system(y)\n'
+    assert findings(source) == [("PT001", 4, "high")]
+
+
+@pytest.mark.parametrize(
+    "expression",
+    [
+        '(y:=input()) if flag else (y:="safe")',
+        '(y:="safe") if flag else (y:=input())',
+        '(y:=input()) or (y:="safe")',
+        '(y:=input()) and (y:="safe")',
+    ],
+)
+def test_expression_branches_join_conditional_name_writes(expression: str) -> None:
+    source = f"import os\nx={expression}\nos.system(y)\n"
+    assert findings(source) == [("PT001", 3, "high")]

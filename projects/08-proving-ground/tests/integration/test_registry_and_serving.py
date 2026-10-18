@@ -258,3 +258,45 @@ def test_successful_new_model_then_rollback_restores_prior_pipeline(context, dat
     assert restored.model_version == original.model_version
     assert restored.artifact_digest == original.artifact_digest
     assert restored.applied_generation == 3
+
+
+@pytest.mark.parametrize(
+    "defect", ["probability_range", "probability_sum", "nonfinite_probability", "classes"]
+)
+def test_supported_but_invalid_classifier_state_never_becomes_ready(context, data, split, defect):
+    candidate = fit(data, split, "prior")
+    classifier = candidate.pipeline.named_steps["classifier"]
+    if defect == "classes":
+        classifier.classes_ = np.array([0, 2], dtype=np.int64)
+    elif defect == "probability_sum":
+        classifier.class_prior_ = np.array([0.2, 0.2])
+    elif defect == "nonfinite_probability":
+        classifier.class_prior_ = np.array([np.nan, np.nan])
+    else:
+        classifier.class_prior_ = np.array([-0.1, 1.1])
+    with pytest.raises(ValueError):
+        predict(candidate.pipeline, data.features[:2])
+    manifest = context.store.publish(
+        candidate, "c" * 64, data.identity, split.identity, tuple(f.name for f in data.schema)
+    )
+    report = replace(context.report, artifact_digest=manifest.identity)
+    version = context.registry.register(manifest.identity, report)
+    process = ServingProcess(context.registry)
+    context.registry.promote(context.model.version, 0)
+    assert process.refresh()
+    before = process.predict(data.features[:2])
+    context.registry.promote(version.version, 1)
+    assert not process.refresh()
+    assert not process.readiness()["ready"]
+    assert process.readiness()["load_error"]
+    assert process.predict(data.features[:2]) == before
+
+
+def test_impossible_validation_report_is_audited_and_cannot_promote(context, tmp_path):
+    registry = Registry(tmp_path / "invalid-report.db", context.store)
+    report = replace(context.report, metrics={**context.report.metrics, "brier": -0.1})
+    version = registry.register(context.manifest.identity, report)
+    with pytest.raises(PromotionRejected, match="brier"):
+        registry.promote(version.version, 0)
+    assert registry.current().generation == 0
+    assert registry.audit()[-1]["accepted"] is False

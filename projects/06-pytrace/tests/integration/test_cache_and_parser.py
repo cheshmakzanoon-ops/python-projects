@@ -64,6 +64,68 @@ def test_corrupted_cache_recovers(tmp_path: Path) -> None:
     assert analyze(tmp_path, cache).invalidated == ("a.py",)
 
 
+@pytest.mark.parametrize(
+    "document",
+    [
+        [],
+        None,
+        {"entries": []},
+        {"entries": {"a.py": None}},
+        {"entries": {"a.py": {"dependencies": [1]}}},
+    ],
+)
+def test_cache_structure_corruption_is_a_cache_miss(tmp_path: Path, document: object) -> None:
+    (tmp_path / "a.py").write_text("import os\nos.system(input())\n")
+    cache = tmp_path / "cache.json"
+    analyze(tmp_path, cache)
+    if isinstance(document, dict):
+        original = json.loads(cache.read_text())
+        original.update(document)
+        document = original
+    cache.write_text(json.dumps(document))
+    result = analyze(tmp_path, cache)
+    assert result.invalidated == ("a.py",)
+    assert result.cache_hits == 0
+    assert [item.rule_id for item in result.diagnostics] == ["PT001"]
+
+
+def test_corrupted_cached_diagnostic_rebuilds_analysis(tmp_path: Path) -> None:
+    (tmp_path / "a.py").write_text("import os\nos.system(input())\n")
+    cache = tmp_path / "cache.json"
+    analyze(tmp_path, cache)
+    document = json.loads(cache.read_text())
+    document["entries"]["a.py"]["diagnostics"][0]["location"]["line"] = "broken"
+    cache.write_text(json.dumps(document))
+    result = analyze(tmp_path, cache)
+    assert result.invalidated == ("a.py",)
+    assert result.diagnostics[0].location.line == 2
+
+
+@pytest.mark.parametrize(
+    ("field", "invalid"),
+    [
+        ("rule_id", "PT999"),
+        ("severity", "garbage"),
+        ("confidence", "certain"),
+        ("coverage", "safe"),
+    ],
+)
+def test_cached_diagnostic_rejects_unknown_metadata(
+    tmp_path: Path, field: str, invalid: str
+) -> None:
+    (tmp_path / "a.py").write_text("import os\nos.system(input())\n")
+    cache = tmp_path / "cache.json"
+    expected = analyze(tmp_path, cache).diagnostics
+    document = json.loads(cache.read_text())
+    document["entries"]["a.py"]["diagnostics"][0][field] = invalid
+    cache.write_text(json.dumps(document))
+    result = analyze(tmp_path, cache)
+    assert result.invalidated == ("a.py",)
+    assert result.cache_hits == 0
+    assert result.diagnostics == expected
+    assert analyze(tmp_path, cache).cache_hits == 1
+
+
 def test_encoding_syntax_and_official_sarif(tmp_path: Path) -> None:
     (tmp_path / "latin.py").write_bytes(
         "# coding: latin-1\nimport os\nnaïve=input()\nos.system(naïve)\n".encode("latin-1")
@@ -157,3 +219,34 @@ def test_oversized_source_does_not_read_bytes_after_rejection(
     result = analyze(tmp_path, limits=Limits(max_bytes=10))
     assert result.parse_failures == 1
     assert "byte limit" in result.diagnostics[0].message
+
+
+def test_discovery_ignores_directories_named_with_python_suffix(tmp_path: Path) -> None:
+    package = tmp_path / "nested.py"
+    package.mkdir()
+    (package / "module.py").write_text("x=1\n")
+    assert analyze(tmp_path).files == 1
+
+
+def test_explicit_symlink_source_root_is_refused(tmp_path: Path) -> None:
+    source = tmp_path / "a.py"
+    source.write_text("x=1\n")
+    link = tmp_path / "link.py"
+    link.symlink_to(source)
+    with pytest.raises(ValueError, match="symlink"):
+        analyze(link)
+
+
+def test_source_fifo_is_refused_before_open(tmp_path: Path) -> None:
+    import os
+
+    from pp_pytrace.frontend.discovery import read_bounded
+
+    if not hasattr(os, "mkfifo"):
+        pytest.skip("named pipes are a POSIX source-ingestion regression")
+    fifo = tmp_path / "pipe.py"
+    os.mkfifo(fifo)
+    with pytest.raises(ValueError, match="regular file"):
+        discover(tmp_path)
+    with pytest.raises(ParseFailure, match="regular file"):
+        read_bounded(fifo)

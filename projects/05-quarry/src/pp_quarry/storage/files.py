@@ -21,3 +21,23 @@ def persist(path: Path) -> tuple[str, int]:
 
 def literal(value: str) -> str:
     return "'" + value.replace("'", "''") + "'"
+
+
+def manifest_path(root: Path, value: str) -> Path:
+    """Format-v1 manifests reference regular files directly in owned data."""
+    relative = Path(value)
+    path = root / relative
+    data = root / "data"
+    if (
+        relative.is_absolute()
+        or len(relative.parts) != 2
+        or relative.parts[0] != "data"
+        or relative.suffix != ".parquet"
+        or any(character in relative.name for character in "*?[]")
+        or data.is_symlink()
+        or path.is_symlink()
+        or path.resolve().parent != data
+        or not path.is_file()
+    ):
+        raise ValueError("manifest path must name a regular file in owned data without symlinks")
+    return path

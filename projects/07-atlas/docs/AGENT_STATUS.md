@@ -1,5 +1,35 @@
 # Atlas checkpoint
 
+## Code review addendum — 2026-10-18
+
+The current working-tree review fixes three confirmed boundary defects:
+
+- Authenticated readers could obtain tenant-wide document, term, segment and revision
+  counts from `/ready`, including hidden documents. Readiness still validates the index
+  and reports corruption, but now returns only `{"status":"ready"}`. Administrative
+  corpus inspection remains available through the trusted CLI and Python API.
+- Non-ASCII bearer credentials raised an exception during string comparison and returned
+  HTTP 500. Constant-time byte comparison now produces the normal HTTP 401 response.
+- NaN and positive infinity were accepted as BM25 `k1` values. Both engine configuration
+  and the scalar scorer now reject non-finite values before scoring.
+
+Five regression cases cover readiness before/after a hidden insertion and corruption,
+non-ASCII bearer input, and non-finite ranking parameters. Four cases failed against
+the previous implementation before the fixes. Full suites pass on Python 3.13.16
+(**45 passed in 2.59 s**) and 3.14.8 (**45 passed in 3.15 s**), including concurrent
+publication, revocation, process failure, CLI demonstrations and quality evaluation.
+Ruff formatting/lint and strict mypy pass on both interpreters; wheel and sdist build
+pass. Commands: `python -m pytest -q --tb=short`, `ruff format --check .`,
+`ruff check .`, `mypy src`, and
+`uv build --out-dir /workspace/python-projects/.local/review-builds/atlas`.
+
+One upstream Starlette/httpx test-client deprecation warning remains. Heavy benchmarks
+and the cross-project code-search integration were not rerun. The historical evidence
+below describes its original revisions and does not verify these working-tree changes.
+No dependency/lockfile or shared tracked files changed. Writes stop at coordinator handoff.
+
+## Previous accepted verification
+
 Status: complete for project acceptance, independent review, integration and
 required local workloads. The coordinator owns final repository commits, push
 and remote CI reporting. Project writes are paused after this documentation handoff.

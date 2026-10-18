@@ -85,15 +85,18 @@ class WAL:
 
     def rotate(self) -> None:
         temporary = self.path.with_suffix(".pending")
-        fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+        fd = os.open(temporary, os.O_RDWR | os.O_CREAT | os.O_TRUNC, 0o600)
         try:
             os.fsync(fd)
-        finally:
+            os.replace(temporary, self.path)
+            sync_directory(self.path.parent)
+        except BaseException:
             os.close(fd)
-        os.replace(temporary, self.path)
-        sync_directory(self.path.parent)
-        os.close(self.fd)
-        self.fd = os.open(self.path, os.O_RDWR)
+            raise
+        # Retain the replacement's writable descriptor. Reopening after closing
+        # the old WAL could fail and leave the owner holding a stale descriptor.
+        previous, self.fd = self.fd, fd
+        os.close(previous)
 
     def close(self) -> None:
         os.close(self.fd)

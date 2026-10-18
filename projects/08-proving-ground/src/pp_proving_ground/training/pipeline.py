@@ -69,6 +69,21 @@ def predict(pipeline: Pipeline, features: FloatArray) -> FloatArray:
         raise ValueError("expected bounded 2D finite-or-missing features")
     probabilities = np.asarray(pipeline.predict_proba(features), dtype=np.float64)
     classes = np.asarray(pipeline.classes_)
+    if (
+        classes.ndim != 1
+        or len(classes) not in (1, 2)
+        or len(np.unique(classes)) != len(classes)
+        or not np.isin(classes, [0, 1]).all()
+    ):
+        raise ValueError("expected binary classifier classes")
+    if (
+        probabilities.shape != (len(features), len(classes))
+        or not np.isfinite(probabilities).all()
+        or (probabilities < 0).any()
+        or (probabilities > 1).any()
+        or not np.allclose(probabilities.sum(axis=1), 1.0, rtol=0, atol=1e-12)
+    ):
+        raise ValueError("invalid classifier probabilities")
     matches = np.flatnonzero(classes == 1)
     if len(matches) == 0:
         return np.zeros(len(features), dtype=np.float64)

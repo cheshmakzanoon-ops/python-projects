@@ -11,31 +11,36 @@ from typing import Any
 import duckdb
 
 from pp_quarry.storage.catalog import connect
-from pp_quarry.storage.files import literal
+from pp_quarry.storage.files import literal, manifest_path
 
 
 class Snapshot:
     def __init__(self, root: str | Path, snapshot: int | None = None) -> None:
         self.root = Path(root).resolve()
-        self.db = connect(self.root)
+        self.db = connect(self.root, initialize=False)
         self.token = uuid.uuid4().hex
         self.closed = False
-        self.db.execute("BEGIN IMMEDIATE")
-        row = (
-            self.db.execute("SELECT id,manifest FROM snapshots WHERE id=?", (snapshot,)).fetchone()
-            if snapshot is not None
-            else self.db.execute(
-                "SELECT id,manifest FROM snapshots ORDER BY id DESC LIMIT 1"
-            ).fetchone()
-        )
-        if row is None:
+        try:
+            self.db.execute("BEGIN IMMEDIATE")
+            row = (
+                self.db.execute(
+                    "SELECT id,manifest FROM snapshots WHERE id=?", (snapshot,)
+                ).fetchone()
+                if snapshot is not None
+                else self.db.execute(
+                    "SELECT id,manifest FROM snapshots ORDER BY id DESC LIMIT 1"
+                ).fetchone()
+            )
+            if row is None:
+                raise ValueError("snapshot does not exist")
+            self.id: int = row[0]
+            self.manifest: dict[str, Any] = json.loads(row[1])
+            self.db.execute("INSERT INTO pins VALUES (?,?)", (self.token, self.id))
+            self.db.commit()
+        except BaseException:
             self.db.rollback()
             self.db.close()
-            raise ValueError("snapshot does not exist")
-        self.id: int = row[0]
-        self.manifest: dict[str, Any] = json.loads(row[1])
-        self.db.execute("INSERT INTO pins VALUES (?,?)", (self.token, self.id))
-        self.db.commit()
+            raise
 
     def rows(self, node: str = "facts", limit: int | None = None) -> Iterator[dict[str, Any]]:
         if self.closed:
@@ -43,7 +48,8 @@ class Snapshot:
         if node not in {"normalized", "facts", "daily"} or (limit is not None and limit < 0):
             raise ValueError("unknown node or invalid limit")
         paths = [
-            str(self.root / nodes[node]["path"]) for nodes in self.manifest["partitions"].values()
+            str(manifest_path(self.root, nodes[node]["path"]))
+            for nodes in self.manifest["partitions"].values()
         ]
         with duckdb.connect() as engine:
             settings = self.manifest.get("execution_settings", {"threads": 1, "memory_mb": 128})

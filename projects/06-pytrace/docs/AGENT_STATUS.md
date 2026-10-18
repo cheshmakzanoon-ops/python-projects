@@ -22,3 +22,20 @@ Defects corrected during verification: string-valued suppression text must not s
 **Final standard:** passed on CPython 3.14.8, 234 files/250,899 lines including 19 graph lines. One cold measurement was 72.576544 s under the documented cost exception; five warm measurements had median 3.254818 s. Incremental analysis took 1.085980 s and invalidated exactly ten files; cache/clean equivalence and closure checks passed with zero parse failures. Tracemalloc peak was 339,695,450 bytes; analyzer RSS and maximum child RSS were each 960,466,944 bytes. These RSS values are neither summed nor a simultaneous machine peak. Standard precision/recall remain null with zero labeled cases: generated scale does not establish accuracy.
 
 PY-01–PY-08 and the required standard workload now have accepted evidence. Historical dirty development artifacts remain unchanged; the final root reports identify their own clean source commit, input scopes and exact hashes. Remaining algorithmic/platform limits are documented in DECISIONS.md and are not claims of full Python soundness or production security certification. No project acceptance gate remains pending in this handoff. Source writes remain paused; the coordinator owns final repository publication.
+
+## Code review addendum — October 18, 2026
+
+The review added 50 regression cases and corrected concrete defects in analysis and editing:
+
+- Truthy constant shell flags and unresolved `**options` now produce shell findings; parser serialization preserves bytes, complex values and Ellipsis instead of silently replacing them with `None`.
+- Ambiguous sanitizer aliases retain taint. Call arguments and method receivers are evaluated once in source order, annotation-only statements preserve existing bindings, and conditional expressions/short-circuit operators join possible name writes.
+- Wildcard imports cause codemod abstention because introduced bindings cannot be proved. Noncanonical path aliases are rejected before editing, malformed JSON plan shapes raise controlled errors, and unique replacement temporaries allow recovery after an earlier interrupted write. A bounded temporary basename preserves support for long source filenames.
+- Structurally corrupt caches and invalid cached diagnostic fields, unknown rules or enum values rebuild analysis. Source discovery ignores directories named `*.py`, rejects an explicit symlink root and refuses nonregular inputs before opening a FIFO can block.
+
+Validation on the reviewed working tree used `UV_CACHE_DIR=/workspace/.cache/uv UV_PYTHON_INSTALL_DIR=/workspace/.python UV_LINK_MODE=copy`:
+
+- Default CPython 3.14.8: `uv run --locked pytest -q` — **127 passed in 16.71 s**; `ruff format --check .`, `ruff check .` and `mypy src` passed (24 source files).
+- Isolated CPython 3.13.16: `UV_PROJECT_ENVIRONMENT=/workspace/python-projects/.local/review-venvs/pytrace-3.13 uv run --locked --python 3.13.16 pytest -q` — **127 passed in 16.99 s**; strict mypy passed. These final compatibility suites ran concurrently in separate virtual environments.
+- `uv build --out-dir /workspace/python-projects/.local/review-artifacts/pytrace-dist` built the sdist and wheel; project diff whitespace validation passed.
+
+The existing acceptance suite includes the 50-file labeled corpus, SARIF validation, CLI demo, apply/recovery and incremental-cache equivalence. No standard or heavy benchmark was rerun; the measurements above this addendum remain historical evidence for their stated source commit. The documented intraprocedural, hostile-filesystem and power-loss limitations remain. No root/shared files, dependency manifests, lockfiles or Git metadata were mutated by this project review. Writes are paused for coordinator handoff.

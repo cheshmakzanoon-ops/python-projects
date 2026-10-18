@@ -8,11 +8,11 @@ from collections import deque
 from dataclasses import asdict, dataclass, field
 from typing import cast
 
-from pp_current.event_time.policy import MIN_TIME, Progress
+from pp_current.event_time.policy import MAX_TIME, MIN_TIME, Progress
 from pp_current.model.envelope import Record, canonical
 from pp_current.operators.tumbling import Aggregate, windows
 
-CODE_VERSION = "current-1"
+CODE_VERSION = "current-2"
 
 
 @dataclass(frozen=True)
@@ -27,8 +27,15 @@ class Config:
     pipeline_version: str = "identity-v1"
 
     def __post_init__(self) -> None:
+        for name in ("workers", "size", "slide", "lateness", "join_interval", "state_limit"):
+            if type(getattr(self, name)) is not int:
+                raise ValueError("integer configuration limits required")
         if not self.inputs or len(set(self.inputs)) != len(self.inputs):
             raise ValueError("unique registered inputs required")
+        if any(not isinstance(identity, str) or not identity for identity in self.inputs):
+            raise ValueError("nonempty string input identities required")
+        if not isinstance(self.pipeline_version, str) or not self.pipeline_version:
+            raise ValueError("nonempty pipeline version required")
         windows(0, self.size, self.slide)
         if min(self.workers, self.state_limit) < 1 or min(self.lateness, self.join_interval) < 0:
             raise ValueError("invalid configuration")
@@ -44,13 +51,17 @@ class Delivery:
 
     def __post_init__(self) -> None:
         if (
-            not self.job_id
+            any(
+                not isinstance(identity, str)
+                for identity in (self.job_id, self.operator_id, self.logical_result_key)
+            )
+            or not self.job_id
             or not self.operator_id
             or type(self.revision) is not int
             or self.revision < 1
         ):
             raise ValueError("invalid delivery identity")
-        if canonical(json.loads(self.payload)) != self.payload:
+        if not isinstance(self.payload, str) or canonical(json.loads(self.payload)) != self.payload:
             raise ValueError("delivery payload must be canonical JSON")
 
     @property
@@ -70,6 +81,8 @@ class Window:
 
 class Engine:
     def __init__(self, config: Config, job_id: str = "demo") -> None:
+        if not isinstance(job_id, str) or not job_id:
+            raise ValueError("nonempty job identity required")
         self.config = config
         self.job_id = job_id
         self.progress = Progress(dict.fromkeys(config.inputs, MIN_TIME))
@@ -104,13 +117,25 @@ class Engine:
         )
         self.pending.append(Delivery(self.job_id, window.operator, key, window.revision, payload))
 
-    def apply(self, record: Record) -> str:
+    def validate(self, record: Record) -> None:
+        """Check ordered admission and input lifecycle before applying or filtering."""
         if record.ingress_ordinal != self.position + 1:
             raise ValueError("records must form a contiguous journal prefix")
         if record.input_id not in self.progress.inputs:
             raise ValueError("unknown input")
+        if self.progress.inputs[record.input_id] == MAX_TIME and record.kind != "end":
+            raise ValueError("input has ended")
         if record.kind == "event" and record.input_id in self.progress.idle:
             raise ValueError("explicit resume required before event")
+
+    def apply(self, record: Record, *, filtered: bool = False) -> str:
+        self.validate(record)
+        if filtered:
+            if record.kind != "event":
+                raise ValueError("control records cannot be filtered")
+            self.position = record.ingress_ordinal
+            self.trace.append((self.position, "filtered", self.progress.watermark))
+            return "filtered"
         watermark = self.progress.watermark
         disposition: str
         if record.kind != "event":

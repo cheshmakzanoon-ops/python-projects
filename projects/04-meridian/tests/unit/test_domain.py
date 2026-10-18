@@ -136,6 +136,31 @@ def test_normalization_direction_timezone_and_candidates():
     assert candidates([a], [MatchEntry("b", -100, "USD", now, "")]) == []
 
 
+@pytest.mark.parametrize("timestamp", ["0001-01-01T00:00:00+01:00", "9999-12-31T23:59:59-01:00"])
+def test_statement_timestamp_outside_utc_range_is_a_validation_error(timestamp):
+    with pytest.raises(ValueError, match="supported UTC range"):
+        normalize_row(
+            {
+                "id": "boundary",
+                "amount": "1.00",
+                "currency": "USD",
+                "timestamp": timestamp,
+                "reference": "",
+            }
+        )
+
+
+@pytest.mark.parametrize(
+    "instant",
+    [datetime.min.replace(tzinfo=timezone.utc), datetime.max.replace(tzinfo=timezone.utc)],
+)
+def test_candidate_date_window_is_clipped_at_representable_boundaries(instant):
+    row = MatchEntry("row", 100, "USD", instant, "same")
+    posting = MatchEntry("posting", 100, "USD", instant, "same")
+    assert candidates([row], [posting]) == [Edge("row", "posting", 0)]
+    assert candidates([row], []) == []
+
+
 def test_candidate_construction_enforces_bounds_before_dense_graph_growth():
     now = datetime.now(timezone.utc)
     rows = [MatchEntry(str(i), 100, "USD", now, "") for i in range(33)]

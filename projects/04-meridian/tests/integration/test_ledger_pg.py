@@ -341,6 +341,135 @@ def test_me07_two_rows_one_posting_and_authorization(ledger):
     )
 
 
+@pytest.mark.parametrize(
+    ("timestamp", "expected"),
+    [
+        ("0001-01-01T00:00:00+01:00", 400),
+        ("9999-12-31T23:59:59-01:00", 400),
+        ("0001-01-01T00:00:00Z", 201),
+        ("9999-12-31T23:59:59Z", 201),
+    ],
+)
+def test_api_statement_date_boundaries_do_not_cause_server_errors(ledger, timestamp, expected):
+    user, tenant, accounts = ledger
+    client = Client()
+    headers = auth(user, tenant)
+    response = client.post(
+        "/api/v1/statements/import",
+        json.dumps(
+            {
+                "account_id": str(accounts[0].id),
+                "source": "boundary-test",
+                "rows": [
+                    {
+                        "id": "boundary-row",
+                        "amount": "1.00",
+                        "currency": "USD",
+                        "timestamp": timestamp,
+                        "reference": "",
+                    }
+                ],
+            }
+        ),
+        content_type="application/json",
+        **headers,
+    )
+    assert response.status_code == expected, response.content
+    assert StatementRow.objects.count() == int(expected == 201)
+    if expected == 201:
+        response = client.post(
+            "/api/v1/reconciliation/runs",
+            json.dumps({"account_id": str(accounts[0].id)}),
+            content_type="application/json",
+            **headers,
+        )
+        assert response.status_code == 201, response.content
+        assert response.json()["summary"]["rows"] == 1
+
+
+def test_failed_native_restore_rolls_back_schema_and_missing_input_creates_no_database(tmp_path):
+    import secrets
+    import subprocess
+
+    import psycopg
+    from psycopg import sql
+
+    from pp_meridian.persistence.snapshot import _connection_parameters, backup, restore
+
+    target = "meridian_restore_" + secrets.token_hex(8)
+    missing_target = "meridian_restore_" + secrets.token_hex(8)
+    path = tmp_path / "truncated-data.dump"
+    # Keep the archive header/TOC intact and truncate the final incompressible data
+    # block, so restoring fails after schema creation and requires a rollback.
+    with connection.cursor() as cursor:
+        cursor.execute("CREATE TABLE meridian_restore_test_table(value bytea)")
+        cursor.execute(
+            "INSERT INTO meridian_restore_test_table VALUES (%s)", [secrets.token_bytes(65536)]
+        )
+    try:
+        backup(path)
+        archive = path.read_bytes()
+        assert len(archive) > 65536
+        path.write_bytes(archive[:-4096])
+        with pytest.raises(subprocess.CalledProcessError):
+            restore(path, target)
+        with psycopg.connect(**_connection_parameters(target)) as restored:
+            assert restored.execute(
+                "SELECT count(*) FROM information_schema.tables WHERE table_schema='public'"
+            ).fetchone() == (0,)
+        with pytest.raises(FileNotFoundError):
+            restore(tmp_path / "missing.dump", missing_target)
+        with psycopg.connect(**_connection_parameters("postgres"), autocommit=True) as admin:
+            assert admin.execute(
+                "SELECT count(*) FROM pg_database WHERE datname=%s", [missing_target]
+            ).fetchone() == (0,)
+    finally:
+        with connection.cursor() as cursor:
+            cursor.execute("DROP TABLE meridian_restore_test_table")
+        with psycopg.connect(**_connection_parameters("postgres"), autocommit=True) as admin:
+            admin.execute(
+                sql.SQL("DROP DATABASE IF EXISTS {} WITH (FORCE)").format(sql.Identifier(target))
+            )
+            admin.execute(
+                sql.SQL("DROP DATABASE IF EXISTS {} WITH (FORCE)").format(
+                    sql.Identifier(missing_target)
+                )
+            )
+
+
+def test_native_client_environment_connects_with_configured_libpq_options(monkeypatch):
+    import subprocess
+    import sys
+    from types import SimpleNamespace
+
+    from django.conf import settings
+
+    from pp_meridian.persistence import snapshot
+
+    config = dict(settings.DATABASES["default"])
+    config["OPTIONS"] = {**config.get("OPTIONS", {}), "options": "-c statement_timeout=1234"}
+    monkeypatch.setattr(snapshot, "settings", SimpleNamespace(DATABASES={"default": config}))
+    monkeypatch.delenv("MERIDIAN_PG_CONTAINER", raising=False)
+    monkeypatch.setattr(snapshot.shutil, "which", lambda _: sys.executable)
+    with snapshot._command("pg_dump", config["NAME"]) as (_, environment):
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-c",
+                "import json, psycopg; "
+                "connection = psycopg.connect(); "
+                'print(json.dumps(connection.execute("SELECT current_database(), '
+                "current_setting('statement_timeout')\").fetchone())); connection.close()",
+            ],
+            env=environment,
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=10,
+        )
+    assert json.loads(result.stdout) == [config["NAME"], "1234ms"]
+
+
 def test_me03_retry_whole_aborted_transaction_real_sqlstate(ledger):
     user, tenant, accounts = ledger
     attempts = []

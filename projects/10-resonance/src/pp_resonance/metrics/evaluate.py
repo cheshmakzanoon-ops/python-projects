@@ -108,7 +108,11 @@ def trajectory_metrics(
         )
         if event is not None:
             eligible += 1
-            if frame.frequency is None:
+            if (
+                frame.frequency is None
+                or not math.isfinite(frame.frequency)
+                or frame.frequency <= 0
+            ):
                 missed += 1
                 continue
             relative = time - event.onset

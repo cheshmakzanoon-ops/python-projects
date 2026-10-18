@@ -144,6 +144,12 @@ def rewrite(source: str, manifest: MigrationManifest | None = None) -> Rewrite:
     selected = manifest or MigrationManifest.trusted()
     selected.validate()
     tree = parse(source)
+    if any(
+        isinstance(node, ast.ImportFrom) and any(alias.name == "*" for alias in node.names)
+        for node in ast.walk(tree)
+    ):
+        # QualifiedNameProvider cannot enumerate names introduced by a star import.
+        return Rewrite(source, source, (), ("wildcard imports make bindings uncertain",))
     forbidden = set()
     for node in ast.walk(tree):
         if (

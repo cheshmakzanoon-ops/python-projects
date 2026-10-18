@@ -132,3 +132,57 @@ def test_oversized_result_not_acknowledged_and_no_heartbeat_mode(engine):
     run_id = engine.submit(Definition("nohb", 1, (Step("x"),)), {}, "nohb")
     assert asyncio.run(Worker(engine, heartbeat=False).run_once())
     assert engine.status(run_id)["status"] == "completed"
+
+
+def test_empty_error_is_a_failed_attempt(engine):
+    run_id = engine.submit(
+        Definition("empty-error", 1, (Step("x", max_attempts=1),)), {}, "empty-error"
+    )
+    task = engine.claim()
+    assert task
+    engine.finish(task, error="")
+    assert engine.status(run_id)["status"] == "failed"
+    assert engine.history(run_id)[-1].kind == "step_failed"
+    with engine.transaction() as c:
+        assert c.execute(
+            "SELECT status FROM activity_attempts WHERE workflow_id=%s", (run_id,)
+        ).fetchone() == {"status": "failed"}
+
+
+@pytest.mark.parametrize("result", [{"huge": "x" * 1048577}, {"nan": float("nan")}])
+@pytest.mark.parametrize("heartbeat", [False, True])
+def test_invalid_activity_result_retries_without_stopping_worker(engine, result, heartbeat):
+    run_id = engine.submit(
+        Definition(
+            "invalid-result", 1, (Step("x", activity="invalid", max_attempts=2, retry_delay=0),)
+        ),
+        {},
+        "invalid-result",
+    )
+    registry = ActivityRegistry()
+
+    async def invalid(context):
+        return result
+
+    registry.register("invalid", invalid)
+    worker = Worker(engine, registry, heartbeat=heartbeat)
+    assert asyncio.run(worker.run_once())
+    assert engine.status(run_id)["status"] == "running"
+    assert engine.history(run_id)[-1].kind == "retry_scheduled"
+    assert asyncio.run(worker.run_once())
+    assert engine.status(run_id)["status"] == "failed"
+    assert engine.history(run_id)[-1].kind == "step_failed"
+
+
+def test_maximum_length_internal_chain_completes_without_recursion(engine):
+    steps = tuple(
+        Step(f"join_{i}", kind="join", after=(f"join_{i - 1}",) if i else ()) for i in range(1000)
+    )
+    run_id = engine.submit(Definition("long-chain", 1, steps), {}, "long-chain")
+    state = engine.replay(run_id)
+    assert state.status == "completed"
+    assert state.done == {step.name for step in steps}
+    history = engine.history(run_id)
+    assert len(history) == 1001
+    assert [event.step for event in history[1:]] == [step.name for step in steps]
+    assert history[-1].commands == ("terminal:completed",)

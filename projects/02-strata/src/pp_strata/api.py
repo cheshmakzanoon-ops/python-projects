@@ -11,6 +11,7 @@ import threading
 import uuid
 from collections import Counter
 from collections.abc import Iterator
+from contextlib import ExitStack
 from pathlib import Path
 from types import TracebackType
 from typing import Literal, Self
@@ -92,6 +93,9 @@ class Database:
         except BlockingIOError as exc:
             os.close(self._owner_fd)
             raise OwnerBusy(f"database already owned: {self.path}") from exc
+        except BaseException:
+            os.close(self._owner_fd)
+            raise
         wal: WAL | None = None
         try:
             manifest = self.path / "MANIFEST"
@@ -101,11 +105,16 @@ class Database:
                     raise Corruption("missing manifest in nonempty database")
                 atomic_metadata(manifest, {"format": 1, "sequence": 0, "tables": []})
             state = read_metadata(manifest)
-            sequence, names = state.get("sequence"), state.get("tables")
+            version, sequence, names = (
+                state.get("format"),
+                state.get("sequence"),
+                state.get("tables"),
+            )
             if (
-                state.get("format") != 1
+                type(version) is not int
+                or version != 1
                 or type(sequence) is not int
-                or sequence < 0
+                or not 0 <= sequence < 2**64
                 or not isinstance(names, list)
                 or len(names) != len(set(str(x) for x in names))
             ):
@@ -128,11 +137,12 @@ class Database:
             self._wal = wal
             self._cleanup_orphans()
         except BaseException:
-            if wal is not None:
-                wal.close()
-            for table in self._tables:
-                table.close()
-            os.close(self._owner_fd)
+            with ExitStack() as cleanup:
+                cleanup.callback(os.close, self._owner_fd)
+                for table in self._tables:
+                    cleanup.callback(table.close)
+                if wal is not None:
+                    cleanup.callback(wal.close)
             raise
 
     @property
@@ -425,12 +435,15 @@ class Database:
         with self._lock:
             if not self._closed:
                 self._check()
-                self._wal.close()
-                for table in self._tables:
-                    table.close()
-                fcntl.flock(self._owner_fd, fcntl.LOCK_UN)
-                os.close(self._owner_fd)
-                self._closed = True
+                # Attempt every release even if a close reports an I/O error;
+                # otherwise a WAL failure can strand tables and the owner lock.
+                with ExitStack() as cleanup:
+                    cleanup.callback(os.close, self._owner_fd)
+                    cleanup.callback(fcntl.flock, self._owner_fd, fcntl.LOCK_UN)
+                    for table in self._tables:
+                        cleanup.callback(table.close)
+                    cleanup.callback(self._wal.close)
+                    self._closed = True
 
     def __enter__(self) -> Self:
         self._check()

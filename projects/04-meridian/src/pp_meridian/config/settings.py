@@ -2,7 +2,8 @@
 
 import os
 from pathlib import Path
-from urllib.parse import unquote, urlparse
+
+from pp_meridian.config.database import database_config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get(
@@ -41,20 +42,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 USE_TZ = True
 TIME_ZONE = "UTC"
 DATA_UPLOAD_MAX_MEMORY_SIZE = 1_000_000
-url = urlparse(
-    os.environ.get("MERIDIAN_DATABASE_URL", "postgresql://meridian@127.0.0.1:5432/meridian")
-)
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": url.path.lstrip("/"),
-        "USER": unquote(url.username or ""),
-        "PASSWORD": unquote(url.password or ""),
-        "HOST": url.hostname or "127.0.0.1",
-        "PORT": url.port or 5432,
-        "CONN_MAX_AGE": 0,
-    }
-}
+url = os.environ.get("MERIDIAN_DATABASE_URL", "postgresql://meridian@127.0.0.1:5432/meridian")
+DATABASES = {"default": database_config(url)}
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.PBKDF2PasswordHasher"]
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = True
@@ -65,7 +54,8 @@ if schema:
 
     if not re.fullmatch(r"meridian_demo_[a-f0-9]{24}", schema):
         raise ValueError("invalid Meridian demo schema")
-    DATABASES["default"]["OPTIONS"] = {"options": f"-c search_path={schema}"}
+    options = DATABASES["default"]["OPTIONS"]
+    options["options"] = f"{options.get('options', '')} -c search_path={schema}".strip()
 
 if os.environ.get("MERIDIAN_TEST_DB_NAME"):
     DATABASES["default"]["TEST"] = {"NAME": os.environ["MERIDIAN_TEST_DB_NAME"]}

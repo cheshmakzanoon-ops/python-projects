@@ -12,9 +12,12 @@ def frequency(midi: float) -> float:
 
 
 def cents(estimated: float, reference: float) -> float:
-    if not (estimated > 0 and reference > 0):
-        raise ValueError("Cents require positive voiced frequencies")
-    return 1200 * math.log2(estimated / reference)
+    if not (
+        math.isfinite(estimated) and math.isfinite(reference) and estimated > 0 and reference > 0
+    ):
+        raise ValueError("Cents require finite positive voiced frequencies")
+    # Taking logs separately avoids overflow/underflow in a finite ratio.
+    return 1200 * (math.log2(estimated) - math.log2(reference))
 
 
 def decode(

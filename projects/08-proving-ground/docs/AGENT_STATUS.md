@@ -1,5 +1,35 @@
 # A08 Proving Ground: complete local verification
 
+## Code review addendum — 2026-10-18
+
+The current working-tree review closes two confirmed validation gaps:
+
+- Promotion gates accepted impossible finite metrics, fractional sample counts and
+  class balance inconsistent with the declared counts. Nonnumeric metrics raised an
+  exception. Gates now reject these reports with explicit reasons; a registry regression
+  verifies that rejection leaves the deployment unchanged and records an audit decision.
+- Shared inference returned unchecked model probabilities and treated unsupported class
+  labels as an all-zero prediction. It now validates binary classes, matrix shape,
+  finite probabilities in [0, 1], and row normalization at absolute tolerance 1e-12.
+  Both offline inference and serving use this boundary. Real supported sklearn artifacts
+  with malformed state fail the serving load probe and retain the previous snapshot.
+
+Fourteen regression cases were added; all twelve initial cases reproduced failures before
+the fixes. Full suites pass on Python 3.13.16 (**117 passed in 7.23 s**) and 3.14.8
+(**117 passed in 9.17 s**), including leakage/split checks, artifact corruption and trust,
+promotion races, rollback, serving swaps, and real loopback HTTP predictions. Ruff
+formatting/lint and strict mypy pass on both interpreters; wheel and sdist build pass.
+Commands: `python -m pytest -q --tb=short`, `ruff format --check .`, `ruff check .`,
+`mypy src`, and `uv build --out-dir /workspace/python-projects/.local/review-builds/proving-ground`.
+OPENBLAS_NUM_THREADS, OMP_NUM_THREADS and MKL_NUM_THREADS were all 1 for numerical tests.
+
+One upstream Starlette/httpx test-client deprecation warning remains. Heavy benchmarks
+were not rerun. The historical evidence below describes its original source revisions
+and does not verify these working-tree changes. No dependency, lockfile or shared tracked
+files changed. Writes stop at coordinator handoff.
+
+## Previous accepted verification
+
 ## Accepted state
 
 PG-01–PG-08, both interpreter compatibility checks, independent review closure and the full standard workload passed. The coordinator accepted the standard run from clean detached source commit `59443e2bcdfc6a1dd81f8334c108474eef2d3030` with source unchanged afterward. No A08 implementation, acceptance or standard-benchmark gate remains open. Repository commit/push and remote CI status are separate coordinator-owned facts; this document does not infer them from local success.

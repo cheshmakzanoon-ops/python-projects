@@ -98,9 +98,9 @@ class Analyzer:
             return Value(base.taint, base.built, base.unknown, targets, base.origins)
         if isinstance(node, ast.Call):
             target = self.expression(node.func, env)
-            values = [self.expression(arg, env) for arg in node.args] + [
-                self.expression(kw.value, env) for kw in node.keywords
-            ]
+            arguments = [self.expression(arg, env) for arg in node.args]
+            keywords = [self.expression(kw.value, env) for kw in node.keywords]
+            values = arguments + keywords
             combined = reduce(Value.join, values, BOTTOM)
             names = target.targets
             if names & set(self.config.sources):
@@ -113,15 +113,19 @@ class Analyzer:
             if shell:
                 shell_kw = next((kw.value for kw in node.keywords if kw.arg == "shell"), None)
                 direct = "os.system" in shell
-                enabled = direct or isinstance(shell_kw, ast.Constant) and shell_kw.value is True
-                uncertain_shell = shell_kw is not None and not isinstance(shell_kw, ast.Constant)
+                enabled = direct or isinstance(shell_kw, ast.Constant) and bool(shell_kw.value)
+                uncertain_shell = (
+                    (shell_kw is not None and not isinstance(shell_kw, ast.Constant))
+                    or shell_kw is None
+                    and any(kw.arg is None for kw in node.keywords)
+                )
                 command = (
-                    self.expression(node.args[0], env)
-                    if node.args
+                    arguments[0]
+                    if arguments
                     else next(
                         (
-                            self.expression(kw.value, env)
-                            for kw in node.keywords
+                            value
+                            for kw, value in zip(node.keywords, keywords, strict=True)
                             if kw.arg in ("args", "command")
                         ),
                         UNKNOWN,
@@ -149,12 +153,12 @@ class Analyzer:
             )
             if sql_call:
                 query = (
-                    self.expression(node.args[0], env)
-                    if node.args
+                    arguments[0]
+                    if arguments
                     else next(
                         (
-                            self.expression(kw.value, env)
-                            for kw in node.keywords
+                            value
+                            for kw, value in zip(node.keywords, keywords, strict=True)
                             if kw.arg in ("query", "sql", "operation")
                         ),
                         UNKNOWN,
@@ -180,19 +184,20 @@ class Analyzer:
                     target,
                     target.unknown,
                 )
-            if names & set(self.config.shell_sanitizers):
+            unambiguous = len(names) == 1 and not target.unknown
+            if unambiguous and names & set(self.config.shell_sanitizers):
                 return Value(
                     combined.taint & ~SHELL,
                     combined.built,
                     combined.unknown,
                     origins=combined.origins,
                 )
-            if names & set(self.config.sql_sanitizers):
+            if unambiguous and names & set(self.config.sql_sanitizers):
                 return Value(
                     combined.taint & ~SQL, False, combined.unknown, origins=combined.origins
                 )
             if isinstance(node.func, ast.Attribute) and node.func.attr in ("format", "join"):
-                base = self.expression(node.func.value, env).join(combined)
+                base = target.join(combined)
                 return Value(base.taint, True, base.unknown, origins=base.origins)
             if (
                 sql_call
@@ -239,11 +244,20 @@ class Analyzer:
             return base.join(UNKNOWN)
         if isinstance(node, ast.IfExp):
             self.expression(node.test, env)
-            return self.expression(node.body, env).join(self.expression(node.orelse, env))
+            left, right = dict(env), dict(env)
+            value = self.expression(node.body, left).join(self.expression(node.orelse, right))
+            env.update(join_environments(left, right))
+            return value
         if isinstance(node, ast.BoolOp):
-            return reduce(
-                Value.join, (self.expression(value, env) for value in node.values), BOTTOM
-            )
+            combined = BOTTOM
+            exits: Environment | None = None
+            for operand in node.values:
+                combined = combined.join(self.expression(operand, env))
+                # Any operand can short circuit; later writes are only conditional.
+                exits = dict(env) if exits is None else join_environments(exits, env)
+            if exits is not None:
+                env.update(exits)
+            return combined
         return reduce(
             Value.join,
             (
@@ -283,7 +297,8 @@ class Analyzer:
             for target in node.targets:
                 self.bind(target, value, env)
         elif isinstance(node, ast.AnnAssign):
-            self.bind(node.target, self.expression(node.value, env), env)
+            if node.value is not None:
+                self.bind(node.target, self.expression(node.value, env), env)
         elif isinstance(node, ast.AugAssign):
             value = self.expression(node.target, env).join(self.expression(node.value, env))
             self.bind(

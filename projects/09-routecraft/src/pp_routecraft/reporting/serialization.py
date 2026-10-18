@@ -2,6 +2,7 @@
 
 import json
 from dataclasses import asdict
+from math import isfinite
 from pathlib import Path
 
 from pp_routecraft.domain.instance import (
@@ -43,7 +44,13 @@ def _str(value: object) -> str:
 def _float(value: object) -> float:
     if not isinstance(value, (int, float)) or isinstance(value, bool):
         raise ValueError("expected coordinate number")
-    return float(value)
+    try:
+        coordinate = float(value)
+    except OverflowError as error:
+        raise ValueError("coordinate must be a finite representable number") from error
+    if not isfinite(coordinate):
+        raise ValueError("coordinate must be a finite representable number")
+    return coordinate
 
 
 def _bool(value: object) -> bool:

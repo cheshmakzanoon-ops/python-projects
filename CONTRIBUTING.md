@@ -13,6 +13,11 @@ python scripts/portfolio.py demo strata
 
 For PostgreSQL products, run `python scripts/services.py up anchor` or `up meridian`, then export the printed local database URL. The helper owns only containers named `pp-anchor-dev` and `pp-meridian-dev`, publishes loopback ports, and uses trust authentication for synthetic local data. `down PROJECT` deletes only that selected demo container and its ephemeral database. Never point demonstrations or reset commands at valuable data. Tests need privileges to create test databases and verify database constraints. CI supplies an isolated PostgreSQL service.
 
+The service helper verifies the `pp.owner=portfolio` label before managing an existing
+container and checks loopback bindings before starting it. A matching name is insufficient.
+Stopping a service removes its anonymous database volume and saved connection metadata;
+start it again and export the new URL before running another database workflow.
+
 On this cloud machine the runtime and cache directories are writable under `/workspace`:
 
 ```sh
@@ -21,6 +26,36 @@ export UV_PYTHON_INSTALL_DIR=/workspace/.python
 ```
 
 Run `uv sync --locked --project tooling/quality --python 3.13`, then `uv run --locked --project tooling/quality pytest scripts/tests` for root tooling tests and `python scripts/portfolio.py docs` for link checks and documentation build. Generated demo state belongs in `.local/`, not Git.
+
+Keep interpreter environments separate when checking compatibility. From the repository
+root, for example:
+
+```sh
+PORTFOLIO_PYTHON=3.14.8 python scripts/portfolio.py check current
+UV_PROJECT_ENVIRONMENT="$PWD/.local/venvs/current-3.13.16" PORTFOLIO_PYTHON=3.13.16 python scripts/portfolio.py setup current
+UV_PROJECT_ENVIRONMENT="$PWD/.local/venvs/current-3.13.16" PORTFOLIO_PYTHON=3.13.16 python scripts/portfolio.py check current
+```
+
+Run these checks sequentially: separate virtual environments still share the project's
+build-output directory. Put additional environments under `.local/` or outside the checkout
+so they cannot enter source distributions, documentation scans, or source-evidence hashes.
+
+Normal CI runs project checks on both supported Python families and the three public
+integrations. Integration failures fail the aggregate merge check. To reproduce the
+integration job, install Anchor, Meridian, Current, Quarry, PyTrace, and Atlas, start the
+two database services, export their URLs, then run:
+
+```sh
+python scripts/portfolio.py integration settlement
+python scripts/portfolio.py integration stream-lake
+python scripts/portfolio.py integration code-search
+```
+
+Each integration creates fresh state, records its stage logs and result under
+`.local/integrations/`, and returns a nonzero exit status on failure. Add a regression that
+fails for the original defect before fixing behavior; include cross-project validation
+when a public exchange contract changes. Historical benchmark and acceptance records
+describe their recorded revision and must not be relabeled as evidence for later changes.
 
 Project owners format only their directories. Shared changes require coordination. A single coordinator owns Git mutations on main. Review stable project snapshots, stage explicit paths, commit coherent changes, and preserve existing remote history. Conventional commit prefixes are useful (`feat`, `fix`, `test`, `docs`, `build`) but accurate scope matters more. A passing test is evidence for its assertions, not a license to claim every acceptance requirement.
 

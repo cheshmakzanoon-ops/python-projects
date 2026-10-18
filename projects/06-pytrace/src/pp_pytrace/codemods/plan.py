@@ -11,6 +11,7 @@ import difflib
 import hashlib
 import json
 import os
+import tempfile
 from dataclasses import asdict, dataclass
 from pathlib import Path, PurePosixPath
 from typing import Any
@@ -49,6 +50,7 @@ def guarded_path(root: Path, relative: str) -> Path:
         or ".." in pure.parts
         or "\\" in relative
         or ":" in relative
+        or relative != pure.as_posix()
     ):
         raise ValueError("malformed/path-escaping edit")
     target = root / relative
@@ -100,15 +102,18 @@ def patch(plan: Plan) -> str:
 def load_plan(path: Path) -> Plan:
     data = json.loads(read_bounded(path, 4_000_000).decode("utf-8"))
     if (
-        data.get("schema_version") != 1
+        not isinstance(data, dict)
+        or data.get("schema_version") != 1
         or not isinstance(data.get("root"), str)
         or not isinstance(data.get("edits"), list)
     ):
         raise ValueError("malformed plan")
     edits = []
     for item in data["edits"]:
-        if set(item) != {"path", "original_sha256", "replacement"} or not all(
-            isinstance(value, str) for value in item.values()
+        if (
+            not isinstance(item, dict)
+            or set(item) != {"path", "original_sha256", "replacement"}
+            or not all(isinstance(value, str) for value in item.values())
         ):
             raise ValueError("malformed edit")
         edits.append(Edit(**item))
@@ -116,13 +121,21 @@ def load_plan(path: Path) -> Plan:
 
 
 def _write_atomic(path: Path, data: bytes) -> None:
-    temporary = path.with_name(path.name + ".pytrace-tmp")
-    with temporary.open("xb") as handle:
-        handle.write(data)
-        handle.flush()
-        os.fsync(handle.fileno())
-    os.chmod(temporary, path.stat().st_mode)
-    temporary.replace(path)
+    handle = tempfile.NamedTemporaryFile(
+        prefix=".pytrace-", suffix=".tmp", dir=path.parent, delete=False
+    )
+    temporary = Path(handle.name)
+    try:
+        with handle:
+            handle.write(data)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.chmod(temporary, path.stat().st_mode)
+        temporary.replace(path)
+    finally:
+        # Unique names permit recovery after an interrupted earlier replacement.
+        # Remove only this invocation's temporary, never another writer's file.
+        temporary.unlink(missing_ok=True)
 
 
 def apply(plan: Plan, journal: Path) -> None:

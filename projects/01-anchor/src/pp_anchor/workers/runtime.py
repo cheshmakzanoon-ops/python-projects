@@ -4,7 +4,7 @@ import asyncio
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 
-from pp_anchor.definitions.model import JSON
+from pp_anchor.definitions.model import JSON, validate_activity_result
 from pp_anchor.persistence.engine import Engine, StaleLeaseError, Task
 
 Activity = Callable[["ActivityContext"], Awaitable[JSON]]
@@ -89,6 +89,8 @@ class Worker:
             try:
                 handler = self.registry.handlers[task.activity]
                 result = await handler(ActivityContext(self.engine, task))
+                # Validate here so invalid output follows the activity retry policy.
+                validate_activity_result(result)
             except Exception as exc:
                 await asyncio.to_thread(
                     self.engine.finish, task, None, f"{type(exc).__name__}: {exc}"

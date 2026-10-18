@@ -1,5 +1,36 @@
 # Anchor status: required local gates complete
 
+## Code review addendum — 2026-10-18
+
+The current working-tree review fixes three correctness issues:
+
+- An empty error string incorrectly completed an exhausted activity. Failure detection now
+  consistently checks whether an error was supplied, including compensation transitions.
+- Oversized or non-finite activity results escaped the worker and left the task leased.
+  Shared result validation now runs at the handler boundary so these failures enter the
+  existing bounded retry policy. Direct engine acknowledgements retain the same validation.
+- Long chains of internal joins recursively appended and replayed history. Internal events
+  now use an explicit stack and one transaction-locked reducer state, retaining the existing
+  depth-first event order and atomic projection updates.
+
+Six regression cases cover empty errors, oversized/NaN results with and without heartbeats,
+and all 1,000 supported steps in an internal join chain. The five error/result cases failed
+against the previous implementation before the fixes. Full PostgreSQL suites pass on
+Python 3.13.16 (**60 passed in 8.47 s**) and 3.14.8 (**60 passed in 9.22 s**), including
+process-failure, cancellation/fencing, snapshots, and the CLI recovery demonstration.
+Ruff formatting/lint and strict mypy pass on both interpreters; wheel and sdist build pass.
+Commands: `python -m pytest -q --tb=short`, `ruff format --check .`, `ruff check .`,
+`mypy src`, and `uv build --out-dir /workspace/python-projects/.local/review-builds/anchor`.
+Tests used the coordinator's real local PostgreSQL service through ANCHOR_DATABASE_URL.
+
+The locked Starlette/httpx test-client integration emits one upstream deprecation warning.
+Heavy benchmarks and the cross-project settlement integration were not rerun in this
+review. The immutable records below describe their original source revisions; they do not
+verify these working-tree changes. No source, dependency, lockfile, or Git changes outside
+this project were made by this reviewer. Writes stop at handoff to the coordinator.
+
+## Previous accepted verification
+
 AN-01–AN-08, immutable compatibility checks, installed-wheel demonstrations, ci profiles,
 the full standard workload, and the settlement integration have passed. The default is
 CPython **3.14.8**, with **3.13.16** also required and verified. Implementation remains

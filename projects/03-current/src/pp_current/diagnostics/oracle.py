@@ -27,7 +27,13 @@ def reconcile(
         identity = json.dumps([row["source_id"], row["partition"]], separators=(",", ":"))
         kind = row["kind"]
         timestamp = row["event_time"]
+        if identity not in clocks:
+            raise ValueError("oracle observed unknown input")
+        if clocks[identity] == 2**63 - 1 and kind != "end":
+            raise ValueError("oracle observed record after end of input")
         if kind == "event":
+            if identity in inactive:
+                raise ValueError("oracle observed event before explicit resume")
             disposition = (
                 "rejected-late"
                 if timestamp + lateness < watermark
@@ -81,6 +87,8 @@ def reconcile(
                 if next_time < clocks[identity]:
                     raise ValueError("oracle observed regressing clock")
                 clocks[identity] = next_time
+                if kind == "end":
+                    inactive.discard(identity)
             active = [clock for source, clock in clocks.items() if source not in inactive]
             if active:
                 watermark = max(watermark, min(active))

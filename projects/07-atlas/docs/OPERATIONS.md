@@ -37,7 +37,9 @@ ATLAS_TOKEN_BINDINGS='{"local-only-demo-token":{"tenant":"docs","subject":"alice
 
 Open http://127.0.0.1:8107/ and enter the synthetic token in the password field.
 The view does not store tokens. API docs are at `/docs`. GET `/health` reports
-process liveness; authenticated `/ready` loads and validates the tenant index.
+process liveness; authenticated `/ready` loads and validates the tenant index, then
+returns only `{"status":"ready"}`. Corpus statistics remain available through the
+trusted administrative CLI and Python interface.
 All search/fetch/export operations require bearer authentication. POST documents,
 DELETE documents/{id}, PUT documents/{id}/acl, PUT groups/{subject}, POST merge
 require this tenant's admin binding. Export/search are paginated. The adapter caps

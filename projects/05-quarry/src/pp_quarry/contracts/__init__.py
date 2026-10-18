@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import string
 from dataclasses import dataclass, field
 from datetime import date
 
@@ -41,6 +42,16 @@ class Contract:
             for f in self.fields.values()
         ):
             raise ValueError("unsupported contract field type")
+        # DuckDB identifiers are ASCII case-insensitive, even when quoted. A
+        # collision would silently rename a published payload__FIELD column.
+        translation = str.maketrans(string.ascii_uppercase, string.ascii_lowercase)
+        folded = [
+            name.translate(translation)
+            for name in self.fields
+            if name not in {"device", "day", "value"}
+        ]
+        if len(set(folded)) != len(folded):
+            raise ValueError("contract fields collide under SQL identifier case rules")
         if self.minimum is not None and self.maximum is not None and self.minimum > self.maximum:
             raise ValueError("invalid quality bounds")
 
@@ -77,7 +88,14 @@ class Contract:
                 raise ValueError(f"{event.key}: integer field {name} exceeds signed 64-bit format")
             if not valid or (type(value) is float and not math.isfinite(value)):
                 raise ValueError(f"{event.key}: field {name} needs {spec.kind}")
-        if "day" in event.payload:
+            if spec.kind == "number" and isinstance(value, (int, float)):
+                try:
+                    finite = math.isfinite(value)
+                except OverflowError:
+                    finite = False
+                if not finite:
+                    raise ValueError(f"{event.key}: field {name} exceeds finite DOUBLE range")
+        if event.payload.get("day") is not None:
             date.fromisoformat(str(event.payload["day"]))
         value = event.payload.get("value")
         if isinstance(value, (int, float)) and not isinstance(value, bool):

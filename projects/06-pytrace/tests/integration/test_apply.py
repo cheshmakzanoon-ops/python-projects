@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from pp_pytrace.codemods.plan import Edit, Plan, apply, create_plan, recover
+from pp_pytrace.codemods.plan import Edit, Plan, apply, create_plan, load_plan, recover
 from pp_pytrace.trusted_api import deliver
 
 
@@ -78,3 +78,67 @@ def test_trusted_api_equivalence_including_errors() -> None:
             except (TypeError, ValueError) as exc:
                 results.append((type(exc).__name__, str(exc)))
         assert results[0] == results[1]
+
+
+@pytest.mark.parametrize("alias", ["./a.py", "folder/../a.py", "folder//a.py"])
+def test_noncanonical_path_aliases_are_refused_before_writes(tmp_path: Path, alias: str) -> None:
+    (tmp_path / "a.py").write_text('x=str("hi")\n')
+    with pytest.raises(ValueError, match="path"):
+        create_plan(tmp_path, ["a.py", alias])
+    assert (tmp_path / "a.py").read_text() == 'x=str("hi")\n'
+
+
+@pytest.mark.parametrize(
+    "document", ["[]", "null", '"plan"', '{"schema_version":1,"root":"/tmp","edits":[null]}']
+)
+def test_malformed_plan_shapes_raise_value_error(tmp_path: Path, document: str) -> None:
+    path = tmp_path / "plan.json"
+    path.write_text(document)
+    with pytest.raises(ValueError, match="malformed"):
+        load_plan(path)
+
+
+def test_recovery_is_not_blocked_by_interrupted_writer_temporary(tmp_path: Path) -> None:
+    source = tmp_path / "a.py"
+    source.write_text('x=str("hi")\n')
+    plan = create_plan(tmp_path, ["a.py"])
+    journal = tmp_path / "journal"
+    apply(plan, journal)
+    interrupted = tmp_path / "a.py.pytrace-tmp"
+    interrupted.write_text("an earlier writer was interrupted")
+    recover(journal)
+    assert source.read_text() == 'x=str("hi")\n'
+    assert interrupted.read_text() == "an earlier writer was interrupted"
+
+
+def test_failed_replacement_cleans_only_its_own_temporary(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from pp_pytrace.codemods.plan import _write_atomic
+
+    source = tmp_path / "a.py"
+    source.write_text("original\n")
+
+    def fail_replace(path: Path, target: Path) -> Path:
+        raise OSError("simulated replacement failure")
+
+    monkeypatch.setattr(Path, "replace", fail_replace)
+    with pytest.raises(OSError, match="simulated"):
+        _write_atomic(source, b"replacement\n")
+    assert source.read_text() == "original\n"
+    assert sorted(path.name for path in tmp_path.iterdir()) == ["a.py"]
+
+
+def test_apply_and_recover_support_long_source_filenames(tmp_path: Path) -> None:
+    name = "a" * 237 + ".py"
+    source = tmp_path / name
+    source.write_text('x=str("hi")\n')
+    source.chmod(0o640)
+    plan = create_plan(tmp_path, [name])
+    journal = tmp_path / "journal"
+    apply(plan, journal)
+    assert source.read_text() == 'x="hi"\n'
+    assert source.stat().st_mode & 0o777 == 0o640
+    recover(journal)
+    assert source.read_text() == 'x=str("hi")\n'
+    assert source.stat().st_mode & 0o777 == 0o640

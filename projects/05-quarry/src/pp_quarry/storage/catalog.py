@@ -16,9 +16,37 @@ CREATE TABLE IF NOT EXISTS pins(token TEXT PRIMARY KEY,snapshot INTEGER NOT NULL
 """
 
 
-def connect(root: Path) -> sqlite3.Connection:
-    conn = sqlite3.connect(root / "catalog.sqlite", timeout=30)
-    conn.execute("PRAGMA journal_mode=WAL")
-    conn.execute("PRAGMA synchronous=FULL")
-    conn.executescript(DDL)
-    return conn
+def check_storage_paths(root: Path) -> None:
+    for name in (
+        ".quarry-owned",
+        "data",
+        "tmp",
+        "catalog.sqlite",
+        "catalog.sqlite-wal",
+        "catalog.sqlite-shm",
+    ):
+        if (root / name).is_symlink():
+            raise ValueError("owned storage paths cannot be symlinks")
+
+
+def connect(root: Path, *, initialize: bool = True) -> sqlite3.Connection:
+    check_storage_paths(root)
+    if not initialize and (
+        not (root / ".quarry-owned").is_file() or not (root / "catalog.sqlite").is_file()
+    ):
+        raise ValueError("snapshot requires an existing Quarry-owned dataset")
+    conn = sqlite3.connect(
+        f"{(root / 'catalog.sqlite').as_uri()}?mode={'rwc' if initialize else 'rw'}",
+        uri=True,
+        timeout=30,
+    )
+    try:
+        if initialize:
+            conn.execute("PRAGMA journal_mode=WAL")
+        conn.execute("PRAGMA synchronous=FULL")
+        if initialize:
+            conn.executescript(DDL)
+        return conn
+    except BaseException:
+        conn.close()
+        raise

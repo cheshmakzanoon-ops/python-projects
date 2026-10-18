@@ -20,6 +20,8 @@ class Progress:
         identity = record.input_id
         if identity not in self.inputs:
             raise ValueError("input must be registered before run")
+        if self.inputs[identity] == MAX_TIME and record.kind != "end":
+            raise ValueError("input has ended")
         if record.kind == "idle":
             self.idle.add(identity)
         elif record.kind == "resume":
@@ -29,6 +31,9 @@ class Progress:
             if next_time < self.inputs[identity]:
                 raise ValueError("input watermark regression")
             self.inputs[identity] = next_time
+            if record.kind == "end":
+                # A finished input contributes positive infinity even if it was idle.
+                self.idle.discard(identity)
         active = [v for k, v in self.inputs.items() if k not in self.idle]
         if active:
             self.watermark = max(self.watermark, min(active))

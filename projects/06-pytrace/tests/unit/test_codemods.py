@@ -78,3 +78,17 @@ def test_nested_literal_constructors_reach_idempotence_in_one_pass() -> None:
     protected = rewrite('str(str("docstring hazard"))\n')
     assert protected.after == 'str("docstring hazard")\n'
     assert rewrite(protected.after).after == protected.after
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        'from another import *\nx=str("unsafe")\n',
+        'from another import *\ndef f():\n return str("unsafe")\n',
+        'from pp_pytrace.trusted_api import deliver\nfrom another import *\nx=deliver("x",timeout=1)\n',
+    ],
+)
+def test_wildcard_imports_abstain_from_unproven_bindings(source: str) -> None:
+    result = rewrite(source)
+    assert result.after == source
+    assert result.abstentions == ("wildcard imports make bindings uncertain",)

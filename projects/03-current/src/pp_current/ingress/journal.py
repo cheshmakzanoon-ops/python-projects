@@ -31,15 +31,44 @@ class Journal:
         max_outbox: int = 2_000_000,
         max_disk_bytes: int = 1_073_741_824,
         failpoint: Failpoint = no_failure,
+        read_only: bool = False,
     ) -> None:
-        path.parent.mkdir(parents=True, exist_ok=True)
-        self.db = sqlite3.connect(path, isolation_level=None, check_same_thread=False, timeout=10)
-        self.db.execute("PRAGMA journal_mode=WAL")
-        self.db.execute("PRAGMA synchronous=FULL")
+        for limit in (max_records, max_outbox, max_disk_bytes):
+            if type(limit) is not int or limit < 0:
+                raise ValueError("nonnegative integer journal budgets required")
         if max_disk_bytes < 40960:
             raise ValueError("disk budget must allow at least ten pages")
-        self.db.execute(f"PRAGMA max_page_count={max_disk_bytes // 4096}")
+        self.max_records = max_records
+        self.max_outbox = max_outbox
+        self.failpoint = failpoint
+        self.replayed = 0
         self.checkpoint_seconds: list[float] = []
+        if read_only:
+            self.db = sqlite3.connect(
+                path.resolve().as_uri() + "?mode=ro",
+                uri=True,
+                isolation_level=None,
+                check_same_thread=False,
+                timeout=10,
+            )
+        else:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            self.db = sqlite3.connect(
+                path, isolation_level=None, check_same_thread=False, timeout=10
+            )
+        try:
+            if not read_only:
+                self._initialize(max_disk_bytes)
+            if self.db.execute("SELECT version FROM format").fetchall() != [(1,)]:
+                raise ValueError("unsupported journal format")
+        except BaseException:
+            self.db.close()
+            raise
+
+    def _initialize(self, max_disk_bytes: int) -> None:
+        self.db.execute("PRAGMA journal_mode=WAL")
+        self.db.execute("PRAGMA synchronous=FULL")
+        self.db.execute(f"PRAGMA max_page_count={max_disk_bytes // 4096}")
         self.db.executescript("""
         CREATE TABLE IF NOT EXISTS format(version INTEGER NOT NULL);
         INSERT INTO format SELECT 1 WHERE NOT EXISTS (SELECT 1 FROM format);
@@ -54,18 +83,13 @@ class Journal:
         CREATE TABLE IF NOT EXISTS results(job TEXT,operator TEXT,key TEXT,revision INTEGER,
           payload TEXT NOT NULL,PRIMARY KEY(job,operator,key));
         """)
-        if self.db.execute("SELECT version FROM format").fetchone()[0] != 1:
-            raise ValueError("unsupported journal format")
-        self.max_records = max_records
-        self.max_outbox = max_outbox
-        self.failpoint = failpoint
-        self.replayed = 0
 
     def close(self) -> None:
         self.db.close()
 
     def admit(self, records: list[Record]) -> list[Record]:
         admitted = []
+        replayed = 0
         self.db.execute("BEGIN IMMEDIATE")
         try:
             count = self.db.execute("SELECT COUNT(*) FROM ingress").fetchone()[0]
@@ -78,7 +102,7 @@ class Journal:
                     if old[1] != record.wire():
                         raise ValueError("conflicting source-offset reuse")
                     ordinal = old[0]
-                    self.replayed += 1
+                    replayed += 1
                 else:
                     if count >= self.max_records:
                         raise BudgetExceeded("durable ingress record budget reached")
@@ -96,6 +120,7 @@ class Journal:
             if self.db.in_transaction:
                 self.db.execute("ROLLBACK")
             raise
+        self.replayed += replayed
         self.failpoint("admission-after-commit")
         return admitted
 
@@ -106,9 +131,14 @@ class Journal:
         ).fetchall()
         return [Record.parse(raw, ordinal=ordinal) for ordinal, raw in rows]
 
-    def recover(self, config: Config, job_id: str = "demo") -> Engine:
+    def recover(self, config: Config, job_id: str | None = None) -> Engine:
         row = self.db.execute("SELECT state FROM checkpoint WHERE id=1").fetchone()
-        return Engine.restore(row[0], config) if row else Engine(config, job_id)
+        if row:
+            engine = Engine.restore(row[0], config)
+            if job_id is not None and engine.job_id != job_id:
+                raise ValueError("checkpoint belongs to a different job")
+            return engine
+        return Engine(config, "demo" if job_id is None else job_id)
 
     def publish(self, engine: Engine) -> None:
         started = time.perf_counter()
@@ -162,10 +192,12 @@ class Journal:
         ]
 
     def acknowledge(self, delivery: Delivery) -> None:
-        self.db.execute(
-            "UPDATE deliveries SET sent=1 WHERE job=? AND operator=? AND key=? AND revision=?",
-            delivery.identity,
+        cursor = self.db.execute(
+            "UPDATE deliveries SET sent=1 WHERE job=? AND operator=? AND key=? AND revision=? AND payload=?",
+            (*delivery.identity, delivery.payload),
         )
+        if cursor.rowcount != 1:
+            raise ValueError("unknown delivery or conflicting acknowledgement payload")
 
     def export(self) -> list[dict[str, object]]:
         import json

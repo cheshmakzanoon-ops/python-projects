@@ -105,3 +105,43 @@ Exact raw-report source SHA-256: `530ea3216de80d90015a655209261085f6f6b2d1ec1fde
 lock SHA-256: `278057ae9b5d37f8ac2d66073891b25e2d51b15d13f7f753129aea59e01bb54d`.
 The raw report and wrapper retain their distinct declared digest input scopes. No source,
 dependency, test, or evidence file changed during this documentation-only handoff.
+
+## Code quality review — October 18, 2026
+
+The earlier immutable evidence above describes the previous accepted revision.
+This review adds focused fixes on the current working tree:
+
+- PostgreSQL URLs now use libpq parsing, preserving TLS, certificate, timeout,
+  and connection options instead of discarding query parameters. Demo search
+  paths retain existing options. Direct snapshot clients use a temporary 0600
+  libpq service file and an environment password; restore administration retains
+  the same connection policy. The explicit local-container path remains supported.
+- Failed backups remove their partial archives. Restore checks the input and
+  client before creating its fresh target and runs pg_restore in one transaction.
+  A real truncated-data archive regression confirms restored tables are rolled
+  back; a missing input creates no database. The empty failed target remains
+  available for operator inspection.
+- Statement timestamps outside Python's UTC range now produce validation errors.
+  Candidate date windows clip at years 1/9999 instead of raising OverflowError.
+  API regressions exercise both rejected UTC overflows and valid boundary dates.
+
+Validation against real PostgreSQL 17 through the coordinator's local service:
+
+- Full `uv run --locked pytest -q`: **59 passed** on Python 3.14.8 (25.96 s)
+  and **59 passed** on Python 3.13.16 (24.39 s), with distinct test databases.
+- Ruff format/check passed for 55 files; strict mypy passed for 34 source files.
+- `uv build` produced both the source distribution and wheel.
+- A separate real libpq subprocess verifies the native-client environment connects
+  to the configured database and applies its statement timeout. Native backup,
+  successful restore, failed-restore rollback, migrations, concurrency, API
+  authorization, and public demo/cleanup tests all execute in the full suites.
+
+Review environments live outside the project under
+`/workspace/python-projects/.local/review-venvs/meridian-3.14` and `meridian-3.13`.
+Commands use `UV_CACHE_DIR=/workspace/.cache/uv`,
+`UV_PYTHON_INSTALL_DIR=/workspace/.python`, `UV_LINK_MODE=copy`, the relevant
+`UV_PROJECT_ENVIRONMENT`, and a unique `MERIDIAN_TEST_DB_NAME` per interpreter.
+No dependency/lockfile, migration, shared/root, or Git changes were made.
+No heavy benchmark was rerun. TLS option preservation is tested; this local trust
+database does not establish a certificate-verified remote TLS handshake.
+Implementation writes are paused for coordinator review.

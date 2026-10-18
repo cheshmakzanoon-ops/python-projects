@@ -4,6 +4,7 @@ import pytest
 
 from pp_current import Config, Engine, Record, canonical
 from pp_current.operators.tumbling import windows
+from pp_current.runtime.engine import CODE_VERSION
 
 INPUT = canonical(["s", 0])
 
@@ -73,7 +74,29 @@ def test_restore_compatibility_and_stable_partition() -> None:
     apply(engine, event_time=2, value=1)
     assert Engine.restore(engine.dump(), engine.config).dump() == engine.dump()
     with pytest.raises(ValueError, match="incompatible"):
-        Engine.restore(engine.dump().replace("current-1", "current-99"), engine.config)
+        Engine.restore(engine.dump().replace(CODE_VERSION, "current-99"), engine.config)
     with pytest.raises(ValueError, match="incompatible"):
         Engine.restore(engine.dump(), replace(engine.config, workers=2))
     assert partition_for("", 4) == 0
+
+
+def test_end_of_idle_input_finalizes_windows_and_survives_restore() -> None:
+    engine = Engine(Config((INPUT,), size=10, slide=5))
+    apply(engine, event_time=1, value=7)
+    apply(engine, kind="idle")
+    engine = Engine.restore(engine.dump(), engine.config)
+    apply(engine, kind="end")
+    assert not engine.state and not engine.join
+    assert engine.progress.watermark == 2**63 - 1
+    assert len(engine.pending) == 3
+    assert INPUT not in engine.progress.idle
+
+
+@pytest.mark.parametrize("kind", ["event", "idle", "resume", "watermark"])
+def test_ended_input_cannot_reopen_while_other_input_is_pending(kind: str) -> None:
+    other = canonical(["s", 1])
+    engine = Engine(Config((INPUT, other)))
+    apply(engine, kind="end")
+    with pytest.raises(ValueError, match="ended"):
+        apply(engine, kind=kind)
+    assert engine.position == 1

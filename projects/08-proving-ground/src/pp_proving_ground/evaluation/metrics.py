@@ -147,12 +147,29 @@ class GatePolicy:
             failures.append("only schema-v1 validation reports can authorize promotion")
         for name in ["count", "positives", "class_balance", "pr_auc", "roc_auc", "brier"]:
             value = report.metrics.get(name)
-            if value is None or isinstance(value, bool) or not math.isfinite(value):
+            if (
+                not isinstance(value, (int, float))
+                or isinstance(value, bool)
+                or (isinstance(value, float) and not math.isfinite(value))
+            ):
                 failures.append(f"{name}: missing, undefined or nonfinite")
         if failures:
             return tuple(failures)
-        count = float(report.metrics["count"] or 0)
-        positives = float(report.metrics["positives"] or 0)
+        count, positives = report.metrics["count"], report.metrics["positives"]
+        if type(count) is not int or type(positives) is not int:
+            return ("count and positives must be integer sample counts",)
+        if count < 0 or not 0 <= positives <= count:
+            return ("invalid validation sample counts",)
+        for name in ["class_balance", "pr_auc", "roc_auc", "brier"]:
+            value = report.metrics[name]
+            if value is None or not 0 <= value <= 1:
+                failures.append(f"{name}: outside [0, 1]")
+        if failures:
+            return tuple(failures)
+        if count > 0 and not math.isclose(
+            float(report.metrics["class_balance"] or 0), positives / count, rel_tol=0, abs_tol=1e-12
+        ):
+            failures.append("class_balance disagrees with validation sample counts")
         if count < self.minimum_count or min(positives, count - positives) < self.minimum_per_class:
             failures.append("insufficient validation samples/classes")
         for metric, threshold in [

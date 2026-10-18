@@ -20,18 +20,53 @@ def run(*args: str) -> str:
     return subprocess.check_output(["docker", *args], text=True, timeout=180).strip()
 
 
+def verify_owner(name: str) -> None:
+    """A matching name alone never grants permission to manage a container."""
+    labels = json.loads(run("inspect", "--format", "{{json .Config.Labels}}", name))
+    if not isinstance(labels, dict) or labels.get("pp.owner") != "portfolio":
+        raise SystemExit(f"{name}: refusing to manage a container without pp.owner=portfolio")
+
+
+def database_port(name: str, *, configured: bool = False) -> int:
+    """Expose trust-authenticated development databases only through loopback."""
+    field = ".HostConfig.PortBindings" if configured else ".NetworkSettings.Ports"
+    ports = json.loads(run("inspect", "--format", "{{json " + field + "}}", name))
+    bindings = ports.get("5432/tcp") if isinstance(ports, dict) else None
+    if (
+        not isinstance(bindings, list)
+        or len(bindings) != 1
+        or not isinstance(bindings[0], dict)
+        or bindings[0].get("HostIp") != "127.0.0.1"
+    ):
+        raise SystemExit(f"{name}: PostgreSQL must have exactly one loopback port binding")
+    if configured and bindings[0].get("HostPort") in {"", "0"}:
+        # Docker retains an empty requested port when it allocated a host port dynamically.
+        return 0
+    try:
+        port = int(bindings[0]["HostPort"])
+    except (KeyError, TypeError, ValueError) as error:
+        raise SystemExit(f"{name}: invalid PostgreSQL port binding") from error
+    if not 1 <= port <= 65535:
+        raise SystemExit(f"{name}: invalid PostgreSQL port binding")
+    return port
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=["up", "down", "status"])
     parser.add_argument("project", choices=["anchor", "meridian"])
     args = parser.parse_args()
     name = f"pp-{args.project}-dev"
-    if args.action == "down":
-        listing = run("ps", "-a", "--filter", f"name=^/{name}$", "--format", "{{.Names}}")
-        if listing == name:
-            run("rm", "-f", name)
-        return
     found = run("ps", "-a", "--filter", f"name=^/{name}$", "--format", "{{.Names}}")
+    if found:
+        verify_owner(name)
+        if args.action == "up":
+            database_port(name, configured=True)
+    if args.action == "down":
+        if found:
+            run("rm", "-f", "-v", name)
+        (ROOT / ".local/services" / f"{args.project}.json").unlink(missing_ok=True)
+        return
     if not found:
         if args.action == "status":
             raise SystemExit(f"{name}: not running")
@@ -65,7 +100,7 @@ def main() -> None:
         time.sleep(0.25)
     else:
         raise SystemExit(f"{name}: PostgreSQL readiness failed")
-    port = run("port", name, "5432/tcp").rsplit(":", 1)[-1]
+    port = database_port(name)
     url = f"postgresql://{args.project}@127.0.0.1:{port}/{args.project}"
     output = ROOT / ".local/services"
     output.mkdir(parents=True, exist_ok=True)

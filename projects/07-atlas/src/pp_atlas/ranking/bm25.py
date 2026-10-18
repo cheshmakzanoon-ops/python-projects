@@ -13,8 +13,8 @@ def contribution(
     k1: float = 1.2,
     b: float = 0.75,
 ) -> float:
-    if k1 <= 0 or not 0 <= b <= 1:
-        raise ValueError("BM25 requires k1 > 0 and 0 <= b <= 1")
+    if not math.isfinite(k1) or k1 <= 0 or not 0 <= b <= 1:
+        raise ValueError("BM25 requires finite k1 > 0 and 0 <= b <= 1")
     if not frequency or not count or not average_length:
         return 0.0
     if not 0 < document_frequency <= count:

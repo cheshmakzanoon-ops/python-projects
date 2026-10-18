@@ -36,9 +36,14 @@ class Record:
         for name in ("partition", "source_offset", "schema_version", "ingress_ordinal"):
             if type(getattr(self, name)) is not int:
                 raise ValueError("integer identity fields required")
+        if type(self.event_time) is not int or type(self.value) is not int:
+            raise ValueError("integer timestamps and values required")
         if not -(2**62) <= self.event_time < 2**62:
             raise ValueError("timestamp outside supported integer range")
-        if not self.source_id or self.partition < 0 or self.source_offset < 0:
+        if not self.source_id or any(
+            not 0 <= getattr(self, name) < 2**63
+            for name in ("partition", "source_offset", "ingress_ordinal")
+        ):
             raise ValueError("invalid source identity")
         if self.schema_version != 1 or self.kind not in (
             "event",
@@ -48,8 +53,6 @@ class Record:
             "end",
         ):
             raise ValueError("unsupported record schema/kind")
-        if type(self.event_time) is not int or type(self.value) is not int:
-            raise ValueError("integer timestamps and values required")
         if self.stream not in ("reading", "metadata"):
             raise ValueError("unsupported stream")
         if len(canonical(self.dictionary()).encode()) > 16_384:

@@ -8,6 +8,7 @@ import resource
 import shutil
 import sqlite3
 import statistics
+import tempfile
 import time
 from pathlib import Path
 from typing import Literal
@@ -42,6 +43,13 @@ def metric_integer(metrics: dict[str, object], key: str) -> int:
 
 
 def commit_comparison(root: Path, count: int, repetitions: int = 5) -> dict[str, object]:
+    # Fixed measurement names belong only to a newly created private directory;
+    # opening and retiring them directly under root could destroy caller data.
+    with tempfile.TemporaryDirectory(prefix=".strata-commit-", dir=root) as temporary:
+        return _measure_commits(Path(temporary), count, repetitions)
+
+
+def _measure_commits(root: Path, count: int, repetitions: int) -> dict[str, object]:
     result: dict[str, object] = {}
     for engine in ("strata", "sqlite"):
         for batch in (1, 100):

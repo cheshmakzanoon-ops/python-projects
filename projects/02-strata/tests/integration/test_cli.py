@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from pp_strata.cli import clean_output, output_directory
+from pp_strata.cli import OWNED, clean_output, output_directory
 
 
 def test_cli_demo_public_interface(tmp_path: Path) -> None:
@@ -74,3 +74,30 @@ def test_reject_database_internal_symlink(tmp_path: Path) -> None:
     with pytest.raises(Corruption):
         Database.open(database)
     assert foreign.read_text() == "preserve"
+
+
+@pytest.mark.parametrize("name", sorted(OWNED))
+def test_output_rejects_symlinks_before_writing_reports(tmp_path: Path, name: str) -> None:
+    output = output_directory(str(tmp_path / "output"))
+    foreign = tmp_path / "foreign.txt"
+    foreign.write_text("preserve")
+    (output / name).symlink_to(foreign)
+    with pytest.raises(ValueError, match="symbolic link"):
+        output_directory(str(output))
+    assert foreign.read_text() == "preserve"
+
+
+def test_commit_benchmark_preserves_preexisting_database(tmp_path: Path) -> None:
+    from pp_strata import Database
+    from pp_strata.workloads import commit_comparison, key_for
+
+    foreign = tmp_path / "commit-strata-1-0"
+    with Database.open(foreign) as db:
+        with db.begin() as tx:
+            tx.put(key_for(0), b"preserve")
+    before = {path.name: path.read_bytes() for path in foreign.iterdir()}
+    result = commit_comparison(tmp_path, count=1, repetitions=1)
+    assert len(result) == 4
+    assert foreign.is_dir()
+    assert {path.name: path.read_bytes() for path in foreign.iterdir()} == before
+    assert sorted(path.name for path in tmp_path.iterdir()) == [foreign.name]

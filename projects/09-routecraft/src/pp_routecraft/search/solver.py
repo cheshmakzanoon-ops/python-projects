@@ -6,7 +6,14 @@ import time
 from collections.abc import Callable
 
 from pp_routecraft.construction.insertion import construct
-from pp_routecraft.domain.instance import Plan, RoutingInstance, SearchBudget, SolveResult, Status
+from pp_routecraft.domain.instance import (
+    Plan,
+    Route,
+    RoutingInstance,
+    SearchBudget,
+    SolveResult,
+    Status,
+)
 from pp_routecraft.neighborhoods.moves import destroy_repair, relocate, reverse_segment, swap
 from pp_routecraft.validation.verifier import input_errors, verify
 
@@ -21,13 +28,17 @@ def solve(
 ) -> SolveResult:
     started = time.monotonic()
     errors = list(input_errors(instance))
-    if (
-        type(budget.iterations) is not int
-        or budget.iterations < 0
-        or (
-            budget.seconds is not None and (budget.seconds < 0 or not math.isfinite(budget.seconds))
-        )
-    ):
+    valid_seconds = True
+    if budget.seconds is not None:
+        try:
+            valid_seconds = (
+                type(budget.seconds) in (int, float)
+                and budget.seconds >= 0
+                and math.isfinite(budget.seconds)
+            )
+        except OverflowError:
+            valid_seconds = False
+    if type(budget.iterations) is not int or budget.iterations < 0 or not valid_seconds:
         errors.append("budget must have finite nonnegative limits")
     if errors:
         return SolveResult(
@@ -54,6 +65,15 @@ def solve(
             ("initial plan failed independent verification",),
         )
     best = initial
+    if initial is not None:
+        # Public plans may omit idle vehicles or order routes arbitrarily. The
+        # neighborhood representation uses the instance's full vehicle order.
+        routes = {route.vehicle_id: route for route in initial.routes}
+        best = Plan(
+            tuple(routes.get(vehicle.id, Route(vehicle.id, ())) for vehicle in instance.vehicles),
+            initial.objective,
+            initial.schema_version,
+        )
     first = 0.0 if initial else None
     reason = "iteration_budget"
     trajectory: list[tuple[int, int, int]] = []
@@ -122,9 +142,16 @@ def solve(
                 elif candidate.objective[0] == current.objective[0]:
                     # Annealing permits travel deterioration, never hard violations.
                     temperature = max(1.0, 30.0 * (1 - iteration / max(1, budget.iterations)))
-                    if rng.random() < math.exp(
-                        -(candidate.objective[1] - current.objective[1]) / temperature
-                    ):
+                    deterioration = candidate.objective[1] - current.objective[1]
+                    # More-negative exponents underflow to zero anyway. Compare
+                    # the integer first so arbitrary-size costs never overflow
+                    # during the conversion to floating-point probability.
+                    probability = (
+                        0.0
+                        if deterioration > 746 * temperature
+                        else math.exp(-deterioration / temperature)
+                    )
+                    if rng.random() < probability:
                         current = candidate
         weights[operator] = 0.8 * weights[operator] + 0.2 * reward
     if best is not None and not verify(instance, best).valid:

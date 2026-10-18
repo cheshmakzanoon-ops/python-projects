@@ -64,3 +64,36 @@ records and tiny sample artifacts remain labeled with their measured dirty sourc
 
 Next administrative action: coordinator commits this final docs handoff. All code
 is frozen; no reruns or implementation changes were performed for this update.
+
+## Code review follow-up — October 18, 2026
+
+The subsequent working-tree review fixed these confirmed defects:
+
+- An empty replanning-state tuple bypassed completeness checks and discarded all
+  executed/cargo history. Initial and repeated replans now require one state per
+  vehicle, including when the supplied tuple is empty.
+- SDK verification accepted boolean/float aliases for schema versions, route and
+  snapshot identifiers, and cached schedule/return units; some aliases caused
+  matrix-indexing exceptions. Types are now checked before keyed/indexed access.
+- Invalid coordinate and wall-budget types, or integer values too large for
+  floating-point conversion, raised unexpected exceptions. SDK calls now report
+  invalid input, and JSON coordinate parsing raises a clear `ValueError`.
+- Annealing overflowed on otherwise valid arbitrary-size integer travel costs.
+  It now checks for probability underflow before converting the deterioration
+  to floating point, preserving the verified incumbent.
+- Valid initial plans could omit idle vehicles or reorder routes, while the
+  neighborhoods assumed the complete instance order. Normalization now exposes
+  every vehicle. A regression reproduces the former two-vehicle result where
+  using an omitted idle vehicle permits a one-vehicle plan.
+
+Added 28 regression cases. The full suite passed **103 tests on CPython 3.14.8**
+and **103 tests on CPython 3.13.16**, using separate environments. Both runs also
+passed Ruff format/lint and strict mypy over 21 source files. The suite includes
+the public demo/replan/verification CLI, directed/window checks, exact oracles,
+owned-output safety checks, and the complete CI benchmark/control assertions.
+The sdist and wheel build passed. No dependencies or lockfiles changed.
+
+The earlier standard measurements retain their recorded revision scope; the
+standard benchmark was not repeated during this review. Heuristic optimality
+and cooperative wall-clock limitations remain unchanged. Current results describe
+the uncommitted review source, not a newly accepted immutable release.

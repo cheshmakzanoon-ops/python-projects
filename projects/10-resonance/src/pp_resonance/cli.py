@@ -60,15 +60,24 @@ def clean(path: Path) -> None:
     if not path.is_absolute() or path.is_symlink():
         raise ValueError("Clean requires an absolute owned directory, not a symlink")
     marker = path / OWNER
-    if not marker.is_file() or json.loads(marker.read_text()) != {
-        "owner": "pp-resonance",
-        "version": 1,
-    }:
+    if (
+        marker.is_symlink()
+        or not marker.is_file()
+        or json.loads(marker.read_text())
+        != {
+            "owner": "pp-resonance",
+            "version": 1,
+        }
+    ):
         raise ValueError("Refusing to clean unowned output")
     for name in OWNED:
         target = path / name
         if target.is_symlink():
             raise ValueError("Refusing to clean symlinked output")
+    # Complete refusal checks before unlinking: a later unsafe path must not
+    # leave a partially deleted run behind.
+    for name in OWNED:
+        target = path / name
         if target.is_file():
             target.unlink()
     marker.unlink()
@@ -164,6 +173,31 @@ def main() -> None:
             print("Removed only Resonance-owned files")
             return
         result: dict[str, object]
+        if args.command in ("analyze", "align", "export"):
+            names = (
+                ("transcription.mid", OWNER)
+                if args.command == "export"
+                else (
+                    "audio.wav",
+                    "analysis.json",
+                    "analysis.html",
+                    "analysis.png",
+                    "transcription.mid",
+                    OWNER,
+                )
+            )
+            inputs = [args.input]
+            if getattr(args, "score", None) is not None:
+                inputs.append(args.score)
+            for source in inputs:
+                for name in names:
+                    target = args.output / name
+                    if source.resolve() == target.resolve() or (
+                        source.exists() and target.exists() and source.samefile(target)
+                    ):
+                        raise ValueError(
+                            "Output would overwrite an input; choose a separate output directory"
+                        )
         output = prepare(args.output)
         if args.command == "demo":
             result = save_demo(output, args.seed)
@@ -227,7 +261,7 @@ def main() -> None:
             export(output / "transcription.mid", notes, data["sample_rate"])
             result = {"midi_notes_checked": len(check_bytes(output / "transcription.mid"))}
         print(json.dumps(result, indent=2, allow_nan=False))
-    except (ValueError, OSError, KeyError, TypeError) as error:
+    except (ValueError, OSError, KeyError, TypeError, sf.LibsndfileError) as error:
         parser.exit(2, f"resonance: {error}\n")
 
 

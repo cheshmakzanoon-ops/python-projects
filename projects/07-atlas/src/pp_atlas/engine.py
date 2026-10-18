@@ -3,6 +3,7 @@
 import hashlib
 import heapq
 import json
+import math
 import threading
 from collections import Counter, defaultdict
 from collections.abc import Iterable
@@ -38,7 +39,7 @@ class Engine:
     """
 
     def __init__(self, root: str | Path, *, k1: float = 1.2, b: float = 0.75) -> None:
-        if k1 <= 0 or not 0 <= b <= 1:
+        if not math.isfinite(k1) or k1 <= 0 or not 0 <= b <= 1:
             raise ValueError("invalid BM25 parameters")
         self.root = Path(root)
         self.root.mkdir(parents=True, exist_ok=True)
