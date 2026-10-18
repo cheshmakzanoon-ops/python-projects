@@ -7,91 +7,122 @@ directory = "projects/01-anchor"
 distribution = "pp-anchor"
 package = "pp_anchor"
 cli = "anchor"
-default_python = "3.13.16"
+default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = ["postgresql"]
-status = "building"
+status = "verifying"
 demo_module = "pp_anchor.cli"
 
+default_port = 8101
+format_arguments = ["ruff", "format", "--check", "."]
+lint_arguments = ["ruff", "check", "."]
+type_arguments = ["mypy", "src"]
+test_arguments = ["pytest"]
 [[projects]]
 slug = "strata"
 directory = "projects/02-strata"
 distribution = "pp-strata"
 package = "pp_strata"
 cli = "strata"
-default_python = "3.13.16"
+default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "building"
+status = "verifying"
 demo_module = "pp_strata.cli"
 
+format_arguments = ["ruff", "format", "--check", "."]
+lint_arguments = ["ruff", "check", "."]
+type_arguments = ["mypy", "src"]
+test_arguments = ["pytest"]
 [[projects]]
 slug = "current"
 directory = "projects/03-current"
 distribution = "pp-current"
 package = "pp_current"
 cli = "current"
-default_python = "3.13.16"
+default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "building"
+status = "verifying"
 demo_module = "pp_current.cli"
 
+format_arguments = ["ruff", "format", "--check", "."]
+lint_arguments = ["ruff", "check", "."]
+type_arguments = ["mypy", "src"]
+test_arguments = ["pytest"]
 [[projects]]
 slug = "meridian"
 directory = "projects/04-meridian"
 distribution = "pp-meridian"
 package = "pp_meridian"
 cli = "meridian"
-default_python = "3.13.16"
+default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = ["postgresql"]
-status = "building"
+status = "needs-fix"
 demo_module = "pp_meridian.cli"
 
+default_port = 8104
+format_arguments = ["ruff", "format", "--check", "."]
+lint_arguments = ["ruff", "check", "."]
+type_arguments = ["mypy", "src"]
+test_arguments = ["pytest"]
 [[projects]]
 slug = "quarry"
 directory = "projects/05-quarry"
 distribution = "pp-quarry"
 package = "pp_quarry"
 cli = "quarry"
-default_python = "3.13.16"
+default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "building"
+status = "verifying"
 demo_module = "pp_quarry.cli"
 
+format_arguments = ["ruff", "format", "--check", "."]
+lint_arguments = ["ruff", "check", "."]
+type_arguments = ["mypy", "src"]
+test_arguments = ["pytest"]
 [[projects]]
 slug = "pytrace"
 directory = "projects/06-pytrace"
 distribution = "pp-pytrace"
 package = "pp_pytrace"
 cli = "pytrace"
-default_python = "3.13.16"
+default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "building"
+status = "verifying"
 demo_module = "pp_pytrace.cli"
 
+format_arguments = ["ruff", "format", "--check", "."]
+lint_arguments = ["ruff", "check", "."]
+type_arguments = ["mypy", "src"]
+test_arguments = ["pytest"]
 [[projects]]
 slug = "atlas"
 directory = "projects/07-atlas"
 distribution = "pp-atlas"
 package = "pp_atlas"
 cli = "atlas"
-default_python = "3.13.16"
+default_python = "3.14.8"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "queued"
+status = "verifying"
 demo_module = "pp_atlas.cli"
 
+default_port = 8107
+format_arguments = ["ruff", "format", "--check", "."]
+lint_arguments = ["ruff", "check", "."]
+type_arguments = ["mypy", "src"]
+test_arguments = ["pytest"]
 [[projects]]
 slug = "proving-ground"
 directory = "projects/08-proving-ground"
@@ -102,9 +133,14 @@ default_python = "3.13.16"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "queued"
+status = "building"
 demo_module = "pp_proving_ground.cli"
 
+default_port = 8108
+format_arguments = ["ruff", "format", "--check", "."]
+lint_arguments = ["ruff", "check", "."]
+type_arguments = ["mypy", "src"]
+test_arguments = ["pytest"]
 [[projects]]
 slug = "routecraft"
 directory = "projects/09-routecraft"
@@ -115,9 +151,13 @@ default_python = "3.13.16"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "queued"
+status = "building"
 demo_module = "pp_routecraft.cli"
 
+format_arguments = ["ruff", "format", "--check", "."]
+lint_arguments = ["ruff", "check", "."]
+type_arguments = ["mypy", "src"]
+test_arguments = ["pytest"]
 [[projects]]
 slug = "resonance"
 directory = "projects/10-resonance"
@@ -128,5 +168,9 @@ default_python = "3.13.16"
 required_python_versions = ["3.13", "3.14"]
 supported_platforms = ["linux"]
 required_services = []
-status = "queued"
+status = "building"
 demo_module = "pp_resonance.cli"
+format_arguments = ["ruff", "format", "--check", "."]
+lint_arguments = ["ruff", "check", "."]
+type_arguments = ["mypy", "src"]
+test_arguments = ["pytest"]

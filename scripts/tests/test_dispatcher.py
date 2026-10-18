@@ -43,3 +43,38 @@ def test_timeout_terminates_child_process_group(tmp_path):
         time.sleep(0.05)
     else:
         raise AssertionError("timeout left a running child process")
+
+
+def test_cleanup_targets_same_owned_directory_as_demo(monkeypatch):
+    calls = []
+
+    def execute(command, cwd, timeout=600):
+        calls.append((command, cwd))
+        return 0
+
+    monkeypatch.setattr(portfolio, "execute", execute)
+    project = next(p for p in portfolio.manifest() if p["slug"] == "current")
+    assert portfolio.project_task("clean-demo", project) == 0
+    arguments = calls[0][0]
+    assert arguments[arguments.index("--output") + 1] == str(portfolio.ROOT / ".local/current/demo")
+    assert "--seed" not in arguments
+
+
+def test_finished_parent_cannot_leave_running_descendant(tmp_path):
+    if os.name != "posix":
+        return
+    pidfile = tmp_path / "pid"
+    parent = (
+        "import subprocess,sys; from pathlib import Path; "
+        "p=subprocess.Popen([sys.executable,'-c','import time; time.sleep(120)']); "
+        "Path(sys.argv[1]).write_text(str(p.pid))"
+    )
+    assert portfolio.execute([sys.executable, "-c", parent, str(pidfile)], tmp_path) == 0
+    pid = int(pidfile.read_text())
+    for _ in range(40):
+        status = Path(f"/proc/{pid}/status")
+        if not status.exists() or "\nState:\tZ" in status.read_text():
+            break
+        time.sleep(0.05)
+    else:
+        raise AssertionError("finished command left a running descendant")

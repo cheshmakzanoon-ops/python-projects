@@ -22,7 +22,8 @@ def main():
                 "uv",
                 "venv",
                 "--python",
-                os.environ.get("PORTFOLIO_PYTHON", "3.13"),
+                os.environ.get("PORTFOLIO_PYTHON")
+                or (project / ".python-version").read_text().strip(),
                 str(Path(folder) / "venv"),
             ],
             env=environment,
@@ -71,6 +72,46 @@ def main():
             check=True,
             stdout=subprocess.DEVNULL,
         )
+        output = Path(folder) / "owned-demo"
+        try:
+            subprocess.run(
+                [
+                    str(python),
+                    "-I",
+                    "-m",
+                    f"{sys.argv[2]}.cli",
+                    "demo",
+                    "--output",
+                    str(output),
+                    "--seed",
+                    "1729",
+                ],
+                cwd=folder,
+                env=environment,
+                check=True,
+                timeout=300,
+            )
+        finally:
+            if output.exists():
+                cleanup = subprocess.run(
+                    [
+                        str(python),
+                        "-I",
+                        "-m",
+                        f"{sys.argv[2]}.cli",
+                        "clean-demo",
+                        "--output",
+                        str(output),
+                    ],
+                    cwd=folder,
+                    env=environment,
+                    check=False,
+                    timeout=60,
+                )
+                if cleanup.returncode:
+                    raise RuntimeError(
+                        "installed demo cleanup failed; see owned output diagnostics"
+                    )
 
 
 if __name__ == "__main__":

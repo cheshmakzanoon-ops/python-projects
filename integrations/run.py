@@ -86,6 +86,12 @@ def main() -> int:
                     process.kill()
                 process.wait()
                 result = 124
+            finally:
+                if os.name != "nt":
+                    try:
+                        os.killpg(process.pid, signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
         records.append(
             {
                 "project": slug,

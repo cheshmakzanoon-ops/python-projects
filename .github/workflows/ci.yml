@@ -41,7 +41,7 @@ jobs:
       matrix: ${{ fromJSON(needs.selection.outputs.matrix) }}
     services:
       postgres:
-        image: postgres:17
+        image: postgres:17@sha256:2d2b8998d31037bf721cfdf764d76ba74171b4fab3431b7f72c27c56ddbdf9e3
         env:
           POSTGRES_USER: portfolio
           POSTGRES_DB: portfolio
@@ -62,6 +62,10 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - run: python -m pip install uv==0.12.23
       - run: uv python install "$PORTFOLIO_PYTHON"
+      - name: Use matching PostgreSQL backup tools
+        env:
+          PG_CONTAINER: ${{ job.services.postgres.id }}
+        run: echo "MERIDIAN_PG_CONTAINER=$PG_CONTAINER" >> "$GITHUB_ENV"
       - run: python scripts/portfolio.py setup '${{ matrix.project }}'
       - run: python scripts/portfolio.py check '${{ matrix.project }}'
       - run: python scripts/portfolio.py demo '${{ matrix.project }}'

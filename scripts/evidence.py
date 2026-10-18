@@ -13,6 +13,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 EXCLUDED_PARTS = {
     ".git",
+    ".local",
     ".venv",
     "__pycache__",
     ".pytest_cache",

@@ -26,6 +26,8 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     args.output = args.output.resolve()
+    if args.output.exists() and any(args.output.iterdir()):
+        parser.error("verification output must be empty; choose a fresh evidence directory")
     args.output.mkdir(parents=True, exist_ok=True)
     commit = subprocess.check_output(
         ["git", "rev-parse", "--verify", f"{args.commit}^{{commit}}"], cwd=ROOT, text=True
@@ -42,9 +44,10 @@ def main() -> int:
     for slug in ("anchor", "meridian"):
         service = ROOT / f".local/services/{slug}.json"
         if service.exists():
-            environment.setdefault(
-                f"{slug.upper()}_DATABASE_URL", json.loads(service.read_text())["url"]
-            )
+            metadata = json.loads(service.read_text())
+            environment.setdefault(f"{slug.upper()}_DATABASE_URL", metadata["url"])
+            if slug == "meridian":
+                environment.setdefault("MERIDIAN_PG_CONTAINER", metadata["container"])
     reports = []
     with tempfile.TemporaryDirectory(prefix="portfolio-verify-") as folder:
         copy = Path(folder) / "source"
@@ -77,7 +80,8 @@ def main() -> int:
                         env=environment,
                         stdout=stream,
                         stderr=subprocess.STDOUT,
-                        timeout=7200 if args.profile == "standard" else 1800,
+                        # The dispatcher bounds each executable and owns its process group.
+                        # An outer SIGKILL timeout would bypass that cleanup.
                     )
                 checks.append(
                     {

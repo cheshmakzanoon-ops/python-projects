@@ -84,7 +84,7 @@ def registry(output: Path, pause: bool = False) -> ActivityRegistry:
 
 
 async def complete(engine: Engine, output: Path, run_id: str) -> None:
-    worker = Worker(engine, registry(output), lease_seconds=0.25, heartbeat=False)
+    worker = Worker(engine, registry(output), lease_seconds=30, heartbeat=True)
     async with asyncio.timeout(60):
         while engine.status(run_id)["status"] in {"running", "compensating"}:
             await asyncio.to_thread(engine.tick)
@@ -132,7 +132,9 @@ def run(output: Path, mode: str, schema: str | None) -> None:
                 time.sleep(0.30)
                 asyncio.run(complete(engine, output, run_id))
                 state = engine.replay(run_id)
-                assert state.status == "completed"
+                assert state.status == "completed", [
+                    asdict(event) for event in engine.history(run_id)
+                ]
                 attempts = [asdict(e) for e in engine.history(run_id)]
                 requests = [
                     json.loads(line)

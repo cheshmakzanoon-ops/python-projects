@@ -51,6 +51,13 @@ def execute(command: list[str], cwd: Path, timeout: int = 600) -> int:
                     process.kill()
                 process.wait()
             raise
+        finally:
+            # A failed or successful parent may leave descendants alive; demos own their group.
+            if os.name != "nt":
+                try:
+                    os.killpg(process.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
     except (OSError, subprocess.TimeoutExpired) as error:
         print(f"Command failed: {error}", file=sys.stderr)
         return 1
@@ -76,10 +83,10 @@ def project_task(task: str, project: dict[str, object], profile: str = "ci") -> 
         ]
     elif task == "check":
         commands = [
-            base + ["ruff", "format", "--check", "."],
-            base + ["ruff", "check", "."],
-            base + ["mypy", "src"],
-            base + ["pytest"],
+            base + list(project["format_arguments"]),
+            base + list(project["lint_arguments"]),
+            base + list(project["type_arguments"]),
+            base + list(project["test_arguments"]),
             [
                 "uv",
                 "build",
@@ -95,7 +102,7 @@ def project_task(task: str, project: dict[str, object], profile: str = "ci") -> 
             ],
         ]
     else:
-        output = ROOT / ".local" / str(project["slug"]) / task
+        output = ROOT / ".local" / str(project["slug"]) / ("demo" if task == "clean-demo" else task)
         commands = [
             base + ["python", "-m", str(project["demo_module"]), task, "--output", str(output)]
         ]
@@ -104,7 +111,7 @@ def project_task(task: str, project: dict[str, object], profile: str = "ci") -> 
         if task == "benchmark":
             commands[0] += ["--profile", profile]
     for command in commands:
-        result = execute(command, directory, 3600 if profile == "standard" else 600)
+        result = execute(command, directory, 7200 if profile == "standard" else 600)
         if result:
             print(f"{project['slug']}: {task} failed ({result})", file=sys.stderr)
             return result

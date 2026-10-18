@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "machine": "x86_64",
+  "cpu_model": "INTEL(R) XEON(R) PLATINUM 8573C",
+  "cpu_cgroup_max": "400000 100000",
+  "memory_limit_bytes": 34359738368,
+  "note": "Observed current cloud runtime. Concurrent implementation/tests can distort development measurements; final standard benchmarks are serialized and numerical threads pinned."
+}
