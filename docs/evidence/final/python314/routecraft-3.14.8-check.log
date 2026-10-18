@@ -1,9 +1,9 @@
 [09-routecraft] uv run --locked --python 3.14.8 ruff format --check .
 Using CPython 3.14.8
 Creating virtual environment at: .venv
-   Building pp-routecraft @ file:///workspace/portfolio-verify-s21ujvba/source/projects/09-routecraft
-      Built pp-routecraft @ file:///workspace/portfolio-verify-s21ujvba/source/projects/09-routecraft
-Installed 27 packages in 1.40s
+   Building pp-routecraft @ file:///workspace/portfolio-verify-fhqniien/source/projects/09-routecraft
+      Built pp-routecraft @ file:///workspace/portfolio-verify-fhqniien/source/projects/09-routecraft
+Installed 27 packages in 1.80s
 41 files already formatted
 [09-routecraft] uv run --locked --python 3.14.8 ruff check .
 All checks passed!
@@ -12,34 +12,34 @@ Success: no issues found in 21 source files
 [09-routecraft] uv run --locked --python 3.14.8 pytest
 ============================= test session starts ==============================
 platform linux -- Python 3.14.8, pytest-9.1.1, pluggy-1.7.0
-rootdir: /workspace/portfolio-verify-s21ujvba/source/projects/09-routecraft
+rootdir: /workspace/portfolio-verify-fhqniien/source/projects/09-routecraft
 configfile: pyproject.toml
 testpaths: tests
 plugins: cov-7.1.0, hypothesis-6.170.1
-collected 74 items
+collected 75 items
 
-tests/acceptance/test_gates.py ...                                       [  4%]
-tests/integration/test_interfaces.py ............                        [ 20%]
-tests/property/test_oracle.py ..                                         [ 22%]
-tests/unit/test_replanning.py ......................                     [ 52%]
-tests/unit/test_search.py ...........                                    [ 67%]
+tests/acceptance/test_gates.py ....                                      [  5%]
+tests/integration/test_interfaces.py ............                        [ 21%]
+tests/property/test_oracle.py ..                                         [ 24%]
+tests/unit/test_replanning.py ......................                     [ 53%]
+tests/unit/test_search.py ...........                                    [ 68%]
 tests/unit/test_verifier.py ........................                     [100%]
 
-============================= 74 passed in 25.03s ==============================
+============================= 75 passed in 22.13s ==============================
 [09-routecraft] uv build --no-sources --python 3.14.8
 Building source distribution...
 Building wheel from source distribution...
 Successfully built dist/pp_routecraft-0.1.0.tar.gz
 Successfully built dist/pp_routecraft-0.1.0-py3-none-any.whl
-[09-routecraft] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/portfolio-verify-s21ujvba/source/scripts/wheel_smoke.py /workspace/portfolio-verify-s21ujvba/source/projects/09-routecraft pp_routecraft
+[09-routecraft] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/portfolio-verify-fhqniien/source/scripts/wheel_smoke.py /workspace/portfolio-verify-fhqniien/source/projects/09-routecraft pp_routecraft
 Using CPython 3.14.8
-Creating virtual environment at: /tmp/portfolio-wheel-nj_lqyvr/venv
-Activate with: source /tmp/portfolio-wheel-nj_lqyvr/venv/bin/activate
+Creating virtual environment at: /tmp/portfolio-wheel-u6qiasbw/venv
+Activate with: source /tmp/portfolio-wheel-u6qiasbw/venv/bin/activate
 Resolved 28 packages in 1ms
-Using Python 3.14.8 environment at: /tmp/portfolio-wheel-nj_lqyvr/venv
-Resolved 12 packages in 291ms
-Prepared 1 package in 23ms
-Installed 12 packages in 54ms
+Using Python 3.14.8 environment at: /tmp/portfolio-wheel-u6qiasbw/venv
+Resolved 12 packages in 669ms
+Prepared 1 package in 12ms
+Installed 12 packages in 184ms
  + contourpy==1.4.0
  + cycler==0.12.1
  + fonttools==4.67.0
@@ -48,9 +48,9 @@ Installed 12 packages in 54ms
  + numpy==2.5.4
  + packaging==26.3
  + pillow==13.0.0
- + pp-routecraft==0.1.0 (from file:///workspace/portfolio-verify-s21ujvba/source/projects/09-routecraft/dist/pp_routecraft-0.1.0-py3-none-any.whl)
+ + pp-routecraft==0.1.0 (from file:///workspace/portfolio-verify-fhqniien/source/projects/09-routecraft/dist/pp_routecraft-0.1.0-py3-none-any.whl)
  + pyparsing==3.3.3
  + python-dateutil==2.9.0.post0
  + six==1.17.0
-/tmp/portfolio-wheel-nj_lqyvr/venv/lib/python3.14/site-packages/pp_routecraft/__init__.py
-{"status": "FEASIBLE", "objective": [4, 657], "replanned": [4, 606], "output": "/tmp/portfolio-wheel-nj_lqyvr/owned-demo"}
+/tmp/portfolio-wheel-u6qiasbw/venv/lib/python3.14/site-packages/pp_routecraft/__init__.py
+{"status": "FEASIBLE", "objective": [4, 657], "replanned": [4, 606], "output": "/tmp/portfolio-wheel-u6qiasbw/owned-demo"}

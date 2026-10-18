@@ -2,11 +2,11 @@
   "schema_version": 1,
   "project": "routecraft",
   "interpreter": "3.13.16",
-  "verified_at_utc": "2026-10-18T01:48:14.693710+00:00",
-  "source_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+  "verified_at_utc": "2026-10-18T03:49:35.534863+00:00",
+  "source_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
   "source_dirty": false,
   "source_scope": "project",
-  "source_content_sha256": "183ee8796cff65012ca533165044c0d2731f9a6dc1cf9bc50bd22c4571ec41e7",
+  "source_content_sha256": "75771d0bde227d959163d644c0ffd95ed62cfc4c4e53b4ad337ef2679bc325ee",
   "source_inputs": [
     "projects/09-routecraft/.python-version",
     "projects/09-routecraft/README.md",
@@ -43,7 +43,7 @@
     "projects/09-routecraft/tests/unit/test_verifier.py",
     "projects/09-routecraft/uv.lock"
   ],
-  "root_contract_sha256": "5e4a948aa31fd81482d44fcca7340c9290393cbbb324f23802ce1c19b64dab1a",
+  "root_contract_sha256": "b6cd5e99e80442d13aa0c3b7d6c7423f181f6572242dab63f8f2d9f2597be363",
   "root_contract_inputs": [
     ".github/workflows/ci.yml",
     ".github/workflows/extended.yml",
@@ -91,7 +91,7 @@
         "routecraft"
       ],
       "exit_code": 0,
-      "seconds": 42.208046843000375,
+      "seconds": 41.44982907300073,
       "log": "routecraft-3.13.16-check.log"
     },
     {
@@ -102,7 +102,7 @@
         "routecraft"
       ],
       "exit_code": 0,
-      "seconds": 2.7002350470002057,
+      "seconds": 2.6970307230003527,
       "log": "routecraft-3.13.16-demo.log"
     },
     {
@@ -115,7 +115,7 @@
         "ci"
       ],
       "exit_code": 0,
-      "seconds": 2.7984074709993365,
+      "seconds": 2.1000993180005025,
       "log": "routecraft-3.13.16-benchmark.log"
     }
   ],

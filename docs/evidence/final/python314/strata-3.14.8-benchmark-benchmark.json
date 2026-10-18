@@ -12,7 +12,7 @@
   "limitations": [
     "Synthetic local filesystem workload, no power-loss simulation",
     "Five repetitions apply to commit comparisons; mixed workload runs once",
-    "Read amplification includes compaction and recovery reads; it is a conservative whole-workload ratio",
+    "Read amplification uses the first owner's counters through compaction; subsequent validation and reopened recovery reads are excluded",
     "ru_maxrss includes Python and independent dictionary oracle; Linux KiB conversion",
     "OS page cache is not controlled; concurrent host work can affect timing"
   ],
@@ -23,76 +23,76 @@
     "churn": {
       "disk_after_compaction": 19640,
       "disk_before_compaction": 427301,
-      "seconds": 1.2640118209997127
+      "seconds": 1.4288672790007695
     },
     "compaction_stall_seconds": [
-      0.04158058700022593
+      0.05912887399972533
     ],
     "disk_bytes": 527782,
     "durable_commit_comparison": {
       "sqlite_batch_1": {
-        "maximum_seconds": 0.1982537379999485,
-        "median_seconds": 0.13111724999998842,
-        "minimum_seconds": 0.11993207300020003,
-        "p95_seconds": 0.1982537379999485,
+        "maximum_seconds": 0.1473228859995288,
+        "median_seconds": 0.1215937840006518,
+        "minimum_seconds": 0.10392870800023957,
+        "p95_seconds": 0.1473228859995288,
         "raw_seconds": [
-          0.1264110580000306,
-          0.13111724999998842,
-          0.11993207300020003,
-          0.1982537379999485,
-          0.15526042299961773
+          0.10608982799931255,
+          0.10392870800023957,
+          0.1473228859995288,
+          0.13052630799938925,
+          0.1215937840006518
         ],
         "records": 200,
-        "records_per_second": 1525.3523087161884
+        "records_per_second": 1644.8209227449317
       },
       "sqlite_batch_100": {
-        "maximum_seconds": 0.0024407830001109687,
-        "median_seconds": 0.0018640859998413362,
-        "minimum_seconds": 0.0012253169998075464,
-        "p95_seconds": 0.0024407830001109687,
+        "maximum_seconds": 0.0022061359995859675,
+        "median_seconds": 0.0017786099997465499,
+        "minimum_seconds": 0.0013046259991824627,
+        "p95_seconds": 0.0022061359995859675,
         "raw_seconds": [
-          0.0024407830001109687,
-          0.0012253169998075464,
-          0.0013057179999123036,
-          0.0018640859998413362,
-          0.002239835000182211
+          0.0014554089993907837,
+          0.0017786099997465499,
+          0.0022061359995859675,
+          0.002025757999945199,
+          0.0013046259991824627
         ],
         "records": 200,
-        "records_per_second": 107291.18721830603
+        "records_per_second": 112447.36059535244
       },
       "strata_batch_1": {
-        "maximum_seconds": 0.15968797300001825,
-        "median_seconds": 0.11492983099969933,
-        "minimum_seconds": 0.09047815500025536,
-        "p95_seconds": 0.15968797300001825,
+        "maximum_seconds": 0.1528329710017715,
+        "median_seconds": 0.12603359799868485,
+        "minimum_seconds": 0.09184763199846202,
+        "p95_seconds": 0.1528329710017715,
         "raw_seconds": [
-          0.12633302699987325,
-          0.09047815500025536,
-          0.15968797300001825,
-          0.11492983099969933,
-          0.10325675100011722
+          0.10201289299948257,
+          0.09184763199846202,
+          0.1528329710017715,
+          0.13978893800049264,
+          0.12603359799868485
         ],
         "records": 200,
-        "records_per_second": 1740.1922395633142
+        "records_per_second": 1586.878444921385
       },
       "strata_batch_100": {
-        "maximum_seconds": 0.005474217000028148,
-        "median_seconds": 0.0036135999998805346,
-        "minimum_seconds": 0.0029264310001053673,
-        "p95_seconds": 0.005474217000028148,
+        "maximum_seconds": 0.0058292150006309384,
+        "median_seconds": 0.004000048998932471,
+        "minimum_seconds": 0.0027463900005386677,
+        "p95_seconds": 0.0058292150006309384,
         "raw_seconds": [
-          0.0036135999998805346,
-          0.004893529000128183,
-          0.003250635999847873,
-          0.0029264310001053673,
-          0.005474217000028148
+          0.0058292150006309384,
+          0.0036095609993935796,
+          0.0054613979991700035,
+          0.0027463900005386677,
+          0.004000048998932471
         ],
         "records": 200,
-        "records_per_second": 55346.46889711423
+        "records_per_second": 49999.38752084682
       }
     },
-    "initial_records_per_second": 60968.668993547726,
-    "initial_seconds": 0.03280373400002645,
+    "initial_records_per_second": 33943.41588473832,
+    "initial_seconds": 0.05892158899951028,
     "io_counters": {
       "active_snapshots": 0,
       "block_read_bytes": 752061,
@@ -107,27 +107,27 @@
       "sequence": 839,
       "table_bytes_written": 1285813,
       "tables": [
-        "table-3be77030c0054b4dbbbc983e35c03853.sst"
+        "table-4b1d32be52e34539a13d7ac497868783.sst"
       ],
       "wal_bytes_written": 762033,
       "writer_failed": false
     },
-    "peak_rss_bytes": 25018368,
+    "peak_rss_bytes": 24707072,
     "read_amplification_bytes_per_requested_value": 2.4875006615156647,
     "read_latency": {
-      "maximum_seconds": 0.000592299999880197,
-      "median_seconds": 1.0098000075231539e-05,
-      "minimum_seconds": 4.750999778480036e-06,
-      "p95_seconds": 3.0052000056457473e-05
+      "maximum_seconds": 0.0006040660009603016,
+      "median_seconds": 1.0072000804939307e-05,
+      "minimum_seconds": 4.569999873638153e-06,
+      "p95_seconds": 5.04749987157993e-05
     },
-    "recovery_seconds": 0.009167232000436343,
+    "recovery_seconds": 0.014382400000613416,
     "space_amplification": 1.06614010989011,
     "write_amplification": 2.723326218640495,
     "write_or_batch_latency": {
-      "maximum_seconds": 0.005598501000349643,
-      "median_seconds": 0.0005068570003459172,
-      "minimum_seconds": 0.00022169200019561686,
-      "p95_seconds": 0.0019112530003440042
+      "maximum_seconds": 0.012362767000013264,
+      "median_seconds": 0.0005281060002744198,
+      "minimum_seconds": 0.00018773000010696705,
+      "p95_seconds": 0.0021577190000243718
     }
   },
   "os": "Linux-6.18.55-x86_64-with-glibc2.41",
@@ -147,7 +147,7 @@
     "threads": 1,
     "value_bytes": 256
   },
-  "pid": 49923,
+  "pid": 79337,
   "profile": "ci",
   "project": "strata",
   "python": "3.14.8",
@@ -160,8 +160,8 @@
   ],
   "schema_version": 1,
   "seed": 1729,
-  "source_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
-  "source_content_sha256": "49730eb7670eb00c203a71f6754c0eccae7147c0ff033d5173d36f12419d5fc3",
+  "source_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+  "source_content_sha256": "eb9a834c5187df948f64f17df02fb7e6e8abbd5899beb5a08b168092e43e49d7",
   "source_dirty": false,
   "source_scope": "project",
   "status": "passed",

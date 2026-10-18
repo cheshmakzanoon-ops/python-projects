@@ -1,38 +1,32 @@
 # A10 Resonance status
 
-State: verifying; implementation and local matrix are ready for stable coordinator handoff. Source/docs frozen. Only coordinator-owned committed-snapshot verification and the exclusive standard workload remain.
+State: complete for the declared local acceptance scope. RE-01–RE-08, both required interpreter checks, independent numerical/MIDI review and the 600-second standard workload have accepted evidence. No project implementation blocker remains. Repository-level commit/push and remote CI reporting remain coordinator-owned.
 
-Development evidence source: Git HEAD `3f2c220333fce195c858fa1f08df21676dd51ff1`, dirty=true (implementation not yet integrated when measured); source-content SHA-256 `ff3adaf492028e4a921d049a5c9f8aa3cdc3af260cdea059883c2fd114b572d1`. See artifacts/development-ci-benchmark.json for exact source input list, root/lock hashes, versions, environment and thread settings. Generated artifacts and this status file are excluded from the content digest.
+The accepted standard [raw report](../../../docs/evidence/final/standard/resonance-3.14.8-benchmark-benchmark.json) and [wrapper](../../../docs/evidence/final/standard/resonance-3.14.8.json) tested clean commit `59443e2bcdfc6a1dd81f8334c108474eef2d3030`. The wrapper confirms unchanged executable source after execution and source-content hash `b8b1d5d2662ad6d12b76b83da99b08ed1e271bcc471e68b8c300e5f9439497d6`. The raw report's broader scope, including then-existing documentation, has hash `ff3adaf492028e4a921d049a5c9f8aa3cdc3af260cdea059883c2fd114b572d1`. Each lists its inputs; both record lock hash `8ac205930d14ebd160772d9950380e6e966aa61e740a0f3cd169c195f15cbefc`.
 
-## Completed locally
+## Accepted gates
 
-* RE-01: frozen MIDI40–88 ×44.1/48k grid, all 6,272 predetermined eligible frames voiced and within10c; conditional median0.0290c/p950.3812c. Explicit regression counts missing/unvoiced/NaN/Inf/zero/out-of-tolerance as failures and reports all-abstention conditional error as null.
-* RE-02: silence/empty/short/clipped/stereo antiphase/unsupported rates/nonfinite inputs and safe file boundaries.
-* RE-03: Hypothesis chunk/padding/flush oracle, four randomized full-phrase chunkings with identical frames, pitch, onset and note outputs; no timestamps shifted or duplicate flush frames.
-* RE-04: direct fixed-window squared-difference oracle; NumPy STFT/inverse versus independent SciPy reference at fixed1e-10/1e-11 tolerances.
-* RE-05: exact six clean pitches/onsets, zero extra/missed notes and no release/silence onsets; <=60ms onset/80ms offset gates. Additional adjacent same-pitch reattack regression.
-* RE-06: exact fixed insertion/deletion mapping, timing perturbation/uncertainty cases, continuous bend/vibrato retained as one event with spread.
-* RE-07: JSON/MIDI timing agreement, independent standard-MIDI byte checker plus mido round-trip; custom tempo and quantized-subtick rejection before writing.
-* RE-08: playable HTML for demo and arbitrary input, actual encoded audio/waveform/spectrogram/notes/reference/cents/confidence/spread, provenance and safe owned cleanup. Input buffers verified bounded in properties and full60-second CI run. The600-second standard execution is still pending coordinator's exclusive lease.
+* RE-01: all 6,272 predetermined MIDI 40–88 frames at 44.1/48 kHz were voiced and within 10 cents. Median absolute error was 0.0290458194 cents; p95 was 0.3812231044 cents. Missing, unvoiced, nonfinite, nonpositive and out-of-tolerance outputs count as failures; all-abstention conditional error is null.
+* RE-02: silence, empty/short recordings, clipping, antiphase stereo, unsupported rates, nonfinite samples and file boundaries are covered.
+* RE-03: Hypothesis framing/flush oracles and randomized full-phrase chunkings preserve exact frame positions and pitch/onset/note outputs.
+* RE-04: direct squared-difference and independent SciPy STFT/inverse checks meet the fixed 1e-10/1e-11 tolerances.
+* RE-05: six fixed clean pitches/onsets meet the predeclared onset/offset tolerances with no missing or extra notes or release/silence onsets. Adjacent same-pitch reattacks have a separate regression.
+* RE-06: the fixed insertion/deletion mapping, timing perturbation, uncertainty and continuous bend/vibrato cases pass.
+* RE-07: JSON/MIDI timing, independent byte parsing, mido round-trip, custom tempo and rejection of collapsed subtick intervals before writing pass.
+* RE-08: playable HTML/audio/plots/notes/reference/cents/confidence/provenance and safe cleanup pass; the accepted 600-second standard run processes 112,500 frames with peak retained sample buffer 9,984 <= 10,239.
 
-## Commands and results
+## Compatibility, review and measurements
 
-Environment: uv0.12.23, CPython3.13.16 and3.14.8 on Linux; OMP/OPENBLAS/MKL thread variables=1; default pin now3.14.8. Both Python versions use the same committed uv.lock resolutions. CPython3.13 remains required.
+The clean [Python 3.13.16 wrapper](../../../docs/evidence/final/python313/resonance-3.13.16.json) and [Python 3.14.8 wrapper](../../../docs/evidence/final/python314/resonance-3.14.8.json) record successful format/lint, strict mypy, 25 tests each, wheel/sdist, clean-wheel demo, seeded demo and CI benchmark at commit `7114e39c7e9e8af177e84fe8cd990fe5a09bde63`. Their executable project hash matches the standard wrapper above. Python 3.14.8 is the default; 3.13.16 remains required. The [independent review record](../../../docs/evidence/INDEPENDENT_REVIEW.md) confirms numerical/export checks and the corrected same-pitch reattack, zero-tick ordering and nondefault-tempo reproductions.
 
-* `uv run --locked --python 3.13.16 ruff format --check .` / `ruff check .` / `mypy src`: exit0.
-* Same quality commands via `UV_PROJECT_ENVIRONMENT=/tmp/resonance-314 uv run --locked --python 3.14.8 ...`: exit0.
-* Python3.13 `pytest -q --cov=pp_resonance --cov-branch --cov-report=term-missing --cov-report=json:results/coverage313.json`:25 passed in24.67s;94.01% statements,92.07% branches,93.54% combined; no exclusions. Numerical DSP modules97–100%; benchmark orchestration30% is covered by real CLI execution rather than mocked timing tests.
-* Python3.14 `pytest -q`:25 passed in14.26s.
-* `uv build`: exit0, wheel and sdist produced.
-* Exact locked runtime requirements exported with hashes, installed with `uv pip install --require-hashes` into fresh `/tmp/resonance-wheel313` and `/tmp/resonance-wheel314`; final rebuilt wheel reinstalled with no dependencies. Both final `python -m pp_resonance.cli demo --output /tmp/resonance-reviewedwheelVERSION --seed 1729` run from `/tmp`: exit0, six notes/MIDI checked, playable reports written outside checkout.
-* Final Python3.14 `python -m pp_resonance.cli benchmark --profile ci --output /workspace/resonance-finalci --seed 1729`: exit0, one warmup/five measured60s challenge runs, median2.96335s, measured factor0.049389; peak RSS84,578,304 bytes, sample buffer9,984<=10,239. Source and root hashes unchanged during run. Challenge separately reports78 matched notes/0 extras/0 misses,79 onset events/1 extra,3 bend-related >50c alignment deviations; no false voiced silence frames. Synthetic metrics do not establish real-recording accuracy.
+Standard parameters: seed 1729; 600 seconds at 48 kHz; frame/hop/block 2,048/256/8,192 samples; one process; OMP/OpenBLAS/MKL threads one; one four-second kernel warmup and five full measurements. Processing times were 24.818886651, 25.890807995, 25.151596931, 25.449761711 and 24.508211711 seconds. Median was 25.151596931 seconds, interpolated p95 25.802598738 seconds, measured processing/audio-duration ratio 0.0419193282, and throughput 23.855344122 audio seconds per second. Recorded peak RSS was 151,752,704 bytes. All four correctness checks passed.
 
-## Independent review corrections
+Challenge results remain visible: 798 truth/detected/matched note events with no note misses/extras; 800 detected onset events, including two extras; 18 aligned summaries over 50 cents from nominal pitch; alignment cost 31.07. Matched onset mean absolute error was 5.1002506 ms. The 40,417 eligible voiced frames had no misses and all tracked analytic instantaneous frequency within 10 cents; 43,306 fully silent frames had no false voicing. These results do not promise zero transcription errors. Onset perturbations are shared by generated audio and its reference, so attack error measures detection relative to performed synthetic attacks. Nominal note-summary deviations and instantaneous bend/vibrato tracking use different pitch references; see [BENCHMARKS.md](BENCHMARKS.md).
 
-A05 independently found and supplied three reproducible defects: contiguous same-pitch attacks merged despite two onsets; a one-sample interval rounded to zero ticks and serialized invalid MIDI; the byte checker rejected valid nondefault tempos. All reproduced, fixed and covered by meaningful regressions plus the full interpreter matrix. Earlier original flux implementation also detected releases; the rising-energy gate and fixture regression exclude that failure.
+## Historical captures and limits
 
-## Remaining work and restart
+[Development CI evidence](../artifacts/development-ci-benchmark.json), [verification](../artifacts/development-verification.json), and [sample outputs](../artifacts/sample-manifest.json) retain their original dirty-source identifiers; they have not been relabeled as final measurements. Historical development coverage was 94.01% statements and 92.07% branches, without exclusions.
 
-Coordinator: commit stable A10 source, set manifest default Python3.14.8 (both3.13/3.14 required), clone that exact commit immutably with Git metadata, rerun required gates/clean wheel and standard600s benchmark serially. No worker standard run has been started. No credentials/services/shared dependencies are missing. There are no active source edits, failing commands or unresolved local code blockers.
+Only sample input buffers have a fixed bound. Retained trajectories/events and alignment state grow with duration/event counts. RSS is the recorded high-water sample after the timed processing, alignment and fixed-grid evaluation, not a constant bound on all later reporting allocations. Real-guitar corpus accuracy, polyphony, extreme-noise behavior and hard real-time operation remain outside the validated synthetic guarantees.
 
-Demo: `uv run --locked python -m pp_resonance.cli demo --output /tmp/resonance-demo --seed 1729`; no service restart needed. Standard: same CLI `benchmark --profile standard --output ABS --seed 1729`. Retained output records and DP state grow with duration/event counts; only sample input buffers are bounded. Real guitar, polyphony, extreme noise and hard real-time behavior remain outside validated synthetic guarantees.
+Documentation handoff: only CASE_STUDY.md, BENCHMARKS.md, AGENT_STATUS.md and ACCEPTANCE.md were updated to describe accepted evidence. Source, tests, dependencies and historical captures are unchanged. No new tests or benchmarks were run for this documentation update; all writes are paused for coordinator review.

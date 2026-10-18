@@ -1,2 +1,2 @@
-[09-routecraft] uv run --locked --python 3.14.8 python -m pp_routecraft.cli demo --output /workspace/portfolio-verify-s21ujvba/source/.local/routecraft/demo --seed 1729
-{"status": "FEASIBLE", "objective": [4, 657], "replanned": [4, 606], "output": "/workspace/portfolio-verify-s21ujvba/source/.local/routecraft/demo"}
+[09-routecraft] uv run --locked --python 3.14.8 python -m pp_routecraft.cli demo --output /workspace/portfolio-verify-fhqniien/source/.local/routecraft/demo --seed 1729
+{"status": "FEASIBLE", "objective": [4, 657], "replanned": [4, 606], "output": "/workspace/portfolio-verify-fhqniien/source/.local/routecraft/demo"}

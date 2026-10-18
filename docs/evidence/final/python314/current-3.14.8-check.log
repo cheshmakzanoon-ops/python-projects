@@ -1,10 +1,10 @@
 [03-current] uv run --locked --python 3.14.8 ruff format --check .
 Using CPython 3.14.8
 Creating virtual environment at: .venv
-   Building pp-current @ file:///workspace/portfolio-verify-s21ujvba/source/projects/03-current
-      Built pp-current @ file:///workspace/portfolio-verify-s21ujvba/source/projects/03-current
-Installed 23 packages in 661ms
-39 files already formatted
+   Building pp-current @ file:///workspace/portfolio-verify-fhqniien/source/projects/03-current
+      Built pp-current @ file:///workspace/portfolio-verify-fhqniien/source/projects/03-current
+Installed 23 packages in 1.94s
+40 files already formatted
 [03-current] uv run --locked --python 3.14.8 ruff check .
 All checks passed!
 [03-current] uv run --locked --python 3.14.8 mypy src
@@ -12,43 +12,44 @@ Success: no issues found in 21 source files
 [03-current] uv run --locked --python 3.14.8 pytest
 ============================= test session starts ==============================
 platform linux -- Python 3.14.8, pytest-9.1.1, pluggy-1.7.0
-rootdir: /workspace/portfolio-verify-s21ujvba/source/projects/03-current
+rootdir: /workspace/portfolio-verify-fhqniien/source/projects/03-current
 configfile: pyproject.toml
 testpaths: tests
 plugins: cov-7.1.0, hypothesis-6.170.1
-collected 30 items
+collected 32 items
 
 tests/acceptance/test_cli.py .                                           [  3%]
-tests/integration/test_persistence.py ........                           [ 30%]
-tests/property/test_admission.py .                                       [ 33%]
-tests/property/test_oracle.py .                                          [ 36%]
-tests/unit/test_semantics.py ....                                        [ 50%]
+tests/integration/test_persistence.py ........                           [ 28%]
+tests/property/test_admission.py .                                       [ 31%]
+tests/property/test_oracle.py .                                          [ 34%]
+tests/unit/test_benchmark_memory.py ..                                   [ 40%]
+tests/unit/test_semantics.py ....                                        [ 53%]
 tests/unit/test_validation.py ...............                            [100%]
 
-============================== 30 passed in 6.52s ==============================
+============================= 32 passed in 14.77s ==============================
 [03-current] uv build --no-sources --python 3.14.8
 Building source distribution...
 Building wheel from source distribution...
 Successfully built dist/pp_current-0.1.0.tar.gz
 Successfully built dist/pp_current-0.1.0-py3-none-any.whl
-[03-current] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/portfolio-verify-s21ujvba/source/scripts/wheel_smoke.py /workspace/portfolio-verify-s21ujvba/source/projects/03-current pp_current
+[03-current] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/portfolio-verify-fhqniien/source/scripts/wheel_smoke.py /workspace/portfolio-verify-fhqniien/source/projects/03-current pp_current
 Using CPython 3.14.8
-Creating virtual environment at: /tmp/portfolio-wheel-8sulqyeo/venv
-Activate with: source /tmp/portfolio-wheel-8sulqyeo/venv/bin/activate
-Resolved 24 packages in 1ms
-Using Python 3.14.8 environment at: /tmp/portfolio-wheel-8sulqyeo/venv
-Resolved 8 packages in 8ms
-Prepared 1 package in 10ms
-Installed 8 packages in 62ms
+Creating virtual environment at: /tmp/portfolio-wheel-7cl9g31_/venv
+Activate with: source /tmp/portfolio-wheel-7cl9g31_/venv/bin/activate
+Resolved 24 packages in 10ms
+Using Python 3.14.8 environment at: /tmp/portfolio-wheel-7cl9g31_/venv
+Resolved 8 packages in 742ms
+Prepared 1 package in 14ms
+Installed 8 packages in 12ms
  + annotated-doc==0.0.5
  + markdown-it-py==4.2.0
  + mdurl==0.1.2
- + pp-current==0.1.0 (from file:///workspace/portfolio-verify-s21ujvba/source/projects/03-current/dist/pp_current-0.1.0-py3-none-any.whl)
+ + pp-current==0.1.0 (from file:///workspace/portfolio-verify-fhqniien/source/projects/03-current/dist/pp_current-0.1.0-py3-none-any.whl)
  + pygments==2.21.0
  + rich==15.0.0
  + shellingham==1.5.4
  + typer==0.27.3
-/tmp/portfolio-wheel-8sulqyeo/venv/lib/python3.14/site-packages/pp_current/__init__.py
+/tmp/portfolio-wheel-7cl9g31_/venv/lib/python3.14/site-packages/pp_current/__init__.py
 {
   "events": 10000,
   "records": 10046,
@@ -59,17 +60,17 @@ Installed 8 packages in 62ms
   },
   "outputs": 25345,
   "oracle_matches": true,
-  "processing_seconds": 1.3117545879999852,
+  "processing_seconds": 2.0018317840003874,
   "checkpoint_seconds": [
-    0.22101930300004824,
-    0.0404557809997641
+    0.5970705470008397,
+    0.05426694999914616
   ],
   "max_watermark_lag_ms": 101900,
   "max_finalization_lag_ms": 113000,
   "controlled_crash_exit": 73,
-  "admission_seconds": 0.578125185999852,
-  "throughput_events_s": 7623.377186160154,
-  "restore_seconds": 0.00011951199985560379,
+  "admission_seconds": 1.5959502429996064,
+  "throughput_events_s": 4995.424730451809,
+  "restore_seconds": 0.000129414998809807,
   "buffer_peak": 48,
   "state_peak": 4560,
   "watermark": 9223372036854775807,

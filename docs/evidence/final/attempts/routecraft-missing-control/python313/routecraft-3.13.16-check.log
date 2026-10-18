@@ -1,0 +1,57 @@
+[09-routecraft] uv run --locked --python 3.13.16 ruff format --check .
+Using CPython 3.13.16
+Creating virtual environment at: .venv
+   Building pp-routecraft @ file:///workspace/portfolio-verify-q_j50t9a/source/projects/09-routecraft
+      Built pp-routecraft @ file:///workspace/portfolio-verify-q_j50t9a/source/projects/09-routecraft
+Installed 27 packages in 872ms
+41 files already formatted
+[09-routecraft] uv run --locked --python 3.13.16 ruff check .
+All checks passed!
+[09-routecraft] uv run --locked --python 3.13.16 mypy src
+Success: no issues found in 21 source files
+[09-routecraft] uv run --locked --python 3.13.16 pytest
+============================= test session starts ==============================
+platform linux -- Python 3.13.16, pytest-9.1.1, pluggy-1.7.0
+rootdir: /workspace/portfolio-verify-q_j50t9a/source/projects/09-routecraft
+configfile: pyproject.toml
+testpaths: tests
+plugins: cov-7.1.0, hypothesis-6.170.1
+collected 74 items
+
+tests/acceptance/test_gates.py ...                                       [  4%]
+tests/integration/test_interfaces.py ............                        [ 20%]
+tests/property/test_oracle.py ..                                         [ 22%]
+tests/unit/test_replanning.py ......................                     [ 52%]
+tests/unit/test_search.py ...........                                    [ 67%]
+tests/unit/test_verifier.py ........................                     [100%]
+
+============================= 74 passed in 24.63s ==============================
+[09-routecraft] uv build --no-sources --python 3.13.16
+Building source distribution...
+Building wheel from source distribution...
+Successfully built dist/pp_routecraft-0.1.0.tar.gz
+Successfully built dist/pp_routecraft-0.1.0-py3-none-any.whl
+[09-routecraft] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/portfolio-verify-q_j50t9a/source/scripts/wheel_smoke.py /workspace/portfolio-verify-q_j50t9a/source/projects/09-routecraft pp_routecraft
+Using CPython 3.13.16
+Creating virtual environment at: /tmp/portfolio-wheel-co11w3zv/venv
+Activate with: source /tmp/portfolio-wheel-co11w3zv/venv/bin/activate
+Using CPython 3.14.8
+Resolved 28 packages in 1ms
+Using Python 3.13.16 environment at: /tmp/portfolio-wheel-co11w3zv/venv
+Resolved 12 packages in 10ms
+Prepared 1 package in 19ms
+Installed 12 packages in 78ms
+ + contourpy==1.4.0
+ + cycler==0.12.1
+ + fonttools==4.67.0
+ + kiwisolver==1.5.1
+ + matplotlib==3.11.2
+ + numpy==2.5.4
+ + packaging==26.3
+ + pillow==13.0.0
+ + pp-routecraft==0.1.0 (from file:///workspace/portfolio-verify-q_j50t9a/source/projects/09-routecraft/dist/pp_routecraft-0.1.0-py3-none-any.whl)
+ + pyparsing==3.3.3
+ + python-dateutil==2.9.0.post0
+ + six==1.17.0
+/tmp/portfolio-wheel-co11w3zv/venv/lib/python3.13/site-packages/pp_routecraft/__init__.py
+{"status": "FEASIBLE", "objective": [4, 657], "replanned": [4, 606], "output": "/tmp/portfolio-wheel-co11w3zv/owned-demo"}

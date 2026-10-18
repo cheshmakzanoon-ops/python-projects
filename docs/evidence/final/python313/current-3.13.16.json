@@ -2,11 +2,11 @@
   "schema_version": 1,
   "project": "current",
   "interpreter": "3.13.16",
-  "verified_at_utc": "2026-10-18T01:42:45.617667+00:00",
-  "source_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+  "verified_at_utc": "2026-10-18T03:48:48.903116+00:00",
+  "source_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
   "source_dirty": false,
   "source_scope": "project",
-  "source_content_sha256": "0e2a2b3cf102109102599055e7fbe0f591f7fbb78df02eb4374ed5393315d696",
+  "source_content_sha256": "c8f3435c518bd48e45805db9a11c8d91d08108d59471f10e776735d7f3106eca",
   "source_inputs": [
     "projects/03-current/.python-version",
     "projects/03-current/README.md",
@@ -39,11 +39,12 @@
     "projects/03-current/tests/integration/test_persistence.py",
     "projects/03-current/tests/property/test_admission.py",
     "projects/03-current/tests/property/test_oracle.py",
+    "projects/03-current/tests/unit/test_benchmark_memory.py",
     "projects/03-current/tests/unit/test_semantics.py",
     "projects/03-current/tests/unit/test_validation.py",
     "projects/03-current/uv.lock"
   ],
-  "root_contract_sha256": "5e4a948aa31fd81482d44fcca7340c9290393cbbb324f23802ce1c19b64dab1a",
+  "root_contract_sha256": "b6cd5e99e80442d13aa0c3b7d6c7423f181f6572242dab63f8f2d9f2597be363",
   "root_contract_inputs": [
     ".github/workflows/ci.yml",
     ".github/workflows/extended.yml",
@@ -91,7 +92,7 @@
         "current"
       ],
       "exit_code": 0,
-      "seconds": 19.58908791900012,
+      "seconds": 48.082944470001166,
       "log": "current-3.13.16-check.log"
     },
     {
@@ -102,7 +103,7 @@
         "current"
       ],
       "exit_code": 0,
-      "seconds": 3.857970896000097,
+      "seconds": 5.474902330999612,
       "log": "current-3.13.16-demo.log"
     },
     {
@@ -115,7 +116,7 @@
         "ci"
       ],
       "exit_code": 0,
-      "seconds": 32.05759024000008,
+      "seconds": 21.27414517299985,
       "log": "current-3.13.16-benchmark.log"
     }
   ],

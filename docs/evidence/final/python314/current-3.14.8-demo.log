@@ -1,4 +1,4 @@
-[03-current] uv run --locked --python 3.14.8 python -m pp_current.cli demo --output /workspace/portfolio-verify-s21ujvba/source/.local/current/demo --seed 1729
+[03-current] uv run --locked --python 3.14.8 python -m pp_current.cli demo --output /workspace/portfolio-verify-fhqniien/source/.local/current/demo --seed 1729
 {
   "events": 10000,
   "records": 10046,
@@ -9,17 +9,17 @@
   },
   "outputs": 25345,
   "oracle_matches": true,
-  "processing_seconds": 1.292646866999803,
+  "processing_seconds": 1.7868661660013458,
   "checkpoint_seconds": [
-    0.2956416270003501,
-    0.044525409000016225
+    0.2740827369998442,
+    0.058929607999743894
   ],
   "max_watermark_lag_ms": 101900,
   "max_finalization_lag_ms": 113000,
   "controlled_crash_exit": 73,
-  "admission_seconds": 0.4321675520000099,
-  "throughput_events_s": 7736.064856761474,
-  "restore_seconds": 0.00012500499997258885,
+  "admission_seconds": 0.3431659750003746,
+  "throughput_events_s": 5596.3900320403,
+  "restore_seconds": 0.0001471919986215653,
   "buffer_peak": 48,
   "state_peak": 4560,
   "watermark": 9223372036854775807,

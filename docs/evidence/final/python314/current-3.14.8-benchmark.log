@@ -1,11 +1,11 @@
-[03-current] uv run --locked --python 3.14.8 python -m pp_current.cli benchmark --output /workspace/portfolio-verify-s21ujvba/source/.local/current/benchmark --seed 1729 --profile ci
+[03-current] uv run --locked --python 3.14.8 python -m pp_current.cli benchmark --output /workspace/portfolio-verify-fhqniien/source/.local/current/benchmark --seed 1729 --profile ci
 {
   "schema_version": 1,
   "project": "current",
-  "source_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+  "source_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
   "source_dirty": false,
   "source_scope": "project",
-  "source_content_sha256": "ababa3cb1e6836489b8fe1d0f475ecbcd2cc35e63b74aab2d030334b7a10491b",
+  "source_content_sha256": "903fc1bb243389940ce9f4b53c392fa962e08d08d2de1406c92880b6f90b62eb",
   "root_contract_sha256": "2fe52e3770f408debf487d4c075ce5261504f6e6ac72e897146d08fe869182c2",
   "lockfile_sha256": "baf15ac83a35752ad671410a6466a49a8b6f5b43d6210beed3cb3bd6982239a3",
   "python": "3.14.8",
@@ -39,17 +39,17 @@
         },
         "outputs": 25345,
         "oracle_matches": true,
-        "processing_seconds": 1.7430991109999923,
+        "processing_seconds": 1.9050002450003376,
         "checkpoint_seconds": [
-          0.2806774409996251,
-          0.05807520899998053
+          0.3593993340000452,
+          0.05051989800085721
         ],
         "max_watermark_lag_ms": 101900,
         "max_finalization_lag_ms": 113000,
         "controlled_crash_exit": null,
-        "admission_seconds": 0.6202154200000223,
-        "throughput_events_s": 5736.90843905206,
-        "restore_seconds": 0.00019770400012930622,
+        "admission_seconds": 1.1611241289992904,
+        "throughput_events_s": 5249.343156907693,
+        "restore_seconds": 0.00015457399967999663,
         "buffer_peak": 48,
         "state_peak": 4560,
         "watermark": 9223372036854775807,
@@ -65,17 +65,17 @@
         },
         "outputs": 25345,
         "oracle_matches": true,
-        "processing_seconds": 1.649996476999604,
+        "processing_seconds": 2.132411572998535,
         "checkpoint_seconds": [
-          0.26762621699981537,
-          0.04260449000003064
+          0.43961438999940583,
+          0.07313306600008218
         ],
         "max_watermark_lag_ms": 101900,
         "max_finalization_lag_ms": 113000,
         "controlled_crash_exit": null,
-        "admission_seconds": 0.6129413480002768,
-        "throughput_events_s": 6060.619000947358,
-        "restore_seconds": 0.0005756170003223815,
+        "admission_seconds": 0.5019259569999122,
+        "throughput_events_s": 4689.526227780827,
+        "restore_seconds": 0.00014080100118007977,
         "buffer_peak": 48,
         "state_peak": 4560,
         "watermark": 9223372036854775807,
@@ -91,17 +91,17 @@
         },
         "outputs": 25345,
         "oracle_matches": true,
-        "processing_seconds": 2.1366195670002526,
+        "processing_seconds": 1.763143192998541,
         "checkpoint_seconds": [
-          0.6160869969999112,
-          0.07084239699997852
+          0.48192269500032126,
+          0.07288075600081356
         ],
         "max_watermark_lag_ms": 101900,
         "max_finalization_lag_ms": 113000,
         "controlled_crash_exit": null,
-        "admission_seconds": 0.5851242529997762,
-        "throughput_events_s": 4680.29037758916,
-        "restore_seconds": 0.00013116399986756733,
+        "admission_seconds": 0.3689793239991559,
+        "throughput_events_s": 5671.689083286087,
+        "restore_seconds": 0.0005434559989225818,
         "buffer_peak": 48,
         "state_peak": 4560,
         "watermark": 9223372036854775807,
@@ -117,17 +117,17 @@
         },
         "outputs": 25345,
         "oracle_matches": true,
-        "processing_seconds": 2.4928959579997354,
+        "processing_seconds": 1.6243150120008067,
         "checkpoint_seconds": [
-          0.5305571949998011,
-          0.07516345000021829
+          0.4535298770006193,
+          0.06799450700054877
         ],
         "max_watermark_lag_ms": 101900,
         "max_finalization_lag_ms": 113000,
         "controlled_crash_exit": null,
-        "admission_seconds": 0.7085683430000245,
-        "throughput_events_s": 4011.3988583879204,
-        "restore_seconds": 0.00013702299975193455,
+        "admission_seconds": 0.38296503799938364,
+        "throughput_events_s": 6156.441285168048,
+        "restore_seconds": 0.00016669199976604432,
         "buffer_peak": 48,
         "state_peak": 4560,
         "watermark": 9223372036854775807,
@@ -143,17 +143,17 @@
         },
         "outputs": 25345,
         "oracle_matches": true,
-        "processing_seconds": 1.4990938820001247,
+        "processing_seconds": 1.7945439539998915,
         "checkpoint_seconds": [
-          0.2679753580000579,
-          0.044367697999859956
+          0.49879431599947566,
+          0.07199693899929116
         ],
         "max_watermark_lag_ms": 101900,
         "max_finalization_lag_ms": 113000,
         "controlled_crash_exit": null,
-        "admission_seconds": 0.4174136940000608,
-        "throughput_events_s": 6670.696291987914,
-        "restore_seconds": 0.00015062400007082033,
+        "admission_seconds": 0.38165932099946076,
+        "throughput_events_s": 5572.446402168539,
+        "restore_seconds": 0.00026936500034935307,
         "buffer_peak": 48,
         "state_peak": 4560,
         "watermark": 9223372036854775807,
@@ -170,24 +170,24 @@
       },
       "outputs": 43714,
       "oracle_matches": true,
-      "processing_seconds": 7.085673561000021,
+      "processing_seconds": 2.540958485000374,
       "checkpoint_seconds": [
-        1.7511149929996463,
-        0.05058291300019846
+        1.0306102350004949,
+        0.03269355200063728
       ],
       "max_watermark_lag_ms": 101900,
       "max_finalization_lag_ms": 113000,
       "controlled_crash_exit": null,
-      "admission_seconds": 0.5919507020003039,
-      "throughput_events_s": 1411.2984339330292,
-      "restore_seconds": 0.00018110400014847983,
+      "admission_seconds": 0.599144403999162,
+      "throughput_events_s": 3935.5227797035527,
+      "restore_seconds": 0.00012984899876755662,
       "buffer_peak": 89,
       "state_peak": 2891,
       "watermark": 9223372036854775807,
       "disk_bytes": 50386488
     },
-    "peak_process_rss_bytes": 116346880,
-    "median_throughput": 5736.90843905206
+    "peak_process_rss_bytes": 166445056,
+    "median_throughput": 5572.446402168539
   },
   "correctness_checks": {
     "reconciled": true

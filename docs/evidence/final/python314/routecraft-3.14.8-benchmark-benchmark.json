@@ -1,6 +1,7 @@
 {
   "correctness_checks": {
     "all_search_trials_feasible": true,
+    "no_improvement_control": true,
     "replanning": true,
     "source_stable": true,
     "tiny_exact": true
@@ -16,8 +17,8 @@
         "baseline": [
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.04130143499969563,
-            "first_feasible_seconds": 0.0016506599995409488,
+            "elapsed_seconds": 0.04407171499951801,
+            "first_feasible_seconds": 0.0019354169999132864,
             "iterations": 20,
             "objective": [
               4,
@@ -52,8 +53,8 @@
           },
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.038953150999986974,
-            "first_feasible_seconds": 0.002118090999829292,
+            "elapsed_seconds": 0.03746489199875214,
+            "first_feasible_seconds": 0.0016829050000524148,
             "iterations": 20,
             "objective": [
               4,
@@ -88,8 +89,8 @@
           },
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.042589985000631714,
-            "first_feasible_seconds": 0.0016189580001082504,
+            "elapsed_seconds": 0.04340932999912184,
+            "first_feasible_seconds": 0.0016780610003479524,
             "iterations": 20,
             "objective": [
               4,
@@ -124,8 +125,8 @@
           },
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.04006518200003484,
-            "first_feasible_seconds": 0.0016463829997519497,
+            "elapsed_seconds": 0.04222170299908612,
+            "first_feasible_seconds": 0.0020163899989711354,
             "iterations": 20,
             "objective": [
               4,
@@ -160,8 +161,8 @@
           },
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.049553036999895994,
-            "first_feasible_seconds": 0.0019612340001913253,
+            "elapsed_seconds": 0.0405494490005367,
+            "first_feasible_seconds": 0.0018993569992744597,
             "iterations": 20,
             "objective": [
               4,
@@ -211,8 +212,8 @@
         "search": [
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.03622472600000037,
-            "first_feasible_seconds": 0.002259728000353789,
+            "elapsed_seconds": 0.03487979599958635,
+            "first_feasible_seconds": 0.002562866000516806,
             "iterations": 20,
             "objective": [
               4,
@@ -278,8 +279,8 @@
           },
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.03656300100010412,
-            "first_feasible_seconds": 0.0016252719997282838,
+            "elapsed_seconds": 0.03939622299913026,
+            "first_feasible_seconds": 0.0018586530004540691,
             "iterations": 20,
             "objective": [
               4,
@@ -355,8 +356,8 @@
           },
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.04045628299991222,
-            "first_feasible_seconds": 0.001979640999707044,
+            "elapsed_seconds": 0.0400791140000365,
+            "first_feasible_seconds": 0.0032694969995645806,
             "iterations": 20,
             "objective": [
               4,
@@ -437,8 +438,8 @@
           },
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.02667594300055498,
-            "first_feasible_seconds": 0.0016074850000222796,
+            "elapsed_seconds": 0.025305355999080348,
+            "first_feasible_seconds": 0.0019086009997408837,
             "iterations": 20,
             "objective": [
               4,
@@ -504,8 +505,8 @@
           },
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.03560027599996829,
-            "first_feasible_seconds": 0.002312416000677331,
+            "elapsed_seconds": 0.0346429689998331,
+            "first_feasible_seconds": 0.0017115380014729453,
             "iterations": 20,
             "objective": [
               4,
@@ -583,14 +584,14 @@
         "search_feasible_rate": 1.0,
         "seed": 1729,
         "tight_windows": false,
-        "verifier_seconds_median": 8.534800053894287e-05
+        "verifier_seconds_median": 8.763999903749209e-05
       },
       {
         "baseline": [
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.04078553399995144,
-            "first_feasible_seconds": 0.0023965800000951276,
+            "elapsed_seconds": 0.04401520099963818,
+            "first_feasible_seconds": 0.001814410999941174,
             "iterations": 20,
             "objective": [
               4,
@@ -625,8 +626,8 @@
           },
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.045132737000130874,
-            "first_feasible_seconds": 0.002086090000375407,
+            "elapsed_seconds": 0.040395334999629995,
+            "first_feasible_seconds": 0.00257701000009547,
             "iterations": 20,
             "objective": [
               4,
@@ -661,8 +662,8 @@
           },
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.04003376600030606,
-            "first_feasible_seconds": 0.0019850369999403483,
+            "elapsed_seconds": 0.045870320000176434,
+            "first_feasible_seconds": 0.0022397390002879547,
             "iterations": 20,
             "objective": [
               4,
@@ -697,8 +698,8 @@
           },
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.07708787699993991,
-            "first_feasible_seconds": 0.0038579000001845998,
+            "elapsed_seconds": 0.04018950399949972,
+            "first_feasible_seconds": 0.00158356899919454,
             "iterations": 20,
             "objective": [
               4,
@@ -733,8 +734,8 @@
           },
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.07973155000036058,
-            "first_feasible_seconds": 0.003692467000291799,
+            "elapsed_seconds": 0.03951760600102716,
+            "first_feasible_seconds": 0.0020743070017488208,
             "iterations": 20,
             "objective": [
               4,
@@ -784,8 +785,8 @@
         "search": [
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.030559786999219796,
-            "first_feasible_seconds": 0.0020872420000159764,
+            "elapsed_seconds": 0.03450055099892779,
+            "first_feasible_seconds": 0.001954466999450233,
             "iterations": 20,
             "objective": [
               4,
@@ -851,8 +852,8 @@
           },
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.0394681589996253,
-            "first_feasible_seconds": 0.0022427610001614084,
+            "elapsed_seconds": 0.03842798299956485,
+            "first_feasible_seconds": 0.0018151819986087503,
             "iterations": 20,
             "objective": [
               4,
@@ -928,8 +929,8 @@
           },
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.056795182000314526,
-            "first_feasible_seconds": 0.0017997240001932369,
+            "elapsed_seconds": 0.03683588900094037,
+            "first_feasible_seconds": 0.0016032530002121348,
             "iterations": 20,
             "objective": [
               4,
@@ -1010,8 +1011,8 @@
           },
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.057756932000302186,
-            "first_feasible_seconds": 0.004848151000260259,
+            "elapsed_seconds": 0.0375198410001758,
+            "first_feasible_seconds": 0.002709373000470805,
             "iterations": 20,
             "objective": [
               4,
@@ -1077,8 +1078,8 @@
           },
           {
             "diagnostics": [],
-            "elapsed_seconds": 0.07496536199960246,
-            "first_feasible_seconds": 0.0037441670001499006,
+            "elapsed_seconds": 0.03617006099921127,
+            "first_feasible_seconds": 0.002058525999018457,
             "iterations": 20,
             "objective": [
               4,
@@ -1156,11 +1157,569 @@
         "search_feasible_rate": 1.0,
         "seed": 1729,
         "tight_windows": true,
-        "verifier_seconds_median": 0.0001570839995110873
+        "verifier_seconds_median": 9.250999937648885e-05
+      }
+    ],
+    "controls": [
+      {
+        "all_plans_independently_verified": true,
+        "baseline": [
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.0024004539991437923,
+            "first_feasible_seconds": 0.0002042760006588651,
+            "iterations": 20,
+            "objective": [
+              1,
+              8
+            ],
+            "operator_counts": [
+              [
+                "construction_restarts",
+                20
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                1,
+                8
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.0023517240006185602,
+            "first_feasible_seconds": 8.726600026420783e-05,
+            "iterations": 20,
+            "objective": [
+              1,
+              8
+            ],
+            "operator_counts": [
+              [
+                "construction_restarts",
+                20
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                1,
+                8
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.00269938900055422,
+            "first_feasible_seconds": 9.036800111061893e-05,
+            "iterations": 20,
+            "objective": [
+              1,
+              8
+            ],
+            "operator_counts": [
+              [
+                "construction_restarts",
+                20
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                1,
+                8
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.0020762469994224375,
+            "first_feasible_seconds": 8.454899943899363e-05,
+            "iterations": 20,
+            "objective": [
+              1,
+              8
+            ],
+            "operator_counts": [
+              [
+                "construction_restarts",
+                20
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                1,
+                8
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.00216045700108225,
+            "first_feasible_seconds": 8.84850014699623e-05,
+            "iterations": 20,
+            "objective": [
+              1,
+              8
+            ],
+            "operator_counts": [
+              [
+                "construction_restarts",
+                20
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                1,
+                8
+              ]
+            ]
+          }
+        ],
+        "budget": {
+          "iterations": 20,
+          "seconds": null
+        },
+        "dataset_id": "tiny-directed-v1:0fb286d892b48ae76a6e4cac4d43407dc15dbf2cf3e06b53f4d843d952cce099",
+        "instance": {
+          "depot": 0,
+          "matrix_version": "synthetic-v1",
+          "schema_version": 1,
+          "states": [],
+          "stops": [
+            {
+              "demand": 1,
+              "due": 20,
+              "id": 1,
+              "ready": 0,
+              "service": 0,
+              "x": 0.0,
+              "y": 0.0
+            },
+            {
+              "demand": 1,
+              "due": 20,
+              "id": 2,
+              "ready": 0,
+              "service": 0,
+              "x": 0.0,
+              "y": 0.0
+            },
+            {
+              "demand": 1,
+              "due": 20,
+              "id": 3,
+              "ready": 0,
+              "service": 0,
+              "x": 0.0,
+              "y": 0.0
+            }
+          ],
+          "travel": [
+            [
+              0,
+              2,
+              5,
+              6
+            ],
+            [
+              7,
+              0,
+              2,
+              8
+            ],
+            [
+              4,
+              9,
+              0,
+              2
+            ],
+            [
+              2,
+              3,
+              8,
+              0
+            ]
+          ],
+          "vehicles": [
+            {
+              "capacity": 3,
+              "end": 20,
+              "id": 0,
+              "start": 0
+            },
+            {
+              "capacity": 3,
+              "end": 20,
+              "id": 1,
+              "start": 0
+            }
+          ]
+        },
+        "measurement_runs": 5,
+        "name": "exact_optimal_construction_baseline",
+        "no_improvement_trials": 5,
+        "oracle": {
+          "diagnostics": [],
+          "elapsed_seconds": 8.387900015804917e-05,
+          "first_feasible_seconds": 3.309900057502091e-05,
+          "iterations": 24,
+          "objective": [
+            1,
+            8
+          ],
+          "operator_counts": [
+            [
+              "enumerated_plans",
+              24
+            ]
+          ],
+          "optimality_gap": "0",
+          "status": "OPTIMAL",
+          "stopping_reason": "exhaustive_enumeration",
+          "trajectory": []
+        },
+        "oracle_plan": {
+          "objective": [
+            1,
+            8
+          ],
+          "routes": [
+            {
+              "return_time": null,
+              "schedule": [],
+              "stops": [],
+              "vehicle_id": 0
+            },
+            {
+              "return_time": null,
+              "schedule": [],
+              "stops": [
+                1,
+                2,
+                3
+              ],
+              "vehicle_id": 1
+            }
+          ],
+          "schema_version": 1
+        },
+        "oracle_verified": true,
+        "paired_outcomes": [
+          "tie",
+          "tie",
+          "tie",
+          "tie",
+          "tie"
+        ],
+        "purpose": "non-improvement control; separate from full-scale island scenarios",
+        "search": [
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.0013392960008786758,
+            "first_feasible_seconds": 9.513000077276956e-05,
+            "iterations": 20,
+            "objective": [
+              1,
+              8
+            ],
+            "operator_counts": [
+              [
+                "relocate",
+                2
+              ],
+              [
+                "swap",
+                1
+              ],
+              [
+                "reverse",
+                6
+              ],
+              [
+                "random_destroy",
+                4
+              ],
+              [
+                "related_destroy",
+                7
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                1,
+                8
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.0011909980003110832,
+            "first_feasible_seconds": 9.817299905989785e-05,
+            "iterations": 20,
+            "objective": [
+              1,
+              8
+            ],
+            "operator_counts": [
+              [
+                "relocate",
+                4
+              ],
+              [
+                "swap",
+                2
+              ],
+              [
+                "reverse",
+                1
+              ],
+              [
+                "random_destroy",
+                5
+              ],
+              [
+                "related_destroy",
+                8
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                1,
+                8
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.0009462569996685488,
+            "first_feasible_seconds": 0.00010500099961063825,
+            "iterations": 20,
+            "objective": [
+              1,
+              8
+            ],
+            "operator_counts": [
+              [
+                "relocate",
+                3
+              ],
+              [
+                "swap",
+                3
+              ],
+              [
+                "reverse",
+                4
+              ],
+              [
+                "random_destroy",
+                5
+              ],
+              [
+                "related_destroy",
+                5
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                1,
+                8
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.0008294260005641263,
+            "first_feasible_seconds": 9.892100024444517e-05,
+            "iterations": 20,
+            "objective": [
+              1,
+              8
+            ],
+            "operator_counts": [
+              [
+                "relocate",
+                5
+              ],
+              [
+                "swap",
+                4
+              ],
+              [
+                "reverse",
+                4
+              ],
+              [
+                "random_destroy",
+                3
+              ],
+              [
+                "related_destroy",
+                4
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                1,
+                8
+              ]
+            ]
+          },
+          {
+            "diagnostics": [],
+            "elapsed_seconds": 0.0009932569992088247,
+            "first_feasible_seconds": 9.84859998425236e-05,
+            "iterations": 20,
+            "objective": [
+              1,
+              8
+            ],
+            "operator_counts": [
+              [
+                "relocate",
+                3
+              ],
+              [
+                "swap",
+                2
+              ],
+              [
+                "reverse",
+                7
+              ],
+              [
+                "random_destroy",
+                5
+              ],
+              [
+                "related_destroy",
+                3
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                1,
+                8
+              ]
+            ]
+          }
+        ],
+        "seed": 1729,
+        "warmup": {
+          "baseline": {
+            "diagnostics": [],
+            "elapsed_seconds": 0.002094954999847687,
+            "first_feasible_seconds": 0.00010006199954659678,
+            "iterations": 20,
+            "objective": [
+              1,
+              8
+            ],
+            "operator_counts": [
+              [
+                "construction_restarts",
+                20
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                1,
+                8
+              ]
+            ]
+          },
+          "search": {
+            "diagnostics": [],
+            "elapsed_seconds": 0.0014008540001668734,
+            "first_feasible_seconds": 9.67819996731123e-05,
+            "iterations": 20,
+            "objective": [
+              1,
+              8
+            ],
+            "operator_counts": [
+              [
+                "relocate",
+                2
+              ],
+              [
+                "swap",
+                1
+              ],
+              [
+                "reverse",
+                6
+              ],
+              [
+                "random_destroy",
+                4
+              ],
+              [
+                "related_destroy",
+                7
+              ]
+            ],
+            "optimality_gap": "unknown",
+            "status": "FEASIBLE",
+            "stopping_reason": "iteration_budget",
+            "trajectory": [
+              [
+                0,
+                1,
+                8
+              ]
+            ]
+          }
+        },
+        "warmup_runs": 1
       }
     ],
     "memory_scope": "Linux process cumulative peak RSS, includes warmups and rendering imports",
-    "process_peak_rss_bytes": 73039872
+    "process_peak_rss_bytes": 72159232
   },
   "os": "Linux-6.18.55-x86_64-with-glibc2.41",
   "parameters": {
@@ -1180,8 +1739,8 @@
   "root_contract_sha256": "f6eb7c7bfabd022f608c34f774f8007dc0f8310ed2c936cb60bcdb349494af58",
   "schema_version": 1,
   "seed": 1729,
-  "source_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
-  "source_content_sha256": "4bc6043864f3321f2b64d594efad64245d44fed0e0865631e03cfcf6d2adac2d",
+  "source_commit": "b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2",
+  "source_content_sha256": "36ababf28a3a00a087fcae837c06ef1370f30928c011e2db64d0bf03f5585685",
   "source_dirty": false,
   "source_scope": "project",
   "status": "passed",

@@ -8,17 +8,17 @@
   },
   "outputs": 25345,
   "oracle_matches": true,
-  "processing_seconds": 1.3749250109999593,
+  "processing_seconds": 1.354540760999953,
   "checkpoint_seconds": [
-    0.26997283999980937,
-    0.06651748400008728
+    0.28295941699980176,
+    0.04529458400065778
   ],
   "max_watermark_lag_ms": 101900,
   "max_finalization_lag_ms": 113000,
   "controlled_crash_exit": 73,
-  "admission_seconds": 0.3828539619998992,
-  "throughput_events_s": 7273.123930393245,
-  "restore_seconds": 0.00026008600025306805,
+  "admission_seconds": 0.394822338999802,
+  "throughput_events_s": 7382.575916444014,
+  "restore_seconds": 0.00020983900139981415,
   "buffer_peak": 48,
   "state_peak": 4560,
   "watermark": 9223372036854775807,

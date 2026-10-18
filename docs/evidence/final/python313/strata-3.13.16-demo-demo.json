@@ -14,7 +14,7 @@
     "sequence": 2,
     "table_bytes_written": 2216,
     "tables": [
-      "table-286767327d9248fb973cffe193d9032b.sst"
+      "table-d3d49478bfc544909b06c6f2c630cb40.sst"
     ],
     "wal_bytes_written": 957,
     "writer_failed": false
@@ -33,7 +33,7 @@
   "memory_limit_bytes": 34359738368,
   "os": "Linux-6.18.55-x86_64-with-glibc2.41",
   "packaging_context": "source-checkout",
-  "pid": 49936,
+  "pid": 79277,
   "project": "strata",
   "python": "3.13.16",
   "recovered_sequence": 11,
@@ -46,8 +46,8 @@
   ],
   "schema_version": 1,
   "seed": 1729,
-  "source_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
-  "source_content_sha256": "49730eb7670eb00c203a71f6754c0eccae7147c0ff033d5173d36f12419d5fc3",
+  "source_commit": "ec1d0106df086a48923016c33199cfbda0aebbc0",
+  "source_content_sha256": "eb9a834c5187df948f64f17df02fb7e6e8abbd5899beb5a08b168092e43e49d7",
   "source_dirty": false,
   "source_scope": "project",
   "status": "passed",

@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "project": "current",
+  "source_commit": "7114e39c7e9e8af177e84fe8cd990fe5a09bde63",
+  "source_dirty": false,
+  "source_scope": "project",
+  "source_content_sha256": "ababa3cb1e6836489b8fe1d0f475ecbcd2cc35e63b74aab2d030334b7a10491b",
+  "root_contract_sha256": "2fe52e3770f408debf487d4c075ce5261504f6e6ac72e897146d08fe869182c2",
+  "lockfile_sha256": "baf15ac83a35752ad671410a6466a49a8b6f5b43d6210beed3cb3bd6982239a3",
+  "python": "3.14.8",
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "cpu": "unknown",
+  "memory_limit_bytes": null,
+  "seed": 1729,
+  "dataset_id": "7e0c2c537892244369b534799cac6da1947eeff5a33a698af3fb904de97ae056",
+  "profile": "ci",
+  "warmup_runs": 1,
+  "measurement_runs": 5,
+  "repetition_reason": "Five CI repetitions; standard uses one full ordinary and one full hot million-event run because durable admission, output publication and full independent reconciliation are costly.",
+  "parameters": {
+    "events": 10000,
+    "workers": 4,
+    "threads": 1,
+    "checkpoint_interval": 10000,
+    "window_ms": 30000,
+    "lateness_ms": 10000,
+    "durability": "SQLite WAL synchronous FULL"
+  },
+  "metrics": {
+    "runs": [
+      {
+        "events": 10000,
+        "records": 10046,
+        "dispositions": {
+          "accepted-late": 65,
+          "on-time": 9902,
+          "rejected-late": 33
+        },
+        "outputs": 25345,
+        "oracle_matches": true,
+        "processing_seconds": 1.7430991109999923,
+        "checkpoint_seconds": [
+          0.2806774409996251,
+          0.05807520899998053
+        ],
+        "max_watermark_lag_ms": 101900,
+        "max_finalization_lag_ms": 113000,
+        "controlled_crash_exit": null,
+        "admission_seconds": 0.6202154200000223,
+        "throughput_events_s": 5736.90843905206,
+        "restore_seconds": 0.00019770400012930622,
+        "buffer_peak": 48,
+        "state_peak": 4560,
+        "watermark": 9223372036854775807,
+        "disk_bytes": 28568984
+      },
+      {
+        "events": 10000,
+        "records": 10046,
+        "dispositions": {
+          "accepted-late": 65,
+          "on-time": 9902,
+          "rejected-late": 33
+        },
+        "outputs": 25345,
+        "oracle_matches": true,
+        "processing_seconds": 1.649996476999604,
+        "checkpoint_seconds": [
+          0.26762621699981537,
+          0.04260449000003064
+        ],
+        "max_watermark_lag_ms": 101900,
+        "max_finalization_lag_ms": 113000,
+        "controlled_crash_exit": null,
+        "admission_seconds": 0.6129413480002768,
+        "throughput_events_s": 6060.619000947358,
+        "restore_seconds": 0.0005756170003223815,
+        "buffer_peak": 48,
+        "state_peak": 4560,
+        "watermark": 9223372036854775807,
+        "disk_bytes": 28568984
+      },
+      {
+        "events": 10000,
+        "records": 10046,
+        "dispositions": {
+          "accepted-late": 65,
+          "on-time": 9902,
+          "rejected-late": 33
+        },
+        "outputs": 25345,
+        "oracle_matches": true,
+        "processing_seconds": 2.1366195670002526,
+        "checkpoint_seconds": [
+          0.6160869969999112,
+          0.07084239699997852
+        ],
+        "max_watermark_lag_ms": 101900,
+        "max_finalization_lag_ms": 113000,
+        "controlled_crash_exit": null,
+        "admission_seconds": 0.5851242529997762,
+        "throughput_events_s": 4680.29037758916,
+        "restore_seconds": 0.00013116399986756733,
+        "buffer_peak": 48,
+        "state_peak": 4560,
+        "watermark": 9223372036854775807,
+        "disk_bytes": 28568984
+      },
+      {
+        "events": 10000,
+        "records": 10046,
+        "dispositions": {
+          "accepted-late": 65,
+          "on-time": 9902,
+          "rejected-late": 33
+        },
+        "outputs": 25345,
+        "oracle_matches": true,
+        "processing_seconds": 2.4928959579997354,
+        "checkpoint_seconds": [
+          0.5305571949998011,
+          0.07516345000021829
+        ],
+        "max_watermark_lag_ms": 101900,
+        "max_finalization_lag_ms": 113000,
+        "controlled_crash_exit": null,
+        "admission_seconds": 0.7085683430000245,
+        "throughput_events_s": 4011.3988583879204,
+        "restore_seconds": 0.00013702299975193455,
+        "buffer_peak": 48,
+        "state_peak": 4560,
+        "watermark": 9223372036854775807,
+        "disk_bytes": 28568984
+      },
+      {
+        "events": 10000,
+        "records": 10046,
+        "dispositions": {
+          "accepted-late": 65,
+          "on-time": 9902,
+          "rejected-late": 33
+        },
+        "outputs": 25345,
+        "oracle_matches": true,
+        "processing_seconds": 1.4990938820001247,
+        "checkpoint_seconds": [
+          0.2679753580000579,
+          0.044367697999859956
+        ],
+        "max_watermark_lag_ms": 101900,
+        "max_finalization_lag_ms": 113000,
+        "controlled_crash_exit": null,
+        "admission_seconds": 0.4174136940000608,
+        "throughput_events_s": 6670.696291987914,
+        "restore_seconds": 0.00015062400007082033,
+        "buffer_peak": 48,
+        "state_peak": 4560,
+        "watermark": 9223372036854775807,
+        "disk_bytes": 28568984
+      }
+    ],
+    "hot": {
+      "events": 10000,
+      "records": 10046,
+      "dispositions": {
+        "accepted-late": 67,
+        "on-time": 9899,
+        "rejected-late": 34
+      },
+      "outputs": 43714,
+      "oracle_matches": true,
+      "processing_seconds": 7.085673561000021,
+      "checkpoint_seconds": [
+        1.7511149929996463,
+        0.05058291300019846
+      ],
+      "max_watermark_lag_ms": 101900,
+      "max_finalization_lag_ms": 113000,
+      "controlled_crash_exit": null,
+      "admission_seconds": 0.5919507020003039,
+      "throughput_events_s": 1411.2984339330292,
+      "restore_seconds": 0.00018110400014847983,
+      "buffer_peak": 89,
+      "state_peak": 2891,
+      "watermark": 9223372036854775807,
+      "disk_bytes": 50386488
+    },
+    "peak_process_rss_bytes": 116346880,
+    "median_throughput": 5736.90843905206
+  },
+  "correctness_checks": {
+    "reconciled": true
+  },
+  "status": "passed"
+}
