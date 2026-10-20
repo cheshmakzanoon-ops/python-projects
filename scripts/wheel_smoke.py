@@ -9,9 +9,10 @@ from pathlib import Path
 
 def main():
     project = Path(sys.argv[1]).resolve()
-    wheels = sorted((project / "dist").glob("*.whl"), key=lambda p: p.stat().st_mtime)
-    if not wheels:
-        raise SystemExit("No built wheel")
+    wheel_directory = Path(sys.argv[4]) if len(sys.argv) > 4 else project / "dist"
+    wheels = list(wheel_directory.glob("*.whl"))
+    if len(wheels) != 1:
+        raise SystemExit("Expected exactly one wheel; use a fresh build directory")
     with tempfile.TemporaryDirectory(prefix="portfolio-wheel-") as folder:
         environment = os.environ.copy()
         python = Path(folder) / (

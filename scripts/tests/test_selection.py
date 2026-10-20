@@ -4,6 +4,7 @@ import subprocess
 from copy import deepcopy
 from pathlib import Path
 
+import catalog
 import pytest
 
 MODULE = Path(__file__).resolve().parents[1] / "select_projects.py"
@@ -22,7 +23,11 @@ def test_canonical_directory_alias_cannot_omit_a_project(monkeypatch):
     next(p for p in projects if p["slug"] == "strata")["directory"] = (
         "projects/01-anchor/../01-anchor"
     )
-    monkeypatch.setattr(selection.tomllib, "load", lambda stream: {"projects": projects})
+    monkeypatch.setattr(
+        catalog.tomllib,
+        "load",
+        lambda stream: {"schema_version": 1, "uv_version": "0.12.23", "projects": projects},
+    )
     with pytest.raises(ValueError, match="duplicate directory"):
         selection.load_projects()
 
@@ -84,7 +89,11 @@ def test_actual_rename_deleted_and_empty_diff(tmp_path):
 def test_noncanonical_and_overlapping_paths_cannot_underselect(monkeypatch):
     projects = deepcopy(selection.load_projects())
     projects[0]["directory"] = "projects/./01-anchor"
-    monkeypatch.setattr(selection.tomllib, "load", lambda stream: {"projects": projects})
+    monkeypatch.setattr(
+        catalog.tomllib,
+        "load",
+        lambda stream: {"schema_version": 1, "uv_version": "0.12.23", "projects": projects},
+    )
     with pytest.raises(ValueError, match="canonical"):
         selection.load_projects()
     projects[0]["directory"] = "projects"

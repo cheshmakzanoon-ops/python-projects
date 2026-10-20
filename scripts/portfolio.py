@@ -9,20 +9,34 @@ import shutil
 import signal
 import subprocess
 import sys
-import tomllib
+import uuid
+from collections.abc import Mapping
 from pathlib import Path
+
+from catalog import ProjectSpec, checkout_problems, load_projects, resolve_python
+from test_results import read_junit
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def manifest() -> list[dict[str, object]]:
-    with (ROOT / "portfolio.toml").open("rb") as stream:
-        return tomllib.load(stream)["projects"]
+def manifest() -> list[ProjectSpec]:
+    return load_projects(ROOT)
 
 
-def execute(command: list[str], cwd: Path, timeout: int = 600) -> int:
+def execute(
+    command: list[str],
+    cwd: Path,
+    timeout: int = 600,
+    *,
+    overrides: Mapping[str, str | None] | None = None,
+) -> int:
     print(f"[{cwd.name}] {' '.join(command)}", flush=True)
     environment = os.environ.copy()
+    for name, value in (overrides or {}).items():
+        if value is None:
+            environment.pop(name, None)
+        else:
+            environment[name] = value
     environment.setdefault(
         "UV_CACHE_DIR",
         "/workspace/.cache/uv" if Path("/workspace").exists() else str(Path.home() / ".cache/uv"),
@@ -68,11 +82,22 @@ def execute(command: list[str], cwd: Path, timeout: int = 600) -> int:
         return 1
 
 
-def project_task(task: str, project: dict[str, object], profile: str = "ci") -> int:
+def project_task(task: str, project: ProjectSpec, profile: str = "ci") -> int:
     directory = ROOT / str(project["directory"])
     # Select one interpreter for the entire task, including builds and wheel checks.
     # Relying on uv's nearest .python-version here can silently disagree with setup.
-    interpreter = os.environ.get("PORTFOLIO_PYTHON") or str(project["default_python"])
+    interpreter = resolve_python(project, os.environ.get("PORTFOLIO_PYTHON") or None)
+    # A compatibility check must not replace the editor's default environment.
+    overrides: dict[str, str | None] = {
+        "UV_PROJECT": str(directory),
+        "UV_WORKING_DIR": str(directory),
+        "PYTHONPATH": None,
+        "PYTHONHOME": None,
+    }
+    if not os.environ.get("UV_PROJECT_ENVIRONMENT") and interpreter != project["default_python"]:
+        overrides["UV_PROJECT_ENVIRONMENT"] = str(
+            ROOT / ".local/venvs" / f"{project['slug']}-{interpreter}"
+        )
     base = ["uv", "run", "--locked", "--python", interpreter]
     if not (directory / "uv.lock").exists():
         print(f"{project['slug']}: incomplete: uv.lock missing", file=sys.stderr)
@@ -88,17 +113,27 @@ def project_task(task: str, project: dict[str, object], profile: str = "ci") -> 
             ]
         ]
     elif task == "check":
+        run_directory = ROOT / ".local/checks" / project["slug"] / interpreter / uuid.uuid4().hex
+        build_directory = run_directory / "build"
+        report = Path(os.environ.get("PORTFOLIO_CHECK_REPORT", str(run_directory / "pytest.xml")))
+        if report.exists() or report.is_symlink():
+            raise ValueError(
+                "test report must be a fresh file; choose a new PORTFOLIO_CHECK_REPORT"
+            )
+        report.parent.mkdir(parents=True, exist_ok=True)
         commands = [
             base + list(project["format_arguments"]),
             base + list(project["lint_arguments"]),
             base + list(project["type_arguments"]),
-            base + list(project["test_arguments"]),
+            base + list(project["test_arguments"]) + ["--junitxml", str(report)],
             [
                 "uv",
                 "build",
                 "--no-sources",
                 "--python",
                 interpreter,
+                "--out-dir",
+                str(build_directory),
             ],
             [
                 sys.executable,
@@ -106,6 +141,7 @@ def project_task(task: str, project: dict[str, object], profile: str = "ci") -> 
                 str(directory),
                 str(project["package"]),
                 interpreter,
+                str(build_directory),
             ],
         ]
     else:
@@ -118,10 +154,25 @@ def project_task(task: str, project: dict[str, object], profile: str = "ci") -> 
         if task == "benchmark":
             commands[0] += ["--profile", profile]
     for command in commands:
-        result = execute(command, directory, 7200 if profile == "standard" else 600)
+        result = execute(
+            command, directory, 7200 if profile == "standard" else 600, overrides=overrides
+        )
         if result:
             print(f"{project['slug']}: {task} failed ({result})", file=sys.stderr)
             return result
+        if task == "check" and "--junitxml" in command:
+            try:
+                outcomes = read_junit(report)
+            except ValueError as error:
+                print(f"{project['slug']}: {error}", file=sys.stderr)
+                return 1
+            print(
+                f"{project['slug']}: executed tests {outcomes.as_dict()}; report {report}",
+                flush=True,
+            )
+            if not outcomes.ready:
+                print("Required tests did not all execute and pass", file=sys.stderr)
+                return 1
     return 0
 
 
@@ -146,24 +197,34 @@ def main() -> int:
     parser.add_argument("--profile", choices=["ci", "standard"], default="ci")
     parser.add_argument("--jobs", type=int, default=2)
     args = parser.parse_args()
-    projects = manifest()
+    try:
+        projects = manifest()
+    except (OSError, ValueError) as error:
+        parser.error(str(error))
     if args.task == "list":
         for project in projects:
             print(f"{project['slug']:16} {project['directory']} [{project['status']}]")
         return 0
     if args.task == "doctor":
         print(f"Python dispatcher: {sys.version.split()[0]}; uv: {shutil.which('uv') or 'MISSING'}")
-        missing = [
-            str(p["slug"])
-            for p in projects
-            if not (ROOT / str(p["directory"]) / "uv.lock").exists()
+        problems = [
+            f"{p['slug']}: {issue}" for p in projects for issue in checkout_problems(p, ROOT)
         ]
-        if missing:
-            print("Incomplete projects: " + ", ".join(missing))
-        return int(not shutil.which("uv") or bool(missing))
+        for problem in problems:
+            print(problem)
+        return int(not shutil.which("uv") or bool(problems))
     if args.task == "verify-all":
+        if os.environ.get("UV_PROJECT_ENVIRONMENT"):
+            parser.error(
+                "unset UV_PROJECT_ENVIRONMENT before verifying multiple independent projects"
+            )
         if not 1 <= args.jobs <= 4:
             parser.error("--jobs must be between 1 and 4")
+        try:
+            for project in projects:
+                resolve_python(project, os.environ.get("PORTFOLIO_PYTHON"))
+        except ValueError as error:
+            parser.error(str(error))
         with concurrent.futures.ThreadPoolExecutor(max_workers=args.jobs) as executor:
             results = list(executor.map(lambda p: project_task("check", p), projects))
         return int(any(results))
@@ -176,7 +237,10 @@ def main() -> int:
     selected = next((p for p in projects if p["slug"] == args.project), None)
     if selected is None:
         parser.error("select a project from `list`")
-    return project_task(args.task, selected, args.profile)
+    try:
+        return project_task(args.task, selected, args.profile)
+    except ValueError as error:
+        parser.error(str(error))
 
 
 if __name__ == "__main__":

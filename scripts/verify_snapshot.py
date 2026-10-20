@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import subprocess
@@ -15,6 +16,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from evidence import ROOT, capture
+from test_results import read_junit
 
 
 def main() -> int:
@@ -39,6 +41,8 @@ def main() -> int:
     ).strip()
     if set(args.checks.split(",")) - {"check", "demo", "benchmark", "extended"}:
         parser.error("--checks accepts check,demo,benchmark,extended")
+    if len(set(args.checks.split(","))) != len(args.checks.split(",")):
+        parser.error("each check may run only once in an evidence directory")
     if "extended" in args.checks.split(",") and args.project != ["strata"]:
         parser.error("extended requires exactly --project strata")
     environment = os.environ.copy()
@@ -68,6 +72,8 @@ def main() -> int:
             if slug == "meridian":
                 environment.setdefault("MERIDIAN_PG_CONTAINER", metadata["container"])
     reports = []
+    report_files = []
+    integration_reports = []
     with tempfile.TemporaryDirectory(prefix="portfolio-verify-", dir=args.temp_root) as folder:
         copy = Path(folder) / "source"
         # A disposable verification clone preserves Git provenance without sharing an index.
@@ -87,6 +93,10 @@ def main() -> int:
             before = capture(scope, copy)
             checks = []
             for check in args.checks.split(","):
+                check_environment = environment.copy()
+                test_report = args.output / f"{project['slug']}-{args.python}-pytest.xml"
+                if check == "check":
+                    check_environment["PORTFOLIO_CHECK_REPORT"] = str(test_report)
                 command = [sys.executable, "scripts/portfolio.py", check, project["slug"]]
                 if check == "extended":
                     workload = [
@@ -120,7 +130,7 @@ def main() -> int:
                     result = subprocess.run(
                         command,
                         cwd=copy,
-                        env=environment,
+                        env=check_environment,
                         stdout=stream,
                         stderr=subprocess.STDOUT,
                         # The dispatcher bounds each executable and owns its process group.
@@ -134,7 +144,20 @@ def main() -> int:
                         "log": log.name,
                     }
                 )
-                print(f"{project['slug']} {args.python} {check}: {result.returncode}", flush=True)
+                if check == "check" and result.returncode == 0:
+                    try:
+                        outcomes = read_junit(test_report)
+                        checks[-1]["tests"] = outcomes.as_dict()
+                        checks[-1]["junit_report"] = test_report.name
+                        if not outcomes.ready:
+                            checks[-1]["exit_code"] = 1
+                    except ValueError as error:
+                        checks[-1]["exit_code"] = 1
+                        checks[-1]["report_error"] = str(error)
+                print(
+                    f"{project['slug']} {args.python} {check}: {checks[-1]['exit_code']}",
+                    flush=True,
+                )
             after = capture(scope, copy)
             unchanged = (
                 before["source_content_sha256"] == after["source_content_sha256"]
@@ -205,9 +228,9 @@ def main() -> int:
                     )
                 if any(c["exit_code"] for c in checks):
                     report["status"] = "failed"
-            (args.output / f"{project['slug']}-{args.python}.json").write_text(
-                json.dumps(report, indent=2) + "\n"
-            )
+            report_path = args.output / f"{project['slug']}-{args.python}.json"
+            report_path.write_text(json.dumps(report, indent=2) + "\n")
+            report_files.append(report_path)
         if args.integrations:
             for name in ("settlement", "stream-lake", "code-search"):
                 destination = args.output / name
@@ -222,9 +245,60 @@ def main() -> int:
                     result = subprocess.run(
                         command, cwd=copy, env=environment, stdout=stream, stderr=subprocess.STDOUT
                     )
-                reports.append({"status": "passed" if result.returncode == 0 else "failed"})
+                integration = {"integration": name, "exit_code": result.returncode}
+                integration_path = destination / "integration.json"
+                try:
+                    recorded = json.loads(integration_path.read_text())
+                    clean = (
+                        recorded["source_commit"] == commit
+                        and recorded["source_dirty"] is False
+                        and recorded["status"] == "passed"
+                        and bool(recorded["stages"])
+                        and all(stage["exit_code"] == 0 for stage in recorded["stages"])
+                    )
+                except (OSError, ValueError, KeyError, TypeError):
+                    clean = False
+                integration["status"] = "passed" if result.returncode == 0 and clean else "failed"
+                reports.append(integration)
+                integration_reports.append(integration)
+                if integration_path.is_file():
+                    report_files.append(integration_path)
                 print(f"integration {name}: {result.returncode}", flush=True)
-    return int(any(r["status"] != "passed" for r in reports))
+    passed = bool(reports) and all(r["status"] == "passed" for r in reports)
+    artifacts = []
+    # A portable inventory binds the compact reports to the logs and actual JUnit
+    # outcomes retained beside them. It contains no machine-specific absolute paths.
+    for path in sorted(args.output.rglob("*")):
+        if path.is_file():
+            artifacts.append(
+                {
+                    "path": path.relative_to(args.output).as_posix(),
+                    "bytes": path.stat().st_size,
+                    "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                }
+            )
+    summary = {
+        "schema_version": 1,
+        "source_commit": commit,
+        "interpreter": args.python,
+        "requested_projects": [project["slug"] for project in projects],
+        "requested_checks": args.checks.split(","),
+        "benchmark_profile": args.profile,
+        "status": "passed" if passed else "failed",
+        "reports": [path.relative_to(args.output).as_posix() for path in report_files],
+        "integrations": integration_reports,
+        "tests": {
+            outcome: sum(
+                check.get("tests", {}).get(outcome, 0)
+                for report in reports
+                for check in report.get("checks", [])
+            )
+            for outcome in ("passed", "failed", "errors", "skipped")
+        },
+        "artifacts": artifacts,
+    }
+    (args.output / "verification.json").write_text(json.dumps(summary, indent=2) + "\n")
+    return int(not passed)
 
 
 if __name__ == "__main__":

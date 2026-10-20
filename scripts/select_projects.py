@@ -5,47 +5,14 @@ from __future__ import annotations
 import argparse
 import json
 import subprocess
-import tomllib
 from pathlib import Path
-from typing import Any
+
+from catalog import ProjectSpec, load_projects
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED = {
-    "anchor",
-    "strata",
-    "current",
-    "meridian",
-    "quarry",
-    "pytrace",
-    "atlas",
-    "proving-ground",
-    "routecraft",
-    "resonance",
-}
 
 
-def load_projects(root: Path = ROOT) -> list[dict[str, Any]]:
-    with (root / "portfolio.toml").open("rb") as stream:
-        projects: list[dict[str, Any]] = tomllib.load(stream)["projects"]
-    if len(projects) != 10 or {p["slug"] for p in projects} != EXPECTED:
-        raise ValueError("manifest must declare exactly all ten unique projects")
-    directories: set[Path] = set()
-    for p in projects:
-        directory = p["directory"]
-        resolved = (root / directory).resolve()
-        if not resolved.is_relative_to(root.resolve()) or resolved == root.resolve():
-            raise ValueError("project path must be a nonempty path within the repository")
-        if resolved in directories or not p["required_python_versions"]:
-            raise ValueError("duplicate directory or empty interpreter matrix")
-        if directory != resolved.relative_to(root.resolve()).as_posix():
-            raise ValueError("project directory must use its canonical repository-relative path")
-        if any(resolved.is_relative_to(d) or d.is_relative_to(resolved) for d in directories):
-            raise ValueError("project directories must not overlap")
-        directories.add(resolved)
-    return projects
-
-
-def select(paths: list[str] | None, projects: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def select(paths: list[str] | None, projects: list[ProjectSpec]) -> list[ProjectSpec]:
     if paths is None:
         return projects
     selected: set[str] = set()

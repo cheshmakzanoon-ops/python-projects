@@ -48,7 +48,7 @@ def test_timeout_terminates_child_process_group(tmp_path):
 def test_cleanup_targets_same_owned_directory_as_demo(monkeypatch):
     calls = []
 
-    def execute(command, cwd, timeout=600):
+    def execute(command, cwd, timeout=600, **kwargs):
         calls.append((command, cwd))
         return 0
 
@@ -83,15 +83,87 @@ def test_finished_parent_cannot_leave_running_descendant(tmp_path):
 def test_task_uses_one_explicit_interpreter_for_run_build_and_wheel(monkeypatch):
     calls = []
     monkeypatch.delenv("PORTFOLIO_PYTHON", raising=False)
-    monkeypatch.setattr(portfolio, "execute", lambda command, *args: calls.append(command) or 0)
+
+    def execute(command, *args, **kwargs):
+        calls.append(command)
+        if "--junitxml" in command:
+            Path(command[command.index("--junitxml") + 1]).write_text(
+                '<testsuite><testcase name="executed"/></testsuite>'
+            )
+        return 0
+
+    monkeypatch.setattr(portfolio, "execute", execute)
     project = next(p for p in portfolio.manifest() if p["slug"] == "current")
     assert portfolio.project_task("check", project) == 0
     for command in calls[:-1]:
         assert command[command.index("--python") + 1] == project["default_python"]
-    assert calls[-1][-1] == project["default_python"]
+    assert calls[-1][-2] == project["default_python"]
     calls.clear()
     monkeypatch.setenv("PORTFOLIO_PYTHON", "3.13.16")
     assert portfolio.project_task("check", project) == 0
     for command in calls[:-1]:
         assert command[command.index("--python") + 1] == "3.13.16"
-    assert calls[-1][-1] == "3.13.16"
+    assert calls[-1][-2] == "3.13.16"
+
+
+def test_execute_removes_inherited_source_selection_for_project_commands(tmp_path, monkeypatch):
+    monkeypatch.setenv("PYTHONPATH", str(tmp_path / "unrelated-source"))
+    monkeypatch.setenv("PYTHONHOME", str(tmp_path / "invalid-python-home"))
+    code = (
+        "import os; assert 'PYTHONPATH' not in os.environ; "
+        "assert 'PYTHONHOME' not in os.environ; "
+        "assert os.environ['UV_PROJECT'] == 'selected-project'"
+    )
+    assert (
+        portfolio.execute(
+            [sys.executable, "-c", code],
+            tmp_path,
+            overrides={"PYTHONPATH": None, "PYTHONHOME": None, "UV_PROJECT": "selected-project"},
+        )
+        == 0
+    )
+
+
+def test_verify_all_refuses_one_environment_for_independent_projects(monkeypatch):
+    import pytest
+
+    monkeypatch.setenv("UV_PROJECT_ENVIRONMENT", "/tmp/shared-environment")
+    monkeypatch.setattr(sys, "argv", ["portfolio.py", "verify-all"])
+    with pytest.raises(SystemExit) as failure:
+        portfolio.main()
+    assert failure.value.code == 2
+
+
+def test_required_checks_reject_skipped_or_unexecuted_tests(tmp_path, monkeypatch):
+    project = next(p for p in portfolio.manifest() if p["slug"] == "current")
+    monkeypatch.setattr(portfolio, "ROOT", tmp_path)
+    directory = tmp_path / project["directory"]
+    directory.mkdir(parents=True)
+    (directory / "uv.lock").write_text("version=1\n")
+    for case in ("", '<testcase><skipped type="pytest.xfail"/></testcase>'):
+        calls = []
+
+        def execute(command, *args, **kwargs):
+            calls.append(command)
+            if "--junitxml" in command:
+                Path(command[command.index("--junitxml") + 1]).write_text(
+                    f"<testsuite>{case}</testsuite>"
+                )
+            return 0
+
+        monkeypatch.setattr(portfolio, "execute", execute)
+        assert portfolio.project_task("check", project) == 1
+        assert not any("build" in command for command in calls)
+
+
+def test_compatibility_setup_uses_separate_project_environment(tmp_path, monkeypatch):
+    project = next(p for p in portfolio.manifest() if p["slug"] == "current")
+    calls = []
+    monkeypatch.delenv("UV_PROJECT_ENVIRONMENT", raising=False)
+    monkeypatch.setenv("PORTFOLIO_PYTHON", "3.13")
+    monkeypatch.setattr(
+        portfolio, "execute", lambda command, *a, **kw: calls.append((command, kw)) or 0
+    )
+    assert portfolio.project_task("setup", project) == 0
+    assert calls[0][0][-1] == "3.13.16"
+    assert calls[0][1]["overrides"]["UV_PROJECT_ENVIRONMENT"].endswith("current-3.13.16")
