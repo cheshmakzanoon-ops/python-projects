@@ -8,7 +8,7 @@ import itertools
 import time
 from collections.abc import Iterator
 
-from pp_routecraft.domain.instance import Plan, Route, RoutingInstance, SolveResult, Status
+from pp_routecraft.domain.instance import Plan, Route, RoutingInstance, SolveResult, Status, Vehicle
 from pp_routecraft.validation.verifier import input_errors, verify
 
 
@@ -19,6 +19,26 @@ def _sizes(total: int, count: int) -> Iterator[tuple[int, ...]]:
         for first in range(total + 1):
             for tail in _sizes(total - first, count - 1):
                 yield (first,) + tail
+
+
+def _feasible(instance: RoutingInstance, vehicle: Vehicle, jobs: tuple[int, ...]) -> bool:
+    """Independent path-prefix formula, without optimizer or verifier schedules.
+
+    Waiting is the maximum ready-time deficit over the path prefix; elapsed
+    travel/service excludes waiting. This is also valid for nonmetric arcs.
+    """
+    if sum(instance.stops[node - 1].demand for node in jobs) > vehicle.capacity:
+        return False
+    elapsed = waiting = node = 0
+    for job in jobs:
+        stop = instance.stops[job - 1]
+        elapsed += instance.travel[node][job]
+        waiting = max(waiting, stop.ready - vehicle.start - elapsed)
+        if vehicle.start + elapsed + waiting > stop.due:
+            return False
+        elapsed += stop.service
+        node = job
+    return vehicle.start + elapsed + waiting + instance.travel[node][0] <= vehicle.end
 
 
 def exhaustive(instance: RoutingInstance) -> SolveResult:
@@ -38,6 +58,7 @@ def exhaustive(instance: RoutingInstance) -> SolveResult:
             routes: list[Route] = []
             offset = 0
             travel = 0
+            feasible = True
             for vehicle, size in zip(instance.vehicles, sizes, strict=True):
                 jobs = order[offset : offset + size]
                 offset += size
@@ -48,16 +69,18 @@ def exhaustive(instance: RoutingInstance) -> SolveResult:
                 if jobs:
                     travel += instance.travel[node][0]
                 routes.append(Route(vehicle.id, jobs))
+                feasible = feasible and _feasible(instance, vehicle, jobs)
             objective = (sum(bool(r.stops) for r in routes), travel)
             checked += 1
             if best is not None and objective >= best.objective:
                 continue
             candidate = Plan(tuple(routes), objective)
-            report = verify(instance, candidate)
-            if report.valid:
+            if feasible:
                 best = candidate
                 if first is None:
                     first = time.monotonic() - started
+    if best is not None and not verify(instance, best).valid:
+        raise RuntimeError("exact reference and independent verifier disagree")
     return SolveResult(
         Status.OPTIMAL if best else Status.PROVEN_INFEASIBLE,
         best,

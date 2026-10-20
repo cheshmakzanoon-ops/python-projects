@@ -6,19 +6,35 @@
   supply additional independent evidence.
 * Lexicographic `(used vehicles, directed travel)` keeps fleet count explicit.
   No scalar penalty can promote a hard-constraint violation to feasibility.
-* Directed routes are fully rescheduled for every move. A symmetric two-opt
-  delta would miss every reversed internal arc. This costs CPU but keeps the
-  implementation auditable; bounded regret lookahead and small capacity-limited
-  routes contain the cost. A measured future optimization could cache immutable
-  prefix/suffix timing with independent regression checks.
+* Insertion uses immutable forward-departure/backward-latest profiles. Checking
+  one inserted stop does not change the existing suffix order, so exact directed
+  arc replacement and one latest-arrival comparison suffice. Profiles are owned
+  by one repair call and replaced after its selected insertion; no cross-search
+  invalidation protocol is needed. Full scheduling remains the fallback for an
+  infeasible partial route and the implementation for reversal/block moves.
+  Symmetric two-opt deltas would miss reversed internal arcs and are not used.
+* Partial-route feasibility is not monotone for nonmetric matrices. A frozen
+  prefix's direct depot return may be slower than a return through a remaining
+  onboard delivery. Rejecting the prefix before considering insertions loses a
+  valid rolling continuation. Infeasible partial routes therefore use direct
+  candidate scheduling rather than an invalid cached certificate. This does not
+  make greedy/regret construction complete for arbitrary matrices.
 * Best and accepted-current plans are different immutable objects. Simulated
   annealing may explore worse schedules without losing the best verified answer.
   Operator weights use deterministic RNG consumption and stable tie breaking.
 * Wall deadlines are cooperative at complete operator boundaries. Construction
   and repair are atomic; they may overrun the requested wall limit by one
-  operation. Cancellation retains the incumbent. Once observed, cancellation is latched; a changing callback cannot resume work in that run. Stop conditions are checked between the greedy and regret constructors as well as between search operations. There is no unsafe thread kill.
-* Exact enumeration is intentionally tiny and independent; it is never an
-  unsupported claim of global optimality on a 500-stop heuristic result.
+  operation. Cancellation retains the incumbent. Once observed, cancellation is
+  latched; a changing callback cannot resume work in that run. Stop conditions
+  are checked between constructors/search operations and after the final operation,
+  including construction with no improvement iterations. The comparison baseline
+  reports a deadline crossed by its final construction too. There is no unsafe
+  thread kill or claim that cancellation rolls back an already completed move.
+* Exact enumeration is intentionally tiny and independent. Feasibility uses a
+  path-prefix waiting-deficit formula; delegating every check to the verifier
+  would let a verifier defect certify the same wrong optimum. A third test model
+  enumerates labeled assignments before route permutations. None establishes
+  global optimality for a 500-stop heuristic result.
 * Vehicle manifests name jobs, not merely spare capacity. A started truck with
   spare capacity still cannot deliver an unloaded new job. Replanning is limited
   to named service-complete/departure nodes; interpolation through an edge would

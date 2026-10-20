@@ -45,6 +45,8 @@ def construction_baseline(
             if best is None or plan.objective < best.objective:
                 best = plan
                 trajectory.append((iteration, *plan.objective))
+    if budget.seconds is not None and time.monotonic() - started >= budget.seconds:
+        reason = "wall_clock"
     return SolveResult(
         Status.FEASIBLE if best else Status.NO_FEASIBLE_PLAN_FOUND,
         best,

@@ -42,7 +42,9 @@ else:
     print(result.status, result.stopping_reason)
 ```
 
-Iteration budgets are reproducible for equal inputs, seeds, and package versions. Wall-clock limits and cancellation are cooperative at completed-operation boundaries; an insertion or repair can overrun the requested deadline. A stop observation prevents further work and retains any verified incumbent.
+Iteration budgets are reproducible for equal inputs, seeds, and package versions. Wall-clock limits and cancellation are cooperative at completed-operation boundaries; an insertion or repair can overrun the requested deadline. The final boundary is checked even with zero improvement iterations. A stop observation prevents further work and retains any verified incumbent.
+
+Construction uses forward/backward timing profiles to test feasible-route insertions without rescheduling every candidate. Arbitrary directed matrices remain supported: when an incomplete route cannot return within its shift, insertions receive full schedule checks because an onboard delivery can provide a shorter return. The heuristic still has no completeness guarantee. The [architecture](docs/ARCHITECTURE.md) derives the certificate and states its fallback and resource bounds.
 
 `generate`, `solve`, `verify`, `replan`, and `compare` expose the individual steps; use `COMMAND --help` for arguments. The [JSON format](docs/FORMAT.md) specifies supported fields and units. Unknown fields, duplicate object keys, and unsupported versions fail explicitly rather than silently dropping constraints.
 

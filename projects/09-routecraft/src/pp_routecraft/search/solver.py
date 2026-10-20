@@ -185,6 +185,13 @@ def solve(
                     if rng.random() < probability:
                         current = candidate
         weights[operator] = 0.8 * weights[operator] + 0.2 * reward
+    # There may be no next iteration to observe a stop raised during the last
+    # atomic operation (or construction with a zero-iteration budget). Retain
+    # the verified result of that operation, but report the actual stop cause.
+    if reason == "iteration_budget":
+        stop = stopping_reason()
+        if stop is not None:
+            reason = stop
     if best is not None and not verify(instance, best).valid:
         raise RuntimeError("retained incumbent failed independent verification")
     return SolveResult(

@@ -2,7 +2,9 @@
 
 import random
 from dataclasses import dataclass
+from heapq import nsmallest
 
+from pp_routecraft.construction.profile import RouteProfile
 from pp_routecraft.domain.instance import Plan, Route, RoutingInstance, VisitSchedule
 from pp_routecraft.validation.verifier import input_errors
 
@@ -12,7 +14,6 @@ class Candidate:
     delta: tuple[int, int]
     vehicle_index: int
     position: int
-    route: Route
     travel: int
 
 
@@ -77,31 +78,58 @@ def empty_routes(instance: RoutingInstance) -> list[tuple[int, ...]]:
     return [states[v.id].executed if v.id in states else () for v in instance.vehicles]
 
 
-def options(instance: RoutingInstance, routes: list[tuple[int, ...]], job: int) -> list[Candidate]:
+def _profile(instance: RoutingInstance, index: int, jobs: tuple[int, ...]) -> RouteProfile | None:
+    evaluated = evaluate_route(instance, index, jobs)
+    state = next((s for s in instance.states if s.vehicle_id == instance.vehicles[index].id), None)
+    return RouteProfile.build(instance, index, evaluated, state) if evaluated else None
+
+
+def options(
+    instance: RoutingInstance,
+    routes: list[tuple[int, ...]],
+    job: int,
+    *,
+    profiles: list[RouteProfile | None] | None = None,
+    limit: int | None = None,
+) -> list[Candidate]:
     choices: list[Candidate] = []
     state_map = {s.vehicle_id: s for s in instance.states}
     for index, jobs in enumerate(routes):
         vehicle = instance.vehicles[index]
         state = state_map.get(vehicle.id)
+        profile = profiles[index] if profiles is not None else _profile(instance, index, jobs)
         if state and state.started and job not in {j.stop_id for j in state.loaded}:
             continue
         if not state or not state.started:
-            demand = sum(instance.stops[j - 1].demand for j in jobs)
+            demand = profile.demand if profile else sum(instance.stops[j - 1].demand for j in jobs)
             if demand + instance.stops[job - 1].demand > vehicle.capacity:
                 continue
-        original = evaluate_route(instance, index, jobs)
-        if original is None:
-            continue
+        # A feasible directed tour need not have feasible partial tours. In
+        # particular a frozen prefix's direct depot return may be much slower
+        # than returning through an onboard delivery. Never prune all insertions
+        # merely because that incomplete route cannot yet return within shift.
+        original_cost = (
+            profile.travel
+            if profile
+            else sum(instance.travel[a][b] for a, b in zip((0, *jobs), (*jobs, 0), strict=True))
+        )
         prefix_length = len(state.executed) if state else 0
         for position in range(prefix_length, len(jobs) + 1):
-            inserted = jobs[:position] + (job,) + jobs[position:]
-            result = evaluate_route(instance, index, inserted)
-            if result is None:
+            if profile:
+                cost = profile.insertion(instance, index, job, position)
+            else:
+                inserted = jobs[:position] + (job,) + jobs[position:]
+                result = evaluate_route(instance, index, inserted)
+                cost = result[1] if result else None
+            if cost is None:
                 continue
-            route, cost = result
-            delta = (int(not jobs), cost - original[1])
-            choices.append(Candidate(delta, index, position, route, cost))
-    return sorted(choices, key=lambda c: (c.delta, c.vehicle_index, c.position))
+            delta = (int(not jobs), cost - original_cost)
+            choices.append(Candidate(delta, index, position, cost))
+
+    def key(candidate: Candidate) -> tuple[tuple[int, int], int, int]:
+        return candidate.delta, candidate.vehicle_index, candidate.position
+
+    return nsmallest(limit, choices, key=key) if limit is not None else sorted(choices, key=key)
 
 
 def repair(
@@ -113,6 +141,7 @@ def repair(
     shuffle_seed: int | None = None,
 ) -> list[tuple[int, ...]] | None:
     routes = list(routes)
+    profiles = [_profile(instance, index, jobs) for index, jobs in enumerate(routes)]
     remaining = sorted(pending, key=lambda j: (instance.stops[j - 1].due, j))
     if shuffle_seed is not None:
         random.Random(shuffle_seed).shuffle(remaining)
@@ -122,7 +151,7 @@ def repair(
             # receive a real feasibility evaluation when selected.
             candidates: list[tuple[tuple[int, int, int, int], int, Candidate]] = []
             for job in remaining[:8]:
-                choices = options(instance, routes, job)
+                choices = options(instance, routes, job, profiles=profiles, limit=2)
                 if not choices:
                     return None
                 best = choices[0]
@@ -135,11 +164,15 @@ def repair(
             _, job, best = max(candidates, key=lambda row: row[0])
         else:
             job = remaining[0]
-            choices = options(instance, routes, job)
+            choices = options(instance, routes, job, profiles=profiles, limit=1)
             if not choices:
                 return None
             best = choices[0]
-        routes[best.vehicle_index] = best.route.stops
+        jobs = routes[best.vehicle_index]
+        routes[best.vehicle_index] = jobs[: best.position] + (job,) + jobs[best.position :]
+        profiles[best.vehicle_index] = _profile(
+            instance, best.vehicle_index, routes[best.vehicle_index]
+        )
         remaining.remove(job)
     return routes
 

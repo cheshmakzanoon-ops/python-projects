@@ -1,5 +1,38 @@
 # Reproducible measurements
 
+## Insertion work diagnostic — October 20, 2026
+
+The [bounded paired diagnostic](evidence/core-insertion-2026-10-20.json) compares
+the insertion module from `39d3a8d4be3e8e2e7de85379790d68f5367d6825` with the
+revised dirty source digest
+`cafee5831a2b70fe70838aed5e526797f271d6362cca057ab0f411834fcec5fb`.
+The actual checkout commit during measurement was
+`cd058b59c5308b88807492c43acc6e3d93128c0b`; the source scope and baseline file
+hash are explicit in the record. This was a concurrent-development run on
+CPython 3.14.8, not an isolated performance lease or a new standard benchmark.
+
+Each case uses one sufficiently capacitated vehicle, synthetic directed island
+arcs, broad windows, seed 1729 and three alternating-order pairs. A separate
+40-stop/seed-1730 regret control checks bounded lookahead. Every paired complete
+plan, including cached schedules, was identical and independently verified.
+
+| Stops | Baseline/revised complete scheduled customer visits | Baseline/revised median seconds |
+| --- | ---: | ---: |
+| 40 | 22,960 / 860 | 0.01704 / 0.00187 |
+| 80 | 177,120 / 3,320 | 0.13612 / 0.00603 |
+| 160 | 1,391,040 / 13,040 | 1.35323 / 0.02326 |
+
+The work counter records visits made by complete optimizer route scheduling;
+it excludes certificate arithmetic, profile building, allocation and verification.
+The portable result is reduced schedule work with identical plans on these cases,
+supported by a quadratic-work regression. Timings are observations, not universal
+speedup or latency guarantees. Infeasible partial routes use full-scheduling
+fallbacks, and actual many-vehicle/windowed search has additional costs.
+The [retained driver](../benchmarks/README.md) reproduces the paired diagnostic;
+the original record is preserved rather than relabeled after documentation changes.
+
+## Historical standard workload
+
 The accepted standard run passed on CPython 3.14.8 at source commit
 `ec1d0106df086a48923016c33199cfbda0aebbc0`, in a clean, isolated Linux checkout.
 The [raw benchmark report](../../../docs/evidence/final/standard/routecraft-3.14.8-benchmark-benchmark.json)

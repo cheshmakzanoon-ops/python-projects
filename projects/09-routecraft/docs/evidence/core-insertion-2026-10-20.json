@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "kind": "paired-construction-diagnostic",
+  "scope": "Concurrent-development run; single-process bounded synthetic diagnostic, not the standard workload or isolated host performance.",
+  "python": "3.14.8",
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "seed": 1729,
+  "source_commit": "cd058b59c5308b88807492c43acc6e3d93128c0b",
+  "source_dirty": true,
+  "source_scope": "project Python source/tests, pyproject.toml, uv.lock, .python-version; relative path + NUL + bytes",
+  "source_content_sha256": "cafee5831a2b70fe70838aed5e526797f271d6362cca057ab0f411834fcec5fb",
+  "source_unchanged": true,
+  "baseline_commit": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+  "baseline_file_sha256": "12eb2cb042c2d05a85c31f10a81157fe53f83638bfbc9bfba718e392c19eb883",
+  "parameters": {
+    "customers": [
+      40,
+      80,
+      160
+    ],
+    "single_vehicle": true,
+    "capacity_per_customer": 3,
+    "due_and_shift_end": 1000000,
+    "repetitions": 3,
+    "warmup_customers": 12,
+    "threads": 1,
+    "regret": false
+  },
+  "work_counter_scope": "Complete optimizer route schedule calls and customer visits; excludes candidate certificate arithmetic, profile building, verification, and allocation costs.",
+  "cases": [
+    {
+      "customers": 40,
+      "regret": false,
+      "repetitions": 3,
+      "objective": [
+        1,
+        727
+      ],
+      "plans_identical": true,
+      "baseline": [
+        {
+          "elapsed_seconds": 0.02185741399989638,
+          "schedule_calls": 861,
+          "scheduled_customer_visits": 22960
+        },
+        {
+          "elapsed_seconds": 0.0170443940005498,
+          "schedule_calls": 861,
+          "scheduled_customer_visits": 22960
+        },
+        {
+          "elapsed_seconds": 0.0166394029993171,
+          "schedule_calls": 861,
+          "scheduled_customer_visits": 22960
+        }
+      ],
+      "revised": [
+        {
+          "elapsed_seconds": 0.0018744580002021394,
+          "schedule_calls": 42,
+          "scheduled_customer_visits": 860
+        },
+        {
+          "elapsed_seconds": 0.0016726329995435663,
+          "schedule_calls": 42,
+          "scheduled_customer_visits": 860
+        },
+        {
+          "elapsed_seconds": 0.001869119999355462,
+          "schedule_calls": 42,
+          "scheduled_customer_visits": 860
+        }
+      ]
+    },
+    {
+      "customers": 80,
+      "regret": false,
+      "repetitions": 3,
+      "objective": [
+        1,
+        1107
+      ],
+      "plans_identical": true,
+      "baseline": [
+        {
+          "elapsed_seconds": 0.1361168910007109,
+          "schedule_calls": 3321,
+          "scheduled_customer_visits": 177120
+        },
+        {
+          "elapsed_seconds": 0.14920214199992188,
+          "schedule_calls": 3321,
+          "scheduled_customer_visits": 177120
+        },
+        {
+          "elapsed_seconds": 0.13590767699952266,
+          "schedule_calls": 3321,
+          "scheduled_customer_visits": 177120
+        }
+      ],
+      "revised": [
+        {
+          "elapsed_seconds": 0.005887412000447512,
+          "schedule_calls": 82,
+          "scheduled_customer_visits": 3320
+        },
+        {
+          "elapsed_seconds": 0.006025019999469805,
+          "schedule_calls": 82,
+          "scheduled_customer_visits": 3320
+        },
+        {
+          "elapsed_seconds": 0.00664936100019986,
+          "schedule_calls": 82,
+          "scheduled_customer_visits": 3320
+        }
+      ]
+    },
+    {
+      "customers": 160,
+      "regret": false,
+      "repetitions": 3,
+      "objective": [
+        1,
+        1875
+      ],
+      "plans_identical": true,
+      "baseline": [
+        {
+          "elapsed_seconds": 1.3532276850000926,
+          "schedule_calls": 13041,
+          "scheduled_customer_visits": 1391040
+        },
+        {
+          "elapsed_seconds": 1.4350643719999425,
+          "schedule_calls": 13041,
+          "scheduled_customer_visits": 1391040
+        },
+        {
+          "elapsed_seconds": 1.32390909500009,
+          "schedule_calls": 13041,
+          "scheduled_customer_visits": 1391040
+        }
+      ],
+      "revised": [
+        {
+          "elapsed_seconds": 0.023262945000169566,
+          "schedule_calls": 162,
+          "scheduled_customer_visits": 13040
+        },
+        {
+          "elapsed_seconds": 0.023936049999974784,
+          "schedule_calls": 162,
+          "scheduled_customer_visits": 13040
+        },
+        {
+          "elapsed_seconds": 0.023058505000335572,
+          "schedule_calls": 162,
+          "scheduled_customer_visits": 13040
+        }
+      ]
+    }
+  ],
+  "regret_control": {
+    "customers": 40,
+    "seed": 1730,
+    "plans_identical": true,
+    "baseline": {
+      "elapsed_seconds": 0.017617757999687456,
+      "schedule_calls": 5904,
+      "scheduled_customer_visits": 10434
+    },
+    "revised": {
+      "elapsed_seconds": 0.004079194000041753,
+      "schedule_calls": 60,
+      "scheduled_customer_visits": 231
+    }
+  },
+  "correctness_checks": {
+    "all_plans_independently_verified": true,
+    "all_paired_plans_identical": true,
+    "source_unchanged": true
+  }
+}

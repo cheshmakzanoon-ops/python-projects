@@ -1,6 +1,57 @@
 # Verification
 
-## Interface and stopping-boundary review — October 20, 2026
+## Core insertion, exact-reference and rolling-state review — October 20, 2026
+
+The revised core passed complete structured project checks on Linux x86_64:
+
+| Interpreter | Tests | Additional checks |
+| --- | ---: | --- |
+| CPython 3.14.8 | 140 passed in 12.30 s | Ruff format/lint, strict mypy on 22 source files, sdist/wheel builds, external runtime-only installed-wheel demo |
+| CPython 3.13.16 | 140 passed in 12.12 s | Same checks, separate environment and build directory |
+
+Both JUnit reports recorded zero failures, errors or skips. Commands were
+`PORTFOLIO_PYTHON=3.14.8 python scripts/portfolio.py check routecraft` and the
+corresponding `PORTFOLIO_PYTHON=3.13.16` invocation with
+`UV_PROJECT_ENVIRONMENT="$PWD/.local/venvs/routecraft-3.13.16"`. These are working-tree
+checks; final immutable-snapshot evidence is collected separately by the repository
+verification workflow.
+
+The core review reproduced a valid rolling continuation discarded by both
+constructors: `0→1→2→0` costs three units within a ten-unit shift, while the frozen
+prefix's direct `1→0` return costs 100. Infeasible partial routes now receive real
+insertion checks rather than being pruned. The original failure is retained in
+`test_core_boundaries.py`, along with controlled cancellation/deadline schedules
+during construction, the last iteration, and a supplied incumbent with zero
+iterations. The comparison baseline also checks its final deadline boundary.
+
+Insertion profiles were challenged against direct unindexed simulation on 600
+seeded cases (`611271`), including nonmetric/zero arcs, service windows/durations,
+partial onboard manifests, completed prefixes and delayed actual departure. A
+third independently enumerated model assigns customers to labeled vehicles and
+then permutes each route on 35 tiny cases (`702813`); it checks verifier acceptance
+and rejection and the exact optimum/infeasibility. The exact reference itself now
+uses a separate path-prefix waiting-deficit formula, with final verifier agreement
+required. A dense 80-customer work-bound regression guards against rescheduling
+every insertion position.
+
+The [paired insertion diagnostic](evidence/core-insertion-2026-10-20.json) preserves
+its actual dirty source digest
+`cafee5831a2b70fe70838aed5e526797f271d6362cca057ab0f411834fcec5fb`, measured checkout
+`cd058b59c5308b88807492c43acc6e3d93128c0b`, baseline `39d3a8d`, parameters and
+counter scope. All nine dense-route pairs and the separate regret control returned
+identical independently verified plans. [Benchmark documentation](BENCHMARKS.md)
+distinguishes deterministic work counts from concurrent-development timing.
+The retained reproduction driver was also executed successfully into a fresh
+temporary report; its output does not replace the original evidence.
+
+Both installed-wheel demos returned static objective `(4, 714)`, rejected the
+deliberately duplicated stop and verified rolling objective `(4, 728)`. The earlier
+rolling demonstration below returned `(4, 700)`; newly eligible repair moves change
+the seeded search path and do not guarantee heuristic dominance. No standard
+benchmark was rerun and no large-instance optimality bound is claimed. Dependencies
+and the lockfile are unchanged.
+
+## Historical interface and stopping-boundary review — October 20, 2026
 
 The reviewed Routecraft working tree passed the complete project check on Linux x86_64:
 
