@@ -18,7 +18,7 @@ from libcst.metadata import (
 )
 
 from pp_pytrace.frontend.discovery import parse
-from pp_pytrace.reporting.models import location
+from pp_pytrace.reporting.models import SourceMap
 
 
 @dataclass(frozen=True)
@@ -151,6 +151,7 @@ def rewrite(source: str, manifest: MigrationManifest | None = None) -> Rewrite:
         # QualifiedNameProvider cannot enumerate names introduced by a star import.
         return Rewrite(source, source, (), ("wildcard imports make bindings uncertain",))
     forbidden = set()
+    locations = SourceMap(source)
     for node in ast.walk(tree):
         if (
             isinstance(node, (ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))
@@ -158,7 +159,7 @@ def rewrite(source: str, manifest: MigrationManifest | None = None) -> Rewrite:
         ):
             first = node.body[0]
             if isinstance(first, ast.Expr) and isinstance(first.value, ast.Call):
-                loc = location(first.value, source)
+                loc = locations.location(first.value)
                 forbidden.add((loc.line, loc.column))
     try:
         module = cst.parse_module(source)

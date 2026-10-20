@@ -13,9 +13,10 @@ values = st.builds(
     built=st.booleans(),
     unknown=st.booleans(),
     targets=st.frozensets(
-        st.sampled_from(["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]), max_size=8
+        st.sampled_from(["*", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]), max_size=11
     ),
-    origins=st.frozensets(st.integers(1, 15), max_size=8),
+    origins=st.frozensets(st.integers(1, 15), max_size=15),
+    sql_protocol=st.booleans(),
 )
 
 

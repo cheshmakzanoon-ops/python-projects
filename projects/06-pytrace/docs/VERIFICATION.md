@@ -5,6 +5,68 @@ bindings, fixed-point convergence, contextual taint, Unicode diagnostics, SARIF,
 incremental invalidation, conservative transforms and journal recovery. Supported
 interpreters are CPython 3.13.16 and 3.14.8 on Linux.
 
+## Raise-expression follow-up: October 20, 2026
+
+Peer differential probes found that evaluating a raised exception or its `from`
+cause could fail before a later alias assignment. The CFG preserved only the
+completed raise state, so a handler/finally sink could lose the earlier process
+alias. Three trusted concrete fixtures reproduced the missing findings before
+the fix; the analogous return-expression control already passed. Raise now
+retains exceptional expression-prefix state on the enclosing continuation.
+The [core review](CORE_REVIEW.md#follow-up-exceptions-while-evaluating-raise)
+records the precise witness and modeled boundary.
+
+The final suite passed **202 tests with zero failures/errors/skips on each
+interpreter**: 16.48 s on CPython 3.14.8 and 15.33 s on CPython 3.13.16. Ruff
+format/lint (53 checked files), strict mypy (25 source modules), sdist/wheel builds
+and isolated installed-wheel demos passed for both. The focused CFG/solver/
+trusted differential selection passed 38 tests. These checks used separate
+environments and ran the full interpreter checks sequentially through
+`PORTFOLIO_PYTHON=VERSION python scripts/portfolio.py check pytrace` from the root.
+
+The working-tree source digest is
+`aacd3998c6bff8d453dc429919b4081954c964ef2d799ee7ceb38c7dab5fdcd0`
+under the source/test/benchmark/example/manifest scope declared by
+`pp_pytrace.evidence.metadata`; lock SHA-256 is
+`4e0752505efdd7261423861af80c8e7fb9f89ce9569d5f09be728826d5507660`.
+Documentation is outside that scope. This narrow follow-up did not rerun the
+earlier mechanism scaling or standard workload; those raw artifacts keep their
+original source identities and do not time this final implementation.
+
+## Compiler and dataflow review: October 20, 2026
+
+Starting revision: `39d3a8d`. This review refactors control-flow lowering and
+convergence, not the target-execution policy. [Core review](CORE_REVIEW.md)
+records the defects, independently executed witnesses and exact scaling scope.
+
+The reviewed suite contains **198 tests**. Thirteen concrete source-to-shell
+witnesses all fail against an independently exported baseline package and pass
+with the reviewed implementation. The preserved [failure capture](../artifacts/deep-core-baseline-failures.txt)
+shows those failures; they are expected baseline defects rather than failures of
+the reviewed tree. The original 50-file labeled corpus still passes unchanged.
+
+Additional evidence includes an exhaustive finite-state solver oracle over 80
+generated cyclic graphs, successor-order invariance, CPython symbol-table and
+comprehension-lifetime comparisons, explicit finally/loop/exception graph checks,
+and 12 before/after executions of owned codemod fixtures. Only these trusted test
+fixtures execute; target analysis still parses without executing source.
+
+The [baseline scaling report](../artifacts/deep-core-baseline-39d3a8d.json) and
+[reviewed scaling report](../artifacts/deep-core-scaling.json) retain three repeats,
+identical generated source hashes and imported Python-package hashes. For 900
+functions, analysis-only median time changed from **2.8605 s** to **0.2454 s** on
+this shared host. Parsing/cache/I/O are excluded. The mechanism comparison does
+not establish end-to-end capacity or accuracy on unfamiliar repositories.
+
+Ruff format/lint and strict mypy (25 source files) pass. Both supported
+interpreters run the full suite in isolated environments: **198 passed in
+16.18 s on 3.14.8**, and **198 passed in 16.23 s on 3.13.16**. Wheel/sdist builds
+and installed-wheel demos pass on both versions, preserving findings and codemod
+idempotence. Large historical benchmark
+reports are unchanged and have not been rerun. Exception types, context-manager
+suppression, `except*` subgroups, heap/closure behavior and annotation evaluation
+remain documented boundaries.
+
 ## Review: October 20, 2026
 
 This review adds regression coverage for two classes of defect:

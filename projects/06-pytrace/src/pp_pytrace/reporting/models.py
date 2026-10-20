@@ -45,18 +45,28 @@ class Diagnostic:
         return {"id": self.identifier, **asdict(self)}
 
 
+class SourceMap:
+    """Index source once; AST byte offsets convert to Unicode report columns."""
+
+    def __init__(self, source: str) -> None:
+        self.lines = tuple(line.encode("utf-8") for line in source.splitlines()) or (b"",)
+
+    def location(self, node: ast.AST) -> Location:
+        start_line = getattr(node, "lineno", 1)
+        end_line = getattr(node, "end_lineno", None) or start_line
+
+        def column(line: int, byte: int) -> int:
+            raw = self.lines[min(line, len(self.lines)) - 1]
+            return len(raw[:byte].decode("utf-8", errors="ignore")) + 1
+
+        return Location(
+            start_line,
+            column(start_line, getattr(node, "col_offset", 0)),
+            end_line,
+            column(end_line, getattr(node, "end_col_offset", 0) or 0),
+        )
+
+
 def location(node: ast.AST, source: str) -> Location:
-    lines = source.splitlines() or [""]
-    start_line = getattr(node, "lineno", 1)
-    end_line = getattr(node, "end_lineno", None) or start_line
-
-    def column(line: int, byte: int) -> int:
-        raw = lines[min(line, len(lines)) - 1].encode("utf-8")
-        return len(raw[:byte].decode("utf-8", errors="ignore")) + 1
-
-    return Location(
-        start_line,
-        column(start_line, getattr(node, "col_offset", 0)),
-        end_line,
-        column(end_line, getattr(node, "end_col_offset", 0) or 0),
-    )
+    """Convenience for single lookups; repeated callers should reuse SourceMap."""
+    return SourceMap(source).location(node)

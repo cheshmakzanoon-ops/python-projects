@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "label": "deep-core-working-tree",
+  "python": "3.14.8",
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "package_path": "/workspace/python-projects/projects/06-pytrace/src/pp_pytrace",
+  "package_content_sha256": "392a8434fb1d965fc78b6d7970b75c67851fd541dba5cef84753ab6a1e64256b",
+  "scope": "Three analysis-only repeats on pre-parsed identical ASTs; includes analyzer construction, CFG, fixed point, lexical scopes and diagnostics; excludes parsing/cache/I/O",
+  "limitation": "Synthetic functions, one shared host; describes this mechanism, not production throughput or broad analyzer accuracy",
+  "measurements": [
+    {
+      "functions": 100,
+      "bytes": 10200,
+      "source_sha256": "cbddd135c187d45d42075a46c80a253d95579dc78b6b8911b53456a3a931af03",
+      "seconds": [
+        0.026255760999902122,
+        0.02721135299998423,
+        0.025558810999882553
+      ],
+      "median_seconds": 0.026255760999902122,
+      "blocks": 1204,
+      "transfer_steps": 1002,
+      "diagnostics": 200,
+      "shell_findings": 100
+    },
+    {
+      "functions": 300,
+      "bytes": 30800,
+      "source_sha256": "abe28483f9b454904ba9e995ecb7dfebb00bce9623212ebc86987a423416eac3",
+      "seconds": [
+        0.08315152900013345,
+        0.08426108300000124,
+        0.07656487399981415
+      ],
+      "median_seconds": 0.08315152900013345,
+      "blocks": 3604,
+      "transfer_steps": 3002,
+      "diagnostics": 600,
+      "shell_findings": 300
+    },
+    {
+      "functions": 900,
+      "bytes": 92600,
+      "source_sha256": "8a1fe1479f12ba01b46fe6e65552c85d4ecbf86b9d1bdb2637ee63740d9e7b70",
+      "seconds": [
+        0.2758415920002335,
+        0.24544045299990103,
+        0.24126648300034503
+      ],
+      "median_seconds": 0.24544045299990103,
+      "blocks": 10804,
+      "transfer_steps": 9002,
+      "diagnostics": 1800,
+      "shell_findings": 900
+    }
+  ]
+}

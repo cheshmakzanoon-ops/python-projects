@@ -15,6 +15,14 @@ class Value:
     unknown: bool = False
     targets: frozenset[str] = frozenset()
     origins: frozenset[int] = frozenset()
+    sql_protocol: bool = False
+
+    def __post_init__(self) -> None:
+        if "*" in self.targets or len(self.targets) > 8:
+            object.__setattr__(self, "targets", frozenset(["*"]))
+            object.__setattr__(self, "unknown", True)
+        if len(self.origins) > 8:
+            object.__setattr__(self, "origins", frozenset(sorted(self.origins)[:8]))
 
     def join(self, other: Value) -> Value:
         targets = self.targets | other.targets
@@ -26,11 +34,12 @@ class Value:
             self.unknown or other.unknown or "*" in targets,
             targets,
             frozenset(sorted(self.origins | other.origins)[:8]),
+            self.sql_protocol or other.sql_protocol,
         )
 
     @property
-    def key(self) -> tuple[int, bool, bool, frozenset[str]]:
-        return self.taint, self.built, self.unknown, self.targets
+    def key(self) -> tuple[int, bool, bool, frozenset[str], bool]:
+        return self.taint, self.built, self.unknown, self.targets, self.sql_protocol
 
 
 UNKNOWN = Value(unknown=True)
@@ -47,5 +56,5 @@ def join_environments(left: Environment, right: Environment) -> Environment:
 
 def environment_key(
     env: Environment,
-) -> tuple[tuple[str, tuple[int, bool, bool, frozenset[str]]], ...]:
+) -> tuple[tuple[str, tuple[int, bool, bool, frozenset[str], bool]], ...]:
     return tuple(sorted((key, value.key) for key, value in env.items()))

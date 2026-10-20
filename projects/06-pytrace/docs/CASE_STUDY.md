@@ -1,5 +1,31 @@
 # Case study: conservative Python analysis and editing
 
+## Control-flow abstractions that lost real behavior
+
+The [subsequent core review](CORE_REVIEW.md) found 13 independently executed
+witnesses that the earlier graph missed. Routing return directly to exit erased
+executable `finally` code. Binding a loop target in the same block as iterable
+evaluation erased an existing alias even for an empty list. Treating an AST's
+field order as Python evaluation order changed dictionary key/value effects and
+chained-comparison short circuits. These were failures of the model rather than
+malformed inputs.
+
+Explicit continuations and lowered operations now preserve those boundaries.
+Exception effects retain intermediate expression prefixes, and diagnostics are
+emitted from converged states rather than worklist arrival order. A separate
+solver admits a small exhaustive oracle that can test convergence without
+reusing the Python transfer implementation. CPython symbol tables and owned
+before/after codemod executions supply additional independent references.
+
+The first correct refactor also made a scaling problem obvious: carrying default
+unknown values for every module definition through every unrelated function adds
+no information but multiplies join work. Sparse unknown bindings, exception-edge
+specific work and one reusable Unicode source index remove that accidental cost.
+The focused record compares exact generated sources and imported package hashes;
+its timings do not imply whole-repository throughput or general soundness.
+
+## Original implementation and acceptance
+
 The problem is deceptively small: find risky Python calls and remove two redundant API forms. Searching names misses import aliases; rewriting textual call expressions can silently change behavior. PyTrace therefore separates bounded parsing, lexical meaning, control flow, finite may-analysis and formatting-preserving transformations.
 
 The core is an original worklist engine. A hand-drawn diamond checks CFG edges, and a loop fixture puts its sink before its source in source order. A one-pass scan misses that flow; fixed-point propagation revisits the earlier sink and carries contextual taint across the backedge. A shell-quoting summary clears only shell taint, allowing the SQL rule to preserve its distinct interpretation. Unsupported dynamic behavior becomes an explicit coverage warning.

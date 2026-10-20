@@ -141,11 +141,13 @@ def analyze(
     engine_files = [
         "analysis/engine.py",
         "analysis/lattice.py",
+        "analysis/solver.py",
         "cfg/blocks.py",
         "semantics/symbols.py",
         "rules/registry.py",
         "frontend/discovery.py",
         "frontend/parser_worker.py",
+        "reporting/models.py",
     ]
     engine_hash = hashlib.sha256(
         b"".join((package_root / name).read_bytes() for name in engine_files)

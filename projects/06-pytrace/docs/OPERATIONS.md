@@ -6,6 +6,20 @@ Analyze only caller-selected source: `uv run --locked pytrace analyze /absolute/
 
 Use `analyze --config /tmp/config.json` for declarative call summaries. The file is bounded to 32 KB, known fields, 100 canonical names/field and 200 characters/name. Never put secrets into source summaries. Executable configuration files and target plugins are not loaded.
 
+Control-flow lowering has a 20,000-block budget per suite; the solver has a
+100,000-transfer budget per solve. Exceeding either is a controlled analysis error
+(CLI status 2), with no complete result or replacement cache published. Split an
+unusually large generated module or inspect its nested cleanup structure rather
+than accepting an incomplete report. These work limits do not promise a fixed
+wall time or whole-process memory ceiling.
+
+Read PT900 alongside the security findings. Exception type matching is a
+may-match approximation; `except*` subgroups, context-manager suppression, heap
+protocols, general closures and annotation evaluation need manual review.
+`finally` executes on modeled abrupt exits, and exception prefixes preserve writes
+made before a later expression fails. `--fail-on-findings` includes coverage
+warnings. [Rule semantics](RULES.md) gives concrete examples and interpretation.
+
 `explain ROOT IDENTIFIER` reanalyzes the selected source and emits the matching diagnostic and evidence. `cache inspect CACHE` shows cache paths, content hashes and imports. Delete an owned cache to force a clean run; corrupted JSON also triggers rebuild. Never treat cache files from another writer as authoritative verification. Output diagnostics have `schema_version: 1`; future incompatible versions require explicit migration.
 
 Keep report, plan, patch and cache destinations separate from source. Preflight

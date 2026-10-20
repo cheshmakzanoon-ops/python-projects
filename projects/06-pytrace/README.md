@@ -81,10 +81,12 @@ another process during apply or recovery.
 ## Engineering reference
 
 - [Architecture](docs/ARCHITECTURE.md): CFG, lattice, bindings, cache and report contracts.
+- [Rule semantics](docs/RULES.md): explainable shell, SQL and async findings, confidence and coverage.
 - [Analysis boundaries](docs/DECISIONS.md): modeled Python behavior and edit preconditions.
 - [Operations](docs/OPERATIONS.md): parser budgets, configuration, recovery and cleanup.
 - [Acceptance map](docs/ACCEPTANCE.md) and [verification history](docs/VERIFICATION.md): reproducible checks and recorded results.
 - [Benchmarks](docs/BENCHMARKS.md) and [case study](docs/CASE_STUDY.md): measurements, defects and tradeoffs.
+- [Core review](docs/CORE_REVIEW.md): differential execution, convergence checks and focused scaling against a fixed baseline.
 
 The analyzer is intraprocedural and path-insensitive. Unsupported dynamic
 behavior produces coverage warnings; an absence of findings does not establish

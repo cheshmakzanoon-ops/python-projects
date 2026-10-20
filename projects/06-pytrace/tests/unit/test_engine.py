@@ -213,3 +213,12 @@ def test_subscript_visits_receiver_before_index_and_finds_nested_sinks() -> None
 def test_augmented_assignment_target_effects_are_not_evaluated_twice() -> None:
     source = 'import os\nrecord[(command := input())] += (command := "safe")\nos.system(command)\n'
     assert not findings(source)
+
+
+def test_sql_method_protocol_survives_canonical_target_overflow() -> None:
+    source = (
+        "import os\nreceiver=os\n"
+        + "".join(f"if flag_{i}:\n receiver=receiver.attribute\n" for i in range(10))
+        + 'execute=receiver.execute\nexecute("SELECT " + input())\n'
+    )
+    assert any(rule == "PT002" for rule, _, _ in findings(source))

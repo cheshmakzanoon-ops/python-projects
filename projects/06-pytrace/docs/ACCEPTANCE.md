@@ -11,6 +11,21 @@
 | PY-07 | Docstring, shadow, bytes/f-string/starred/keyword constructor abstentions; conflicting API bindings/new spelling/unpacking/hash mismatch; duplicate edits, forged replacement, stale hashes, traversal, symlink, preflight no-partial-write, recovery refusing external edits. |
 | PY-08 | Actual subprocess byte/node/time/address-space checks, compile-only validity, selected-root file limit, and target/setup/conftest/config sources containing sentinel-writing code that must never run. |
 
+The subsequent [core review](CORE_REVIEW.md) adds independent checks beyond the
+original correlated fixture corpus. `test_core_differential.py` compares authored
+control-flow witnesses with actual CPython execution against harmless process
+stand-ins. `test_solver_oracle.py` compares convergence on cyclic graphs with an
+exhaustive Boolean-state interpreter and reverses successor scheduling.
+`test_codemod_differential.py` executes owned before/after fixtures to compare
+values, docstrings, argument order and errors. These map to PY-01/PY-02/PY-06;
+normal target analysis remains non-executing.
+
+The follow-up raise-expression cases independently execute exception-expression
+failure, `from`-cause failure and finally cleanup with harmless process APIs.
+Each exposes a transient alias that normal expression completion would erase;
+all three failed before the raise exceptional edge was added. An equivalent
+return-expression case checks the analogous already-supported path.
+
 The CLI acceptance test invokes installed package entry points in subprocesses, produces SARIF and a reviewable patch, applies only owned trusted fixtures and verifies unchanged security findings. Unit/property tests supplement the correlated labeled variants; reported precision/recall on those variants is not an estimate of broad Python-code accuracy.
 
 Current commands and results are in [verification history](VERIFICATION.md).

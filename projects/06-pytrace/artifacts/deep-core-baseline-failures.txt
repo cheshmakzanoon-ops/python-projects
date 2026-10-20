@@ -1,0 +1,263 @@
+FFFFFFFFFFFFF                                                            [100%]
+=================================== FAILURES ===================================
+_ test_concrete_source_to_shell_paths_are_not_lost[expression-prefix-exception] _
+
+name = 'expression-prefix-exception'
+source = 'import os\nrun=print\ntry:\n values=((run:=os.system), int("invalid"), (run:=print))\nexcept ValueError:\n run(input())\n'
+call = None
+
+    @pytest.mark.parametrize("name,source,call", RISK_CASES, ids=[case[0] for case in RISK_CASES])
+    def test_concrete_source_to_shell_paths_are_not_lost(
+        name: str, source: str, call: str | None
+    ) -> None:
+        concrete = concrete_shell_lines(source, call=call)
+        assert concrete, name  # A trivial zero-execution fixture cannot establish coverage.
+>       assert concrete <= abstract_shell_lines(source)
+E       assert {6} <= set()
+E         
+E         Extra items in the left set:
+E         6
+
+tests/integration/test_core_differential.py:131: AssertionError
+_______ test_concrete_source_to_shell_paths_are_not_lost[finally-return] _______
+
+name = 'finally-return'
+source = 'import os\ndef service():\n try:\n  return 0\n finally:\n  os.system(input())\n'
+call = 'service'
+
+    @pytest.mark.parametrize("name,source,call", RISK_CASES, ids=[case[0] for case in RISK_CASES])
+    def test_concrete_source_to_shell_paths_are_not_lost(
+        name: str, source: str, call: str | None
+    ) -> None:
+        concrete = concrete_shell_lines(source, call=call)
+        assert concrete, name  # A trivial zero-execution fixture cannot establish coverage.
+>       assert concrete <= abstract_shell_lines(source)
+E       assert {6} <= set()
+E         
+E         Extra items in the left set:
+E         6
+
+tests/integration/test_core_differential.py:131: AssertionError
+_______ test_concrete_source_to_shell_paths_are_not_lost[finally-raise] ________
+
+name = 'finally-raise'
+source = 'import os\ndef service():\n try:\n  raise ValueError()\n finally:\n  os.system(input())\n'
+call = 'service'
+
+    @pytest.mark.parametrize("name,source,call", RISK_CASES, ids=[case[0] for case in RISK_CASES])
+    def test_concrete_source_to_shell_paths_are_not_lost(
+        name: str, source: str, call: str | None
+    ) -> None:
+        concrete = concrete_shell_lines(source, call=call)
+        assert concrete, name  # A trivial zero-execution fixture cannot establish coverage.
+>       assert concrete <= abstract_shell_lines(source)
+E       assert {6} <= set()
+E         
+E         Extra items in the left set:
+E         6
+
+tests/integration/test_core_differential.py:131: AssertionError
+_______ test_concrete_source_to_shell_paths_are_not_lost[finally-break] ________
+
+name = 'finally-break'
+source = 'import os\nfor step in [0]:\n try:\n  break\n finally:\n  os.system(input())\n'
+call = None
+
+    @pytest.mark.parametrize("name,source,call", RISK_CASES, ids=[case[0] for case in RISK_CASES])
+    def test_concrete_source_to_shell_paths_are_not_lost(
+        name: str, source: str, call: str | None
+    ) -> None:
+        concrete = concrete_shell_lines(source, call=call)
+        assert concrete, name  # A trivial zero-execution fixture cannot establish coverage.
+>       assert concrete <= abstract_shell_lines(source)
+E       assert {6} <= set()
+E         
+E         Extra items in the left set:
+E         6
+
+tests/integration/test_core_differential.py:131: AssertionError
+______ test_concrete_source_to_shell_paths_are_not_lost[finally-continue] ______
+
+name = 'finally-continue'
+source = 'import os\nfor step in [0]:\n try:\n  continue\n finally:\n  os.system(input())\n'
+call = None
+
+    @pytest.mark.parametrize("name,source,call", RISK_CASES, ids=[case[0] for case in RISK_CASES])
+    def test_concrete_source_to_shell_paths_are_not_lost(
+        name: str, source: str, call: str | None
+    ) -> None:
+        concrete = concrete_shell_lines(source, call=call)
+        assert concrete, name  # A trivial zero-execution fixture cannot establish coverage.
+>       assert concrete <= abstract_shell_lines(source)
+E       assert {6} <= set()
+E         
+E         Extra items in the left set:
+E         6
+
+tests/integration/test_core_differential.py:131: AssertionError
+______ test_concrete_source_to_shell_paths_are_not_lost[empty-for-alias] _______
+
+name = 'empty-for-alias'
+source = 'import os\nrun=os.system\nfor run in []:\n pass\nrun(input())\n'
+call = None
+
+    @pytest.mark.parametrize("name,source,call", RISK_CASES, ids=[case[0] for case in RISK_CASES])
+    def test_concrete_source_to_shell_paths_are_not_lost(
+        name: str, source: str, call: str | None
+    ) -> None:
+        concrete = concrete_shell_lines(source, call=call)
+        assert concrete, name  # A trivial zero-execution fixture cannot establish coverage.
+>       assert concrete <= abstract_shell_lines(source)
+E       assert {5} <= set()
+E         
+E         Extra items in the left set:
+E         5
+
+tests/integration/test_core_differential.py:131: AssertionError
+______ test_concrete_source_to_shell_paths_are_not_lost[exception-state] _______
+
+name = 'exception-state'
+source = 'import os\nrun=print\ntry:\n run=os.system\n raise ValueError()\nexcept ValueError:\n run(input())\n'
+call = None
+
+    @pytest.mark.parametrize("name,source,call", RISK_CASES, ids=[case[0] for case in RISK_CASES])
+    def test_concrete_source_to_shell_paths_are_not_lost(
+        name: str, source: str, call: str | None
+    ) -> None:
+        concrete = concrete_shell_lines(source, call=call)
+        assert concrete, name  # A trivial zero-execution fixture cannot establish coverage.
+>       assert concrete <= abstract_shell_lines(source)
+E       assert {7} <= set()
+E         
+E         Extra items in the left set:
+E         7
+
+tests/integration/test_core_differential.py:131: AssertionError
+_______ test_concrete_source_to_shell_paths_are_not_lost[nested-finally] _______
+
+name = 'nested-finally'
+source = 'import os\nrun=print\ntry:\n try:\n  raise ValueError()\n finally:\n  run=os.system\nexcept ValueError:\n run(input())\n'
+call = None
+
+    @pytest.mark.parametrize("name,source,call", RISK_CASES, ids=[case[0] for case in RISK_CASES])
+    def test_concrete_source_to_shell_paths_are_not_lost(
+        name: str, source: str, call: str | None
+    ) -> None:
+        concrete = concrete_shell_lines(source, call=call)
+        assert concrete, name  # A trivial zero-execution fixture cannot establish coverage.
+>       assert concrete <= abstract_shell_lines(source)
+E       assert {9} <= set()
+E         
+E         Extra items in the left set:
+E         9
+
+tests/integration/test_core_differential.py:131: AssertionError
+______ test_concrete_source_to_shell_paths_are_not_lost[function-default] ______
+
+name = 'function-default'
+source = 'import os\ndef service(value=os.system(input())):\n pass\n'
+call = None
+
+    @pytest.mark.parametrize("name,source,call", RISK_CASES, ids=[case[0] for case in RISK_CASES])
+    def test_concrete_source_to_shell_paths_are_not_lost(
+        name: str, source: str, call: str | None
+    ) -> None:
+        concrete = concrete_shell_lines(source, call=call)
+        assert concrete, name  # A trivial zero-execution fixture cannot establish coverage.
+>       assert concrete <= abstract_shell_lines(source)
+E       assert {2} <= set()
+E         
+E         Extra items in the left set:
+E         2
+
+tests/integration/test_core_differential.py:131: AssertionError
+________ test_concrete_source_to_shell_paths_are_not_lost[class-suite] _________
+
+name = 'class-suite', source = 'class C:\n import os\n os.system(input())\n'
+call = None
+
+    @pytest.mark.parametrize("name,source,call", RISK_CASES, ids=[case[0] for case in RISK_CASES])
+    def test_concrete_source_to_shell_paths_are_not_lost(
+        name: str, source: str, call: str | None
+    ) -> None:
+        concrete = concrete_shell_lines(source, call=call)
+        assert concrete, name  # A trivial zero-execution fixture cannot establish coverage.
+>       assert concrete <= abstract_shell_lines(source)
+E       assert {3} <= set()
+E         
+E         Extra items in the left set:
+E         3
+
+tests/integration/test_core_differential.py:131: AssertionError
+______ test_concrete_source_to_shell_paths_are_not_lost[dictionary-order] ______
+
+name = 'dictionary-order'
+source = 'import os\nx="safe"\nd={(x:=input()):(x:="safe"), (x:=input()):0}\nos.system(x)\n'
+call = None
+
+    @pytest.mark.parametrize("name,source,call", RISK_CASES, ids=[case[0] for case in RISK_CASES])
+    def test_concrete_source_to_shell_paths_are_not_lost(
+        name: str, source: str, call: str | None
+    ) -> None:
+        concrete = concrete_shell_lines(source, call=call)
+        assert concrete, name  # A trivial zero-execution fixture cannot establish coverage.
+>       assert concrete <= abstract_shell_lines(source)
+E       assert {4} <= set()
+E         
+E         Extra items in the left set:
+E         4
+
+tests/integration/test_core_differential.py:131: AssertionError
+__ test_concrete_source_to_shell_paths_are_not_lost[comparison-short-circuit] __
+
+name = 'comparison-short-circuit'
+source = 'import os\nx=input()\nresult = 0 > 1 < (x:="safe")\nos.system(x)\n'
+call = None
+
+    @pytest.mark.parametrize("name,source,call", RISK_CASES, ids=[case[0] for case in RISK_CASES])
+    def test_concrete_source_to_shell_paths_are_not_lost(
+        name: str, source: str, call: str | None
+    ) -> None:
+        concrete = concrete_shell_lines(source, call=call)
+        assert concrete, name  # A trivial zero-execution fixture cannot establish coverage.
+>       assert concrete <= abstract_shell_lines(source)
+E       assert {4} <= set()
+E         
+E         Extra items in the left set:
+E         4
+
+tests/integration/test_core_differential.py:131: AssertionError
+_____ test_concrete_source_to_shell_paths_are_not_lost[guard-fallthrough] ______
+
+name = 'guard-fallthrough'
+source = 'import os\nrun=print\nmatch 1:\n case 1 if (run:=os.system) and False:\n  pass\n case _:\n  run(input())\n'
+call = None
+
+    @pytest.mark.parametrize("name,source,call", RISK_CASES, ids=[case[0] for case in RISK_CASES])
+    def test_concrete_source_to_shell_paths_are_not_lost(
+        name: str, source: str, call: str | None
+    ) -> None:
+        concrete = concrete_shell_lines(source, call=call)
+        assert concrete, name  # A trivial zero-execution fixture cannot establish coverage.
+>       assert concrete <= abstract_shell_lines(source)
+E       assert {7} <= set()
+E         
+E         Extra items in the left set:
+E         7
+
+tests/integration/test_core_differential.py:131: AssertionError
+=========================== short test summary info ============================
+FAILED tests/integration/test_core_differential.py::test_concrete_source_to_shell_paths_are_not_lost[expression-prefix-exception]
+FAILED tests/integration/test_core_differential.py::test_concrete_source_to_shell_paths_are_not_lost[finally-return]
+FAILED tests/integration/test_core_differential.py::test_concrete_source_to_shell_paths_are_not_lost[finally-raise]
+FAILED tests/integration/test_core_differential.py::test_concrete_source_to_shell_paths_are_not_lost[finally-break]
+FAILED tests/integration/test_core_differential.py::test_concrete_source_to_shell_paths_are_not_lost[finally-continue]
+FAILED tests/integration/test_core_differential.py::test_concrete_source_to_shell_paths_are_not_lost[empty-for-alias]
+FAILED tests/integration/test_core_differential.py::test_concrete_source_to_shell_paths_are_not_lost[exception-state]
+FAILED tests/integration/test_core_differential.py::test_concrete_source_to_shell_paths_are_not_lost[nested-finally]
+FAILED tests/integration/test_core_differential.py::test_concrete_source_to_shell_paths_are_not_lost[function-default]
+FAILED tests/integration/test_core_differential.py::test_concrete_source_to_shell_paths_are_not_lost[class-suite]
+FAILED tests/integration/test_core_differential.py::test_concrete_source_to_shell_paths_are_not_lost[dictionary-order]
+FAILED tests/integration/test_core_differential.py::test_concrete_source_to_shell_paths_are_not_lost[comparison-short-circuit]
+FAILED tests/integration/test_core_differential.py::test_concrete_source_to_shell_paths_are_not_lost[guard-fallthrough]
+13 failed, 14 deselected in 0.73s

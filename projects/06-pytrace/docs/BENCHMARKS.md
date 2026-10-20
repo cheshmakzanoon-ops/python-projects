@@ -1,5 +1,9 @@
 # Benchmark evidence
 
+The later [core review](CORE_REVIEW.md) records a focused analysis-only scaling
+comparison against revision `39d3a8d`. It is a separate workload from the standard
+corpus below and does not relabel these historical measurements.
+
 The standard benchmark ran from immutable source commit `59443e2bcdfc6a1dd81f8334c108474eef2d3030`, with `source_dirty: false`. The [raw benchmark report](../../../docs/evidence/final/standard/pytrace-3.14.8-benchmark-benchmark.json) records the workload and measurements; the [verification wrapper](../../../docs/evidence/final/standard/pytrace-3.14.8.json) records the exact dispatcher commands, successful exit codes and unchanged source scope. Their hashes cover explicitly different input lists; use each report's declared scope rather than treating their digests as interchangeable.
 
 | Final standard measurement | Actual result |

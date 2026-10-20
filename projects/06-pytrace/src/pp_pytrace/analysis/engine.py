@@ -6,7 +6,6 @@ import ast
 import io
 import re
 import tokenize
-from collections import deque
 from dataclasses import dataclass
 from functools import reduce
 
@@ -17,13 +16,20 @@ from pp_pytrace.analysis.lattice import (
     UNKNOWN,
     Environment,
     Value,
-    environment_key,
     join_environments,
 )
-from pp_pytrace.cfg.blocks import build
-from pp_pytrace.reporting.models import Diagnostic, Evidence, location
+from pp_pytrace.analysis.solver import Effects, solve
+from pp_pytrace.cfg.blocks import Block, build
+from pp_pytrace.reporting.models import Diagnostic, Evidence, SourceMap
 from pp_pytrace.rules.registry import Config
-from pp_pytrace.semantics.symbols import Locals, imported
+from pp_pytrace.semantics.symbols import (
+    Locals,
+    definition_expressions,
+    imported,
+    named_expression_bindings,
+    parameters,
+    pattern_bindings,
+)
 
 
 @dataclass(frozen=True)
@@ -36,12 +42,15 @@ class Analysis:
 class Analyzer:
     def __init__(self, source: str, path: str, config: Config = Config()) -> None:
         self.source = source
+        self.locations = SourceMap(source)
         self.path = path
         self.config = config
         self.findings: dict[str, Diagnostic] = {}
         self.iterations = 0
         self.blocks = 0
         self.async_context = False
+        self.recording = True
+        self.exceptional_states: list[Environment] | None = None
         self.suppressions: dict[int, set[str]] = {}
         for token in tokenize.generate_tokens(io.StringIO(source).readline):
             if token.type != tokenize.COMMENT:
@@ -54,7 +63,9 @@ class Analyzer:
     def emit(
         self, rule: str, node: ast.AST, message: str, value: Value = BOTTOM, uncertain: bool = False
     ) -> None:
-        loc = location(node, self.source)
+        if not self.recording:
+            return
+        loc = self.locations.location(node)
         if rule in self.suppressions.get(loc.line, set()):
             return
         origins = tuple(
@@ -89,17 +100,29 @@ class Analyzer:
         if isinstance(node, ast.Constant):
             return BOTTOM
         if isinstance(node, ast.Name):
+            self.remember_exception(env)
             return env.get(node.id, UNKNOWN)
         if isinstance(node, ast.Attribute):
             base = self.expression(node.value, env)
-            targets = frozenset(target + "." + node.attr for target in base.targets)
-            if node.attr in self.config.sql_methods:
-                targets = targets | frozenset(["__sql__." + node.attr])
-            return Value(base.taint, base.built, base.unknown, targets, base.origins)
+            self.remember_exception(env)
+            targets = (
+                frozenset(["*"])
+                if "*" in base.targets
+                else frozenset(target + "." + node.attr for target in base.targets)
+            )
+            return Value(
+                base.taint,
+                base.built,
+                base.unknown,
+                targets,
+                base.origins,
+                node.attr in self.config.sql_methods,
+            )
         if isinstance(node, ast.Call):
             target = self.expression(node.func, env)
             arguments = [self.expression(arg, env) for arg in node.args]
             keywords = [self.expression(kw.value, env) for kw in node.keywords]
+            self.remember_exception(env)
             values = arguments + keywords
             combined = reduce(Value.join, values, BOTTOM)
             names = target.targets
@@ -138,7 +161,7 @@ class Analyzer:
                             node,
                             "Untrusted value flows to a shell-enabled process",
                             command,
-                            uncertain_shell or target.unknown or command.unknown,
+                            uncertain_shell or target.unknown or len(names) != 1 or command.unknown,
                         )
                     elif command.unknown:
                         self.emit(
@@ -148,9 +171,7 @@ class Analyzer:
                             command,
                             True,
                         )
-            sql_call = any(
-                name == "__sql__." + method for name in names for method in self.config.sql_methods
-            )
+            sql_call = target.sql_protocol
             if sql_call:
                 query = (
                     arguments[0]
@@ -182,7 +203,7 @@ class Analyzer:
                     node,
                     "Configured synchronous blocking call inside async function",
                     target,
-                    target.unknown,
+                    target.unknown or len(names) != 1,
                 )
             unambiguous = len(names) == 1 and not target.unknown
             if unambiguous and names & set(self.config.shell_sanitizers):
@@ -216,7 +237,8 @@ class Analyzer:
                     "Unresolved call target; returned data is unknown",
                     uncertain=True,
                 )
-            return combined.join(UNKNOWN)
+            receiver = Value(target.taint, target.built, target.unknown, origins=target.origins)
+            return combined.join(receiver).join(UNKNOWN)
         if isinstance(node, (ast.BinOp, ast.JoinedStr)):
             children = list(ast.iter_child_nodes(node))
             combined = reduce(
@@ -224,11 +246,33 @@ class Analyzer:
                 (self.expression(child, env) for child in children if isinstance(child, ast.expr)),
                 BOTTOM,
             )
+            self.remember_exception(env)
             return Value(combined.taint, True, combined.unknown, origins=combined.origins)
         if isinstance(node, ast.NamedExpr):
             value = self.expression(node.value, env)
             self.bind(node.target, value, env)
             return value
+        if isinstance(node, ast.Dict):
+            values = []
+            for key, entry_value in zip(node.keys, node.values, strict=True):
+                values.append(self.expression(key, env))
+                values.append(self.expression(entry_value, env))
+                self.remember_exception(env)
+            return reduce(Value.join, values, BOTTOM)
+        if isinstance(node, ast.Compare):
+            self.expression(node.left, env)
+            comparison_exits: Environment | None = None
+            for comparator in node.comparators:
+                self.expression(comparator, env)
+                self.remember_exception(env)
+                comparison_exits = (
+                    dict(env)
+                    if comparison_exits is None
+                    else join_environments(comparison_exits, env)
+                )
+            if comparison_exits is not None:
+                env.update(comparison_exits)
+            return BOTTOM
         if isinstance(
             node, (ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp, ast.Lambda)
         ):
@@ -238,6 +282,8 @@ class Analyzer:
                 "Comprehension/lambda has a nested scope; effects and data are unknown",
                 uncertain=True,
             )
+            for name in named_expression_bindings(node):
+                env[name] = env.get(name, UNKNOWN).join(UNKNOWN)
             return UNKNOWN
         if isinstance(node, ast.Subscript):
             base = self.expression(node.value, env)
@@ -245,6 +291,7 @@ class Analyzer:
             # sinks or assignment expressions even though heap lookup itself
             # remains an unknown value in this name-state model.
             self.expression(node.slice, env)
+            self.remember_exception(env)
             return base.join(UNKNOWN)
         if isinstance(node, ast.IfExp):
             self.expression(node.test, env)
@@ -276,7 +323,7 @@ class Analyzer:
         self, target: ast.AST, value: Value, env: Environment, *, evaluate_target: bool = True
     ) -> None:
         if isinstance(target, ast.Name):
-            env[target.id] = value
+            self.assign(env, target.id, value)
         elif isinstance(target, (ast.Tuple, ast.List)):
             for item in target.elts:
                 self.bind(item, value.join(UNKNOWN), env)
@@ -290,8 +337,68 @@ class Analyzer:
                 uncertain=True,
             )
 
-    def transfer(self, node: ast.stmt | None, incoming: Environment) -> Environment:
+    @staticmethod
+    def assign(env: Environment, name: str, value: Value) -> None:
+        # Missing bindings already denote UNKNOWN. Keeping thousands of default
+        # values would make every unrelated function pay for module inventory.
+        if value == UNKNOWN:
+            env.pop(name, None)
+        else:
+            env[name] = value
+
+    def remember_exception(self, env: Environment) -> None:
+        if self.exceptional_states is not None:
+            self.exceptional_states.append(dict(env))
+
+    def transfer_block(self, block: Block, incoming: Environment) -> Effects:
+        parent_states = self.exceptional_states
+        self.exceptional_states = [] if block.exceptional_successors else None
+        try:
+            normal = self.transfer_operation(block, incoming)
+            failure = None
+            for state in self.exceptional_states or []:
+                failure = state if failure is None else join_environments(failure, state)
+            return Effects(normal, failure)
+        finally:
+            self.exceptional_states = parent_states
+
+    def transfer_operation(self, block: Block, incoming: Environment) -> Environment:
+        node = block.node
         env = dict(incoming)
+        if block.operation == "for-init":
+            assert isinstance(node, (ast.For, ast.AsyncFor))
+            env[block.temporary] = self.expression(node.iter, env).join(UNKNOWN)
+        elif block.operation == "for-next":
+            pass
+        elif block.operation == "for-bind":
+            assert isinstance(node, (ast.For, ast.AsyncFor))
+            self.bind(node.target, env[block.temporary], env)
+        elif block.operation in ("except-enter", "except-clear"):
+            assert isinstance(node, ast.ExceptHandler)
+            if block.operation == "except-enter":
+                self.expression(node.type, env)
+            if node.name:
+                env.pop(node.name, None)
+        elif block.operation == "match-init":
+            assert isinstance(node, ast.Match)
+            env[block.temporary] = self.expression(node.subject, env)
+            self.emit(
+                "PT900",
+                node,
+                "Pattern protocols and partial failed captures are not modeled",
+                uncertain=True,
+            )
+        elif block.operation == "match-case":
+            assert isinstance(node, ast.match_case)
+            for name in pattern_bindings(node.pattern):
+                self.assign(env, name, env[block.temporary].join(UNKNOWN))
+            self.expression(node.guard, env)
+        else:
+            assert node is None or isinstance(node, ast.stmt)
+            return self.transfer_statement(node, env)
+        return env
+
+    def transfer_statement(self, node: ast.stmt | None, env: Environment) -> Environment:
         if isinstance(node, (ast.Import, ast.ImportFrom)):
             env.update(imported(node))
             if isinstance(node, ast.ImportFrom) and any(alias.name == "*" for alias in node.names):
@@ -320,10 +427,19 @@ class Analyzer:
                 evaluate_target=False,
             )
         elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
-            env[node.name] = UNKNOWN
-        elif isinstance(node, (ast.For, ast.AsyncFor)):
-            self.bind(node.target, self.expression(node.iter, env).join(UNKNOWN), env)
-        elif isinstance(node, (ast.Try, ast.TryStar, ast.With, ast.AsyncWith, ast.Match)):
+            for expression in definition_expressions(node):
+                self.expression(expression, env)
+            if isinstance(node, ast.ClassDef):
+                self.flow(node.body, env)
+            env.pop(node.name, None)
+        elif isinstance(node, (ast.Try, ast.TryStar)):
+            self.emit(
+                "PT900",
+                node,
+                "Exception types and raising timing use conservative may-match edges",
+                uncertain=True,
+            )
+        elif isinstance(node, (ast.With, ast.AsyncWith)):
             self.emit(
                 "PT900",
                 node,
@@ -337,8 +453,6 @@ class Analyzer:
                     self.expression(item.context_expr, env)
                     if item.optional_vars:
                         self.bind(item.optional_vars, UNKNOWN, env)
-            elif isinstance(node, ast.Match):
-                self.expression(node.subject, env)
         elif isinstance(node, ast.Delete):
             for target in node.targets:
                 self.bind(target, UNKNOWN, env)
@@ -358,22 +472,17 @@ class Analyzer:
     def flow(self, body: list[ast.stmt], initial: Environment) -> Environment:
         graph = build(body)
         self.blocks += len(graph.blocks)
-        states = {graph.entry: dict(initial)}
-        queue = deque([graph.entry])
-        pending = {graph.entry}
-        while queue:
-            index = queue.popleft()
-            pending.remove(index)
-            self.iterations += 1
-            output = self.transfer(graph.blocks[index].node, states[index])
-            for next_index in graph.blocks[index].successors:
-                previous = states.get(next_index)
-                merged = output if previous is None else join_environments(previous, output)
-                changed = previous is None or environment_key(previous) != environment_key(merged)
-                states[next_index] = merged
-                if changed and next_index not in pending:
-                    queue.append(next_index)
-                    pending.add(next_index)
+        recording = self.recording
+        self.recording = False
+        try:
+            solution = solve(graph, initial, self.transfer_block)
+        finally:
+            self.recording = recording
+        self.iterations += solution.iterations
+        states = solution.states
+        if recording:
+            for index in sorted(states):
+                self.transfer_block(graph.blocks[index], states[index])
         return states.get(0, initial)
 
     def run(self, tree: ast.Module) -> Analysis:
@@ -414,21 +523,14 @@ class Analyzer:
                     nested = True
                     captured = locals_by_node[enclosing]
                     for name in captured.names:
-                        env[name] = UNKNOWN
-                    for argument in (
-                        enclosing.args.posonlyargs + enclosing.args.args + enclosing.args.kwonlyargs
-                    ):
-                        env[argument.arg] = UNKNOWN
+                        env.pop(name, None)
+                    for argument in parameters(enclosing):
+                        env.pop(argument, None)
                 enclosing = parents.get(enclosing)
-            for name in local.names - local.globals:
-                env[name] = UNKNOWN
-            args = node.args.posonlyargs + node.args.args + node.args.kwonlyargs
-            for arg in (
-                args
-                + ([node.args.vararg] if node.args.vararg else [])
-                + ([node.args.kwarg] if node.args.kwarg else [])
-            ):
-                env[arg.arg] = UNKNOWN
+            for name in local.local_bindings:
+                env.pop(name, None)
+            for argument in parameters(node):
+                env.pop(argument, None)
             self.async_context = isinstance(node, ast.AsyncFunctionDef)
             self.flow(node.body, env)
             if nested:
