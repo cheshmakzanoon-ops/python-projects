@@ -1,5 +1,11 @@
 # Reliability and interface review — October 2026
 
+Committed source `0e52603de3bfbe50094904b5c5b9620af2ac0178` passed the complete
+two-interpreter check: 2,274 project tests, 122 shared tooling tests, all package
+builds and installed-wheel demonstrations, CI-sized workloads, and six public
+integration executions. The [verification record](evidence/quality-review-2026-10-20.json)
+retains source hashes, counts, outcomes, and limitations; [status](STATUS.md) summarizes the scope.
+
 This review concentrates on failures at persistence, input, and operator boundaries. The goal is to make invalid state fail explicitly, preserve valuable data on failure, and make the repository easier to run and assess. Existing algorithm implementations and independently locked package boundaries remain intact.
 
 ## Changes by product

@@ -37,6 +37,8 @@ For a focused first review, follow [Anchor's event reducer](projects/01-anchor/s
 
 Architecture documents explain transaction and persistence boundaries. Case studies discuss reproduced defects and rejected alternatives. [Verification records](docs/STATUS.md) distinguish tested revisions, local checks, hosted CI observations, and historical performance measurements. The [evidence policy](docs/architecture/EVIDENCE.md) defines source hashes, isolated wheel checks, and benchmark interpretation.
 
+The [latest reliability and interface review](docs/QUALITY_REVIEW.md) documents the persistence, validation, security, and usability changes across all ten products, with their committed-source verification results.
+
 ## Scope and limitations
 
 The supported verification target is Linux with standard CPython 3.13.16 and 3.14.8. Anchor and Meridian require local PostgreSQL; other core workflows need no paid API, cloud account, GPU, or external dataset. Demonstration services are local tools and require additional deployment controls before use on a shared network; read [SECURITY.md](SECURITY.md).

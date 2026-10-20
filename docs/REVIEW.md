@@ -1,5 +1,10 @@
 # Correctness and reliability review
 
+This is the October 18 historical review of source snapshot
+`554e0ba461793657c6279068e361a35b3097ecf6`. Its counts, hashes, and compatibility
+observations belong to that revision. See the [later reliability and interface
+review](QUALITY_REVIEW.md) and [current verification status](STATUS.md) for subsequent changes.
+
 This review examined all ten products, their public interfaces, persistence and failure
 boundaries, and the shared development tooling. The changes address reproducible defects
 and add regression coverage; they do not change the repository into a single application

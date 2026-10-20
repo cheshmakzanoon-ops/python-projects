@@ -1,63 +1,52 @@
 # Verification status
 
-The subsequent [correctness and reliability review](REVIEW.md) fixes additional defects
-across all ten products and shared tooling. Its immutable snapshot passed **1,680 test
-executions** across Python 3.13.16 and 3.14.8, including **259 additional cases**, plus
-builds, installed-wheel demos, and all three integrations on both versions. Its
-[validation record](evidence/review-2026-10-18.json) retains exact source/lock hashes and
-counts. Current's checkpoint compatibility change is documented in that review. The
-acceptance and performance records below describe their original source revisions.
+The [October reliability and interface review](QUALITY_REVIEW.md) verified committed source `0e52603de3bfbe50094904b5c5b9620af2ac0178` in disposable clean checkouts. All twenty product/interpreter checks passed, with unchanged implementation and shared-input hashes before and after execution. The [machine-readable record](evidence/quality-review-2026-10-20.json) contains exact source and lock hashes, input lists, test counts, command outcomes, and log digests. Subsequent status/evidence documentation does not change those tested implementation inputs.
 
-All ten projects have passed their local required acceptance gates and coordinator review. The 80 project IDs map to concrete implementations, tests and workload evidence in each `docs/ACCEPTANCE.md`; the [inventory](evidence/final/gate-inventory.json) is navigation, not a substitute for execution. No required implementation or local workload is left pending. Hosted CI is separately unverified.
+## Current compatibility checks
 
-The clean-source CPython 3.13.16/3.14.8 matrix passed **1,136 project test executions**, without skips or expected failures. Every project/interpreter check includes locked installation, formatting/lint, strict types, wheel/sdist builds, runtime-only wheel installation and a full installed-wheel demo outside source. All ten standard workload profiles passed; [evidence](evidence/README.md) retains actual commands, source revisions, input hashes, outputs and limitations. Later documentation commits do not relabel earlier measurements.
+| Product | CPython 3.13.16 | CPython 3.14.8 |
+| --- | ---: | ---: |
+| Anchor | 111 | 111 |
+| Strata | 110 | 110 |
+| Current | 123 | 123 |
+| Meridian | 94 | 94 |
+| Quarry | 93 | 93 |
+| PyTrace | 151 | 151 |
+| Atlas | 64 | 64 |
+| Proving Ground | 155 | 155 |
+| Routecraft | 129 | 129 |
+| Resonance | 107 | 107 |
 
-| Product | Tests per interpreter | Accepted standard workload |
-| --- | ---: | --- |
-| Anchor | 54 | 5,000 workflows, 25,000 activities; 100,000 future timers |
-| Strata | 79 | 250,000 initial rows, 200,000 mixed operations, 50,000 churn operations |
-| Current | 32 | One million ordinary events and one million 50%-hot-key events |
-| Meridian | 46 | 250,000 measured journals; 100,000 statement rows |
-| Quarry | 37 | Five million originals, 500,000 corrections, 100,000 deletes, 100 schema changes |
-| PyTrace | 77 | 250,899 lines; five warm scans and incremental invalidation |
-| Atlas | 40 | 100,000 documents; 10,000 measured warm queries |
-| Proving Ground | 103 | 250,000 rows × 40 features; lifecycle and serving transitions |
-| Routecraft | 75 | 18 scale scenarios × five paired trials, plus five exact-optimal control ties |
-| Resonance | 25 | 600 seconds at 48 kHz; five measured runs |
+**2,274 project test executions passed**, with zero failures, skips, or expected failures. Every product check also passed locked dependency installation, Ruff formatting and lint, strict mypy, source/wheel builds, runtime-only wheel installation, and an installed-wheel demonstration outside source. Each product additionally passed its public demo and CI-sized benchmark on both interpreters.
 
-Strata also passed **100 seeds × 5,000 stateful operations**, using an independent dictionary/snapshot oracle and real durable reopen/compaction paths. The extended report retains its original revision; the later reporting-only counter clarification is covered by a separate unchanged-storage-core impact analysis. Independent findings and their regressions are recorded in [review](evidence/INDEPENDENT_REVIEW.md). Each defined domain core exceeded the brief's 85% branch-coverage aim; whole-package figures and scope remain explicit in project documents.
+Shared tooling passed **61 tests on each interpreter** (122 executions), formatting/lint, local documentation link validation, and the strict documentation build. Its checks include subprocess cleanup, CI selection and aggregate failure behavior, immutable-copy isolation, service ownership, and complete dependency-audit reporting.
 
-## Integrations
+## Public integrations
 
-| ID | Result and exercised boundary |
+All three integrations passed on both interpreters, for six executions. Each uses independently installed products and their public HTTP or JSON interfaces.
+
+| Integration | Exercised boundary |
 | --- | --- |
-| IN-01 | Passed: settlement uses real Meridian HTTP effects, Anchor worker process death before acknowledgement, idempotent retry and reversal compensation; independent SQL checks balanced final journals. |
-| IN-02 | Passed: Current emits late revisions delivered in order 1/1/2/1; Quarry retains exact historical identities, a pinned old result and the correct latest result, and rejects conflicting history. |
-| IN-03 | Passed: PyTrace findings become Atlas documents; deletion/update, hidden-score and snippet invariance, tenant isolation, direct access denial, merge and next-request revocation are checked. |
+| [Settlement](../integrations/01-settlement/) | Meridian HTTP effects, Anchor worker death before acknowledgement, idempotent retry, reversal compensation, and independent SQL balance checks |
+| [Stream to lake](../integrations/02-stream-lake/) | Duplicate and out-of-order revisions, retained historical identities, pinned old results, correct latest aggregates, and conflicting-history rejection |
+| [Code search](../integrations/03-code-search/) | Finding publication/deletion, permission-aware search, tenant isolation, hidden-score invariance, direct-access denial, and next-request revocation |
 
-[Integration records](evidence/README.md) use separate installed package environments and public HTTP/JSON interfaces, with no sibling source imports.
+## Browser and dependency checks
 
-## Global gates
+The fixed-source Atlas browser harness passed functional and selected Axe WCAG 2/2.1 A/AA checks for desktop, mobile, and document-dialog states. It exercises paging, escaped content, keyboard navigation, stale requests, authentication/empty states, identity changes, and absence of external requests or browser storage.
 
-| Gate | Outcome |
-| --- | --- |
-| G01 | Passed: ten substantial, identifiable original Python domain cores. |
-| G02 | Passed: independent fresh-clone locked installs on both required interpreters. |
-| G03 | Passed locally: all 80 required project acceptance IDs, including full workloads. |
-| G04 | Passed locally: required formatting, lint, strict types, tests, builds and installed-wheel execution. |
-| G05 | Passed: ten seeded demos in clean committed snapshots, including installed wheels. |
-| G06 | Passed: independent reference models and actual PostgreSQL, process and filesystem failure boundaries; review defects have regressions. |
-| G07 | Passed: all ten standard profiles have measured results and declared provenance, repetitions and limits. |
-| G08 | Passed locally: linked architecture, decisions, runbooks, case studies and evidence; strict documentation build is recorded. |
-| G09 | Passed: IN-01, IN-02 and IN-03 through public interfaces. |
-| G10 | Local selector and aggregate-failure tests passed; hosted workflow execution remains unverified, with real runs observed queued. |
-| G11 | Passed: database-free Current quickstart and focused reviewer routes are documented and exercised. |
-| G12 | Reviewed implementations and evidence committed/pushed; exact Git and hosted CI observations are reported separately in the final handoff. |
+Working-tree Chromium checks of the matching Meridian screens and Resonance report passed the selected accessibility rules and small-screen overflow checks. Journal/account views rendered successfully; Resonance's native audio controls advanced playback. These are bounded automated and visual checks, not complete accessibility conformance.
 
-## Limits and external status
+All ten runtime lock exports passed pip-audit 2.10.1 against PyPI advisories with no known vulnerabilities found. The command verifies the complete applicable package identity set and fails on skipped packages or incomplete/service-error reports. Coverage is CPython 3.14.8 on Linux; development tools, other marker combinations, and unknown vulnerabilities require separate review. See [SECURITY.md](../SECURITY.md).
 
-Hosted GitHub Actions runs have been observed queued, not successful. GitHub REST API access returned HTTP 403 through this environment's proxy; the read-only public Actions page exposes actual run states. The final handoff checks its exact pushed SHA. No cause for the queue is inferred, and no remote pass is claimed from local tests.
+## Historical workloads
 
-Full required suites were verified on Linux x86_64; other systems remain unverified. Fixtures and scale workloads are synthetic. Single costly benchmark runs are labeled; timings do not establish production capacity. Process termination and fsync tests do not simulate every power-loss/storage failure. Each project documents narrower algorithmic limits and unfavorable results. No code license has been chosen by the owner; provenance and third-party notices are preserved. No release or public deployment has been made.
+The [evidence index](evidence/README.md) preserves the original compatibility matrix, independent reviews, standard workload reports, and corrections. Those records retain their actual tested revisions and should be compared only within their declared input scopes. Standard workloads include large storage/stream/lake datasets, PostgreSQL contention, static-analysis and search corpora, model lifecycles, routing scenarios, and synthetic guitar audio. Strata also has a recorded 100-seed × 5,000-operation stateful recovery suite.
 
-The tested cloud install/startup configuration is saved as a draft. Saving, publishing and independently proving fresh-task restoration are distinct operations.
+The full standard-scale workloads were **not rerun for this review**. CI profiles exercise correctness at smaller scale; they do not update historical performance claims. Quarry's new content checks add read/reuse I/O. Synthetic measurements do not establish production capacity or real-recording accuracy.
+
+## Scope and external status
+
+The supported verification platform is Linux x86_64 with standard CPython 3.13.16 and 3.14.8. Other operating systems and experimental interpreter builds remain unverified. PostgreSQL checks use actual isolated local databases; process-fault tests do not simulate every hardware or power-loss failure.
+
+Hosted GitHub Actions is a separate observation. No hosted CI success is established by these local runs. No public deployment, package-registry release, production security certification, or environment publication is claimed. The owner has not selected a code license; notices and factual provenance remain intact.

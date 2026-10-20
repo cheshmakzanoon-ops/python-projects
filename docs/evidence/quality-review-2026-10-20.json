@@ -1,0 +1,2062 @@
+{
+  "schema_version": 1,
+  "source_commit": "0e52603de3bfbe50094904b5c5b9620af2ac0178",
+  "verified_at_utc": "2026-10-20T07:53:56.325447+00:00",
+  "platform": "Linux x86_64",
+  "status": "passed",
+  "source_scope": "implementation, tests, package metadata, locks and shared command/configuration inputs; generated files and verification documents excluded",
+  "root_contract_sha256": "6408b7f34ec8a9cce758a55582ad42e1677ffe327e03856c3f16290f83076373",
+  "root_contract_inputs": [
+    ".github/workflows/ci.yml",
+    ".github/workflows/extended.yml",
+    ".github/workflows/security.yml",
+    ".github/workflows/source-export.yml",
+    "CONTRIBUTING.md",
+    "docs/REQUIREMENTS.md",
+    "integrations/01-settlement/README.md",
+    "integrations/01-settlement/anchor_stage.py",
+    "integrations/01-settlement/meridian_stage.py",
+    "integrations/02-stream-lake/README.md",
+    "integrations/02-stream-lake/current_stage.py",
+    "integrations/02-stream-lake/quarry_stage.py",
+    "integrations/03-code-search/README.md",
+    "integrations/03-code-search/atlas_stage.py",
+    "integrations/03-code-search/pytrace_stage.py",
+    "integrations/run.py",
+    "portfolio.toml",
+    "ruff.toml",
+    "scripts/audit_dependencies.py",
+    "scripts/check_docs.py",
+    "scripts/ci_status.py",
+    "scripts/cloud_install.sh",
+    "scripts/evidence.py",
+    "scripts/mkdocs_source_links.py",
+    "scripts/portfolio.py",
+    "scripts/select_projects.py",
+    "scripts/services.py",
+    "scripts/tests/test_ci_status.py",
+    "scripts/tests/test_dependency_audit.py",
+    "scripts/tests/test_dispatcher.py",
+    "scripts/tests/test_evidence.py",
+    "scripts/tests/test_selection.py",
+    "scripts/tests/test_services.py",
+    "scripts/tests/test_snapshot.py",
+    "scripts/tests/test_workflows.py",
+    "scripts/verify_snapshot.py",
+    "scripts/wheel_smoke.py",
+    "tooling/quality/pyproject.toml",
+    "tooling/quality/uv.lock"
+  ],
+  "projects": {
+    "anchor": {
+      "source_content_sha256": "dce388302b28e6ef1a0dbb8cd37c9d2e7bebe74fa8869a620b14c27a1de74d84",
+      "lockfile_sha256": "cb58668e71ccbc29112a367ef6cd358115039a96bffa666ba83c402e7929fdac",
+      "source_inputs": [
+        "projects/01-anchor/.python-version",
+        "projects/01-anchor/README.md",
+        "projects/01-anchor/benchmarks/README.md",
+        "projects/01-anchor/examples/README.md",
+        "projects/01-anchor/examples/export.json",
+        "projects/01-anchor/examples/payload.json",
+        "projects/01-anchor/pyproject.toml",
+        "projects/01-anchor/src/pp_anchor/__init__.py",
+        "projects/01-anchor/src/pp_anchor/api/__init__.py",
+        "projects/01-anchor/src/pp_anchor/api/app.py",
+        "projects/01-anchor/src/pp_anchor/api/body_limit.py",
+        "projects/01-anchor/src/pp_anchor/benchmark.py",
+        "projects/01-anchor/src/pp_anchor/cli.py",
+        "projects/01-anchor/src/pp_anchor/definitions/__init__.py",
+        "projects/01-anchor/src/pp_anchor/definitions/commands.py",
+        "projects/01-anchor/src/pp_anchor/definitions/model.py",
+        "projects/01-anchor/src/pp_anchor/examples.py",
+        "projects/01-anchor/src/pp_anchor/history/__init__.py",
+        "projects/01-anchor/src/pp_anchor/history/events.py",
+        "projects/01-anchor/src/pp_anchor/observability/__init__.py",
+        "projects/01-anchor/src/pp_anchor/observability/evidence.py",
+        "projects/01-anchor/src/pp_anchor/persistence/__init__.py",
+        "projects/01-anchor/src/pp_anchor/persistence/engine.py",
+        "projects/01-anchor/src/pp_anchor/persistence/schema.sql",
+        "projects/01-anchor/src/pp_anchor/persistence/snapshot.py",
+        "projects/01-anchor/src/pp_anchor/py.typed",
+        "projects/01-anchor/src/pp_anchor/replay/__init__.py",
+        "projects/01-anchor/src/pp_anchor/replay/reducer.py",
+        "projects/01-anchor/src/pp_anchor/scheduler/__init__.py",
+        "projects/01-anchor/src/pp_anchor/sdk/__init__.py",
+        "projects/01-anchor/src/pp_anchor/workers/__init__.py",
+        "projects/01-anchor/src/pp_anchor/workers/runtime.py",
+        "projects/01-anchor/tests/acceptance/test_cli_demo.py",
+        "projects/01-anchor/tests/conftest.py",
+        "projects/01-anchor/tests/integration/test_edge_cases.py",
+        "projects/01-anchor/tests/integration/test_postgres_contract.py",
+        "projects/01-anchor/tests/integration/test_process_fencing.py",
+        "projects/01-anchor/tests/integration/test_snapshot.py",
+        "projects/01-anchor/tests/property/test_dag_model.py",
+        "projects/01-anchor/tests/unit/test_api_body_limit.py",
+        "projects/01-anchor/tests/unit/test_boundaries.py",
+        "projects/01-anchor/tests/unit/test_reducer.py",
+        "projects/01-anchor/uv.lock"
+      ],
+      "interpreters": {
+        "3.13.16": {
+          "tests": {
+            "passed": 111,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "9b95244e059da433550b3def9f8ae42e27c1ecf959b63c2cba786d78a91eb287"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "9e1579176a14170c14191687851c3979e5ef069662eb28166de081a2d190edd2"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "9af196ad698d4e2b9a9b50187f650dc36532fcc4c395f58d9e60953765ae8e68"
+            },
+            {
+              "task": "cleanup-demo",
+              "exit_code": 0,
+              "log_sha256": "c6b73ef99b294df198f937e3c47a0a9afc03cc223f1424ee7aab9fe11e2a4d13"
+            },
+            {
+              "task": "cleanup-benchmark",
+              "exit_code": 0,
+              "log_sha256": "c6b73ef99b294df198f937e3c47a0a9afc03cc223f1424ee7aab9fe11e2a4d13"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "4f2c0ad2e34b7c801549b92ab4c11092bc362d6bbd06916f12b7baffe4ee451c"
+        },
+        "3.14.8": {
+          "tests": {
+            "passed": 111,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "4b5ba18fca0b56e314617a59a0150a2cefe49bd2350e729ec28f0b832d04bfcf"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "1590468d97b40a9d31a7276716f7dd9bfa8c91bb1b43fc1c8d1013172e0c6b31"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "269f997f72e96575b8dcb3090b0677db1c4456506368580d9df8a646f8409828"
+            },
+            {
+              "task": "cleanup-demo",
+              "exit_code": 0,
+              "log_sha256": "c6b73ef99b294df198f937e3c47a0a9afc03cc223f1424ee7aab9fe11e2a4d13"
+            },
+            {
+              "task": "cleanup-benchmark",
+              "exit_code": 0,
+              "log_sha256": "c6b73ef99b294df198f937e3c47a0a9afc03cc223f1424ee7aab9fe11e2a4d13"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "0bedc910130a5d61d7cd076576175ee747d1a4b1cc800c4b4e84967a3e3c26ea"
+        }
+      }
+    },
+    "strata": {
+      "source_content_sha256": "47c7959089f4ba544f1079df5e7d36fb501c73f355790462aa2ab42b64704f71",
+      "lockfile_sha256": "33d8e55d6e7773df668c53066b89481c06c274b4e3989b5cba83d33581f7667d",
+      "source_inputs": [
+        "projects/02-strata/.python-version",
+        "projects/02-strata/README.md",
+        "projects/02-strata/benchmarks/README.md",
+        "projects/02-strata/benchmarks/extended_stateful.py",
+        "projects/02-strata/examples/catalog.py",
+        "projects/02-strata/pyproject.toml",
+        "projects/02-strata/src/pp_strata/__init__.py",
+        "projects/02-strata/src/pp_strata/api.py",
+        "projects/02-strata/src/pp_strata/cli.py",
+        "projects/02-strata/src/pp_strata/codec/__init__.py",
+        "projects/02-strata/src/pp_strata/codec/records.py",
+        "projects/02-strata/src/pp_strata/errors.py",
+        "projects/02-strata/src/pp_strata/evidence.py",
+        "projects/02-strata/src/pp_strata/io.py",
+        "projects/02-strata/src/pp_strata/memtable/__init__.py",
+        "projects/02-strata/src/pp_strata/py.typed",
+        "projects/02-strata/src/pp_strata/sstable.py",
+        "projects/02-strata/src/pp_strata/wal/__init__.py",
+        "projects/02-strata/src/pp_strata/wal/frames.py",
+        "projects/02-strata/src/pp_strata/workloads.py",
+        "projects/02-strata/tests/acceptance/test_faults.py",
+        "projects/02-strata/tests/acceptance/test_initialization.py",
+        "projects/02-strata/tests/acceptance/test_resource_safety.py",
+        "projects/02-strata/tests/acceptance/test_snapshot_contract.py",
+        "projects/02-strata/tests/integration/test_cli.py",
+        "projects/02-strata/tests/integration/test_threads.py",
+        "projects/02-strata/tests/property/test_model.py",
+        "projects/02-strata/tests/unit/test_formats.py",
+        "projects/02-strata/uv.lock"
+      ],
+      "interpreters": {
+        "3.13.16": {
+          "tests": {
+            "passed": 110,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "7fcd99b2a7ab5ae67c1df2b1249f7880f5afe842d00ee4cef5ecb4f8352aff00"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "afef752b4598a87d1a0ec69ebc9e59c06ce0cfb714753b6e642f6afd6ec64b4e"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "39933625d6f07f17f8a9175e24e57d8b475c6ba8c4ba11a9b3a6ce9e4b3bf767"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "fc504c15d88258b899b6fe602ab214515267fa361eb78ccc990c51a7ecfd68e7"
+        },
+        "3.14.8": {
+          "tests": {
+            "passed": 110,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "5c9e665941d4dda220fed2a1887dab335af32b3b39ec3ed2f5f8a545b2ac3d17"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "fd29b489b3d2a4be8416af65e6635e53b366b06ee055022b4c852b2ced95c50f"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "cf0967b228554b63866019c0a6ff4f6c4ad2ca103923b36ad3b395a5a5708623"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "8522758eddadc68293b1de30ebe511c59540e3c088e14b9ec89a0b12fa44d01d"
+        }
+      }
+    },
+    "current": {
+      "source_content_sha256": "b1e5a321312e8aad29f0f760dd63619e06e495c8adce3fdf869f94175b4733d1",
+      "lockfile_sha256": "baf15ac83a35752ad671410a6466a49a8b6f5b43d6210beed3cb3bd6982239a3",
+      "source_inputs": [
+        "projects/03-current/.python-version",
+        "projects/03-current/README.md",
+        "projects/03-current/benchmarks/README.md",
+        "projects/03-current/examples/README.md",
+        "projects/03-current/pyproject.toml",
+        "projects/03-current/src/pp_current/__init__.py",
+        "projects/03-current/src/pp_current/checkpoints/__init__.py",
+        "projects/03-current/src/pp_current/cli.py",
+        "projects/03-current/src/pp_current/diagnostics/__init__.py",
+        "projects/03-current/src/pp_current/diagnostics/oracle.py",
+        "projects/03-current/src/pp_current/diagnostics/workload.py",
+        "projects/03-current/src/pp_current/event_time/__init__.py",
+        "projects/03-current/src/pp_current/event_time/policy.py",
+        "projects/03-current/src/pp_current/ingress/__init__.py",
+        "projects/03-current/src/pp_current/ingress/journal.py",
+        "projects/03-current/src/pp_current/ingress/schema.py",
+        "projects/03-current/src/pp_current/model/__init__.py",
+        "projects/03-current/src/pp_current/model/envelope.py",
+        "projects/03-current/src/pp_current/operators/__init__.py",
+        "projects/03-current/src/pp_current/operators/tumbling.py",
+        "projects/03-current/src/pp_current/py.typed",
+        "projects/03-current/src/pp_current/runtime/__init__.py",
+        "projects/03-current/src/pp_current/runtime/asyncio.py",
+        "projects/03-current/src/pp_current/runtime/engine.py",
+        "projects/03-current/src/pp_current/sinks/__init__.py",
+        "projects/03-current/src/pp_current/sinks/idempotent.py",
+        "projects/03-current/src/pp_current/sources/__init__.py",
+        "projects/03-current/src/pp_current/sources/ndjson.py",
+        "projects/03-current/tests/acceptance/test_cli.py",
+        "projects/03-current/tests/integration/test_journal_integrity.py",
+        "projects/03-current/tests/integration/test_persistence.py",
+        "projects/03-current/tests/property/test_admission.py",
+        "projects/03-current/tests/property/test_oracle.py",
+        "projects/03-current/tests/unit/test_benchmark_memory.py",
+        "projects/03-current/tests/unit/test_semantics.py",
+        "projects/03-current/tests/unit/test_validation.py",
+        "projects/03-current/uv.lock"
+      ],
+      "interpreters": {
+        "3.13.16": {
+          "tests": {
+            "passed": 123,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "8575348020bf3668df81423e8037dd0df187c904d02e377744d06ff4c687daca"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "706b6434c6ce660539e39a882d5e122b1966015cbf9e116fb527dca91be0a5a9"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "c6bfeb3f56818f453f37393602c98bf0a2a5f9679cff1071bf1a8876d769da55"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "692c93eed07e42fbf01e074bbcd1318a392cf9ff8d505c4178651dbe2cb0303a"
+        },
+        "3.14.8": {
+          "tests": {
+            "passed": 123,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "3d2bf7403f8611ea72073d816e758695f8c37397e7db0cf6d42d8fafc9e908b1"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "c8380b72307c5972656a0e215c7ff03bcc917988c94d97970dda6e8155cec696"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "1a79b70f80ba8d6f01f60cbcc7af15bf0e542b3695feb1eec4eb8fee41c0e7eb"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "fa089388e54c9a2bb7a37a79c2b9864b31871dde656ba92033e4b409434643c4"
+        }
+      }
+    },
+    "meridian": {
+      "source_content_sha256": "83a08f2b7ceea46206ada0f970835b4e56d66633d090cd7f23a2fe58cff9e8e1",
+      "lockfile_sha256": "278057ae9b5d37f8ac2d66073891b25e2d51b15d13f7f753129aea59e01bb54d",
+      "source_inputs": [
+        "projects/04-meridian/.python-version",
+        "projects/04-meridian/README.md",
+        "projects/04-meridian/benchmarks/README.md",
+        "projects/04-meridian/examples/README.md",
+        "projects/04-meridian/examples/journal-request.json",
+        "projects/04-meridian/pyproject.toml",
+        "projects/04-meridian/src/pp_meridian/__init__.py",
+        "projects/04-meridian/src/pp_meridian/api/__init__.py",
+        "projects/04-meridian/src/pp_meridian/api/validation.py",
+        "projects/04-meridian/src/pp_meridian/api/views.py",
+        "projects/04-meridian/src/pp_meridian/application/__init__.py",
+        "projects/04-meridian/src/pp_meridian/application/ledger.py",
+        "projects/04-meridian/src/pp_meridian/application/reconcile.py",
+        "projects/04-meridian/src/pp_meridian/cli.py",
+        "projects/04-meridian/src/pp_meridian/config/__init__.py",
+        "projects/04-meridian/src/pp_meridian/config/database.py",
+        "projects/04-meridian/src/pp_meridian/config/settings.py",
+        "projects/04-meridian/src/pp_meridian/config/urls.py",
+        "projects/04-meridian/src/pp_meridian/config/wsgi.py",
+        "projects/04-meridian/src/pp_meridian/domain/__init__.py",
+        "projects/04-meridian/src/pp_meridian/domain/journal.py",
+        "projects/04-meridian/src/pp_meridian/domain/money.py",
+        "projects/04-meridian/src/pp_meridian/domain/replay.py",
+        "projects/04-meridian/src/pp_meridian/evidence.py",
+        "projects/04-meridian/src/pp_meridian/persistence/__init__.py",
+        "projects/04-meridian/src/pp_meridian/persistence/apps.py",
+        "projects/04-meridian/src/pp_meridian/persistence/migrations/0001_initial.py",
+        "projects/04-meridian/src/pp_meridian/persistence/migrations/0002_database_invariants.py",
+        "projects/04-meridian/src/pp_meridian/persistence/migrations/0003_reversal_guard_alias.py",
+        "projects/04-meridian/src/pp_meridian/persistence/migrations/0004_account_insert_lock.py",
+        "projects/04-meridian/src/pp_meridian/persistence/migrations/0005_tenant_identity_history.py",
+        "projects/04-meridian/src/pp_meridian/persistence/migrations/__init__.py",
+        "projects/04-meridian/src/pp_meridian/persistence/models.py",
+        "projects/04-meridian/src/pp_meridian/persistence/snapshot.py",
+        "projects/04-meridian/src/pp_meridian/py.typed",
+        "projects/04-meridian/src/pp_meridian/reconciliation/__init__.py",
+        "projects/04-meridian/src/pp_meridian/reconciliation/assignment.py",
+        "projects/04-meridian/src/pp_meridian/reconciliation/candidates.py",
+        "projects/04-meridian/src/pp_meridian/reconciliation/normalize.py",
+        "projects/04-meridian/src/pp_meridian/templates/__init__.py",
+        "projects/04-meridian/src/pp_meridian/templates/meridian/__init__.py",
+        "projects/04-meridian/src/pp_meridian/templates/meridian/review.html",
+        "projects/04-meridian/src/pp_meridian/workloads.py",
+        "projects/04-meridian/tests/acceptance/test_cli_boundaries.py",
+        "projects/04-meridian/tests/acceptance/test_workload_failure_reporting.py",
+        "projects/04-meridian/tests/conftest.py",
+        "projects/04-meridian/tests/integration/test_http_boundaries.py",
+        "projects/04-meridian/tests/integration/test_ledger_pg.py",
+        "projects/04-meridian/tests/property/test_history_model.py",
+        "projects/04-meridian/tests/unit/test_database_configuration.py",
+        "projects/04-meridian/tests/unit/test_domain.py",
+        "projects/04-meridian/tests/unit/test_http_validation.py",
+        "projects/04-meridian/uv.lock"
+      ],
+      "interpreters": {
+        "3.13.16": {
+          "tests": {
+            "passed": 94,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "22cafcaa1506ffdff22e3af6297e51bd4c57c8af2786f8aeeb3ad514512d825c"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "c07626977a45c78aa3d9d092f781c83d0d05a5e8f677d8a8e5bcf3b8fc611f54"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "ebef2fbf8d8f9f45e5e78bc1b7465b1c8f3bbc57b45b7f0c962f52add7c71575"
+            },
+            {
+              "task": "cleanup-demo",
+              "exit_code": 0,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "task": "cleanup-benchmark",
+              "exit_code": 0,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "220c6787d8033b398bc08befb01a294116d645f1f87d3c9bb448a4338802c079"
+        },
+        "3.14.8": {
+          "tests": {
+            "passed": 94,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "9433a869a9e69bac5de73d362c43490d8a05a3fb89ae216d4b0efd55f4137224"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "ac1acacf2aba9a55c3c56791b300db296cb3349009569df77a844e3fa1adfc46"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "94831c2ce47187520c6a1257e8eea2d3a4a1653c719a6444702fb02c8925b9c8"
+            },
+            {
+              "task": "cleanup-demo",
+              "exit_code": 0,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "task": "cleanup-benchmark",
+              "exit_code": 0,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "43c8468a98f5d3017e062f5025b7186910a31d300ec2aa1e521861397133abc2"
+        }
+      }
+    },
+    "quarry": {
+      "source_content_sha256": "3a59137d9f86123da5c8eebe717e4a42bb0b91572391240932dedc94353ca475",
+      "lockfile_sha256": "71898d3b0636bd6d3ed606a933766b7c6849d8da3766504686d8599fd5fbe00f",
+      "source_inputs": [
+        "projects/05-quarry/.python-version",
+        "projects/05-quarry/README.md",
+        "projects/05-quarry/benchmarks/README.md",
+        "projects/05-quarry/examples/README.md",
+        "projects/05-quarry/examples/correction.ndjson",
+        "projects/05-quarry/examples/devices.ndjson",
+        "projects/05-quarry/pyproject.toml",
+        "projects/05-quarry/src/pp_quarry/__init__.py",
+        "projects/05-quarry/src/pp_quarry/cli.py",
+        "projects/05-quarry/src/pp_quarry/contracts/__init__.py",
+        "projects/05-quarry/src/pp_quarry/evidence.py",
+        "projects/05-quarry/src/pp_quarry/execution/__init__.py",
+        "projects/05-quarry/src/pp_quarry/execution/engine.py",
+        "projects/05-quarry/src/pp_quarry/lineage.py",
+        "projects/05-quarry/src/pp_quarry/model/__init__.py",
+        "projects/05-quarry/src/pp_quarry/model/events.py",
+        "projects/05-quarry/src/pp_quarry/planning/__init__.py",
+        "projects/05-quarry/src/pp_quarry/planning/dag.py",
+        "projects/05-quarry/src/pp_quarry/planning/partitions.py",
+        "projects/05-quarry/src/pp_quarry/py.typed",
+        "projects/05-quarry/src/pp_quarry/query.py",
+        "projects/05-quarry/src/pp_quarry/recovery.py",
+        "projects/05-quarry/src/pp_quarry/sources/__init__.py",
+        "projects/05-quarry/src/pp_quarry/storage/__init__.py",
+        "projects/05-quarry/src/pp_quarry/storage/catalog.py",
+        "projects/05-quarry/src/pp_quarry/storage/files.py",
+        "projects/05-quarry/src/pp_quarry/storage/manifest.py",
+        "projects/05-quarry/src/pp_quarry/workloads.py",
+        "projects/05-quarry/tests/__init__.py",
+        "projects/05-quarry/tests/acceptance/__init__.py",
+        "projects/05-quarry/tests/acceptance/test_quarry.py",
+        "projects/05-quarry/tests/conftest.py",
+        "projects/05-quarry/tests/integration/__init__.py",
+        "projects/05-quarry/tests/integration/test_crash.py",
+        "projects/05-quarry/tests/integration/test_integrity.py",
+        "projects/05-quarry/tests/integration/test_interfaces.py",
+        "projects/05-quarry/tests/integration/test_review_regressions.py",
+        "projects/05-quarry/tests/property/__init__.py",
+        "projects/05-quarry/tests/property/test_histories.py",
+        "projects/05-quarry/tests/unit/__init__.py",
+        "projects/05-quarry/tests/unit/test_contracts.py",
+        "projects/05-quarry/uv.lock"
+      ],
+      "interpreters": {
+        "3.13.16": {
+          "tests": {
+            "passed": 93,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "1f3620d8bcc6c0d5d648b837470500e11131e14361a7fd896d30c8c2dadc4338"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "dba9f0c19266bb81ac310cb5877752c5d3c7526576fd9d437d6b725463aebfed"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "b62aa41bd5ef8be5734db525293d259a246f8133712b4fbe68f3ad3ca07b7024"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "810c028017f2ab5152d281eb6d51dbd7f07dcc16dd6acfd54cdaa5cc531238aa"
+        },
+        "3.14.8": {
+          "tests": {
+            "passed": 93,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "575a25b60afccf51c495d560f00986110bfeeada5947ee9748f80dbd637d0dfd"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "3e9e76dc8183c14533067a8d4a3ea6d3bfa0db15e9708681deec9ce613ae7ee2"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "142ad7c406f7223ecbee6409024bbc9faca67f3a94702aac24fa361cdd2571c6"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "7ddbdb7348f89a235c636522990e528da60cf85aecb7291e59f2807121d46587"
+        }
+      }
+    },
+    "pytrace": {
+      "source_content_sha256": "4371fecd6cc764eaa5ad3b3a04bcd172aa0ccc5a1101bc99e90481c302041ecc",
+      "lockfile_sha256": "4e0752505efdd7261423861af80c8e7fb9f89ce9569d5f09be728826d5507660",
+      "source_inputs": [
+        "projects/06-pytrace/.python-version",
+        "projects/06-pytrace/README.md",
+        "projects/06-pytrace/benchmarks/README.md",
+        "projects/06-pytrace/benchmarks/generate_corpus.py",
+        "projects/06-pytrace/examples/README.md",
+        "projects/06-pytrace/examples/config.json",
+        "projects/06-pytrace/examples/flawed_service.py",
+        "projects/06-pytrace/pyproject.toml",
+        "projects/06-pytrace/src/pp_pytrace/__init__.py",
+        "projects/06-pytrace/src/pp_pytrace/analysis/__init__.py",
+        "projects/06-pytrace/src/pp_pytrace/analysis/engine.py",
+        "projects/06-pytrace/src/pp_pytrace/analysis/lattice.py",
+        "projects/06-pytrace/src/pp_pytrace/cache.py",
+        "projects/06-pytrace/src/pp_pytrace/cfg/__init__.py",
+        "projects/06-pytrace/src/pp_pytrace/cfg/blocks.py",
+        "projects/06-pytrace/src/pp_pytrace/cli.py",
+        "projects/06-pytrace/src/pp_pytrace/codemods/__init__.py",
+        "projects/06-pytrace/src/pp_pytrace/codemods/plan.py",
+        "projects/06-pytrace/src/pp_pytrace/codemods/transforms.py",
+        "projects/06-pytrace/src/pp_pytrace/evidence.py",
+        "projects/06-pytrace/src/pp_pytrace/frontend/__init__.py",
+        "projects/06-pytrace/src/pp_pytrace/frontend/discovery.py",
+        "projects/06-pytrace/src/pp_pytrace/frontend/parser_worker.py",
+        "projects/06-pytrace/src/pp_pytrace/py.typed",
+        "projects/06-pytrace/src/pp_pytrace/reporting/__init__.py",
+        "projects/06-pytrace/src/pp_pytrace/reporting/models.py",
+        "projects/06-pytrace/src/pp_pytrace/reporting/sarif-schema-2.1.0.json",
+        "projects/06-pytrace/src/pp_pytrace/reporting/sarif.py",
+        "projects/06-pytrace/src/pp_pytrace/rules/__init__.py",
+        "projects/06-pytrace/src/pp_pytrace/rules/registry.py",
+        "projects/06-pytrace/src/pp_pytrace/semantics/__init__.py",
+        "projects/06-pytrace/src/pp_pytrace/semantics/symbols.py",
+        "projects/06-pytrace/src/pp_pytrace/trusted_api.py",
+        "projects/06-pytrace/src/pp_pytrace/workloads.py",
+        "projects/06-pytrace/tests/acceptance/test_contract.py",
+        "projects/06-pytrace/tests/fixtures/labeled/labels.json",
+        "projects/06-pytrace/tests/fixtures/labeled/service_00.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_01.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_02.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_03.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_04.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_05.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_06.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_07.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_08.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_09.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_10.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_11.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_12.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_13.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_14.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_15.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_16.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_17.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_18.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_19.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_20.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_21.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_22.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_23.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_24.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_25.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_26.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_27.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_28.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_29.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_30.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_31.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_32.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_33.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_34.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_35.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_36.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_37.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_38.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_39.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_40.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_41.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_42.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_43.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_44.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_45.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_46.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_47.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_48.py",
+        "projects/06-pytrace/tests/fixtures/labeled/service_49.py",
+        "projects/06-pytrace/tests/integration/test_apply.py",
+        "projects/06-pytrace/tests/integration/test_cache_and_parser.py",
+        "projects/06-pytrace/tests/integration/test_output_safety.py",
+        "projects/06-pytrace/tests/property/test_lattice.py",
+        "projects/06-pytrace/tests/unit/test_codemods.py",
+        "projects/06-pytrace/tests/unit/test_engine.py",
+        "projects/06-pytrace/tests/unit/test_packaging.py",
+        "projects/06-pytrace/uv.lock"
+      ],
+      "interpreters": {
+        "3.13.16": {
+          "tests": {
+            "passed": 151,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "f53cb39ec2ff6e5850eb26f59f70156936bb2834cf96183bb42182856327246a"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "e6db5c66f534a244fb3c4482f4170888b5dd54cefdb19974fbfd56aa8e8e9968"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "423ddd521fbb2cdaac465fe5c42733f1e28b8edc9bef61cf4cb7e2378cacb76d"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "e4d5d34a36f315c02340b8f77c097634278dccabcbe18ac048856ab0e2e8ccab"
+        },
+        "3.14.8": {
+          "tests": {
+            "passed": 151,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "ab50aeec9446dd4146864d99fc6b74509727c3abc0e9e2555bbe45901c689c30"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "9471f715c7c93fc8d3bb39ddf49a98eca053f33e770de2dc8b3fd854653a66f6"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "56fab46778896512e0da91e7129370a0b3a562f1a8cdc498986026145df06c9a"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "d219f237034509e8fcacf497eb1eda61c26ceb633f48f3ecfcd443f637ef34e0"
+        }
+      }
+    },
+    "atlas": {
+      "source_content_sha256": "6b391c97d5c8195b2d5df1a7d8f3fa693398bfedcec40f0b19eda4646d3535d7",
+      "lockfile_sha256": "afadf806fdbb623044aa563e65234d12d3a49b57e907308cab46198ecad717f8",
+      "source_inputs": [
+        "projects/07-atlas/.python-version",
+        "projects/07-atlas/README.md",
+        "projects/07-atlas/benchmarks/README.md",
+        "projects/07-atlas/examples/README.md",
+        "projects/07-atlas/examples/quality_corpus.json",
+        "projects/07-atlas/examples/quality_judgments.json",
+        "projects/07-atlas/pyproject.toml",
+        "projects/07-atlas/src/pp_atlas/__init__.py",
+        "projects/07-atlas/src/pp_atlas/api/__init__.py",
+        "projects/07-atlas/src/pp_atlas/api/body_limit.py",
+        "projects/07-atlas/src/pp_atlas/api/security.py",
+        "projects/07-atlas/src/pp_atlas/api/static/index.html",
+        "projects/07-atlas/src/pp_atlas/api/static/search.css",
+        "projects/07-atlas/src/pp_atlas/api/static/search.js",
+        "projects/07-atlas/src/pp_atlas/auth/__init__.py",
+        "projects/07-atlas/src/pp_atlas/benchmarks.py",
+        "projects/07-atlas/src/pp_atlas/cache.py",
+        "projects/07-atlas/src/pp_atlas/catalog.py",
+        "projects/07-atlas/src/pp_atlas/cli.py",
+        "projects/07-atlas/src/pp_atlas/engine.py",
+        "projects/07-atlas/src/pp_atlas/evaluation.py",
+        "projects/07-atlas/src/pp_atlas/index/postings.py",
+        "projects/07-atlas/src/pp_atlas/index/segments.py",
+        "projects/07-atlas/src/pp_atlas/ingest/tokenizer.py",
+        "projects/07-atlas/src/pp_atlas/models.py",
+        "projects/07-atlas/src/pp_atlas/provenance.py",
+        "projects/07-atlas/src/pp_atlas/py.typed",
+        "projects/07-atlas/src/pp_atlas/query.py",
+        "projects/07-atlas/src/pp_atlas/ranking/bm25.py",
+        "projects/07-atlas/src/pp_atlas/snippets.py",
+        "projects/07-atlas/tests/acceptance/test_cli_quality.py",
+        "projects/07-atlas/tests/browser/check_browser.py",
+        "projects/07-atlas/tests/browser/search.cjs",
+        "projects/07-atlas/tests/integration/test_failures.py",
+        "projects/07-atlas/tests/integration/test_http_contract.py",
+        "projects/07-atlas/tests/integration/test_persistence_auth.py",
+        "projects/07-atlas/tests/property/test_history.py",
+        "projects/07-atlas/tests/unit/test_http_body_limit.py",
+        "projects/07-atlas/tests/unit/test_lexical.py",
+        "projects/07-atlas/uv.lock"
+      ],
+      "interpreters": {
+        "3.13.16": {
+          "tests": {
+            "passed": 64,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "0d58b357dbe0b84f5e60ee0487f74385f2390c65ccbf8bda68eb289d74ae96b9"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "443125e5f2c7b277debf29c3556c11183a4af53814dcabba4c7c166cf72765e5"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "7ecf15881ef2db2bff9e816b4b423c48fec74315b5affdef7fb2142a63fa4412"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "01734892facc18534a9adb0e70687b5f2a9732c2b2bf5f4ac64bd655643b39a6"
+        },
+        "3.14.8": {
+          "tests": {
+            "passed": 64,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "4270f0f1d7a233d7d29a05cf5d2a9a075f2c10c9de4895b6ff84d636e1680cf0"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "3a0b7772c8be76b497c7f2280269793a2f6f37bdde68b5e6b4d4ed494ddf216d"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "5d4427d6fc8c4ad423663c5c0915527a34a3ad9f7c306027b97c757db0de5d08"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "717c20e74cb019daab509baa21f6e761b3346c2e13c391da46a2618f83b5e624"
+        }
+      }
+    },
+    "proving-ground": {
+      "source_content_sha256": "adfb7ae6df1e255d2f5ad7bbe4b314193783a29e6141c931d9e9820a1acf9f61",
+      "lockfile_sha256": "48ddce6dd70acac05a8094cf70e3d40ee7feb534591e49776292ef00436a508f",
+      "source_inputs": [
+        "projects/08-proving-ground/.python-version",
+        "projects/08-proving-ground/README.md",
+        "projects/08-proving-ground/benchmarks/result-schema.json",
+        "projects/08-proving-ground/benchmarks/run.py",
+        "projects/08-proving-ground/examples/README.md",
+        "projects/08-proving-ground/pyproject.toml",
+        "projects/08-proving-ground/src/pp_proving_ground/__init__.py",
+        "projects/08-proving-ground/src/pp_proving_ground/cli.py",
+        "projects/08-proving-ground/src/pp_proving_ground/data_contracts/__init__.py",
+        "projects/08-proving-ground/src/pp_proving_ground/data_contracts/schema.py",
+        "projects/08-proving-ground/src/pp_proving_ground/evaluation/__init__.py",
+        "projects/08-proving-ground/src/pp_proving_ground/evaluation/metrics.py",
+        "projects/08-proving-ground/src/pp_proving_ground/experiments/__init__.py",
+        "projects/08-proving-ground/src/pp_proving_ground/experiments/identity.py",
+        "projects/08-proving-ground/src/pp_proving_ground/monitoring/__init__.py",
+        "projects/08-proving-ground/src/pp_proving_ground/monitoring/drift.py",
+        "projects/08-proving-ground/src/pp_proving_ground/py.typed",
+        "projects/08-proving-ground/src/pp_proving_ground/registry/__init__.py",
+        "projects/08-proving-ground/src/pp_proving_ground/registry/sqlite.py",
+        "projects/08-proving-ground/src/pp_proving_ground/reports/__init__.py",
+        "projects/08-proving-ground/src/pp_proving_ground/reports/model_card.py",
+        "projects/08-proving-ground/src/pp_proving_ground/reports/provenance.py",
+        "projects/08-proving-ground/src/pp_proving_ground/serving/__init__.py",
+        "projects/08-proving-ground/src/pp_proving_ground/serving/api.py",
+        "projects/08-proving-ground/src/pp_proving_ground/serving/body_limit.py",
+        "projects/08-proving-ground/src/pp_proving_ground/serving/service.py",
+        "projects/08-proving-ground/src/pp_proving_ground/splits/__init__.py",
+        "projects/08-proving-ground/src/pp_proving_ground/splits/manifest.py",
+        "projects/08-proving-ground/src/pp_proving_ground/training/__init__.py",
+        "projects/08-proving-ground/src/pp_proving_ground/training/model_registry.py",
+        "projects/08-proving-ground/src/pp_proving_ground/training/pipeline.py",
+        "projects/08-proving-ground/tests/acceptance/test_lifecycle.py",
+        "projects/08-proving-ground/tests/conftest.py",
+        "projects/08-proving-ground/tests/integration/test_artifacts.py",
+        "projects/08-proving-ground/tests/integration/test_registry_and_serving.py",
+        "projects/08-proving-ground/tests/integration/test_review_regressions.py",
+        "projects/08-proving-ground/tests/integration/test_trust_boundaries.py",
+        "projects/08-proving-ground/tests/property/test_invariants.py",
+        "projects/08-proving-ground/tests/property/test_registry_state_machine.py",
+        "projects/08-proving-ground/tests/unit/test_body_limit.py",
+        "projects/08-proving-ground/tests/unit/test_contracts.py",
+        "projects/08-proving-ground/tests/unit/test_evaluation.py",
+        "projects/08-proving-ground/tests/unit/test_model_registry.py",
+        "projects/08-proving-ground/uv.lock"
+      ],
+      "interpreters": {
+        "3.13.16": {
+          "tests": {
+            "passed": 155,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "a1b23fce8a9e66e8e7d1ed88796e196458516c63bb2d7b71691e03122676d1da"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "8054da6adad90be073919eb7a6a1703ff13b51d4360675fa38503740ea9b7dad"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "67c035360293a54a5ca1f9dd2a9065a99c822e2aca0bf69471b2c08a3fcac095"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "0b7bc0fe69f709a5a70cb8055edf157b6b8f7aa8a6bf5571f86c449c8b05139b"
+        },
+        "3.14.8": {
+          "tests": {
+            "passed": 155,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "4f482b8551b512c954de4b35012a8e6a74f12f92b9bb164f6de87ecebf9d6d36"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "3a16ce85f9d06f15fcbbb91ab459a9ff43728959e465aee433ab1804c742dc07"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "d952a8c2355568f8d85a209166dff428a76adb3f67323d64d6582e3bfe539a39"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "fafc10f327403d9e5292ce5eff6fd8398ad2f3652069fdea860ff0a03e116996"
+        }
+      }
+    },
+    "routecraft": {
+      "source_content_sha256": "78610bae3a8a4d23115642b1de12372cc76ac510d0e5baa335151c3a8882c193",
+      "lockfile_sha256": "9aef9e96a988bfdd7403447241e67af694abf1c7d3910e57cae691e55643a011",
+      "source_inputs": [
+        "projects/09-routecraft/.python-version",
+        "projects/09-routecraft/README.md",
+        "projects/09-routecraft/benchmarks/README.md",
+        "projects/09-routecraft/examples/README.md",
+        "projects/09-routecraft/pyproject.toml",
+        "projects/09-routecraft/src/pp_routecraft/__init__.py",
+        "projects/09-routecraft/src/pp_routecraft/benchmark.py",
+        "projects/09-routecraft/src/pp_routecraft/cli.py",
+        "projects/09-routecraft/src/pp_routecraft/construction/__init__.py",
+        "projects/09-routecraft/src/pp_routecraft/construction/insertion.py",
+        "projects/09-routecraft/src/pp_routecraft/domain/__init__.py",
+        "projects/09-routecraft/src/pp_routecraft/domain/instance.py",
+        "projects/09-routecraft/src/pp_routecraft/fixtures.py",
+        "projects/09-routecraft/src/pp_routecraft/neighborhoods/__init__.py",
+        "projects/09-routecraft/src/pp_routecraft/neighborhoods/moves.py",
+        "projects/09-routecraft/src/pp_routecraft/py.typed",
+        "projects/09-routecraft/src/pp_routecraft/reference/__init__.py",
+        "projects/09-routecraft/src/pp_routecraft/reference/exhaustive.py",
+        "projects/09-routecraft/src/pp_routecraft/replanning/__init__.py",
+        "projects/09-routecraft/src/pp_routecraft/replanning/rolling.py",
+        "projects/09-routecraft/src/pp_routecraft/reporting/__init__.py",
+        "projects/09-routecraft/src/pp_routecraft/reporting/report.py",
+        "projects/09-routecraft/src/pp_routecraft/reporting/serialization.py",
+        "projects/09-routecraft/src/pp_routecraft/search/__init__.py",
+        "projects/09-routecraft/src/pp_routecraft/search/solver.py",
+        "projects/09-routecraft/src/pp_routecraft/validation/__init__.py",
+        "projects/09-routecraft/src/pp_routecraft/validation/verifier.py",
+        "projects/09-routecraft/tests/acceptance/test_gates.py",
+        "projects/09-routecraft/tests/integration/test_boundary_safety.py",
+        "projects/09-routecraft/tests/integration/test_interfaces.py",
+        "projects/09-routecraft/tests/integration/test_timeline_intervals.py",
+        "projects/09-routecraft/tests/property/test_oracle.py",
+        "projects/09-routecraft/tests/unit/test_new_neighborhoods.py",
+        "projects/09-routecraft/tests/unit/test_replanning.py",
+        "projects/09-routecraft/tests/unit/test_review_regressions.py",
+        "projects/09-routecraft/tests/unit/test_search.py",
+        "projects/09-routecraft/tests/unit/test_stop_boundaries.py",
+        "projects/09-routecraft/tests/unit/test_verifier.py",
+        "projects/09-routecraft/uv.lock"
+      ],
+      "interpreters": {
+        "3.13.16": {
+          "tests": {
+            "passed": 129,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "2d8ca3f75c803e5c022e53ea5acdea55d63eb202641970a9dda2787f3a55fb33"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "948e3320b26adff9955824bfa2d5ed7924777cfdfb16ab9b5d2bc92a3f065f60"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "726e775ce727448105e3c2c431bb3973c03114bfb457906f006bcf99a986df0d"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "133d6b9ae68846dd902c2757fa5edccc8e2e26f51019712de187d836cba44e81"
+        },
+        "3.14.8": {
+          "tests": {
+            "passed": 129,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "8a2c37342fa02bb83fdee329879a16593a48aeeefe12a9862cc75e7a9cce204d"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "fdcccedcfb6b9b6ec0b422f1421e3d1f7071f2255560f73795e1f3b800272312"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "fa77baa7f395204eef72c90ff23ed5eded6b935b790179255af5221914bd61e3"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "f5906537adf14e3e23a424b0949419f619db4492d56360e0ebc9e1b91bd72aa4"
+        }
+      }
+    },
+    "resonance": {
+      "source_content_sha256": "a80fbc4ece04c8db17d6e525831028f6ac39e1bae6da868fbea4f5e52ada6ddd",
+      "lockfile_sha256": "8ac205930d14ebd160772d9950380e6e966aa61e740a0f3cd169c195f15cbefc",
+      "source_inputs": [
+        "projects/10-resonance/.python-version",
+        "projects/10-resonance/README.md",
+        "projects/10-resonance/benchmarks/README.md",
+        "projects/10-resonance/examples/README.md",
+        "projects/10-resonance/examples/reference.json",
+        "projects/10-resonance/pyproject.toml",
+        "projects/10-resonance/src/pp_resonance/__init__.py",
+        "projects/10-resonance/src/pp_resonance/alignment/__init__.py",
+        "projects/10-resonance/src/pp_resonance/alignment/dynamic.py",
+        "projects/10-resonance/src/pp_resonance/analysis.py",
+        "projects/10-resonance/src/pp_resonance/audio_io/__init__.py",
+        "projects/10-resonance/src/pp_resonance/audio_io/pcm.py",
+        "projects/10-resonance/src/pp_resonance/benchmark.py",
+        "projects/10-resonance/src/pp_resonance/cli.py",
+        "projects/10-resonance/src/pp_resonance/formats.py",
+        "projects/10-resonance/src/pp_resonance/metrics/__init__.py",
+        "projects/10-resonance/src/pp_resonance/metrics/evaluate.py",
+        "projects/10-resonance/src/pp_resonance/midi/__init__.py",
+        "projects/10-resonance/src/pp_resonance/midi/export.py",
+        "projects/10-resonance/src/pp_resonance/model.py",
+        "projects/10-resonance/src/pp_resonance/notes/__init__.py",
+        "projects/10-resonance/src/pp_resonance/notes/decode.py",
+        "projects/10-resonance/src/pp_resonance/onsets/__init__.py",
+        "projects/10-resonance/src/pp_resonance/onsets/detect.py",
+        "projects/10-resonance/src/pp_resonance/pitch/__init__.py",
+        "projects/10-resonance/src/pp_resonance/pitch/difference.py",
+        "projects/10-resonance/src/pp_resonance/provenance.py",
+        "projects/10-resonance/src/pp_resonance/py.typed",
+        "projects/10-resonance/src/pp_resonance/reports/__init__.py",
+        "projects/10-resonance/src/pp_resonance/reports/analysis.html",
+        "projects/10-resonance/src/pp_resonance/reports/render.py",
+        "projects/10-resonance/src/pp_resonance/spectral/__init__.py",
+        "projects/10-resonance/src/pp_resonance/spectral/transforms.py",
+        "projects/10-resonance/src/pp_resonance/streaming/__init__.py",
+        "projects/10-resonance/src/pp_resonance/streaming/framing.py",
+        "projects/10-resonance/src/pp_resonance/synthesis/__init__.py",
+        "projects/10-resonance/src/pp_resonance/synthesis/tones.py",
+        "projects/10-resonance/tests/acceptance/test_acceptance.py",
+        "projects/10-resonance/tests/integration/test_json_boundaries.py",
+        "projects/10-resonance/tests/integration/test_outputs.py",
+        "projects/10-resonance/tests/integration/test_report_accessibility.py",
+        "projects/10-resonance/tests/integration/test_review_boundaries.py",
+        "projects/10-resonance/tests/property/test_framing.py",
+        "projects/10-resonance/tests/unit/test_audio.py",
+        "projects/10-resonance/tests/unit/test_input_contracts.py",
+        "projects/10-resonance/tests/unit/test_numerics.py",
+        "projects/10-resonance/tests/unit/test_review_numerics.py",
+        "projects/10-resonance/uv.lock"
+      ],
+      "interpreters": {
+        "3.13.16": {
+          "tests": {
+            "passed": 107,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "a70409a9c27af017f7ccff1944246eef54d7159180e156ad13499448b09846ea"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "18a0fa8c0b6edc42c61850cdefc9211ec9491761d97221bb0d816d08755d426c"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "ce07284b57711881b13468f004935beace55c690f26c5064a36990237fd0ba93"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "c6034d8dcedcc505d6c0ddbb1931634a0c1b4a38b80d92f548ba0598a9a18f8b"
+        },
+        "3.14.8": {
+          "tests": {
+            "passed": 107,
+            "failed": 0,
+            "skipped": 0,
+            "expected_failures": 0
+          },
+          "checks": [
+            {
+              "task": "check",
+              "exit_code": 0,
+              "log_sha256": "edd673f718031e0783e08e85ae5035a54f5d861c7421e4056a0bf8a6aa2d014c"
+            },
+            {
+              "task": "demo",
+              "exit_code": 0,
+              "log_sha256": "464b9df1a8568d25fdab1cd676dc260863a7c5ba595c2365af253f0bdeec132e"
+            },
+            {
+              "task": "benchmark",
+              "exit_code": 0,
+              "log_sha256": "332f55d66f84824aa3c1fcdd8274f2bd670f4c5d1466f454a7e40be304dba64d"
+            }
+          ],
+          "source_dirty": false,
+          "source_unchanged_after": true,
+          "raw_record_sha256": "2ab8ee0996b26176ad3e02a751980235c14fede16507d8c4b0902891f57335c2"
+        }
+      }
+    }
+  },
+  "integrations": {
+    "3.13.16": {
+      "settlement": {
+        "status": "passed",
+        "stages": [
+          {
+            "project": "meridian",
+            "exit_code": 0,
+            "stage_sha256": "1c61b0a0d6d7c60afd1e1efa049c73201c3fac5791a7cf7eb73cb738d7d44185"
+          }
+        ],
+        "raw_record_sha256": "655ff3e7b5413a39478c740711bef02324a3b489f6cc1161291b1717c15b0268"
+      },
+      "stream-lake": {
+        "status": "passed",
+        "stages": [
+          {
+            "project": "current",
+            "exit_code": 0,
+            "stage_sha256": "9f8235c34e99e0374ba02a60b6e3cffd1c1315c2a01adebd7d94dd404e56fe15"
+          },
+          {
+            "project": "quarry",
+            "exit_code": 0,
+            "stage_sha256": "ec9caf3682decd190d4bf177ba5f2824ee6d79bd151beb4347aa734d17a5a088"
+          }
+        ],
+        "raw_record_sha256": "903f760570b7b6f9a2df307cd4cf4680be6375733aacabdb875727da05a879b4"
+      },
+      "code-search": {
+        "status": "passed",
+        "stages": [
+          {
+            "project": "pytrace",
+            "exit_code": 0,
+            "stage_sha256": "6d8fea671585a42ff03fc271f5cedca9feb7ad797c3cb1d9f5bd6fdf918390f2"
+          },
+          {
+            "project": "atlas",
+            "exit_code": 0,
+            "stage_sha256": "0eef1863071afaca9ff38ee6e3930c7282dd93def3ed4d36e06f4e7de34ae8c1"
+          }
+        ],
+        "raw_record_sha256": "f30be7958a5be1eb7cc240da2aeadc70d34a932702ca20a8200c838138ab994b"
+      }
+    },
+    "3.14.8": {
+      "settlement": {
+        "status": "passed",
+        "stages": [
+          {
+            "project": "meridian",
+            "exit_code": 0,
+            "stage_sha256": "1c61b0a0d6d7c60afd1e1efa049c73201c3fac5791a7cf7eb73cb738d7d44185"
+          }
+        ],
+        "raw_record_sha256": "e280b536a0f5d1ce0bfe1d59fdaf57aa8967fe3df9515f4f26c3f6b68dcab117"
+      },
+      "stream-lake": {
+        "status": "passed",
+        "stages": [
+          {
+            "project": "current",
+            "exit_code": 0,
+            "stage_sha256": "9f8235c34e99e0374ba02a60b6e3cffd1c1315c2a01adebd7d94dd404e56fe15"
+          },
+          {
+            "project": "quarry",
+            "exit_code": 0,
+            "stage_sha256": "ec9caf3682decd190d4bf177ba5f2824ee6d79bd151beb4347aa734d17a5a088"
+          }
+        ],
+        "raw_record_sha256": "bf13a28f3f44b7550379d19a5970c8bbd5caa4b16a625c6fe6e9425f384f2101"
+      },
+      "code-search": {
+        "status": "passed",
+        "stages": [
+          {
+            "project": "pytrace",
+            "exit_code": 0,
+            "stage_sha256": "6d8fea671585a42ff03fc271f5cedca9feb7ad797c3cb1d9f5bd6fdf918390f2"
+          },
+          {
+            "project": "atlas",
+            "exit_code": 0,
+            "stage_sha256": "0eef1863071afaca9ff38ee6e3930c7282dd93def3ed4d36e06f4e7de34ae8c1"
+          }
+        ],
+        "raw_record_sha256": "578f0a99dca5c6d3fd9c2bca705c1d50f5c5f6b05a99253084848aa29e51fce1"
+      }
+    }
+  },
+  "shared": {
+    "source_commit": "0e52603de3bfbe50094904b5c5b9620af2ac0178",
+    "source_dirty_before": false,
+    "source_dirty_after": false,
+    "checks": [
+      {
+        "name": "setup313",
+        "exit_code": 0,
+        "log_sha256": "f3be11cce62a855ad14d3fdf25445039f3007404f7713d5032cd3bfafd7a76c5"
+      },
+      {
+        "name": "format",
+        "exit_code": 0,
+        "log_sha256": "2bcbe8e6e763d11737554aa861ef6606aea9d87114a002aa9bd426ec920674cf"
+      },
+      {
+        "name": "lint",
+        "exit_code": 0,
+        "log_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+      },
+      {
+        "name": "tests313",
+        "exit_code": 0,
+        "log_sha256": "66939a6e9f979b3fb43c9ba37389ec3ab151ca68e4336d56f56d26dadddba6ad"
+      },
+      {
+        "name": "setup314",
+        "exit_code": 0,
+        "log_sha256": "1fbb8e07e5d0fe5850168eddd7720fb3d6c97965c6f7d603607d62e5862fee16"
+      },
+      {
+        "name": "tests314",
+        "exit_code": 0,
+        "log_sha256": "e4c325e49104a2deec43dd6c422aa22633d4af5564b7436a5e71c63bb08f6176"
+      },
+      {
+        "name": "docs",
+        "exit_code": 0,
+        "log_sha256": "505a07779031866f33b185b49c177c0ea8dffe536a33c9c8b8f71893baafb73d"
+      },
+      {
+        "name": "advisories",
+        "exit_code": 0,
+        "log_sha256": "c6abca2e28e11b65c698f77e53e2da4185f3ffc5550445a5e70d3367aa2926eb"
+      },
+      {
+        "name": "atlas-browser",
+        "exit_code": 0,
+        "log_sha256": "4f78de3fcbd9e1d296ba968da43ef4f4486530048d5534d49a42350de8aec526"
+      }
+    ],
+    "tests": {
+      "3.13.16": {
+        "passed": 61,
+        "failed": 0,
+        "skipped": 0,
+        "expected_failures": 0
+      },
+      "3.14.8": {
+        "passed": 61,
+        "failed": 0,
+        "skipped": 0,
+        "expected_failures": 0
+      }
+    }
+  },
+  "limitations": [
+    "Full standard-scale performance workloads were not rerun; historical measurements retain their original source revisions.",
+    "Advisory coverage is the locked runtime dependency set applicable to CPython 3.14.8/Linux, using PyPI advisories at execution time; it excludes development tools and unknown vulnerabilities.",
+    "Browser checks are bounded functional, automated accessibility, and visual checks, not complete accessibility conformance or deployment security certification.",
+    "Hosted CI is a separate observation; local verification is not a hosted CI pass."
+  ],
+  "advisories": {
+    "auditor": "pip-audit==2.10.1",
+    "python": "3.14.8",
+    "projects": {
+      "anchor": {
+        "lockfile_sha256": "cb58668e71ccbc29112a367ef6cd358115039a96bffa666ba83c402e7929fdac",
+        "requirements_sha256": "e02848554ce2daa43c679e8f24bf96afdd31828a513926d14512972b46c4b855",
+        "packages": [
+          {
+            "name": "annotated-doc",
+            "version": "0.0.5",
+            "vulnerabilities": []
+          },
+          {
+            "name": "annotated-types",
+            "version": "0.8.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "anyio",
+            "version": "4.15.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "click",
+            "version": "8.5.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "fastapi",
+            "version": "0.143.3",
+            "vulnerabilities": []
+          },
+          {
+            "name": "h11",
+            "version": "0.16.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "idna",
+            "version": "3.20",
+            "vulnerabilities": []
+          },
+          {
+            "name": "markdown-it-py",
+            "version": "4.2.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "mdurl",
+            "version": "0.1.2",
+            "vulnerabilities": []
+          },
+          {
+            "name": "opentelemetry-api",
+            "version": "1.45.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "psycopg",
+            "version": "3.3.6",
+            "vulnerabilities": []
+          },
+          {
+            "name": "psycopg-binary",
+            "version": "3.3.6",
+            "vulnerabilities": []
+          },
+          {
+            "name": "psycopg-pool",
+            "version": "3.3.3",
+            "vulnerabilities": []
+          },
+          {
+            "name": "pydantic",
+            "version": "2.14.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "pydantic-core",
+            "version": "2.50.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "pygments",
+            "version": "2.21.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "rich",
+            "version": "15.0.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "shellingham",
+            "version": "1.5.4",
+            "vulnerabilities": []
+          },
+          {
+            "name": "starlette",
+            "version": "1.8.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "typer",
+            "version": "0.27.3",
+            "vulnerabilities": []
+          },
+          {
+            "name": "typing-extensions",
+            "version": "4.16.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "typing-inspection",
+            "version": "0.4.4",
+            "vulnerabilities": []
+          },
+          {
+            "name": "uvicorn",
+            "version": "0.54.0",
+            "vulnerabilities": []
+          }
+        ],
+        "raw_report_sha256": "22af4d075be90d7d841604b908c086519d3fb212af2a9e125ad0d4399854ef5f"
+      },
+      "strata": {
+        "lockfile_sha256": "33d8e55d6e7773df668c53066b89481c06c274b4e3989b5cba83d33581f7667d",
+        "requirements_sha256": "d7a630fd315742f25d11025aae949ad4bd850d75903b5df118d1249b82023d53",
+        "packages": [],
+        "raw_report_sha256": "87b8b6a2ed1cf98ddb395969c074495e7ed2149897c07778f0052effe75cb8cf"
+      },
+      "current": {
+        "lockfile_sha256": "baf15ac83a35752ad671410a6466a49a8b6f5b43d6210beed3cb3bd6982239a3",
+        "requirements_sha256": "f4879339c3a94a7c65e68fb63916a33457f598c2bde617400ecedd8933579d6b",
+        "packages": [
+          {
+            "name": "annotated-doc",
+            "version": "0.0.5",
+            "vulnerabilities": []
+          },
+          {
+            "name": "markdown-it-py",
+            "version": "4.2.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "mdurl",
+            "version": "0.1.2",
+            "vulnerabilities": []
+          },
+          {
+            "name": "pygments",
+            "version": "2.21.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "rich",
+            "version": "15.0.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "shellingham",
+            "version": "1.5.4",
+            "vulnerabilities": []
+          },
+          {
+            "name": "typer",
+            "version": "0.27.3",
+            "vulnerabilities": []
+          }
+        ],
+        "raw_report_sha256": "288c11f4ce10642d529eea8a62fb24b09d99463c51bd90cc9e0a2e22b7a083ee"
+      },
+      "meridian": {
+        "lockfile_sha256": "278057ae9b5d37f8ac2d66073891b25e2d51b15d13f7f753129aea59e01bb54d",
+        "requirements_sha256": "d84120dcf016b3c71205f59cd2f39ba9b397cf1ad5d883ffc9ce1094e460b21c",
+        "packages": [
+          {
+            "name": "asgiref",
+            "version": "3.12.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "django",
+            "version": "5.2.18",
+            "vulnerabilities": []
+          },
+          {
+            "name": "psycopg",
+            "version": "3.3.6",
+            "vulnerabilities": []
+          },
+          {
+            "name": "psycopg-binary",
+            "version": "3.3.6",
+            "vulnerabilities": []
+          },
+          {
+            "name": "sqlparse",
+            "version": "0.6.0",
+            "vulnerabilities": []
+          }
+        ],
+        "raw_report_sha256": "e815e3885d6f8fcceb06906ca30f8afca37b46905d69624081f3f906534997ed"
+      },
+      "quarry": {
+        "lockfile_sha256": "71898d3b0636bd6d3ed606a933766b7c6849d8da3766504686d8599fd5fbe00f",
+        "requirements_sha256": "e4654e27e380657d99c99e3f587a824bbf49532a5e1efdb9de31c7df84c35f7d",
+        "packages": [
+          {
+            "name": "duckdb",
+            "version": "1.5.6",
+            "vulnerabilities": []
+          },
+          {
+            "name": "pyarrow",
+            "version": "26.0.0",
+            "vulnerabilities": []
+          }
+        ],
+        "raw_report_sha256": "b808524c6ab17498bbc03dab89f989b186ac70c9dd2262a16469e8b16dba45e1"
+      },
+      "pytrace": {
+        "lockfile_sha256": "4e0752505efdd7261423861af80c8e7fb9f89ce9569d5f09be728826d5507660",
+        "requirements_sha256": "27316eff2bda99fd5bab75461d850df1ed78e0d985b25277ce90aa47cf55d820",
+        "packages": [
+          {
+            "name": "attrs",
+            "version": "26.1.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "jsonschema",
+            "version": "4.26.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "jsonschema-specifications",
+            "version": "2025.9.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "libcst",
+            "version": "1.9.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "pyyaml",
+            "version": "6.0.3",
+            "vulnerabilities": []
+          },
+          {
+            "name": "referencing",
+            "version": "0.37.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "rpds-py",
+            "version": "2026.9.1",
+            "vulnerabilities": []
+          }
+        ],
+        "raw_report_sha256": "9e96e3504351c1ee8b7f2b4f645d23b3a92d23fb678f57ad8d70e09ede218e03"
+      },
+      "atlas": {
+        "lockfile_sha256": "afadf806fdbb623044aa563e65234d12d3a49b57e907308cab46198ecad717f8",
+        "requirements_sha256": "fe3cb6c43ab3bfe6e6644d0a6a89030b8c9cdc50a9b42f43ac0b97fb8568b443",
+        "packages": [
+          {
+            "name": "annotated-doc",
+            "version": "0.0.5",
+            "vulnerabilities": []
+          },
+          {
+            "name": "annotated-types",
+            "version": "0.8.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "anyio",
+            "version": "4.15.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "click",
+            "version": "8.5.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "fastapi",
+            "version": "0.143.3",
+            "vulnerabilities": []
+          },
+          {
+            "name": "h11",
+            "version": "0.16.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "idna",
+            "version": "3.20",
+            "vulnerabilities": []
+          },
+          {
+            "name": "opentelemetry-api",
+            "version": "1.45.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "pydantic",
+            "version": "2.14.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "pydantic-core",
+            "version": "2.50.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "starlette",
+            "version": "1.8.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "typing-extensions",
+            "version": "4.16.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "typing-inspection",
+            "version": "0.4.4",
+            "vulnerabilities": []
+          },
+          {
+            "name": "uvicorn",
+            "version": "0.54.0",
+            "vulnerabilities": []
+          }
+        ],
+        "raw_report_sha256": "db1212307e7ecee44ba666c8118599b5e63e1f8944089c64ecf90499ec7d214f"
+      },
+      "proving-ground": {
+        "lockfile_sha256": "48ddce6dd70acac05a8094cf70e3d40ee7feb534591e49776292ef00436a508f",
+        "requirements_sha256": "592c3925cbb871b90b2faa38acfff40cfa2a634f4b0cd2388b80a94b264037db",
+        "packages": [
+          {
+            "name": "annotated-doc",
+            "version": "0.0.5",
+            "vulnerabilities": []
+          },
+          {
+            "name": "annotated-types",
+            "version": "0.8.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "anyio",
+            "version": "4.15.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "click",
+            "version": "8.5.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "cloudpickle",
+            "version": "3.1.2",
+            "vulnerabilities": []
+          },
+          {
+            "name": "fastapi",
+            "version": "0.143.3",
+            "vulnerabilities": []
+          },
+          {
+            "name": "h11",
+            "version": "0.16.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "idna",
+            "version": "3.20",
+            "vulnerabilities": []
+          },
+          {
+            "name": "joblib",
+            "version": "1.6.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "narwhals",
+            "version": "2.27.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "numpy",
+            "version": "2.5.4",
+            "vulnerabilities": []
+          },
+          {
+            "name": "opentelemetry-api",
+            "version": "1.45.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "packaging",
+            "version": "26.3",
+            "vulnerabilities": []
+          },
+          {
+            "name": "prettytable",
+            "version": "3.18.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "pyarrow",
+            "version": "26.0.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "pydantic",
+            "version": "2.14.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "pydantic-core",
+            "version": "2.50.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "scikit-learn",
+            "version": "1.9.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "scipy",
+            "version": "1.18.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "skops",
+            "version": "0.16.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "starlette",
+            "version": "1.8.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "threadpoolctl",
+            "version": "3.7.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "typing-extensions",
+            "version": "4.16.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "typing-inspection",
+            "version": "0.4.4",
+            "vulnerabilities": []
+          },
+          {
+            "name": "uvicorn",
+            "version": "0.54.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "wcwidth",
+            "version": "0.9.2",
+            "vulnerabilities": []
+          }
+        ],
+        "raw_report_sha256": "484671c57968e4e96f20f0b8b8f12ba911366d7ab61cf82ac4ef2c07a8013840"
+      },
+      "routecraft": {
+        "lockfile_sha256": "9aef9e96a988bfdd7403447241e67af694abf1c7d3910e57cae691e55643a011",
+        "requirements_sha256": "c9daede70e1100bb28d07d34f7279ca80121f748b8de9224d930c8d20faef67b",
+        "packages": [
+          {
+            "name": "contourpy",
+            "version": "1.4.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "cycler",
+            "version": "0.12.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "fonttools",
+            "version": "4.67.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "kiwisolver",
+            "version": "1.5.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "matplotlib",
+            "version": "3.11.2",
+            "vulnerabilities": []
+          },
+          {
+            "name": "numpy",
+            "version": "2.5.4",
+            "vulnerabilities": []
+          },
+          {
+            "name": "packaging",
+            "version": "26.3",
+            "vulnerabilities": []
+          },
+          {
+            "name": "pillow",
+            "version": "13.0.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "pyparsing",
+            "version": "3.3.3",
+            "vulnerabilities": []
+          },
+          {
+            "name": "python-dateutil",
+            "version": "2.9.0.post0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "six",
+            "version": "1.17.0",
+            "vulnerabilities": []
+          }
+        ],
+        "raw_report_sha256": "744a401d74c56eaccd8946329f691ce94d3f3c5fc5e16fb2a0175bbc3ec7358c"
+      },
+      "resonance": {
+        "lockfile_sha256": "8ac205930d14ebd160772d9950380e6e966aa61e740a0f3cd169c195f15cbefc",
+        "requirements_sha256": "77449701ad2a55e15e3d0e89c9d34a04c17e0623f04bb5c397357d559cf83d61",
+        "packages": [
+          {
+            "name": "cffi",
+            "version": "2.1.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "contourpy",
+            "version": "1.4.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "cycler",
+            "version": "0.12.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "fonttools",
+            "version": "4.67.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "kiwisolver",
+            "version": "1.5.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "matplotlib",
+            "version": "3.11.2",
+            "vulnerabilities": []
+          },
+          {
+            "name": "mido",
+            "version": "1.3.3",
+            "vulnerabilities": []
+          },
+          {
+            "name": "numpy",
+            "version": "2.5.4",
+            "vulnerabilities": []
+          },
+          {
+            "name": "packaging",
+            "version": "26.3",
+            "vulnerabilities": []
+          },
+          {
+            "name": "pillow",
+            "version": "13.0.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "pycparser",
+            "version": "3.11",
+            "vulnerabilities": []
+          },
+          {
+            "name": "pyparsing",
+            "version": "3.3.3",
+            "vulnerabilities": []
+          },
+          {
+            "name": "python-dateutil",
+            "version": "2.9.0.post0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "scipy",
+            "version": "1.18.1",
+            "vulnerabilities": []
+          },
+          {
+            "name": "six",
+            "version": "1.17.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "soundfile",
+            "version": "0.14.0",
+            "vulnerabilities": []
+          },
+          {
+            "name": "typing-extensions",
+            "version": "4.16.0",
+            "vulnerabilities": []
+          }
+        ],
+        "raw_report_sha256": "c808a715f46685ed2d27ebe2df8536aa066c88aacd37f65a7a0ec35282a4fb66"
+      }
+    }
+  },
+  "browser_checks": {
+    "chromium": "154.0.8037.57",
+    "playwright": "1.64.1",
+    "axe_playwright": "4.14.0",
+    "wcag_tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa"
+    ],
+    "atlas": {
+      "functional": "passed",
+      "accessibility": [
+        {
+          "state": "desktop initial",
+          "violations": []
+        },
+        {
+          "state": "desktop results",
+          "violations": []
+        },
+        {
+          "state": "document dialog",
+          "violations": []
+        },
+        {
+          "state": "mobile results",
+          "violations": []
+        }
+      ]
+    },
+    "meridian": {
+      "scope": "working-tree journal and account screens, matching committed implementation",
+      "http": 200,
+      "page_errors": 0,
+      "accessibility_violations": 0,
+      "mobile_overflow": false
+    },
+    "resonance": {
+      "scope": "working-tree seeded report, matching committed report template",
+      "viewports": [
+        1440,
+        390
+      ],
+      "accessibility_violations": 0,
+      "page_overflow": false,
+      "native_audio_playback": "advanced with keyboard controls"
+    }
+  },
+  "totals": {
+    "project_test_executions": 2274,
+    "shared_test_executions": 122,
+    "integration_executions": 6,
+    "project_interpreter_checks": 20
+  },
+  "reproduction": [
+    "python scripts/verify_snapshot.py --commit 0e52603de3bfbe50094904b5c5b9620af2ac0178 --python VERSION --checks check,demo,benchmark --integrations --temp-root /workspace --output FRESH_DIRECTORY",
+    "uv run --locked --project tooling/quality --python VERSION pytest scripts/tests",
+    "python scripts/portfolio.py docs",
+    "python scripts/audit_dependencies.py --output FRESH_DIRECTORY",
+    "NODE_PATH=PATH_TO_NODE_TOOLS uv run --locked --project projects/07-atlas --python 3.14.8 python projects/07-atlas/tests/browser/check_browser.py"
+  ]
+}

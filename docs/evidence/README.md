@@ -1,6 +1,19 @@
-# Committed verification evidence
+# Verification records
 
-The accepted local compatibility matrix passes all ten projects on both required interpreters: **1,136 project tests**, with no skips or expected failures. Every check also runs Ruff formatting/lint, strict mypy, wheel/sdist build, runtime-only wheel installation and a complete installed-wheel demo outside source. Each verification record retains actual commands, exit codes, source/lock/shared-input hashes and unchanged/clean-source checks.
+[Current verification status](../STATUS.md) identifies the latest tested source. The
+[reliability and interface review](../QUALITY_REVIEW.md) describes subsequent product
+and tooling changes. Records below retain their original source revisions; they do
+not certify later code or repeat historical performance measurements.
+
+The [October 20 review record](quality-review-2026-10-20.json) identifies fixed source
+`0e52603de3bfbe50094904b5c5b9620af2ac0178`: 2,274 project test executions,
+122 shared tooling test executions, twenty package/demo/CI-workload checks, and
+six public integration runs passed. It also records the dependency-advisory and
+browser checks and their limits.
+
+## Original acceptance matrix
+
+The original local compatibility matrix recorded all ten projects on both required interpreters: **1,136 project test executions**, with no skips or expected failures. Every check also ran Ruff formatting/lint, strict mypy, wheel/sdist build, runtime-only wheel installation and a complete installed-wheel demo outside source. Each verification record retains actual commands, exit codes, source/lock/shared-input hashes and unchanged/clean-source checks.
 
 | Product | Tests per interpreter | CPython 3.13.16 | CPython 3.14.8 |
 | --- | ---: | --- | --- |
