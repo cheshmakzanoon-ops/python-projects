@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "project": "quarry",
+  "source_commit": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+  "source_dirty": true,
+  "source_scope": "project",
+  "source_content_sha256": "460e8c57895390f5fa61366bf361582abe5129dd1691ea09424eba51d5d336e9",
+  "root_contract_sha256": "cdd3d19d53efcd337bc0a3b104ed1ee20e631dc6c53e993791e3b25e53627909",
+  "lockfile_sha256": "71898d3b0636bd6d3ed606a933766b7c6849d8da3766504686d8599fd5fbe00f",
+  "python": "3.14.8",
+  "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "cpu": "unknown",
+  "memory_limit_bytes": null,
+  "seed": 1729,
+  "profile": "incremental-correctness",
+  "memory_metadata_note": "OS peak RSS measured; cgroup maximum not inferred",
+  "status": "passed",
+  "original_events": 50000,
+  "buckets": 8,
+  "duckdb_threads": 1,
+  "duckdb_memory_mb": 128,
+  "phases": [
+    {
+      "phase": "original",
+      "snapshot": 1,
+      "facts_sha256": "d65b69ba56b713f67b56988f0d23dea5971f0f3fb20347583de145fdcf56f587",
+      "daily_sha256": "b01f00ccdc31d2d2532412e65e29a9592828cde1ae8a432fdb1ac51de3bcf985",
+      "historical_identities": 50000,
+      "live_rows": 50000,
+      "stats": {
+        "bytes_written": 1629066,
+        "max_batch_rows": 1024,
+        "parquet_input_bytes": 1622571,
+        "reused_nodes": 0,
+        "rewritten_buckets": 8
+      },
+      "planned_buckets": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "phase": "corrections",
+      "snapshot": 2,
+      "facts_sha256": "9cb5467185f0c510a2c100e886eb59567bde41969b1edfbea87afe563a3cc0e9",
+      "daily_sha256": "bcdd45831c04ac8b06dce418fe316c39e3a638f89ece66cc91251014aa25faf5",
+      "historical_identities": 60000,
+      "live_rows": 50000,
+      "stats": {
+        "bytes_written": 1703429,
+        "max_batch_rows": 1024,
+        "parquet_input_bytes": 1696980,
+        "reused_nodes": 0,
+        "rewritten_buckets": 8
+      },
+      "planned_buckets": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "phase": "obsolete-and-replayed",
+      "snapshot": 3,
+      "facts_sha256": "9cb5467185f0c510a2c100e886eb59567bde41969b1edfbea87afe563a3cc0e9",
+      "daily_sha256": "bcdd45831c04ac8b06dce418fe316c39e3a638f89ece66cc91251014aa25faf5",
+      "historical_identities": 65000,
+      "live_rows": 50000,
+      "stats": {
+        "bytes_written": 0,
+        "max_batch_rows": 0,
+        "parquet_input_bytes": 0,
+        "reused_nodes": 24,
+        "rewritten_buckets": 0
+      },
+      "planned_buckets": []
+    },
+    {
+      "phase": "deletes",
+      "snapshot": 4,
+      "facts_sha256": "39c43481dd8760134b193f0c9f0efd9643cd1a7c1b378a4f79c8ea042685e023",
+      "daily_sha256": "3d5d6ca5e391c83d1ee6fe395b4d786317f4f4a9ce42cb638b2ab78bed70237b",
+      "historical_identities": 69546,
+      "live_rows": 45454,
+      "stats": {
+        "bytes_written": 1641414,
+        "max_batch_rows": 1024,
+        "parquet_input_bytes": 1634976,
+        "reused_nodes": 0,
+        "rewritten_buckets": 8
+      },
+      "planned_buckets": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "phase": "schema-addition",
+      "snapshot": 5,
+      "facts_sha256": "2ee15bf8de042e2ce88b2ebc168d5fb49917aa436b67a0e4b9d68a2c0910a9ff",
+      "daily_sha256": "fa9162c2196dcee081f6632c36c69d5795c60132196e848ed06caa0bd57ef2f9",
+      "historical_identities": 69646,
+      "live_rows": 45464,
+      "stats": {
+        "bytes_written": 1649594,
+        "max_batch_rows": 1024,
+        "parquet_input_bytes": 1643165,
+        "reused_nodes": 0,
+        "rewritten_buckets": 8
+      },
+      "planned_buckets": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "phase": "targeted-move",
+      "snapshot": 6,
+      "facts_sha256": "30ada943eddf00b719c5ef654075e0a83ca407c37950db2a00e3d227ef074932",
+      "daily_sha256": "01625797e075cf6fa70391cbbf96ff824ed59dbe81fd35140c7eff8853cfbbae",
+      "historical_identities": 69647,
+      "live_rows": 45464,
+      "stats": {
+        "bytes_written": 210792,
+        "max_batch_rows": 1024,
+        "parquet_input_bytes": 209983,
+        "reused_nodes": 21,
+        "rewritten_buckets": 1
+      },
+      "planned_buckets": [
+        "6"
+      ]
+    },
+    {
+      "phase": "quality-policy",
+      "snapshot": 7,
+      "facts_sha256": "30ada943eddf00b719c5ef654075e0a83ca407c37950db2a00e3d227ef074932",
+      "daily_sha256": "01625797e075cf6fa70391cbbf96ff824ed59dbe81fd35140c7eff8853cfbbae",
+      "historical_identities": 69647,
+      "live_rows": 45464,
+      "stats": {
+        "bytes_written": 0,
+        "max_batch_rows": 0,
+        "parquet_input_bytes": 0,
+        "reused_nodes": 24,
+        "rewritten_buckets": 0
+      },
+      "planned_buckets": []
+    }
+  ],
+  "elapsed_seconds": 22.327328206000402,
+  "peak_rss_bytes": 145219584,
+  "scope": "One deterministic correctness exercise on a shared Linux host; not a capacity measurement."
+}

@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import math
 import string
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 from datetime import date
+from types import MappingProxyType
 
 from pp_quarry.model.events import JSON, Event
 
@@ -37,7 +39,7 @@ class Field:
 
 @dataclass(frozen=True)
 class Contract:
-    fields: dict[str, Field] = field(
+    fields: Mapping[str, Field] = field(
         default_factory=lambda: {
             "device": Field("string"),
             "day": Field("string"),
@@ -50,6 +52,13 @@ class Contract:
     max_rows: int | None = None
 
     def __post_init__(self) -> None:
+        if not isinstance(self.fields, Mapping) or any(
+            not isinstance(spec, Field) for spec in self.fields.values()
+        ):
+            raise ValueError("contract fields must map names to Field definitions")
+        # A frozen dataclass alone does not freeze a caller-owned dictionary.
+        # Stage validation and publication must use the same schema snapshot.
+        object.__setattr__(self, "fields", MappingProxyType(dict(self.fields)))
         if type(self.min_rows) is not int or (
             self.max_rows is not None and type(self.max_rows) is not int
         ):

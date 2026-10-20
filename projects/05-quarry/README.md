@@ -13,7 +13,7 @@ uv run --locked python -m pp_quarry.cli benchmark --profile ci --output /tmp/qua
 uv run --locked pytest
 ```
 
-The demo writes `report.json` containing an explainable one-bucket correction plan, a rejected quality batch, an orphan recovery report, source lineage, historical query samples and an independent complete-rebuild comparison. Its `correctness_checks` must all be `true`. Output directories must be empty; cleanup requires the explicit ownership marker:
+The demo writes `report.json` containing an explainable one-bucket correction plan, a rejected quality batch, an orphan recovery report, source lineage, historical query samples and independent facts/daily complete-rebuild comparisons. Its `correctness_checks` must all be `true`. Output directories must be empty; cleanup requires the explicit ownership marker:
 
 ```sh
 uv run --locked python -m pp_quarry.cli clean-demo --output /tmp/quarry-demo
@@ -56,12 +56,15 @@ with Lakehouse("/tmp/my-lake") as lake:
 
 Published manifests must include every configured bucket and the complete normalized/facts/daily graph, including empty buckets. Readers and recovery reject missing entries before interpreting them as an empty dataset or orphaned files. Pinned queries read only the files in their committed manifest and verify each file's SHA-256, size, schema and row count before execution. An externally modified Parquet file stops a query or reused publication rather than silently changing history. Full-file verification adds I/O even when a query requests a small row limit. Checksums establish consistency with the local catalog; the filesystem and catalog remain trusted.
 
-`Contract(fields={...})` supports arbitrary initial JSON payload schemas for integration imports. Facts always preserve canonical `payload` JSON; additional declared fields become typed nullable `payload__FIELD` columns. The domain projections `device`, `day` and `value` drive daily statistics; custom datasets without those fields have null day/device and a zero value projection. New nullable columns are supported; removals, type changes and bucket-count changes require explicit migration. See [architecture](docs/ARCHITECTURE.md), [operations](docs/OPERATIONS.md), [acceptance](docs/ACCEPTANCE.md) and [measured benchmarks](docs/BENCHMARKS.md).
+`Contract(fields={...})` copies fields into a read-only specification and supports custom initial JSON payload schemas for integration imports. Facts always preserve canonical `payload` JSON; additional declared fields become typed `payload__FIELD` columns. The domain projections `device`, `day` and `value` drive daily statistics; custom datasets without them have null day/device and a zero value projection. New nullable columns are supported; removals, type changes and bucket-count changes require explicit migration. Policy-only changes validate without rewriting unchanged files. Daily totals must remain finite `DOUBLE` values, including when combining bucket contributions.
+
+Lineage defaults to bounded 1,000-version pages with an acceptance-snapshot cutoff. Keep `Snapshot` open throughout iteration; closing it closes active query streams before releasing its persistent retention pin. See [API](docs/API.md) for pagination, schemas and failure semantics.
 
 ## Design and operations
 
 | Topic | Reference |
 | --- | --- |
+| Python calls, streaming ownership and frozen lineage pages | [API](docs/API.md) |
 | Publication, fingerprints and pinned readers | [Architecture](docs/ARCHITECTURE.md) |
 | Storage and retention tradeoffs | [Decisions](docs/DECISIONS.md) |
 | Validation, migration, backup and recovery | [Operations](docs/OPERATIONS.md) |
@@ -70,3 +73,5 @@ Published manifests must include every configured bucket and the complete normal
 | Workload definitions and measured limitations | [Benchmarks](docs/BENCHMARKS.md) |
 
 The supported durability scope is a local filesystem with working fsync and SQLite WAL, one writer and concurrent pinned readers. Linux is the required fault-test and benchmark platform. Historical identities grow with accepted input and stale reader pins require explicit offline administration. Cloud-object storage, distributed writers and full Delta/Iceberg compatibility are outside the product.
+
+The [focused correctness exercise](benchmarks/verify_incremental.py) checks independent facts and daily rebuilds after seven publications, including two namespaces sharing keys, corrections, obsolete arrivals, tombstones, schema evolution and retention/restart. Its [retained 50,000-original report](artifacts/deep-correctness-2026-10-20.json) records 69,647 historical identities and verifies a one-key move rewrites one bucket while a policy-only publication writes zero bytes. This is one shared-host correctness run, not a capacity measurement; [benchmarks](docs/BENCHMARKS.md) gives the command, hashes and limitations.

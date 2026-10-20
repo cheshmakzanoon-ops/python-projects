@@ -16,6 +16,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 
 from pp_quarry.contracts import Contract
+from pp_quarry.execution.analytics import analytical_session, check_daily_totals
 from pp_quarry.model.events import canonical
 from pp_quarry.planning.dag import DEFAULT_DAG, Node, fingerprint, order
 from pp_quarry.planning.partitions import bucket
@@ -178,7 +179,12 @@ class Lakehouse:
                     inputs,
                     canonical(
                         {
-                            "contract": contract.to_dict(),
+                            # Validation policy does not change physical data.
+                            # Normalized files have a fixed envelope schema;
+                            # only facts materialize the declared payload fields.
+                            "payload_fields": contract.to_dict()["fields"]
+                            if node.transform == "facts"
+                            else None,
                             "compression": "zstd",
                             "duckdb_threads": self.config.threads,
                             "format_version": 1,
@@ -339,7 +345,7 @@ class Lakehouse:
         previous = self.manifest().get("quality", {}).get("partitions", {})
         partitions: dict[str, Any] = {}
         for partition, nodes in plan["partitions"].items():
-            if partition in previous and all(node["action"] == "reuse" for node in nodes.values()):
+            if partition in previous and nodes["normalized"]["action"] == "reuse":
                 partitions[partition] = previous[partition]
             else:
                 count, low, high = self.db.execute(
@@ -422,10 +428,9 @@ class Lakehouse:
                 ("offset", pa.int64()),
             ]
         )
-        with duckdb.connect() as engine:
-            engine.execute(f"SET memory_limit='{self.config.memory_mb}MB'")
-            engine.execute(f"SET threads={self.config.threads}")
-            engine.execute(f"SET temp_directory={literal(str(self.root / 'tmp'))}")
+        with analytical_session(
+            self.root, memory_mb=self.config.memory_mb, threads=self.config.threads
+        ) as engine:
             for part, nodes in plan["partitions"].items():
                 output: dict[str, Any] = {}
                 rewritten = False
@@ -507,9 +512,44 @@ class Lakehouse:
                     manifest["stats"]["bytes_written"] += size
                 manifest["partitions"][part] = output
                 manifest["stats"]["rewritten_buckets"] += int(rewritten)
+            check_daily_totals(
+                engine,
+                [
+                    str(manifest_path(self.root, nodes["daily"]["path"]))
+                    for nodes in manifest["partitions"].values()
+                ],
+            )
         return manifest
 
-    def lineage(self, namespace: str, key: str) -> dict[str, Any]:
+    def lineage(
+        self,
+        namespace: str,
+        key: str,
+        *,
+        after_version: int = -1,
+        limit: int = 1000,
+        as_of_snapshot: int | None = None,
+    ) -> dict[str, Any]:
+        if type(after_version) is not int or not -1 <= after_version < 2**63:
+            raise ValueError("history cursor must be an integer from -1 to 2**63-1")
+        if type(limit) is not int or not 1 <= limit <= 10000:
+            raise ValueError("history page limit must be an integer from 1 to 10000")
+        current = self.manifest()
+        latest = current["snapshot"] or 0
+        cutoff = latest if as_of_snapshot is None else as_of_snapshot
+        if type(cutoff) is not int or not 0 <= cutoff <= latest:
+            raise ValueError("history cutoff must identify an already committed snapshot prefix")
+        # Source checkpoints outlive snapshot retention and record the first
+        # commit that accepted each identity. This freezes pagination even when
+        # a later source adds an obsolete version below an existing cursor.
+        rows = self.db.execute(
+            """SELECT i.version,i.fingerprint,i.source,i.offset,i.operation
+            FROM identities i JOIN sources s ON s.hash=i.source
+            WHERE i.namespace=? AND i.key=? AND i.version>? AND s.snapshot<=?
+            ORDER BY i.version LIMIT ?""",
+            (namespace, key, after_version, cutoff, limit + 1),
+        ).fetchall()
+        has_more = len(rows) > limit
         versions = [
             {
                 "version": row[0],
@@ -518,24 +558,43 @@ class Lakehouse:
                 "offset": row[3],
                 "operation": row[4],
             }
-            for row in self.db.execute(
-                "SELECT version,fingerprint,source,offset,operation FROM identities WHERE namespace=? AND key=? ORDER BY version",
-                (namespace, key),
-            )
+            for row in rows[:limit]
         ]
         return {
             "namespace": namespace,
             "key": key,
             "versions": versions,
-            "columns": self.manifest().get("column_lineage", {}),
+            "as_of_snapshot": cutoff,
+            "next_after_version": versions[-1]["version"] if has_more else None,
+            "column_lineage_snapshot": current["snapshot"],
+            "columns": current.get("column_lineage", {}),
         }
 
     def validate(self, snapshot: int | None = None) -> dict[str, int]:
-        manifest = self.manifest(snapshot)
-        files = rows = 0
-        for nodes in manifest["partitions"].values():
-            for entry in nodes.values():
-                verify_entry(self.root, entry)
-                files += 1
-                rows += entry["rows"]
-        return {"files": files, "rows": rows}
+        from pp_quarry.query import Snapshot
+
+        if (
+            snapshot is None
+            and self.db.execute("SELECT 1 FROM snapshots LIMIT 1").fetchone() is None
+        ):
+            return {"files": 0, "rows": 0}
+        # Validation is a reader too: select and pin atomically before hashing
+        # files, then keep the lease until all content and aggregate checks end.
+        with Snapshot(self.root, snapshot) as pinned:
+            manifest = pinned.manifest
+            files = rows = 0
+            for nodes in manifest["partitions"].values():
+                for entry in nodes.values():
+                    verify_entry(self.root, entry)
+                    files += 1
+                    rows += entry["rows"]
+            settings = manifest.get("execution_settings", {"memory_mb": 128, "threads": 1})
+            with analytical_session(self.root, **settings) as engine:
+                check_daily_totals(
+                    engine,
+                    [
+                        str(manifest_path(self.root, nodes["daily"]["path"]))
+                        for nodes in manifest["partitions"].values()
+                    ],
+                )
+            return {"files": files, "rows": rows}

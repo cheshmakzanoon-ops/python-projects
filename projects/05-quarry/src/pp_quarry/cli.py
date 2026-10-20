@@ -15,7 +15,17 @@ from typing import Any
 from pp_quarry import Config, Contract, InjectedCrash, Lakehouse, Snapshot, recover
 from pp_quarry.evidence import provenance
 from pp_quarry.sources import file_hash
-from pp_quarry.workloads import actual, evolved_contract, generate, make_event, oracle, write_events
+from pp_quarry.workloads import (
+    actual,
+    daily_actual,
+    daily_digest,
+    daily_oracle,
+    evolved_contract,
+    generate,
+    make_event,
+    oracle,
+    write_events,
+)
 
 
 def owned_output(path: Path) -> None:
@@ -65,6 +75,7 @@ def demo(output: Path, seed: int) -> dict[str, Any]:
         first = lake.ingest(files[0])
         with Snapshot(lake.root, first) as old:
             old_digest = actual(lake)
+            old_daily = daily_digest(old.rows("daily"))
             targeted = output / "inputs" / "one-bucket.ndjson"
             write_events(targeted, [make_event(101, 2, 999, day=12)])
             plan = lake.plan(targeted)
@@ -92,7 +103,11 @@ def demo(output: Path, seed: int) -> dict[str, Any]:
                 [files[0], targeted, *files[1:]], output / "oracle.sqlite"
             )
             current_digest = actual(lake)
+            current_daily = daily_actual(lake)
+            expected_daily = daily_oracle(output / "oracle.sqlite")
             assert current_digest == expected
+            assert current_daily == expected_daily
+            assert daily_digest(old.rows("daily")) == old_daily
             pinned_rows = list(old.rows(limit=3))
             assert pinned_rows[0]["version"] == 1
             report = {
@@ -109,8 +124,10 @@ def demo(output: Path, seed: int) -> dict[str, Any]:
                 "old_snapshot_sample": pinned_rows,
                 "old_digest": old_digest,
                 "current_digest": current_digest,
+                "current_daily_digest": current_daily,
                 "correctness_checks": {
                     "independent_rebuild": current_digest == expected,
+                    "independent_daily_rebuild": current_daily == expected_daily,
                     "one_bucket_only": one_bucket_stats["rewritten_buckets"] == 1,
                     "old_snapshot_unchanged": pinned_rows[0]["version"] == 1,
                 },
@@ -129,18 +146,22 @@ def benchmark(output: Path, seed: int, profile: str) -> dict[str, Any]:
     count, buckets = (20000, 8) if profile == "ci" else (5000000, 128)
     files = generate(output / "inputs", count, seed)
     expected, oracle_seconds = oracle(files, output / "oracle.sqlite")
+    expected_daily = daily_oracle(output / "oracle.sqlite")
     config = Config(buckets=buckets)
     warmup_count, warmup_buckets = 20000, 8
     if profile == "standard":
         warmup_files = generate(output / "inputs" / "warmup", warmup_count, seed)
         warmup_expected, _ = oracle(warmup_files, output / "inputs" / "warmup" / "oracle.sqlite")
+        warmup_daily = daily_oracle(output / "inputs" / "warmup" / "oracle.sqlite")
     else:
         warmup_files, warmup_expected = files, expected
+        warmup_daily = expected_daily
     samples: list[dict[str, Any]] = []
     measurements = 5 if profile == "ci" else 1
     for run in range(-1, measurements):
         active_files = warmup_files if run < 0 else files
         active_expected = warmup_expected if run < 0 else expected
+        active_daily = warmup_daily if run < 0 else expected_daily
         active_count = warmup_count if run < 0 else count
         active_config = Config(buckets=warmup_buckets) if run < 0 else config
         with Lakehouse(output / ("warmup" if run < 0 else f"run-{run}"), active_config) as lake:
@@ -154,8 +175,9 @@ def benchmark(output: Path, seed: int, profile: str) -> dict[str, Any]:
             incremental_seconds = time.perf_counter() - start
             start = time.perf_counter()
             observed = actual(lake)
+            observed_daily = daily_actual(lake)
             query_seconds = time.perf_counter() - start
-            if observed != active_expected:
+            if observed != active_expected or observed_daily != active_daily:
                 raise AssertionError("independent complete-rebuild mismatch")
             start = time.perf_counter()
             recovery = recover(lake)
@@ -167,7 +189,7 @@ def benchmark(output: Path, seed: int, profile: str) -> dict[str, Any]:
             start = time.perf_counter()
             lake.build(force=True)
             full_rebuild_seconds = time.perf_counter() - start
-            if actual(lake) != active_expected:
+            if actual(lake) != active_expected or daily_actual(lake) != active_daily:
                 raise AssertionError("forced full Parquet rebuild mismatch")
             sample = {
                 "original_seconds": original_seconds,
@@ -246,7 +268,12 @@ def benchmark(output: Path, seed: int, profile: str) -> dict[str, Any]:
             "source_bytes_read_per_run": sum(path.stat().st_size for path in files) * 4,
             "oracle_seconds": oracle_seconds,
         },
-        "correctness_checks": {"independent_full_rebuild": True, "latest_digest": expected},
+        "correctness_checks": {
+            "independent_full_rebuild": True,
+            "latest_digest": expected,
+            "independent_daily_rebuild": True,
+            "daily_digest": expected_daily,
+        },
         "status": "passed",
     }
     assert before["source_content_sha256"] == provenance(seed, profile)["source_content_sha256"]
@@ -291,6 +318,9 @@ def main() -> None:
         if command == "lineage":
             child.add_argument("--namespace", required=True)
             child.add_argument("--key", required=True)
+            child.add_argument("--after-version", type=int, default=-1)
+            child.add_argument("--as-of-snapshot", type=int)
+            child.add_argument("--limit", type=int, default=1000)
         if command == "gc":
             child.add_argument("--retain", type=int, required=True)
     args = parser.parse_args()
@@ -323,7 +353,13 @@ def main() -> None:
                 elif args.command == "snapshots":
                     result = lake.snapshots()
                 elif args.command == "lineage":
-                    result = lake.lineage(args.namespace, args.key)
+                    result = lake.lineage(
+                        args.namespace,
+                        args.key,
+                        after_version=args.after_version,
+                        limit=args.limit,
+                        as_of_snapshot=args.as_of_snapshot,
+                    )
                 elif args.command == "recover":
                     result = recover(lake)
                 elif args.command == "gc":

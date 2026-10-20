@@ -69,11 +69,13 @@ def generate(directory: Path, count: int, seed: int) -> list[Path]:
     return files
 
 
-def row_digest(rows: Iterable[tuple[str, str, int, str]]) -> str:
+def row_digest(rows: Iterable[tuple[object, ...]]) -> str:
     digest = hashlib.sha256()
     for row in rows:
         digest.update(
-            json.dumps(row, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
+            json.dumps(
+                row, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False
+            ).encode()
         )
         digest.update(b"\n")
     return digest.hexdigest()
@@ -123,6 +125,33 @@ def actual(lake: Lakehouse) -> str:
                 yield row["namespace"], row["key"], row["version"], row["payload"]
 
         return row_digest(rows())
+
+
+def daily_oracle(path: Path) -> str:
+    """Rebuild device-day counts/totals from all arrivals, without bucket SQL.
+
+    The synthetic workloads use small integer-valued measurements, making their
+    DOUBLE sums exact; this comparison is not a floating-point accuracy claim.
+    """
+    with closing(sqlite3.connect(path.resolve().as_uri() + "?mode=ro", uri=True)) as db:
+        return row_digest(
+            db.execute("""WITH ranked AS (
+              SELECT *,row_number() OVER(PARTITION BY namespace,key ORDER BY version DESC) rank
+              FROM arrivals
+            ) SELECT json_extract(payload,'$.day') day,count(*),
+              sum(coalesce(CAST(json_extract(payload,'$.value') AS REAL),0))
+              FROM ranked WHERE rank=1 AND operation='upsert'
+              GROUP BY day ORDER BY day NULLS LAST""")
+        )
+
+
+def daily_digest(rows: Iterable[dict[str, Any]]) -> str:
+    return row_digest((row["day"], row["count"], row["total"]) for row in rows)
+
+
+def daily_actual(lake: Lakehouse) -> str:
+    with Snapshot(lake.root) as view:
+        return daily_digest(view.rows("daily"))
 
 
 def evolved_contract() -> Contract:

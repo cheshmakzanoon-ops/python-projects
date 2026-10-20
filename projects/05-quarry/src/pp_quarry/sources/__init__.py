@@ -7,8 +7,11 @@ import hashlib
 import json
 from collections.abc import Callable, Iterator
 from pathlib import Path
+from threading import Lock
 
 from pp_quarry.model.events import JSON, Event
+
+_CSV_LIMIT = Lock()
 
 
 def file_hash(path: Path) -> str:
@@ -33,9 +36,17 @@ def _lines(
             yield offset, line
 
 
-def _csv_row(line: bytes) -> list[str]:
+def _csv_row(line: bytes, limit: int) -> list[str]:
     try:
-        return next(csv.reader([line.decode("utf-8")], strict=True))
+        # The stdlib limit is process-global, not reader-local. Hold it only
+        # while parsing one already byte-bounded record, then restore callers'
+        # configuration before yielding control to another reader.
+        with _CSV_LIMIT:
+            previous = csv.field_size_limit(limit)
+            try:
+                return next(csv.reader([line.decode("utf-8")], strict=True))
+            finally:
+                csv.field_size_limit(previous)
     except csv.Error as exc:
         raise ValueError(
             "CSV requires one complete record per physical line; multiline quoted records are unsupported"
@@ -50,11 +61,10 @@ def read(
 ) -> Iterator[tuple[int, Event]]:
     lines = _lines(path, max_record_bytes, observe)
     if path.suffix == ".csv":
-        csv.field_size_limit(max_record_bytes)
         first = next(lines, None)
         if first is None:
             return
-        header = _csv_row(first[1])
+        header = _csv_row(first[1], max_record_bytes)
         allowed = {"source_namespace", "namespace", "key", "version", "operation", "payload"}
         if (
             len(header) != len(set(header))
@@ -63,7 +73,7 @@ def read(
         ):
             raise ValueError("CSV header must contain unique declared event columns")
         for ordinal, (_, line) in enumerate(lines, 1):
-            fields = _csv_row(line)
+            fields = _csv_row(line, max_record_bytes)
             if len(fields) != len(header):
                 raise ValueError("CSV record does not match header width")
             row = dict(zip(header, fields, strict=True))
