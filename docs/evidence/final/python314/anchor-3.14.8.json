@@ -92,7 +92,7 @@
   "checks": [
     {
       "command": [
-        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "$DISPATCHER_PYTHON",
         "scripts/portfolio.py",
         "check",
         "anchor"
@@ -103,7 +103,7 @@
     },
     {
       "command": [
-        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "$DISPATCHER_PYTHON",
         "scripts/portfolio.py",
         "demo",
         "anchor"
@@ -114,7 +114,7 @@
     },
     {
       "command": [
-        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "$DISPATCHER_PYTHON",
         "scripts/portfolio.py",
         "benchmark",
         "anchor",

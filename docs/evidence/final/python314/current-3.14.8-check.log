@@ -32,7 +32,7 @@ Building source distribution...
 Building wheel from source distribution...
 Successfully built dist/pp_current-0.1.0.tar.gz
 Successfully built dist/pp_current-0.1.0-py3-none-any.whl
-[03-current] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/portfolio-verify-fhqniien/source/scripts/wheel_smoke.py /workspace/portfolio-verify-fhqniien/source/projects/03-current pp_current
+[03-current] $DISPATCHER_PYTHON /workspace/portfolio-verify-fhqniien/source/scripts/wheel_smoke.py /workspace/portfolio-verify-fhqniien/source/projects/03-current pp_current
 Using CPython 3.14.8
 Creating virtual environment at: /tmp/portfolio-wheel-7cl9g31_/venv
 Activate with: source /tmp/portfolio-wheel-7cl9g31_/venv/bin/activate

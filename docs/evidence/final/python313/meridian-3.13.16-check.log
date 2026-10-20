@@ -31,7 +31,7 @@ Building source distribution...
 Building wheel from source distribution...
 Successfully built dist/pp_meridian-0.1.0.tar.gz
 Successfully built dist/pp_meridian-0.1.0-py3-none-any.whl
-[04-meridian] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/portfolio-verify-mlsinfvy/source/scripts/wheel_smoke.py /workspace/portfolio-verify-mlsinfvy/source/projects/04-meridian pp_meridian
+[04-meridian] $DISPATCHER_PYTHON /workspace/portfolio-verify-mlsinfvy/source/scripts/wheel_smoke.py /workspace/portfolio-verify-mlsinfvy/source/projects/04-meridian pp_meridian
 Using CPython 3.13.16
 Creating virtual environment at: /tmp/portfolio-wheel-shwatjb2/venv
 Activate with: source /tmp/portfolio-wheel-shwatjb2/venv/bin/activate

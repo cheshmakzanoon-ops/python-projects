@@ -99,7 +99,7 @@
   "checks": [
     {
       "command": [
-        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "$DISPATCHER_PYTHON",
         "scripts/portfolio.py",
         "demo",
         "meridian"
@@ -110,7 +110,7 @@
     },
     {
       "command": [
-        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "$DISPATCHER_PYTHON",
         "scripts/portfolio.py",
         "benchmark",
         "meridian",

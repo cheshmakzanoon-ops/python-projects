@@ -1,4 +1,4 @@
-[source] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python scripts/check_docs.py
+[source] $DISPATCHER_PYTHON scripts/check_docs.py
 INFO    -  Cleaning site directory
 INFO    -  Building documentation to directory: /workspace/portfolio-root-verify-1imz3oh8/source/.local/docs-site
 INFO    -  Documentation built in 0.24 seconds

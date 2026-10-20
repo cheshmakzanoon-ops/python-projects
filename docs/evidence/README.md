@@ -5,6 +5,13 @@
 and tooling changes. Records below retain their original source revisions; they do
 not certify later code or repeat historical performance measurements.
 
+Historical command arrays and logs use `$DISPATCHER_PYTHON` for a machine-specific
+dispatcher executable path. The [archive publication map](archive-publication.json)
+records each original and published file hash and the Git commit containing the
+original bytes. Source identities, inputs, outcomes, and measurements are unchanged.
+Embedded historical artifact hashes refer to the original bytes; the publication
+map binds them to these portable copies.
+
 The [October 20 review record](quality-review-2026-10-20.json) identifies fixed source
 `0e52603de3bfbe50094904b5c5b9620af2ac0178`: 2,274 project test executions,
 122 shared tooling test executions, twenty package/demo/CI-workload checks, and
@@ -28,7 +35,7 @@ The original local compatibility matrix recorded all ten projects on both requir
 | routecraft | 75 | [record](final/python313/routecraft-3.13.16.json) | [record](final/python314/routecraft-3.14.8.json) |
 | resonance | 25 | [record](final/python313/resonance-3.13.16.json) | [record](final/python314/resonance-3.14.8.json) |
 
-Compatibility source is `7114e39c7e9e8af177e84fe8cd990fe5a09bde63`, with Meridian rerun at `59443e2bcdfc6a1dd81f8334c108474eef2d3030`, Current and Routecraft at `b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2`, and Strata at `ec1d0106df086a48923016c33199cfbda0aebbc0` after reporting/control corrections. Exact full commits in the JSON records are authoritative. The initial parallel Meridian attempt shared Django's default test database and failed; those unaltered reports/logs remain under `final/attempts/parallel-database-collision/`. They are superseded by the successful isolated-database runs in the main table, not counted as passes.
+Compatibility source is `7114e39c7e9e8af177e84fe8cd990fe5a09bde63`, with Meridian rerun at `59443e2bcdfc6a1dd81f8334c108474eef2d3030`, Current and Routecraft at `b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2`, and Strata at `ec1d0106df086a48923016c33199cfbda0aebbc0` after reporting/control corrections. Exact full commits in the JSON records are authoritative. The initial parallel Meridian attempt shared Django's default test database and failed; those reports/logs, with only the documented executable-path normalization, remain under `final/attempts/parallel-database-collision/`. They are superseded by the successful isolated-database runs in the main table, not counted as passes.
 
 Strata's [extended suite](final/strata-extended/strata-extended.json) passed all **100 seeds × 5,000 operations**, with independent dictionary/snapshot oracles, conflict/abort cases, flush/compaction and reopen checks. Its [outer verification record](final/strata-extended/strata-3.14.8.json) confirms clean committed source and unchanged hashes.
 

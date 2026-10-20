@@ -1,0 +1,412 @@
+{
+  "schema_version": 1,
+  "original_archive_commit": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+  "scope": "Historical command arrays and logs only; machine-specific dispatcher executable paths use $DISPATCHER_PYTHON. Source commits, source-input lists, outcomes and measurements are unchanged. Digest fields inside historical reports continue to identify their original bytes. This inventory maps original files to the portable published copies; original bytes remain retrievable from the named Git commit.",
+  "files": [
+    {
+      "path": "docs/evidence/final/attempts/current-rss-before-hot/python313/current-3.13.16-check.log",
+      "original_sha256": "c5dd61d5d6addf62c347684c2127b6434d360d7db5f70adfe828a0f83ec7776a",
+      "published_sha256": "0f1885e60c1683fa85eb50c483f01b34975835ec62fc75409dded59d857963de"
+    },
+    {
+      "path": "docs/evidence/final/attempts/current-rss-before-hot/python313/current-3.13.16.json",
+      "original_sha256": "bc68b848b7a3e703f384f45d64d4f73953ef5e24485b7285d273310b8e44d832",
+      "published_sha256": "25db39baddc1cc035610e9e92f65f3feac9b7174f6b5dc3f0b1220e67b8c8d1e"
+    },
+    {
+      "path": "docs/evidence/final/attempts/current-rss-before-hot/python314/current-3.14.8-check.log",
+      "original_sha256": "efabcee0b03959dcaa5a594833674cf608a7630b350c3e7763db7e3c053f1827",
+      "published_sha256": "b87c1ffe3102286f43060cb5f695721ccaf597237cbeff0d3ed5e705bf0ca5b6"
+    },
+    {
+      "path": "docs/evidence/final/attempts/current-rss-before-hot/python314/current-3.14.8.json",
+      "original_sha256": "de588f863307374751bb7d72e216318223ccd993fc8be7d2f5c7c172d13b3608",
+      "published_sha256": "d51c151bf961dcc99b274eaf0f6cec452383303b69250dae97c6184882a1f53c"
+    },
+    {
+      "path": "docs/evidence/final/attempts/current-rss-before-hot/standard/current-3.14.8.json",
+      "original_sha256": "1abad9fbc5703ffdc4ea703e87a08fbedc526248cf6f88a0350ab3b4e9d66183",
+      "published_sha256": "3bc2d727e92f9bbc805872f5adb1c8101b478fef1c2a9c19914b146a63cefa30"
+    },
+    {
+      "path": "docs/evidence/final/attempts/parallel-database-collision/python313/meridian-3.13.16.json",
+      "original_sha256": "820ce2378d84f7888ac2268884ae05ea7e16d0c84db5372cbd9aecfe57931575",
+      "published_sha256": "2a6e495e7c22aa108fc6fe4bfcdcf85604ec43add059e39b901243a4abd23f34"
+    },
+    {
+      "path": "docs/evidence/final/attempts/parallel-database-collision/python314/meridian-3.14.8.json",
+      "original_sha256": "c31a1eb5f5d40c9754966c23b3723d89ddf96695aa5a4bd84aa76d1ef559479e",
+      "published_sha256": "59da7de288f16165725cdbc76cea4132896784d9097fd27d633337d77c7ed394"
+    },
+    {
+      "path": "docs/evidence/final/attempts/root-before-final/verification.json",
+      "original_sha256": "518a75acb0bad5df9979b31540c1dce4dac616c645aa1b667e9314a5dde7ceb5",
+      "published_sha256": "5151ed9b882b72faf99c3e08e269d616653ebc82300ce31b60f1a587e2a68df9"
+    },
+    {
+      "path": "docs/evidence/final/attempts/routecraft-missing-control/python313/routecraft-3.13.16-check.log",
+      "original_sha256": "a87fbd3ee3c235847bea873b867e14f7fd259c47f336d7caaac6e41fc37bf695",
+      "published_sha256": "3d5bdd802708d53c8bbfc19a031ac750aa0d462ce6cb451058d2bdb0f9c77c80"
+    },
+    {
+      "path": "docs/evidence/final/attempts/routecraft-missing-control/python313/routecraft-3.13.16.json",
+      "original_sha256": "252e2b39e8627095aa8e8cf27d7148e8d57bbcd2754291222f986c8f608b883b",
+      "published_sha256": "08df9a4a8db60ebaaa06de151bb9926fce4dd4cadd87e5e732e3756c19df63ff"
+    },
+    {
+      "path": "docs/evidence/final/attempts/routecraft-missing-control/python314/routecraft-3.14.8-check.log",
+      "original_sha256": "5014bf94932fa1b2dbb1eccdda4fcb374ddf7f0c30f323d162c8275c588467ab",
+      "published_sha256": "f39b26823f36656cbaee197d029f0c70b1f6748911ed9f763501f99d888f366a"
+    },
+    {
+      "path": "docs/evidence/final/attempts/routecraft-missing-control/python314/routecraft-3.14.8.json",
+      "original_sha256": "a5e05e7cf6856f52a51db28ae6251b938553f0829c7c43a25b34db60ec3804da",
+      "published_sha256": "0f51ace089e57aab3ffcc5abc85fd779ff9747cec028b1cc91a4db2b6d570755"
+    },
+    {
+      "path": "docs/evidence/final/attempts/routecraft-missing-control/routecraft-3.14.8.json",
+      "original_sha256": "d0531742676b96a5445201366c009b4d09690d418a1910083d280f658d222ac4",
+      "published_sha256": "548c8db99f71a3a418e1512b7aeaf64f24d272c920346790befd53274a234ef5"
+    },
+    {
+      "path": "docs/evidence/final/attempts/strata-counter-scope/python313/strata-3.13.16-check.log",
+      "original_sha256": "0ad73b8e570d102859933b9c142878f43c2efe97046031c76deb27247a8502cf",
+      "published_sha256": "3b1c811d88c0c8a459456c3afd78c21ca74d729db8b587de8ffd422844606760"
+    },
+    {
+      "path": "docs/evidence/final/attempts/strata-counter-scope/python313/strata-3.13.16.json",
+      "original_sha256": "ccbad3bde2dbc9f6f157abf12debb9a78ffcb9646ca2eefa78095f615ad179ac",
+      "published_sha256": "eb0c6e426622b0a2abda1d44a75a149e7d6d3f3d3ab0c42bc065286f3b8cbe10"
+    },
+    {
+      "path": "docs/evidence/final/attempts/strata-counter-scope/python314/strata-3.14.8-check.log",
+      "original_sha256": "22cb1746a4560f4fb96fc0f9ec3ebec091447e2739d03e65571c6512b256b8cd",
+      "published_sha256": "36d463bac0879b89f0d2085a5b6d002b7dd397dbb77bb40727cf9e57d2cff62e"
+    },
+    {
+      "path": "docs/evidence/final/attempts/strata-counter-scope/python314/strata-3.14.8.json",
+      "original_sha256": "5535819a2d88fbb9b60881d81c52c4436303df4aa40380e556408141b2337582",
+      "published_sha256": "4eb3dc56135cca0c89ba4cd95427b518a405aeed1e2492286e7af8b1556a323d"
+    },
+    {
+      "path": "docs/evidence/final/attempts/strata-counter-scope/standard/strata-3.14.8.json",
+      "original_sha256": "0439a4ed3e1cc083bab7e2e618065891ceb56aa96636faee7735cc4b226c1172",
+      "published_sha256": "4c2c07d1bda529065886b676cd76665a6c574ff147cf82c0e598da531664f1b5"
+    },
+    {
+      "path": "docs/evidence/final/handoff/anchor-3.14.8.json",
+      "original_sha256": "fcfbc18dba86a9a5a573861e5a2cfdcb5e90cdc806798a7e672bbb8499a2f0bb",
+      "published_sha256": "f875a86bc9dfb4af4f528cfbbbe64dfc03efa7f9a0f96225a04b96bc0fae3fac"
+    },
+    {
+      "path": "docs/evidence/final/handoff/atlas-3.14.8.json",
+      "original_sha256": "17eb616b5f66f9ced7e68dd25d84492b36efad4db765301496493a5619e776c1",
+      "published_sha256": "e0f10c61c4d061707722cb12d4e12b6346a590d1e6deff2aafb8fff591aced11"
+    },
+    {
+      "path": "docs/evidence/final/handoff/current-3.14.8.json",
+      "original_sha256": "5f688e423d838e5a1ff70dbbd3f089592d0b9ae9a5fef2358edbeacfcff06032",
+      "published_sha256": "86f1434189a03fb9040b3d40033d9c2188800316c2397ef61735010812990f9a"
+    },
+    {
+      "path": "docs/evidence/final/handoff/meridian-3.14.8.json",
+      "original_sha256": "49956b653b29c7b15f5b51ba9f8d69f3c051086fe7c89fa370122107f36059e4",
+      "published_sha256": "9ac6554288b2d560b5b6aee05a9bfafc944e1db391e095f4e430015ec9ff08e1"
+    },
+    {
+      "path": "docs/evidence/final/handoff/proving-ground-3.14.8.json",
+      "original_sha256": "dd3a86eb35cc168ebef442692222c81e1773128d66005bc77b3346191df2596b",
+      "published_sha256": "be0e09e7c722cee2be5f33446800f677c7c897071dc574ada90afb032a02e596"
+    },
+    {
+      "path": "docs/evidence/final/handoff/pytrace-3.14.8.json",
+      "original_sha256": "753aa0259c69b635d0dfdf7b658e46d28787069e47821824e51b7da8066b531c",
+      "published_sha256": "edd177e8a79370f15c4c097e4a2509173569baa2d494ae9897e1dc73a282c330"
+    },
+    {
+      "path": "docs/evidence/final/handoff/quarry-3.14.8.json",
+      "original_sha256": "27edd22569800628a8f0255eeff31ac2f73e44d7fae0f5257aaf790ad56bcc07",
+      "published_sha256": "03ce384f279358a453892a37ce8c5b79570ef29fb8700ef54f25911a97ec7eca"
+    },
+    {
+      "path": "docs/evidence/final/handoff/resonance-3.14.8.json",
+      "original_sha256": "25c30e239dca63685c2ac1e7b4348a7e4ab37da4f6ec4f5200a4af5fcc51aaae",
+      "published_sha256": "4ed5fc6f213ab874bf05b2687a2445e07ef30f0b01055c9c307f2274249feb79"
+    },
+    {
+      "path": "docs/evidence/final/handoff/routecraft-3.14.8.json",
+      "original_sha256": "a88e9cc130596fddb46e2ca96c09d091eff37c4c629a6885bb745c553905f250",
+      "published_sha256": "109184f158c4dccf33f616bcbebc946d1d41f09c019299e33bd5b486e80f4f0a"
+    },
+    {
+      "path": "docs/evidence/final/handoff/strata-3.14.8.json",
+      "original_sha256": "7343bb6898fe94e5e4ca9a01a4f66581e259620c7cfc095313e2a99ad0a91a0b",
+      "published_sha256": "3f599af3b1f3eb0589672d4de5a34362abd9d00cee270c9c0f35383561082f6c"
+    },
+    {
+      "path": "docs/evidence/final/python313/anchor-3.13.16-check.log",
+      "original_sha256": "2c7c9e7b9a2b5d824d3ea194919dcff1bf9d706d2c33fc10201ca4b6a0138eac",
+      "published_sha256": "e184aad1a65f03d320051eaad974bfa36dfdff7a65ead4bd88c8b88b45dbf90d"
+    },
+    {
+      "path": "docs/evidence/final/python313/anchor-3.13.16.json",
+      "original_sha256": "72b95156bc45297d27908cdf803ce5a668b905022928e076039933ab57f3f1b0",
+      "published_sha256": "b547784c46006445440d01eb077920602566a1ec7dfbf4f7a9b0fd8bdf396aa9"
+    },
+    {
+      "path": "docs/evidence/final/python313/atlas-3.13.16-check.log",
+      "original_sha256": "379b71f7975b92c879984f1688f5205cc27d91308e5bab041283be57b1a883a8",
+      "published_sha256": "171535826750729fa49e5a10d46edc9d1b7303aa3d2456a0d09975d055aa5ac0"
+    },
+    {
+      "path": "docs/evidence/final/python313/atlas-3.13.16.json",
+      "original_sha256": "3b839ccb1937a3255929ea4395267638279831c0a683d3bad4ed724e52f6b71a",
+      "published_sha256": "f30ae6b6719a55585517ece7c838938bf26cbdc302bc0810aa90e9210748137d"
+    },
+    {
+      "path": "docs/evidence/final/python313/current-3.13.16-check.log",
+      "original_sha256": "f01c6f3627134c7256ddbcbc1dc5aee14d6b10774029e3a3ddb4ee65b79b35e6",
+      "published_sha256": "dd23f2ba7eb4fcddf530ab614abe9b04de13e075075501f3e0d83701b3c691ba"
+    },
+    {
+      "path": "docs/evidence/final/python313/current-3.13.16.json",
+      "original_sha256": "b8595e510a961860ffa8b49c638e56495386c020b1f508d00beba265f39d6188",
+      "published_sha256": "d91e420c7ff74c3b291da4092b2722b7af65830c1c8b17e556845b34564e6a74"
+    },
+    {
+      "path": "docs/evidence/final/python313/meridian-3.13.16-check.log",
+      "original_sha256": "1ceb4ac7b32f1f032a9cee972291c11bd77793121c1097d82f8d31fbfad9241e",
+      "published_sha256": "e3451f3803fce617ba0b67f29278c0ee9d2b4139c05e6c4954e0a7fc8bf404c2"
+    },
+    {
+      "path": "docs/evidence/final/python313/meridian-3.13.16.json",
+      "original_sha256": "f84f875cd925dacdcd437dbee44a5e620f63c5d004bffe7bc0d67689df88860a",
+      "published_sha256": "3ba50bb643f09698fb14c92724e82e8c15e3ee5e83b645909b738449b03dad9f"
+    },
+    {
+      "path": "docs/evidence/final/python313/proving-ground-3.13.16-check.log",
+      "original_sha256": "daae1f3d4968d64220ef13c3ebad541f24cdf684b6826e45fd3ef3d0e5ce379b",
+      "published_sha256": "260d9575fcec811e1141b21fe90733eb85f9d16370315eb426e08e25f013ddbf"
+    },
+    {
+      "path": "docs/evidence/final/python313/proving-ground-3.13.16.json",
+      "original_sha256": "da28c4387225c07b2c2596255bca341316ef6a1a97d97a848e746df89eee2ab0",
+      "published_sha256": "55df7c48334d4ae3e4925a7e0d09074ab83235ad79442b5c6157fd42208096b1"
+    },
+    {
+      "path": "docs/evidence/final/python313/pytrace-3.13.16-check.log",
+      "original_sha256": "75899186d3f5b3e883f9a1b1141271fa4ff17b37e5008bbc124d78018d539687",
+      "published_sha256": "e16dd3d74f568ad07e9dac9c55f881ed8246279fbff16ba100e02d47e52b2c7d"
+    },
+    {
+      "path": "docs/evidence/final/python313/pytrace-3.13.16.json",
+      "original_sha256": "4383a3bf944d438bc7b394901a0eec195d38c55c245f86ecabb7e60c8bbd5619",
+      "published_sha256": "b211ad8d38835398a867dbce27fc37576cc55824f210cc9f6446dde287be5ee1"
+    },
+    {
+      "path": "docs/evidence/final/python313/quarry-3.13.16-check.log",
+      "original_sha256": "423a3f614d18a9eaa47a801a129a763ac37536735811a72608e2152867582bf8",
+      "published_sha256": "a26de4a731ece20bc0c11c5bd3c9ac12749f5773768f630fb9c00a9065a40ea3"
+    },
+    {
+      "path": "docs/evidence/final/python313/quarry-3.13.16.json",
+      "original_sha256": "0fbc32b2c5afae395ab601c4e667288a4dccc239a7f1b3410e136fc0632c6db6",
+      "published_sha256": "107b70a8fecbaba06e8b9af50d318edcccf8980517f77a16001186f1cdd1d32f"
+    },
+    {
+      "path": "docs/evidence/final/python313/resonance-3.13.16-check.log",
+      "original_sha256": "5f2578228ebfdf54e4576c313a94b0d0044cd6eac1a56e8d6d2f45ce9aa1ae41",
+      "published_sha256": "0d37d16f151f3f1a204d76eed8830ddf6677f2603e23ac9b8ca4f8b23aa9f10a"
+    },
+    {
+      "path": "docs/evidence/final/python313/resonance-3.13.16.json",
+      "original_sha256": "6e343775a671f7b1d5fbe25a5d30a1fede7897096cd3833a4f57551a6e4379b0",
+      "published_sha256": "0d35864a9b50a3d74eae4748de639c4105df319e07cfa1a8db2082bb1cd85f98"
+    },
+    {
+      "path": "docs/evidence/final/python313/routecraft-3.13.16-check.log",
+      "original_sha256": "ca46847637dc0f8923954aec0a854fbb68c1114e48f1649faec1e928923fa3d1",
+      "published_sha256": "e50a58f505538a43b15532b5e81690cbd32efc4ade25ff1e9f7d84b207c78cfc"
+    },
+    {
+      "path": "docs/evidence/final/python313/routecraft-3.13.16.json",
+      "original_sha256": "bb312524d663a98d7de04350d4e41465fb611686972266da7bccd74d9de128b9",
+      "published_sha256": "5e37337181266ae06dcb96a6880bdc6eb3383954a0e24cc99fb0fa040a473ed6"
+    },
+    {
+      "path": "docs/evidence/final/python313/strata-3.13.16-check.log",
+      "original_sha256": "0c88bedc7ed0b477c4f9aabc9be57f8dadfc5ce2bcb35e7481b02f38e4680623",
+      "published_sha256": "0fb7fc815d4dcfea2bb677d0e7ad291b0864d6954e87eaf0687d7e5305b1ecb5"
+    },
+    {
+      "path": "docs/evidence/final/python313/strata-3.13.16.json",
+      "original_sha256": "e3fc000167eb45248f4ead90d1ccee8213ef94c5ccaa633445edc0ef6b2d9c1a",
+      "published_sha256": "a903bf874b214d293435ba97ac3d84916b26ab02d12b9a922611c548af6aeeb1"
+    },
+    {
+      "path": "docs/evidence/final/python314/anchor-3.14.8-check.log",
+      "original_sha256": "0c9316c08ba48fd3825ad6834f672ff50979eddacc87714434d47dc1b1f3816c",
+      "published_sha256": "af48452cd1ccadf076ea078f483280337fbbe2b8e1c6ae9e6754392254bf2964"
+    },
+    {
+      "path": "docs/evidence/final/python314/anchor-3.14.8.json",
+      "original_sha256": "e70fc34f6f90ef445523994a124c71d517567196c6a809d4065b371df8c8ba16",
+      "published_sha256": "c99acb2f6dde584fc7696cda99d30d84c36a9d14321682ee7232050575c51bbd"
+    },
+    {
+      "path": "docs/evidence/final/python314/atlas-3.14.8-check.log",
+      "original_sha256": "3c485488fb34a90f9ad2221e6ca32de1460277fa499735595be7c2b8fed3da36",
+      "published_sha256": "4a6d61da7152f03ee3add656d973b0fbb5a65848fd6fe2eda26163349a1fe0e6"
+    },
+    {
+      "path": "docs/evidence/final/python314/atlas-3.14.8.json",
+      "original_sha256": "d35656f6dc1598af534eac16c49e64aebc5a2b838055d4bef66a363f8e01c8f2",
+      "published_sha256": "2234e46c8d2994743dd54a6bb872f661811a4824d082f1d08770a8a5428d45c2"
+    },
+    {
+      "path": "docs/evidence/final/python314/current-3.14.8-check.log",
+      "original_sha256": "b0ceb4e6946491e4172833acf8a8be8d4d4ab7de540c0a3669374284ba7974b8",
+      "published_sha256": "ffd66a934a97438818eff05e98de844003b30520f70e1e24eaef4cee4810c968"
+    },
+    {
+      "path": "docs/evidence/final/python314/current-3.14.8.json",
+      "original_sha256": "5d8b5a4a7b0d8c26813857830aa99e7da13bcd1f3276888c82ebe4f2a18b4bef",
+      "published_sha256": "f5a019c7545604b95607105151df543c59027cb26fcb5e7d0859c534a6b926b1"
+    },
+    {
+      "path": "docs/evidence/final/python314/meridian-3.14.8-check.log",
+      "original_sha256": "d111d1361bb0affa41f8f6e983ab4583dbad7e5557ea3dce8edf6ea045bb98c3",
+      "published_sha256": "e8b7e9ef6b2efdf6a3bdd2a7ddb77acd5a628699534984c8f09048592c20a420"
+    },
+    {
+      "path": "docs/evidence/final/python314/meridian-3.14.8.json",
+      "original_sha256": "0b6c0fc68b07079f42c49beeee600923076c6f1038ebc920f8b4b5be4755e152",
+      "published_sha256": "dbbd069f21974a59553bcb61add3e39d5eff004731ebfa2e47bd34664a8ba70b"
+    },
+    {
+      "path": "docs/evidence/final/python314/proving-ground-3.14.8-check.log",
+      "original_sha256": "7a2a87b71c230bb679df229137b42ac2140079f6b05c972e65e79bef0ccf4373",
+      "published_sha256": "4f8d62de3e2e9612495a31f50ec43bbda780fc1c0c429c97bcd8300a80b1a598"
+    },
+    {
+      "path": "docs/evidence/final/python314/proving-ground-3.14.8.json",
+      "original_sha256": "14a6d364c835f0f4367d4a32bad7d61dcd69c6148dc0fce89d6ca9d8a69ef93b",
+      "published_sha256": "19b75dd56bd87e0462df10a12cbc9676c79857a7a6d4a09b586e7f9a166c8ef3"
+    },
+    {
+      "path": "docs/evidence/final/python314/pytrace-3.14.8-check.log",
+      "original_sha256": "e0e0099debb9659e8ee9de8b78b8db7e78f2b711cae0a75e0387f7ccf4f58d2c",
+      "published_sha256": "935ac4e8997cada0500aebc497da345d3fad85336f1bf564c4c1bf74857c5465"
+    },
+    {
+      "path": "docs/evidence/final/python314/pytrace-3.14.8.json",
+      "original_sha256": "571c050ea4a75b578b87b318a8c92dbc5229fd45f714f6f295076f958dbf87d4",
+      "published_sha256": "f1717c865c31be3d69944e584891240c2e8f0aa39b75920f63f9999a585f1795"
+    },
+    {
+      "path": "docs/evidence/final/python314/quarry-3.14.8-check.log",
+      "original_sha256": "229d185010eff1fb0e05f90b6c0408ae3a6964f89793d7ba37223b91dee88dd7",
+      "published_sha256": "7176adfe0f12c754bba98435c2b5634d5000cd13df35cbbbd9621444cdbfabdf"
+    },
+    {
+      "path": "docs/evidence/final/python314/quarry-3.14.8.json",
+      "original_sha256": "3606a1c8862595b98223983587f5772495b5d388f1b687fcd97f4da671c69ce3",
+      "published_sha256": "8edacbf7149df9131752630b45aa0af27dfc0688d214aacd3ea140926a5d0945"
+    },
+    {
+      "path": "docs/evidence/final/python314/resonance-3.14.8-check.log",
+      "original_sha256": "382f6244e9d41d45194cd4ed3a971c98f6f7ba3cece80d517a8a097f6645cac4",
+      "published_sha256": "58b81098a9196873b7f5c02920edfcbbddb70c64615b2e6eeed13889a159be06"
+    },
+    {
+      "path": "docs/evidence/final/python314/resonance-3.14.8.json",
+      "original_sha256": "b91ce709d043fc51158f43e03d87f3d27ff039ff39c0acf8e29536f828d89b3b",
+      "published_sha256": "b61fd7854025cc1a8541fede0257791dd96137f7cf3a6ed09fe55d249da8d11b"
+    },
+    {
+      "path": "docs/evidence/final/python314/routecraft-3.14.8-check.log",
+      "original_sha256": "ffe7a2fb691bd7b763ee82b9ad8ead4760fc7c48b4867ebc9681517c1266ae26",
+      "published_sha256": "597cf1a6632c366edbd081999f77e27301900d61679524d3b414bf365c59dba7"
+    },
+    {
+      "path": "docs/evidence/final/python314/routecraft-3.14.8.json",
+      "original_sha256": "783499e6acefa5808e57b56237367f3bbce7f8699c646be827a8e7aac0c622d9",
+      "published_sha256": "dbcb1ecfb3f221806fa58fd02ef0bdeda24c990279c3b2a1e1131e27e5c50438"
+    },
+    {
+      "path": "docs/evidence/final/python314/strata-3.14.8-check.log",
+      "original_sha256": "8eec1a2363d9e667b0c13b0e734cb3f4543fcdf3c99b9710c1c58063e20976b4",
+      "published_sha256": "1d10cfdff85a8bcadd6534c32c4c8c0fb41e11094d41b9744659a4629e8292ee"
+    },
+    {
+      "path": "docs/evidence/final/python314/strata-3.14.8.json",
+      "original_sha256": "d5e96c4133740312e39dc3ebdbf4c99baee51f8fb07020c6516aece533601943",
+      "published_sha256": "b58390ad22f8b178ea496ddad74f93339bc32a2b7c076161ef1588399650a7e7"
+    },
+    {
+      "path": "docs/evidence/final/root/check-4.log",
+      "original_sha256": "6954f0c609f98b8d4b60f42a98a45c9475955f720d9840e8dc3b95b07b18e1e7",
+      "published_sha256": "893ad68e3e1d587979ce8aea143f2111d7ba5d46b909189e80aa010458b8eb89"
+    },
+    {
+      "path": "docs/evidence/final/root/verification.json",
+      "original_sha256": "4b34deddf7a8463c33954a8808c4404f003e7ed3372957ae09c64db7e345e51d",
+      "published_sha256": "b2bb6a71120364ecf9ef043b55900662d7b0f04015ad5d4b071435c486a4e4b6"
+    },
+    {
+      "path": "docs/evidence/final/standard/anchor-3.14.8.json",
+      "original_sha256": "8c767f7cf70b0702987d14710a331e09f7f3b7f11bd2880f006bf368936897d7",
+      "published_sha256": "1d081a4c2e92e065519e42b5b764f82e86ed18b542379b3a77dd01634f4ae3f1"
+    },
+    {
+      "path": "docs/evidence/final/standard/atlas-3.14.8.json",
+      "original_sha256": "d2883aaefdb0fb0bf2c0eb06886dca5e1dfaf49b758cca407773b20c0e9c51f9",
+      "published_sha256": "98dd11e1d6b29ada3ff82f71f4ce097a0b766847ba4095c9033bf081e081806e"
+    },
+    {
+      "path": "docs/evidence/final/standard/current-3.14.8.json",
+      "original_sha256": "03b06d79be35f2609b390d0b1bc215fdc87e73116581a53db265c217da7fb643",
+      "published_sha256": "e2d12fd37d093e31098027c786615bc28edf78e0741bd6b368430a4c1213466d"
+    },
+    {
+      "path": "docs/evidence/final/standard/meridian-3.14.8.json",
+      "original_sha256": "05bd59fbe0153ddfd7638a1c6224875ff74d79306d1a3022a3f399741d3e35b4",
+      "published_sha256": "3948842eac79cadadaca28e52b5d781fe5e17077994c7319112a6672a3fcaf25"
+    },
+    {
+      "path": "docs/evidence/final/standard/proving-ground-3.14.8.json",
+      "original_sha256": "9fbda5200190b4cf966b6155377103d315f44c793aa59a84df839a2ebf714f4e",
+      "published_sha256": "ccf2cc9c7767cbc22c80a799e73d9019a2e1a906c9e9dd6628dc3a0f23c6fec9"
+    },
+    {
+      "path": "docs/evidence/final/standard/pytrace-3.14.8.json",
+      "original_sha256": "c5d388c7e9e20a89208500e60c0bba57c7181c0ee799b1b337c4a26fbc62d454",
+      "published_sha256": "1d70ace6e5508d690bf762270eb06648ec2e735b95d99132d1624fb40118eee7"
+    },
+    {
+      "path": "docs/evidence/final/standard/quarry-3.14.8.json",
+      "original_sha256": "78a73758acce49cb3e57214b9c7558dada67daaeef47642fcd93a7a4a644c1f1",
+      "published_sha256": "215951524212bc5b9489d2e20b76df249edce42371ce8942068b621d1d2181d1"
+    },
+    {
+      "path": "docs/evidence/final/standard/resonance-3.14.8.json",
+      "original_sha256": "4cc145eab8fe17ba03f9497ded6e776449e0759d44b66fdb09e2ae420c2491f2",
+      "published_sha256": "badf519dffaf5cd133dbacac442df9d14d449d021c43fc6ea6d1a0ac10862672"
+    },
+    {
+      "path": "docs/evidence/final/standard/routecraft-3.14.8.json",
+      "original_sha256": "f9bc822b4108e1bbd0ae7d462cf4371ccceae144a7a55f573af547a9cff3f002",
+      "published_sha256": "e6bae99a9c98206011d4a3d2111d91f0ad2dbc496a0edfa7fa5255bf10b187b1"
+    },
+    {
+      "path": "docs/evidence/final/standard/strata-3.14.8.json",
+      "original_sha256": "6d82514ccf67792fd43fc91a0caf3532d12f891fc6cc6623ee673e39fb155243",
+      "published_sha256": "e573ee9eccf39c8d54da4f9de8a2194a4ef6a70a72f6c08535f3be8ce2fc9ef8"
+    },
+    {
+      "path": "docs/evidence/final/strata-extended/strata-3.14.8.json",
+      "original_sha256": "14fb06d2abf948380e9c9fe7bebf3f9ef8e91dfc68e753b6b51e64b44a36ab66",
+      "published_sha256": "ebc50c159d83f731d3b597ba9619ef9f54b6ef9b80f4414b779568ed5ede2efc"
+    }
+  ]
+}

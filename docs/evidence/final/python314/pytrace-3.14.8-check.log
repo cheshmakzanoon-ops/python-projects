@@ -31,7 +31,7 @@ Building source distribution...
 Building wheel from source distribution...
 Successfully built dist/pp_pytrace-0.1.0.tar.gz
 Successfully built dist/pp_pytrace-0.1.0-py3-none-any.whl
-[06-pytrace] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/portfolio-verify-s21ujvba/source/scripts/wheel_smoke.py /workspace/portfolio-verify-s21ujvba/source/projects/06-pytrace pp_pytrace
+[06-pytrace] $DISPATCHER_PYTHON /workspace/portfolio-verify-s21ujvba/source/scripts/wheel_smoke.py /workspace/portfolio-verify-s21ujvba/source/projects/06-pytrace pp_pytrace
 Using CPython 3.14.8
 Creating virtual environment at: /tmp/portfolio-wheel-rlu8pj4g/venv
 Activate with: source /tmp/portfolio-wheel-rlu8pj4g/venv/bin/activate

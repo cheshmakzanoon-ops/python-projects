@@ -76,7 +76,7 @@
   "checks": [
     {
       "command": [
-        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "$DISPATCHER_PYTHON",
         "-c",
         "import sys; from pathlib import Path; sys.path.insert(0, 'scripts'); from portfolio import execute; raise SystemExit(execute(sys.argv[1:], Path.cwd(), 7200))",
         "uv",

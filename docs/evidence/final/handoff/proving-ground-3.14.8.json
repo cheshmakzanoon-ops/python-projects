@@ -90,7 +90,7 @@
   "checks": [
     {
       "command": [
-        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "$DISPATCHER_PYTHON",
         "scripts/portfolio.py",
         "demo",
         "proving-ground"

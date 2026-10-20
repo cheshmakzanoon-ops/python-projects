@@ -39,7 +39,7 @@ Building source distribution...
 Building wheel from source distribution...
 Successfully built dist/pp_proving_ground-0.1.0.tar.gz
 Successfully built dist/pp_proving_ground-0.1.0-py3-none-any.whl
-[08-proving-ground] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/portfolio-verify-s21ujvba/source/scripts/wheel_smoke.py /workspace/portfolio-verify-s21ujvba/source/projects/08-proving-ground pp_proving_ground
+[08-proving-ground] $DISPATCHER_PYTHON /workspace/portfolio-verify-s21ujvba/source/scripts/wheel_smoke.py /workspace/portfolio-verify-s21ujvba/source/projects/08-proving-ground pp_proving_ground
 Using CPython 3.14.8
 Creating virtual environment at: /tmp/portfolio-wheel-k7fq8omf/venv
 Activate with: source /tmp/portfolio-wheel-k7fq8omf/venv/bin/activate

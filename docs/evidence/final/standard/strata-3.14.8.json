@@ -78,7 +78,7 @@
   "checks": [
     {
       "command": [
-        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "$DISPATCHER_PYTHON",
         "scripts/portfolio.py",
         "demo",
         "strata"
@@ -89,7 +89,7 @@
     },
     {
       "command": [
-        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "$DISPATCHER_PYTHON",
         "scripts/portfolio.py",
         "benchmark",
         "strata",

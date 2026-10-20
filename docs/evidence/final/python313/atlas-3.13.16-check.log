@@ -36,7 +36,7 @@ Building source distribution...
 Building wheel from source distribution...
 Successfully built dist/pp_atlas-0.1.0.tar.gz
 Successfully built dist/pp_atlas-0.1.0-py3-none-any.whl
-[07-atlas] /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/portfolio-verify-q_j50t9a/source/scripts/wheel_smoke.py /workspace/portfolio-verify-q_j50t9a/source/projects/07-atlas pp_atlas
+[07-atlas] $DISPATCHER_PYTHON /workspace/portfolio-verify-q_j50t9a/source/scripts/wheel_smoke.py /workspace/portfolio-verify-q_j50t9a/source/projects/07-atlas pp_atlas
 Using CPython 3.13.16
 Creating virtual environment at: /tmp/portfolio-wheel-znrohedg/venv
 Activate with: source /tmp/portfolio-wheel-znrohedg/venv/bin/activate
