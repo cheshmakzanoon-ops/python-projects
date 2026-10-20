@@ -18,8 +18,12 @@ from pp_atlas.index.segments import CorruptSegment, Record, make_record, read_se
 from pp_atlas.ingest.tokenizer import tokenize
 from pp_atlas.models import Document, Hit, SearchResult
 from pp_atlas.query import Query, parse
-from pp_atlas.ranking.bm25 import contribution
+from pp_atlas.ranking.bm25 import Scorer
 from pp_atlas.snippets import snippet
+
+
+class StaleGeneration(RuntimeError):
+    """A merge lost its generation compare check; retry from a new snapshot."""
 
 
 @dataclass
@@ -66,6 +70,10 @@ class Engine:
         """
         with self._lock:
             catalog = self._catalog(tenant)
+            # Refuse an already incompatible warm catalog before preparing files.
+            # Publication rechecks under the writer lock to close the later race.
+            with catalog.transaction():
+                pass
             docs: dict[str, Document] = {}
             records: dict[str, Record] = {}
             for document in documents:
@@ -80,8 +88,7 @@ class Engine:
             segment = write_segment(
                 catalog.directory / "segments", (records[ident] for ident in sorted(records))
             )
-            with catalog.connection() as connection:
-                connection.execute("BEGIN IMMEDIATE")
+            with catalog.transaction(write=True) as connection:
                 segments = json.loads(
                     connection.execute("SELECT segments FROM state").fetchone()[0]
                 )
@@ -102,14 +109,12 @@ class Engine:
                     "UPDATE state SET generation=generation+1,acl_revision=acl_revision+1,segments=?",
                     (json.dumps(segments),),
                 )
-                connection.commit()
             return {ident: record.revision for ident, record in records.items()}
 
     def delete(self, tenant: str, document_id: str) -> bool:
         with self._lock:
             catalog = self._catalog(tenant)
-            with catalog.connection() as connection:
-                connection.execute("BEGIN IMMEDIATE")
+            with catalog.transaction(write=True) as connection:
                 deleted = (
                     connection.execute("DELETE FROM documents WHERE id=?", (document_id,)).rowcount
                     > 0
@@ -118,15 +123,13 @@ class Engine:
                     connection.execute(
                         "UPDATE state SET generation=generation+1,acl_revision=acl_revision+1"
                     )
-                connection.commit()
                 return deleted
 
     def set_acl(self, tenant: str, document_id: str, acl: Iterable[str]) -> None:
         subjects = frozenset(acl)
         Document(document_id, "", "", subjects)  # Validate ACL bounds before persistence.
         with self._lock:
-            with self._catalog(tenant).connection() as connection:
-                connection.execute("BEGIN IMMEDIATE")
+            with self._catalog(tenant).transaction(write=True) as connection:
                 if (
                     connection.execute(
                         "UPDATE documents SET acl=? WHERE id=?",
@@ -136,7 +139,6 @@ class Engine:
                 ):
                     raise KeyError(document_id)
                 connection.execute("UPDATE state SET acl_revision=acl_revision+1")
-                connection.commit()
 
     def set_groups(self, tenant: str, subject: str, groups: Iterable[str]) -> None:
         Principal(tenant, subject)
@@ -144,14 +146,12 @@ class Engine:
         if any(not g or len(g) > 256 for g in memberships) or len(memberships) > 128:
             raise ValueError("invalid groups")
         with self._lock:
-            with self._catalog(tenant).connection() as connection:
-                connection.execute("BEGIN IMMEDIATE")
+            with self._catalog(tenant).transaction(write=True) as connection:
                 connection.execute(
                     "INSERT INTO groups VALUES (?,?) ON CONFLICT(subject) DO UPDATE SET memberships=excluded.memberships",
                     (subject, json.dumps(sorted(memberships))),
                 )
                 connection.execute("UPDATE state SET acl_revision=acl_revision+1")
-                connection.commit()
 
     def _snapshot(self, tenant: str) -> tuple[CatalogSnapshot, Generation]:
         catalog = self._catalog(tenant)
@@ -219,7 +219,6 @@ class Engine:
         parsed = parse(query)
         with self._lock:
             snapshot, generation = self._snapshot(principal.tenant)
-            visible = self._visible(principal, snapshot, parsed)
             # ACL and group mutations advance acl_revision; data writes advance
             # generation. These revisions safely key cache identity without
             # sorting the entire visible document set on every query.
@@ -237,6 +236,7 @@ class Engine:
             cached = self._cache.get(key)
             if cached is not None:
                 return deepcopy(cached)
+            visible = self._visible(principal, snapshot, parsed)
             candidates = visible.copy()
             for term in parsed.terms:
                 candidates.intersection_update(generation.postings.get(term, {}))
@@ -256,26 +256,12 @@ class Engine:
                 for term in parsed.terms
             }
 
-            def explain(ident: str) -> dict[str, float]:
-                record = generation.records[ident]
-                return {
-                    term: contribution(
-                        len(record.positions[term]),
-                        record.length,
-                        len(visible),
-                        dfs[term],
-                        average,
-                        k1=self.k1,
-                        b=self.b,
-                    )
-                    for term in parsed.terms
-                }
-
-            # Build each score explanation once and reuse it in the result.
-            explanations = {ident: explain(ident) for ident in candidates}
+            scorer = Scorer(parsed.terms, len(visible), dfs, average, self.k1, self.b)
+            # Retain only the requested prefix of scores. Explanation dictionaries
+            # are allocated for the returned page, never for the entire match set.
             ranked = heapq.nsmallest(
                 offset + limit,
-                ((-sum(parts.values()), ident) for ident, parts in explanations.items()),
+                ((-scorer.score(generation.records[ident]), ident) for ident in candidates),
             )
             hits = tuple(
                 Hit(
@@ -288,7 +274,7 @@ class Engine:
                         tokenize(generation.records[ident].text),
                         frozenset(parsed.terms),
                     ),
-                    explanations[ident],
+                    scorer.explain(generation.records[ident]),
                 )
                 for negative, ident in ranked[offset:]
             )
@@ -399,15 +385,15 @@ class Engine:
             segment = write_segment(catalog.directory / "segments", active_records())
             if seen != snapshot.documents.keys():
                 raise CorruptSegment("merge found missing current revisions")
-            with catalog.connection() as connection:
-                connection.execute("BEGIN IMMEDIATE")
+            with catalog.transaction(write=True) as connection:
                 current = connection.execute("SELECT generation FROM state").fetchone()[0]
                 if current != snapshot.generation:
-                    raise RuntimeError("generation changed during merge; retry with a new snapshot")
+                    raise StaleGeneration(
+                        "generation changed during merge; retry with a new snapshot"
+                    )
                 connection.execute(
                     "UPDATE state SET generation=generation+1,segments=?", (json.dumps([segment]),)
                 )
-                connection.commit()
                 return int(current) + 1
 
     def inspect(self, tenant: str) -> dict[str, object]:

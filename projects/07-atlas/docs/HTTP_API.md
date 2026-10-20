@@ -70,9 +70,10 @@ materialized in memory. It is not a streaming full-index export interface.
 | `401` | Missing or rejected bearer credential; response includes `WWW-Authenticate`. |
 | `403` | Authenticated identity lacks the tenant administrator role. |
 | `404` | Document unavailable to this principal. |
+| `409` | Merge lost a concurrent generation comparison; retry from a new snapshot. |
 | `413` | Request exceeds the 2,100,000-byte body limit, including chunked JSON. |
 | `422` | Invalid request schema or an unexpected document field. |
-| `503` | Segment integrity failure; administrator intervention is needed. |
+| `503` | Index integrity or catalog/tokenizer compatibility failure; administrator intervention is needed. |
 
 Responses send `Cache-Control: no-store`, `Referrer-Policy: no-referrer`, framing
 denial and content-type sniffing protection. The search workspace enforces a

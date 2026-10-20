@@ -23,12 +23,13 @@ marks. This handled accents and ligatures, but Hangul Jamo are class-zero starte
 The failure could hide a relevant document. Normalizing the complete string without
 retaining offsets would introduce a different defect in snippet highlighting.
 
-The correction recognizes Hangul L/V/T composition while forming normalization
-clusters, including compatibility Jamo. Each normalized expansion retains the
-original cluster's character span. Regression tests compare all three spellings
-and assert that `<mark>가</mark>` highlights the decomposed source. A generated
-normalization-equivalence property supplements the explicit cases. It tests an
-independent Unicode invariant rather than reproducing the tokenizer.
+That correction recognized Hangul L/V/T composition. The later v2 tokenizer
+generalizes the boundary rule: compatibility characters can themselves normalize
+into marks, as with Japanese `ｶﾞ` and `ガ`. It joins normalization-safe source spans
+and compares term sequences with an independent whole-string NFKC/casefold oracle.
+The persisted identity also includes the Unicode database, since the supported
+interpreters classify newly assigned characters differently. An offline rebuild
+retokenizes current text and preserves permissions; old postings are never relabeled.
 
 Adversarial review also found that nested mutable result dictionaries could poison
 an LRU entry when a library caller modified a prior result. Cache insertion and
@@ -56,13 +57,17 @@ The [benchmark](../../../docs/evidence/final/standard/atlas-3.14.8-benchmark-ben
 and [verification record](../../../docs/evidence/final/standard/atlas-3.14.8.json)
 preserve exact provenance and environment details.
 
-This measurement exposes the next performance work: O(N) visibility construction
-runs before cache lookup, and materialized Python postings use approximately
-2.78 GB at this workload. Authorized-snapshot median cost was 59.3983 ms; the
+In that historical implementation, O(N) visibility construction ran before cache
+lookup, and materialized Python postings used approximately 2.78 GB at this workload.
+Authorized-snapshot median cost was 59.3983 ms; the
 separate mixed-principal authorization-plus-search sample had a 398.615 ms median.
 Those samples use different scopes and cannot be subtracted from ordinary query
 timing. Indexed ACL visibility and compact positional arrays are justified next
-steps; they have not been implemented or assigned invented speedups.
+steps. The current reader avoids the visibility scan on a valid result-cache hit,
+after pinning the current ACL revision and checking compatibility/file signatures.
+It also retains explanations only for the returned page and uses rare phrase
+anchors. The bounded [allocation diagnostic](../benchmarks/README.md) establishes
+those narrower changes; the historical standard workload has not been rerun.
 
 The separate judged collection improves heldout nDCG@10 from 0.69740 to 0.95150
 by honoring explicit phrase positions, without heldout parameter tuning. An independent reviewer completed an independent [semantic judgment audit](../../../docs/evidence/atlas-judgment-review.md)

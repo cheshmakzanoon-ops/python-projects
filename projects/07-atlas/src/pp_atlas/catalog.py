@@ -11,6 +11,10 @@ from typing import Iterator, cast
 from pp_atlas.ingest.tokenizer import TOKENIZER_VERSION
 
 
+class IncompatibleCatalog(ValueError):
+    """Persisted format cannot be interpreted or modified by this process."""
+
+
 @dataclass(frozen=True)
 class Active:
     revision: str
@@ -58,9 +62,17 @@ class Catalog:
             connection.execute(
                 "INSERT OR IGNORE INTO state VALUES (1,1,?,0,0,'[]')", (TOKENIZER_VERSION,)
             )
-            state = connection.execute("SELECT format,tokenizer FROM state").fetchone()
-            if state != (1, TOKENIZER_VERSION):
-                raise ValueError("unsupported catalog/tokenizer version")
+            self._check_compatibility(connection)
+
+    @staticmethod
+    def _check_compatibility(connection: sqlite3.Connection) -> None:
+        state = connection.execute(
+            "SELECT format,tokenizer FROM state WHERE singleton=1"
+        ).fetchone()
+        if state != (1, TOKENIZER_VERSION):
+            raise IncompatibleCatalog(
+                "unsupported catalog/tokenizer version; offline rebuild required"
+            )
 
     @contextmanager
     def connection(self) -> Iterator[sqlite3.Connection]:
@@ -71,35 +83,54 @@ class Catalog:
         finally:
             connection.close()
 
-    def snapshot(self, previous: CatalogSnapshot | None = None) -> CatalogSnapshot:
+    @contextmanager
+    def transaction(self, *, write: bool = False) -> Iterator[sqlite3.Connection]:
+        """Check compatibility inside the same snapshot/lock as the operation.
+
+        Checking before BEGIN would leave a race with a different catalog writer.
+        Closing on every exit rolls back any failed publication, including commit
+        failures. Raw connections are reserved for initialization and repair tests.
+        """
         with self.connection() as connection:
-            connection.execute("BEGIN")
-            generation, acl_revision, segments = connection.execute(
-                "SELECT generation,acl_revision,segments FROM state WHERE singleton=1"
-            ).fetchone()
-            if previous and (previous.generation, previous.acl_revision) == (
-                generation,
-                acl_revision,
-            ):
-                return previous
-            docs = {
-                ident: Active(
-                    revision, frozenset(json.loads(acl)), cast(dict[str, str], json.loads(metadata))
-                )
-                for ident, revision, acl, metadata in connection.execute(
-                    "SELECT id,revision,acl,metadata FROM documents"
-                )
-            }
-            groups = {
-                subject: frozenset(json.loads(memberships))
-                for subject, memberships in connection.execute(
-                    "SELECT subject,memberships FROM groups"
-                )
-            }
-            return CatalogSnapshot(
-                generation,
-                acl_revision,
-                tuple(tuple(s) for s in json.loads(segments)),
-                docs,
-                groups,
-            )
+            connection.execute("BEGIN IMMEDIATE" if write else "BEGIN")
+            self._check_compatibility(connection)
+            yield connection
+            if write:
+                connection.commit()
+
+    def snapshot(self, previous: CatalogSnapshot | None = None) -> CatalogSnapshot:
+        with self.transaction() as connection:
+            return read_snapshot(connection, previous)
+
+
+def read_snapshot(
+    connection: sqlite3.Connection, previous: CatalogSnapshot | None = None
+) -> CatalogSnapshot:
+    """Read inside a transaction whose format/tokenizer has already been checked."""
+    generation, acl_revision, segments = connection.execute(
+        "SELECT generation,acl_revision,segments FROM state WHERE singleton=1"
+    ).fetchone()
+    if previous and (previous.generation, previous.acl_revision) == (
+        generation,
+        acl_revision,
+    ):
+        return previous
+    docs = {
+        ident: Active(
+            revision, frozenset(json.loads(acl)), cast(dict[str, str], json.loads(metadata))
+        )
+        for ident, revision, acl, metadata in connection.execute(
+            "SELECT id,revision,acl,metadata FROM documents"
+        )
+    }
+    groups = {
+        subject: frozenset(json.loads(memberships))
+        for subject, memberships in connection.execute("SELECT subject,memberships FROM groups")
+    }
+    return CatalogSnapshot(
+        generation,
+        acl_revision,
+        tuple(tuple(s) for s in json.loads(segments)),
+        docs,
+        groups,
+    )

@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "diagnostic": "warm-generation uncached top-10 and identical cached query",
+  "limitations": "one sample per size; tracemalloc overhead; excludes index load/RSS; not standard-workload evidence",
+  "provenance": {
+    "source_commit": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+    "source_dirty": true,
+    "source_scope": "project",
+    "source_content_sha256": "2179065e061dd552829a66ed352a9b22920e6e1673ccb99e39c817f93318c5c2",
+    "source_inputs": [
+      ".python-version",
+      "benchmarks/README.md",
+      "benchmarks/query_memory.py",
+      "examples/README.md",
+      "examples/quality_corpus.json",
+      "examples/quality_judgments.json",
+      "pyproject.toml",
+      "src/pp_atlas/__init__.py",
+      "src/pp_atlas/api/__init__.py",
+      "src/pp_atlas/api/body_limit.py",
+      "src/pp_atlas/api/security.py",
+      "src/pp_atlas/api/static/index.html",
+      "src/pp_atlas/api/static/search.css",
+      "src/pp_atlas/api/static/search.js",
+      "src/pp_atlas/auth/__init__.py",
+      "src/pp_atlas/benchmarks.py",
+      "src/pp_atlas/cache.py",
+      "src/pp_atlas/catalog.py",
+      "src/pp_atlas/cli.py",
+      "src/pp_atlas/engine.py",
+      "src/pp_atlas/evaluation.py",
+      "src/pp_atlas/index/postings.py",
+      "src/pp_atlas/index/segments.py",
+      "src/pp_atlas/ingest/tokenizer.py",
+      "src/pp_atlas/models.py",
+      "src/pp_atlas/provenance.py",
+      "src/pp_atlas/py.typed",
+      "src/pp_atlas/query.py",
+      "src/pp_atlas/ranking/bm25.py",
+      "src/pp_atlas/snippets.py",
+      "tests/acceptance/test_cli_quality.py",
+      "tests/browser/check_browser.py",
+      "tests/browser/search.cjs",
+      "tests/integration/test_failures.py",
+      "tests/integration/test_http_contract.py",
+      "tests/integration/test_persistence_auth.py",
+      "tests/integration/test_snapshot_boundaries.py",
+      "tests/property/test_history.py",
+      "tests/unit/test_http_body_limit.py",
+      "tests/unit/test_lexical.py",
+      "uv.lock"
+    ],
+    "root_contract_sha256": "2749a4c0ce1ce9ca9ea32df8876885b816b6f7e32f5208595b5eae7af6622477",
+    "root_contract_inputs": [
+      "CONTRIBUTING.md",
+      "docs/REQUIREMENTS.md",
+      "portfolio.toml",
+      "ruff.toml",
+      "scripts/portfolio.py"
+    ],
+    "lockfile_sha256": "afadf806fdbb623044aa563e65234d12d3a49b57e907308cab46198ecad717f8",
+    "provenance_note": "checkout source scope captured",
+    "python": "3.14.8 (main, Oct  3 2026, 01:04:31) [Clang 22.1.3 ]",
+    "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "cpu": "AMD EPYC 9V74 80-Core Processor",
+    "memory_limit_bytes": 34359738368,
+    "threads": {
+      "OMP_NUM_THREADS": "not-set",
+      "OPENBLAS_NUM_THREADS": "not-set",
+      "MKL_NUM_THREADS": "not-set"
+    }
+  },
+  "samples": [
+    {
+      "documents": 1000,
+      "terms_per_document_and_query": 8,
+      "limit": 10,
+      "uncached": {
+        "seconds": 0.03854235600010725,
+        "peak_python_allocation_bytes": 591650
+      },
+      "cache_hit": {
+        "seconds": 0.002988948000165692,
+        "peak_python_allocation_bytes": 49131
+      },
+      "cache_hit_visibility_scans": 1,
+      "exact_total_ids_explanations_and_cache_equality": true
+    },
+    {
+      "documents": 5000,
+      "terms_per_document_and_query": 8,
+      "limit": 10,
+      "uncached": {
+        "seconds": 0.18257385900051304,
+        "peak_python_allocation_bytes": 3499751
+      },
+      "cache_hit": {
+        "seconds": 0.010263019999911194,
+        "peak_python_allocation_bytes": 659764
+      },
+      "cache_hit_visibility_scans": 1,
+      "exact_total_ids_explanations_and_cache_equality": true
+    }
+  ]
+}

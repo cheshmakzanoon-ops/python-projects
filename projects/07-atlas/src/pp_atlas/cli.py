@@ -105,9 +105,9 @@ def demo(output: Path, seed: int) -> dict[str, object]:
         ),
     )
     engine.delete("demo", "restricted")
-    pre_merge = engine.search(p, "recovery")
+    pre_merge = engine.search(p, '"wal recovery"')
     engine.merge("demo")
-    after_merge = engine.search(p, "recovery")
+    after_merge = engine.search(p, '"wal recovery"')
     checks = {
         "grant_observed": granted.total == before.total + 1,
         "revoke_observed": revoked.hits == before.hits,

@@ -3,7 +3,8 @@
 import unicodedata
 from dataclasses import dataclass
 
-TOKENIZER_VERSION = "nfkc-casefold-alnum-v1"
+LEGACY_TOKENIZER_VERSION = "nfkc-casefold-alnum-v1"
+TOKENIZER_VERSION = f"nfkc-casefold-alnum-v2-ucd{unicodedata.unidata_version}"
 MAX_DOCUMENT_BYTES = 2_000_000
 
 
@@ -16,7 +17,7 @@ class Token:
 
 
 def tokenize(text: str) -> list[Token]:
-    """NFKC + casefold each grapheme cluster; combining marks join their base.
+    """NFKC + casefold normalization-safe clusters, retaining source spans.
 
     Apostrophes and underscores separate tokens. Expansions such as ß→ss retain
     the source character span, so snippets never index into normalized text.
@@ -28,22 +29,17 @@ def tokenize(text: str) -> list[Token]:
     while i < len(text):
         end = i + 1
         while end < len(text):
-            if unicodedata.category(text[end]).startswith("M"):
+            next_normalized = unicodedata.normalize("NFKC", text[end])
+            if unicodedata.category(next_normalized[0]).startswith("M"):
                 end += 1
                 continue
-            if text[end].isascii() or text[end - 1].isascii():
+            if text[end].isascii():
                 break
-            # Hangul composition crosses class-zero starters, including
-            # compatibility Jamo. Combining-class-only clustering misses it.
-            last_character = unicodedata.normalize("NFKC", text[i:end])[-1]
-            next_character = unicodedata.normalize("NFKC", text[end])[0]
-            if (
-                0x1100 <= ord(last_character) <= 0x1112 and 0x1161 <= ord(next_character) <= 0x1175
-            ) or (
-                0xAC00 <= ord(last_character) <= 0xD7A3
-                and (ord(last_character) - 0xAC00) % 28 == 0
-                and 0x11A8 <= ord(next_character) <= 0x11C2
-            ):
+            # A source character can become a combining mark under NFKC
+            # (halfwidth Japanese voiced marks), or compose across starters
+            # (Hangul). Original Unicode categories alone are insufficient.
+            joined = unicodedata.normalize("NFKC", text[i:end]) + next_normalized
+            if unicodedata.normalize("NFKC", joined) != joined:
                 end += 1
             else:
                 break

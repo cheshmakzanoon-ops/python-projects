@@ -28,6 +28,10 @@ Python 3.13.16 and 3.14.8 are supported; Linux is the tested durability platform
 Filesystem directory fsync is required for ingestion. No code license has yet
 been selected by the repository owner; see [provenance](docs/THIRD_PARTY.md).
 
+Existing indexes need the [offline tokenizer rebuild](docs/OPERATIONS.md#tokenizer-upgrade-or-interpreter-switch).
+The corrected tokenizer is versioned with its Unicode database; v1 indexes and
+indexes from the other supported interpreter are refused before mutation.
+
 ```python
 from pp_atlas import Document, Engine, Principal
 
@@ -58,6 +62,7 @@ for local serving, backups and deliberate segment-corruption reproduction.
 - [Quality collection and benchmarks](docs/BENCHMARKS.md)
 - [Engineering case study](docs/CASE_STUDY.md)
 - [Current verification state](docs/VERIFICATION.md)
+- [Bounded query allocation diagnostic](benchmarks/README.md)
 
 ## Development checks
 

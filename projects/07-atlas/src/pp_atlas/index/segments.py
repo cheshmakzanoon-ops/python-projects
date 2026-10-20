@@ -83,13 +83,15 @@ def write_segment(directory: Path, records: Iterable[Record]) -> tuple[str, str]
         temporary.unlink(missing_ok=True)
 
 
-def read_segment(path: Path, expected: str) -> Iterator[Record]:
+def read_segment(
+    path: Path, expected: str, *, tokenizer_version: str = TOKENIZER_VERSION
+) -> Iterator[Record]:
     try:
         if sha256(path) != expected:
             raise CorruptSegment(f"checksum mismatch: {path.name}")
         with gzip.open(path, "rt", encoding="utf-8") as stream:
             header: object = json.loads(stream.readline(4096))
-            if header != {"format": 1, "tokenizer": TOKENIZER_VERSION}:
+            if header != {"format": 1, "tokenizer": tokenizer_version}:
                 raise CorruptSegment("unsupported segment/tokenizer version")
             while line := stream.readline(32_000_001):
                 if len(line) > 32_000_000:

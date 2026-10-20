@@ -46,6 +46,8 @@ def test_cli_demo_cleanup_and_unowned_file_safety(tmp_path, capsys):
     assert main(["demo", "--output", str(output), "--seed", "1729"]) == 0
     report = json.loads((output / "demo.json").read_text())
     assert report["status"] == "passed"
+    assert report["query"] == '"wal recovery"'
+    assert set(report["ranked_authorized_results"]["hits"][0]["explanation"]) == {"wal", "recovery"}
     assert main(["demo", "--output", str(output)]) == 2
     (output / "user.txt").write_text("preserve")
     assert main(["clean-demo", "--output", str(output)]) == 2

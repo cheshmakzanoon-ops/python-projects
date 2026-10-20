@@ -12,7 +12,14 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 
-from pp_atlas import CorruptSegment, Document, Engine, Principal
+from pp_atlas import (
+    CorruptSegment,
+    Document,
+    Engine,
+    IncompatibleCatalog,
+    Principal,
+    StaleGeneration,
+)
 from pp_atlas.api.body_limit import BodyLimitMiddleware
 from pp_atlas.api.security import BrowserSecurityMiddleware
 
@@ -78,7 +85,8 @@ def create_app(engine: Engine, tokens: dict[str, Identity]) -> FastAPI:
         return JSONResponse({"detail": str(error)}, status_code=400)
 
     @app.exception_handler(CorruptSegment)
-    async def corrupt(_: Request, error: CorruptSegment) -> JSONResponse:
+    @app.exception_handler(IncompatibleCatalog)
+    async def corrupt(_: Request, error: CorruptSegment | IncompatibleCatalog) -> JSONResponse:
         return JSONResponse(
             {"detail": "index integrity failure; administrator intervention required"},
             status_code=503,
@@ -87,6 +95,10 @@ def create_app(engine: Engine, tokens: dict[str, Identity]) -> FastAPI:
     @app.exception_handler(KeyError)
     async def missing(_: Request, error: KeyError) -> JSONResponse:
         return JSONResponse({"detail": "document unavailable"}, status_code=404)
+
+    @app.exception_handler(StaleGeneration)
+    async def stale(_: Request, error: StaleGeneration) -> JSONResponse:
+        return JSONResponse({"detail": str(error)}, status_code=409)
 
     @app.get("/health")
     def health() -> dict[str, str]:

@@ -1,6 +1,43 @@
 """Original scalar BM25 implementation; statistics always come from visibility."""
 
 import math
+from collections.abc import Iterator, Mapping
+from dataclasses import dataclass
+
+from pp_atlas.index.segments import Record
+
+
+@dataclass(frozen=True)
+class Scorer:
+    """A query's visible statistics; candidate scores need no explanation dict."""
+
+    terms: tuple[str, ...]
+    count: int
+    document_frequencies: Mapping[str, int]
+    average_length: float
+    k1: float
+    b: float
+
+    def _parts(self, record: Record) -> Iterator[tuple[str, float]]:
+        for term in self.terms:
+            yield (
+                term,
+                contribution(
+                    len(record.positions[term]),
+                    record.length,
+                    self.count,
+                    self.document_frequencies[term],
+                    self.average_length,
+                    k1=self.k1,
+                    b=self.b,
+                ),
+            )
+
+    def score(self, record: Record) -> float:
+        return sum(value for _, value in self._parts(record))
+
+    def explain(self, record: Record) -> dict[str, float]:
+        return dict(self._parts(record))
 
 
 def contribution(

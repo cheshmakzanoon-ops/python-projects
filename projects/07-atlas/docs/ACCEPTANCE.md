@@ -1,5 +1,13 @@
 # Acceptance mapping
 
+The current core regressions also cover whole-string normalization equivalence,
+Unicode database compatibility, offline v1/v2 text rebuilds with ACL/group retention,
+transaction-local format guards, cached revocation, real WAL interleavings and death
+after commit before acknowledgment. `tests/property/test_query_oracle.py` uses
+exhaustive sliding windows and direct BM25 arithmetic across tiny corpora,
+principals, filters and pages. See [current verification](VERIFICATION.md) for
+results and [bounded resource probes](../benchmarks/README.md) for their limits.
+
 AT-01–AT-08 are verified through project tests, independent review and
 integration. The original Python 3.13.16 and 3.14.8 compatibility runs each passed 40 tests, with
 no required service skipped. The final required standard workload passed from

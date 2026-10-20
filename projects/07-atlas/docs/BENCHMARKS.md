@@ -1,5 +1,28 @@
 # Benchmarks and relevance
 
+## Current bounded query diagnostic
+
+The [query-memory probe](../benchmarks/README.md) separately measures a loaded
+generation with 1,000/5,000 documents and eight matching terms, returning ten hits.
+The actual [before](../artifacts/query-memory-before.json) and
+[after](../artifacts/query-memory-after.json) reports retain exact source digests.
+
+| Documents | Uncached peak allocation before / after | Cached peak allocation before / after | Cached ACL scans before / after |
+| ---: | ---: | ---: | ---: |
+| 1,000 | 591,650 / 111,419 bytes | 49,131 / 15,987 bytes | 1 / 0 |
+| 5,000 | 3,499,751 / 1,708,843 bytes | 659,764 / 15,883 bytes | 1 / 0 |
+
+All totals, top-ten IDs, per-hit explanation cardinalities and cached values match.
+Each size has one `tracemalloc` sample; the reports include elapsed time, but this
+is an allocation/work diagnostic, not a latency or throughput comparison. It
+excludes loading, process RSS and concurrency. Explanation retention is now bounded
+by the returned page; a valid result-cache hit skips visibility construction only
+after catalog compatibility, current revisions and segment signatures are checked.
+Cache misses still scan visibility; materialized indexes, candidate sets and
+full-match facets remain. The standard workload below has not been rerun.
+
+## Workload profiles
+
 Workloads are implemented in `src/pp_atlas/benchmarks.py` and invoked through the
 installed CLI. Seed 1729 fixes generated inputs. Pin OMP_NUM_THREADS,
 OPENBLAS_NUM_THREADS and MKL_NUM_THREADS to 1. Reports record source, lock and
@@ -59,11 +82,11 @@ and all-group readers; it cannot be subtracted from warm-query timing to estimat
 an isolated authorization cost. Peak RSS is the process-lifetime maximum. Disk
 size includes all files retained by the benchmark's index root.
 
-The scaling limit is explicit: visibility construction scans O(N) current
-catalog documents, including before a result-cache lookup. The materialized Python
-postings also consume approximately 2.78 GB of peak RSS at this workload. These
+At that historical source, visibility construction scanned O(N) current
+catalog documents even before a result-cache lookup. The materialized Python
+postings consumed approximately 2.78 GB of peak RSS at this workload. Those
 measurements motivate an indexed ACL visibility representation and compact
-positional storage. Neither optimization is claimed to be implemented. This
+positional storage. Neither representation optimization is implemented. This
 single-machine synthetic run does not establish production capacity or a latency
 service guarantee.
 
