@@ -33,9 +33,11 @@ Every product exposes the same `setup`, `check`, `demo`, and `benchmark` tasks t
 
 ## Reviewing the engineering
 
-For a focused first review, follow [Anchor's event reducer](projects/01-anchor/src/pp_anchor/replay/reducer.py) into its PostgreSQL fencing tests; compare [Current's independent oracle](projects/03-current/tests/property/test_oracle.py) with recovery behavior; or examine [Quarry's publication-failure tests](projects/05-quarry/tests/integration/test_crash.py). The [reviewer guide](docs/PORTFOLIO_GUIDE.md) provides routes by discipline and links one difficult test to each system.
+For a focused first review, follow [Anchor's event reducer](projects/01-anchor/src/pp_anchor/replay/reducer.py) into its [causal rollback tests](projects/01-anchor/tests/integration/test_causal_rollback.py); compare [Current's independent prefix model](projects/03-current/tests/reference_trace.py) with recovery behavior; or examine [Strata's recovery-plan boundaries](projects/02-strata/tests/acceptance/test_persistence_boundaries.py). The [reviewer guide](docs/PORTFOLIO_GUIDE.md) provides routes by discipline and links difficult tests to their underlying guarantees.
 
 Architecture documents explain transaction and persistence boundaries. Case studies discuss reproduced defects and rejected alternatives. [Verification records](docs/STATUS.md) distinguish tested revisions, local checks, hosted CI observations, and historical performance measurements. The [evidence policy](docs/architecture/EVIDENCE.md) defines source hashes, isolated wheel checks, and benchmark interpretation.
+
+The [verification method](docs/architecture/VERIFICATION.md) explains independent references, controlled failure schedules, deterministic work bounds, and the limitations of each kind of evidence.
 
 The [latest reliability and interface review](docs/QUALITY_REVIEW.md) documents the persistence, validation, security, and usability changes across all ten products, with their committed-source verification results.
 

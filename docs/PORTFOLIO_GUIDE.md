@@ -14,8 +14,8 @@ The Current demo processes actual event/control records, kills a checkpointing c
 
 ## Three detailed starting points
 
-1. **Durable workflows:** read [Anchor's reducer](../projects/01-anchor/src/pp_anchor/replay/reducer.py), then its [acceptance map](../projects/01-anchor/docs/ACCEPTANCE.md). Follow lease epochs, replay diagnostics and stale-worker tests into the PostgreSQL adapter. The settlement integration demonstrates a real HTTP effect followed by worker death and a retry with one ledger identity.
-2. **Event time and recovery:** read [Current's generated oracle tests](../projects/03-current/tests/property/test_oracle.py) and [persistence faults](../projects/03-current/tests/integration/test_persistence.py). Then inspect the stream-lake integration: a correction changes the latest aggregate while a pinned historical snapshot retains the earlier value.
+1. **Durable workflows:** read [Anchor's reducer](../projects/01-anchor/src/pp_anchor/replay/reducer.py), [transaction-local reconstruction](../projects/01-anchor/src/pp_anchor/persistence/transition.py), and [causal rollback tests](../projects/01-anchor/tests/integration/test_causal_rollback.py). Follow how a dependent cleanup blocks release of its predecessor, how a failed cleanup stays unresolved, and how a transaction failure discards both history and projections. The settlement integration adds a real HTTP effect followed by worker death and a retry with one ledger identity.
+2. **Event time and recovery:** compare [Current's independent prefix model](../projects/03-current/tests/reference_trace.py) with [generated traces](../projects/03-current/tests/property/test_online_trace.py) and [owner/cancellation schedules](../projects/03-current/tests/integration/test_owner_failures.py). An unfinished idle input cannot become terminal when another input ends; a stale processor cannot overwrite a newer checkpoint. Then inspect stream-lake corrections against retained historical snapshots.
 3. **Incremental analytical data:** read [Quarry's execution engine](../projects/05-quarry/src/pp_quarry/execution/engine.py), [version registry](../projects/05-quarry/src/pp_quarry/storage/catalog.py) and [crash tests](../projects/05-quarry/tests/integration/test_crash.py). Examine exact historical fingerprints, partition invalidation and immutable publication before reading performance results.
 
 ## Routes by interest
@@ -30,15 +30,15 @@ The Current demo processes actual event/control records, kills a checkpointing c
 
 Every product has a README, architecture, decisions, operations, acceptance, benchmarks and case study. Case studies discuss an invariant, rejected alternative, reproduced defect, measured bottleneck, limitation and justified next step. [Independent review notes](evidence/INDEPENDENT_REVIEW.md) describe adversarial findings and corrections. Synthetic fixtures do not establish customer adoption, production capacity or real-world model accuracy.
 
-Use [repository architecture](architecture/REPOSITORY.md) to understand dependency isolation and [evidence policy](architecture/EVIDENCE.md) to interpret source hashes, clean clones and measurement limits. Linux is required for process-fault and storage suites. Windows/macOS results are not claimed.
+Use [repository architecture](architecture/REPOSITORY.md) to understand dependency isolation, [verification method](architecture/VERIFICATION.md) to assess independent models and failure schedules, and [evidence policy](architecture/EVIDENCE.md) to interpret source hashes and measurements. Linux is required for process-fault and storage suites. Windows/macOS results are not claimed.
 
 ## One module and one difficult test per route
 
 | Route | Source | Challenge |
 | --- | --- | --- |
-| Backend | [Anchor reducer](../projects/01-anchor/src/pp_anchor/replay/reducer.py) | [PostgreSQL contracts](../projects/01-anchor/tests/integration/test_postgres_contract.py): stale workers, durable scheduling and compensation |
+| Backend | [Meridian ledger](../projects/04-meridian/src/pp_meridian/application/ledger.py) | [Transaction contracts](../projects/04-meridian/tests/integration/test_transaction_contracts.py): savepoints, terminal decisions, authority revocation, commit-order history |
 | Data | [Quarry execution](../projects/05-quarry/src/pp_quarry/execution/engine.py) | [Process-death publication](../projects/05-quarry/tests/integration/test_crash.py) |
-| Algorithms | [Strata WAL](../projects/02-strata/src/pp_strata/wal/frames.py) | [Storage fault boundaries](../projects/02-strata/tests/acceptance/test_faults.py) |
+| Algorithms | [Strata WAL](../projects/02-strata/src/pp_strata/wal/frames.py) | [Persistence boundaries](../projects/02-strata/tests/acceptance/test_persistence_boundaries.py): validated recovery plans, corrupt-state refusal, descriptor retirement |
 | Search/ML | [Atlas engine](../projects/07-atlas/src/pp_atlas/engine.py) | [Persistence and authorization](../projects/07-atlas/tests/integration/test_persistence_auth.py): hidden documents and revocation |
 | Music | [Resonance pitch difference](../projects/10-resonance/src/pp_resonance/pitch/difference.py) | [Independent numerical references](../projects/10-resonance/tests/unit/test_numerics.py) |
 

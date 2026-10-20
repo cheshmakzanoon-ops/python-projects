@@ -14,5 +14,6 @@ nav:
   - Independent review: evidence/INDEPENDENT_REVIEW.md
   - Relevance review: evidence/atlas-judgment-review.md
   - Architecture: architecture/REPOSITORY.md
+  - Verification method: architecture/VERIFICATION.md
   - Product requirements: REQUIREMENTS.md
   - Evidence policy: architecture/EVIDENCE.md
