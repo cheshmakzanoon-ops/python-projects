@@ -59,6 +59,16 @@ def test_executable_multi_tenant_rebuild_preserves_current_text_acls_and_groups(
     before = digest_files(source)
     with pytest.raises(ValueError, match="unsupported"):
         Engine(source).search(Principal("t", "reader"), "ガ")
+    # Ordinary read-only WAL recognition may create coordination sidecars. It
+    # must preserve every existing source byte; maintenance's immutable offline
+    # connection additionally preserves the complete inventory present at entry.
+    after_recognition = digest_files(source)
+    assert all(after_recognition[name] == value for name, value in before.items())
+    assert all(
+        name.endswith(("catalog.sqlite3-wal", "catalog.sqlite3-shm"))
+        for name in after_recognition.keys() - before.keys()
+    )
+    before = after_recognition
     result = subprocess.run(
         [
             sys.executable,

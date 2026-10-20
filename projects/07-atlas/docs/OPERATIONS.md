@@ -55,6 +55,14 @@ form name, URL parameter or browser storage is used. See the
 GET `/health` is process liveness. Authenticated `/ready` validates the tenant and
 returns only `{"status":"ready"}`. A healthy process can still have an unavailable
 index: integrity or compatibility failures return 503 without document details.
+Opening an existing catalog first recognizes it read-only. Atlas refuses unrelated
+databases, incomplete schemas and missing headers rather than creating replacement
+tables or default state. Restore/rebuild from a coherent source; do not use startup
+as a schema repair operation. Catalog and existing WAL content remain unchanged on
+rejection, although SQLite may create/update read-coordination WAL/SHM sidecars.
+Fresh empty databases initialize atomically; concurrent first opens serialize through
+the SQLite initialization lock. A recognized format-1 DELETE-mode catalog can convert
+to WAL without rebuilding its tables or metadata.
 Search/fetch/export need a reader binding; ingestion/deletion, ACL/group mutation
 and merge need this tenant's administrator role. The body limit is 2.1 MB,
 including chunked input. Query execution is synchronous and runs off the ASGI event

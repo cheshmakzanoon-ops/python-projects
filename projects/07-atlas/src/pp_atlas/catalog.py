@@ -3,12 +3,41 @@
 import hashlib
 import json
 import sqlite3
-from contextlib import contextmanager
+from contextlib import closing, contextmanager
 from dataclasses import dataclass
+from functools import cache
 from pathlib import Path
 from typing import Iterator, cast
 
 from pp_atlas.ingest.tokenizer import TOKENIZER_VERSION
+
+_TABLES = {
+    "state": """singleton INTEGER PRIMARY KEY CHECK(singleton=1),
+        format INTEGER NOT NULL, tokenizer TEXT NOT NULL,
+        generation INTEGER NOT NULL, acl_revision INTEGER NOT NULL,
+        segments TEXT NOT NULL""",
+    "documents": """id TEXT PRIMARY KEY, revision TEXT NOT NULL,
+        acl TEXT NOT NULL, metadata TEXT NOT NULL""",
+    "groups": "subject TEXT PRIMARY KEY, memberships TEXT NOT NULL",
+}
+
+
+def _create_tables(connection: sqlite3.Connection) -> None:
+    # Separate execute calls remain inside the caller's explicit transaction;
+    # executescript would commit that transaction before running its statements.
+    for name, columns in _TABLES.items():
+        connection.execute(f"CREATE TABLE {name} ({columns})")
+
+
+@cache
+def _table_signatures() -> dict[str, tuple[tuple[object, ...], ...]]:
+    """Derive expected column/type/default/key metadata from the creation SQL."""
+    with closing(sqlite3.connect(":memory:")) as connection:
+        _create_tables(connection)
+        return {
+            name: tuple(tuple(row) for row in connection.execute(f"PRAGMA table_info({name})"))
+            for name in _TABLES
+        }
 
 
 class IncompatibleCatalog(ValueError):
@@ -42,27 +71,63 @@ class Catalog:
         self.directory = tenant_directory(root, tenant)
         self.directory.mkdir(parents=True, exist_ok=True)
         self.path = self.directory / "catalog.sqlite3"
+        if self.path.exists():
+            # A writable last connection can checkpoint a WAL merely on close.
+            # Unsupported state is recognized through a genuinely read-only
+            # connection before any persistent pragma or schema operation.
+            with self.connection(read_only=True) as connection:
+                connection.execute("BEGIN")
+                empty = self._recognize(connection)
+                mode = connection.execute("PRAGMA journal_mode").fetchone()[0]
+                if not empty and mode == "wal":
+                    return
         with self.connection() as connection:
-            connection.executescript("""
-                PRAGMA journal_mode=WAL;
-                CREATE TABLE IF NOT EXISTS state (
-                    singleton INTEGER PRIMARY KEY CHECK(singleton=1),
-                    format INTEGER NOT NULL, tokenizer TEXT NOT NULL,
-                    generation INTEGER NOT NULL, acl_revision INTEGER NOT NULL,
-                    segments TEXT NOT NULL
-                );
-                CREATE TABLE IF NOT EXISTS documents (
-                    id TEXT PRIMARY KEY, revision TEXT NOT NULL,
-                    acl TEXT NOT NULL, metadata TEXT NOT NULL
-                );
-                CREATE TABLE IF NOT EXISTS groups (
-                    subject TEXT PRIMARY KEY, memberships TEXT NOT NULL
-                );
-            """)
-            connection.execute(
-                "INSERT OR IGNORE INTO state VALUES (1,1,?,0,0,'[]')", (TOKENIZER_VERSION,)
+            # Journal mode cannot change inside a transaction. Exclusive locking
+            # mode is connection-local and retains the acquired SQLite lock over
+            # COMMIT, protecting recognition -> WAL conversion -> atomic DDL.
+            connection.execute("PRAGMA locking_mode=EXCLUSIVE")
+            connection.execute("BEGIN EXCLUSIVE")
+            empty = self._recognize(connection)
+            connection.commit()
+            if connection.execute("PRAGMA journal_mode=WAL").fetchone() != ("wal",):
+                raise IncompatibleCatalog("catalog requires SQLite WAL support")
+            if empty:
+                connection.execute("BEGIN IMMEDIATE")
+                _create_tables(connection)
+                connection.execute(
+                    "INSERT INTO state VALUES (1,1,?,0,0,'[]')", (TOKENIZER_VERSION,)
+                )
+                connection.commit()
+
+    @classmethod
+    def _recognize(cls, connection: sqlite3.Connection) -> bool:
+        """Return whether a database is empty; never repair an existing schema."""
+        try:
+            objects = set(
+                connection.execute(
+                    "SELECT type,name FROM sqlite_schema WHERE substr(name,1,7) != 'sqlite_'"
+                )
             )
-            self._check_compatibility(connection)
+            if any(
+                connection.execute(f"PRAGMA {name}").fetchone() != (0,)
+                for name in ("application_id", "user_version")
+            ):
+                raise IncompatibleCatalog("unrecognized catalog identity metadata")
+            if not objects:
+                return True
+            cls._check_compatibility(connection)
+            expected = _table_signatures()
+            if objects != {("table", name) for name in _TABLES} or any(
+                tuple(tuple(row) for row in connection.execute(f"PRAGMA table_info({name})"))
+                != expected[name]
+                for name in _TABLES
+            ):
+                raise IncompatibleCatalog("unrecognized or incomplete catalog schema")
+            if connection.execute("SELECT COUNT(*) FROM state").fetchone() != (1,):
+                raise IncompatibleCatalog("catalog must have exactly one state header")
+        except sqlite3.DatabaseError as error:
+            raise IncompatibleCatalog("unrecognized or incomplete catalog schema") from error
+        return False
 
     @staticmethod
     def _check_compatibility(connection: sqlite3.Connection) -> None:
@@ -75,10 +140,12 @@ class Catalog:
             )
 
     @contextmanager
-    def connection(self) -> Iterator[sqlite3.Connection]:
-        connection = sqlite3.connect(self.path, timeout=30, isolation_level=None)
-        connection.execute("PRAGMA synchronous=FULL")
+    def connection(self, *, read_only: bool = False) -> Iterator[sqlite3.Connection]:
+        path = self.path.resolve().as_uri() + "?mode=ro" if read_only else str(self.path)
+        connection = sqlite3.connect(path, timeout=30, isolation_level=None, uri=read_only)
         try:
+            if not read_only:
+                connection.execute("PRAGMA synchronous=FULL")
             yield connection
         finally:
             connection.close()

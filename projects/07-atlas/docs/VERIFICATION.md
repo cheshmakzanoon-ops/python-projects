@@ -1,8 +1,45 @@
 # Verification records
 
+## Catalog initialization safety — 2026-10-20
+
+The finished constructor recognizes existing state through a read-only transaction
+before persistent journal changes or DDL. It rejects future versions, unrelated
+databases, missing headers/tables, redesigned columns and foreign SQLite identity
+metadata. New schemas publish all three tables and the state header atomically;
+an exclusive initialization lock spans recognition, WAL conversion and publication.
+Known WAL opens stay read-only. See the initialization sequences and physical
+preservation limits in [architecture](ARCHITECTURE.md).
+
+Eight negative cases reproduced constructor defects before their fixes: future DELETE-mode state
+gained legacy tables/WAL mode and changed its digest; unrelated or partial databases
+were silently initialized, including a foreign `sqliteXdata` table mistaken for an
+internal SQLite name; and opening an uncheckpointed future WAL changed its
+persistent content. `test_catalog_initialization.py` now compares main-database and
+existing-WAL SHA-256 values, schema and journal mode before/after rejection. Six
+positive cases cover absent/zero-byte/empty-SQLite creation, recognized DELETE-to-WAL
+conversion, two controlled overlapping first opens and rollback/retry after an
+injected schema write failure. Ordinary SQLite read-only recognition may touch
+coordination sidecars; these tests do not claim an untouched shared-memory file.
+The offline rebuild test separately preserves its entire source inventory after
+recognition, using the rebuild's stopped/checkpointed immutable source connection.
+
+Root dispatcher checks passed **106 tests on CPython 3.14.8 (2.86 s)** and
+**106 on CPython 3.13.16 (2.85 s)**, with no failures, errors, skips or expected
+failures. Both also passed Ruff formatting/lint, strict mypy over 20 source files,
+fresh sdist/wheel builds and runtime-only installed-wheel demonstrations. Existing
+real WAL snapshot, concurrent publication, revocation and rebuild regressions passed.
+Commands were `python scripts/portfolio.py check atlas` and
+`PORTFOLIO_PYTHON=3.13 python scripts/portfolio.py check atlas`, sequentially from
+the repository root. One upstream Starlette/httpx deprecation remains.
+
+The query-allocation, runtime round-trip and browser observations below predate this
+constructor guard. Their original source digests/results remain intact and are not
+measurements of this final change. The final immutable repository matrix provides
+the committed-source verification record for the finished tree.
+
 ## Core query and publication verification — 2026-10-20
 
-The current implementation separates compatibility-checked catalog transactions
+That reviewed snapshot separates compatibility-checked catalog transactions
 from file preparation, streams ranking scores without retaining every candidate's
 explanation, anchors phrases on the rarest positional list, and uses a result-cache
 hit only after pinning the current ACL/data revisions and checking file signatures.
@@ -39,7 +76,7 @@ back under 3.14.8. Text, ACLs and groups survive; newly assigned characters are
 retokenized according to the destination's Unicode database. Indexes are not
 silently shared across different Unicode identities.
 
-**Final checks.** Root dispatcher checks passed on CPython **3.14.8: 92 tests in
+**Checks at that snapshot.** Root dispatcher checks passed on CPython **3.14.8: 92 tests in
 3.29 s** and **3.13.16: 92 tests in 3.12 s**, with no failures, errors, skips or
 expected failures. Both also passed Ruff formatting/lint, strict mypy over 20 source
 files, fresh sdist/wheel builds and runtime-only installed-wheel demos outside source.
@@ -70,7 +107,7 @@ reads from 100,000 to fewer than 32. These are single allocation/work samples wi
 tracemalloc overhead, excluding index load/RSS/concurrency; they establish no new
 standard-workload throughput or capacity claim.
 
-Current source-scope digest for the corrected allocation and runtime exercises is
+Source-scope digest captured for the corrected allocation and runtime exercises is
 `e29c34a5e8717121bf2ebd39a8eb8a124e45831f3633c61026911959e721b98b`;
 the reports retain their actual dirty checkout, lock and root-input provenance.
 Historical standard/relevance evidence below is unchanged. Material boundaries remain

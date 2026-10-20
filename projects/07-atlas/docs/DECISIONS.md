@@ -47,6 +47,16 @@ maintenance tests. Unsupported catalogs raise `IncompatibleCatalog`; HTTP presen
 503 without corpus detail. A stale merge is a separate, expected concurrency
 outcome (`StaleGeneration`, HTTP 409), for which retry uses a fresh snapshot.
 
+Construction must recognize a catalog before preparing its schema or changing
+its journal mode. Otherwise even a correctly rejected future version can acquire
+legacy tables or be checkpointed by the writable connection on close. Existing
+catalog recognition now uses a read-only transaction. Only empty databases and
+recognized format-1 catalogs can enter initialization; partial schemas require
+recovery, not `CREATE IF NOT EXISTS` repair. New-table creation is atomic. An
+exclusive SQLite initialization lock spans the separate journal-mode transition,
+while normal valid WAL opens remain read-only and preserve reader/writer concurrency.
+Catalog/WAL content preservation excludes SQLite's read-coordination sidecars.
+
 ## Normalization is persisted semantics
 
 A tokenization fix changes the meaning of stored postings. V1 grouped source

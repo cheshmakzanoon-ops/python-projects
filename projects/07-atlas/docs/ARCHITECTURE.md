@@ -29,6 +29,30 @@ the WAL snapshot before any cache reuse or document/group reads. Every operation
 checks compatibility, including already-warmed Engine instances. A constructor
 check alone cannot protect a process from a later incompatible publisher.
 
+Initialization has a separate recognition boundary. An existing catalog is first
+opened through a SQLite `mode=ro` connection and a read transaction. Unsupported
+versions, unrelated objects, incomplete tables/columns, missing state headers and
+foreign SQLite identity metadata are rejected before persistent pragmas or DDL.
+Only the literal `sqlite_` prefix identifies ignored internal objects; a user table
+such as `sqliteXdata` is still foreign state.
+A recognized WAL catalog needs no initialization write lock or schema mutation.
+
+For a genuinely empty database, or a recognized format-1 DELETE-mode catalog that
+needs WAL, initialization acquires a SQLite exclusive lock and rechecks identity.
+Connection-local `locking_mode=EXCLUSIVE` retains that lock across the commit
+required before changing journal mode; SQLite forbids journal-mode changes inside
+a transaction. Table creation and singleton-header insertion then share one explicit
+transaction. A failed initializer rolls back its entire schema; another constructor
+can initialize the remaining empty database. Concurrent first opens see a complete
+catalog after the lock releases, never a partially committed series of CREATEs.
+Existing incomplete schemas are not silently repaired.
+
+Read-only recognition preserves catalog and existing WAL-frame bytes, schema and
+journal mode on rejection. SQLite may create or update WAL/shared-memory coordination
+sidecars while reading; absence of filesystem side effects is not promised. The
+offline rebuild's checkpointed `immutable=1` source has a stricter byte/inventory
+preservation contract because all source processes are stopped.
+
 Upsert's sequence is:
 
 1. Validate documents and tokenize body text; create new random revisions.
