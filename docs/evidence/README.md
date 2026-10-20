@@ -21,9 +21,11 @@ and exact source/input inventories. The [focused comparison](core-focused-2026-1
 embeds the actual five-repeat observations, commands, module/workload identities,
 source inventory, original-byte artifact hashes, and scope limitations. Portable
 publication paths preserve raw-file hashes; hashes establish local consistency,
-not signed authenticity. Raw logs, JUnit and compact output files are retained
-under ignored `.local/core-review-final/` and `.local/core-review-focused-final/`.
-Large generated data, environments and live databases are excluded from Git.
+not signed authenticity. The [supporting records archive](supporting-records-2026-10-20/README.md) publishes
+616 detailed logs, JUnit reports, inventories, compact outputs, and reproduction
+helpers, including the final and preceding review runs. Its manifest binds original
+and published bytes and documents tool-path normalization. Generated environments,
+large data, and live databases are excluded from Git.
 
 The preceding [October 20 interface review record](quality-review-2026-10-20.json) identifies fixed source
 `0e52603de3bfbe50094904b5c5b9620af2ac0178`: 2,274 project test executions,
