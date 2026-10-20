@@ -33,3 +33,17 @@ retains source `9218b77769cef807700d67f8a0c2b97512b9cc0e`. Its
 proves unchanged storage algorithms/tests/entry point and only one changed
 reporter string that the extended runner does not execute; no new extended
 execution or equality of whole-project digests is claimed.
+
+
+## Storage-core review coverage
+
+The current suite additionally checks real process death while writing a value
+containing frame-shaped bytes, nonmutating recovery-plan rejection, cached-read
+corruption detection, complete retired-descriptor release, and conflict-head
+reclamation with older writers still active. `test_transaction_histories.py`
+compares overlapping writers and snapshots with independent dictionary copies,
+including maintenance, reopen, historical backup/restore, forced conflicts, and
+private overlays. `test_version_retention.py` checks every logical view above the
+retention floor, not just one expected output list. Point-lookup work tests bound
+block probes without asserting noisy elapsed times. Exact legacy table/log/backup
+bytes are retained in the fixture produced by baseline `39d3a8d`.

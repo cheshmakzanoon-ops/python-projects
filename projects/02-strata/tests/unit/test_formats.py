@@ -160,7 +160,7 @@ def test_wal_tail_and_interior_corruption(tmp_path: Path) -> None:
     struct.pack_into(">I", broken, 4, 10000)
     path.write_bytes(broken)
     wal = WAL(path)
-    with pytest.raises(Corruption, match="later complete"):
+    with pytest.raises(Corruption, match="header checksum"):
         wal.recover()
     wal.close()
 

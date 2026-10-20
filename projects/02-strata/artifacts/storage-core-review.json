@@ -1,0 +1,306 @@
+{
+  "baseline_export": "git archive 39d3a8d4be3e8e2e7de85379790d68f5367d6825; benchmark workload script executed unchanged against that export via PYTHONPATH.",
+  "baseline_revision": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+  "before_fix_core_regressions": {
+    "command": "python -m pytest tests/acceptance/test_persistence_boundaries.py -q --tb=short against the baseline package source",
+    "failed": 10,
+    "passed": 2,
+    "tests": "tests/acceptance/test_persistence_boundaries.py"
+  },
+  "format_compatibility": {
+    "baseline_revision": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+    "method": "Run baseline source exported from Git under CPython 3.14.8 with its own PYTHONPATH; current engine uses the installed editable source. All owners closed before changing binaries.",
+    "new_binary_reads_old_restoration": true,
+    "old_binary_reads_new_flushed_directory": true,
+    "old_binary_rejects_live_v2_log": true,
+    "old_binary_restores_new_logical_backup": true,
+    "rejection_preserves_input_files": true
+  },
+  "interpretation": [
+    "Baseline correctness comparisons still selected the right old value; the logarithmic I/O-work gate failed as expected.",
+    "The same workload and algorithm-file hashes identify exactly which before/after lookup implementations were timed.",
+    "Transaction-history results cover 20,000 deterministic scheduled operations with overlapping handle lifetimes, not a parallel throughput benchmark.",
+    "The 5,000-operation-per-seed exercise occurred before adding callback-order/read-failure test variants; storage algorithm files were unchanged afterward.",
+    "Historical full standard and 500,000-operation workloads were not repeated for this review."
+  ],
+  "schema_version": 1,
+  "source_state": "Review working tree; measurements retain their exact input hashes. Not an immutable final-commit report.",
+  "suite": "strata-storage-core-review",
+  "transaction_histories": {
+    "cpu": "AMD EPYC 9V74 80-Core Processor",
+    "digest_inputs": "src/**, tests/**, benchmarks/**, examples/** (excluding __pycache__); pyproject.toml; uv.lock; .python-version",
+    "lockfile_sha256": "33d8e55d6e7773df668c53066b89481c06c274b4e3989b5cba83d33581f7667d",
+    "memory_limit_bytes": 34359738368,
+    "operations_per_seed": 5000,
+    "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "packaging_context": "source-checkout",
+    "pid": 71209,
+    "project": "strata",
+    "python": "3.14.8",
+    "results": [
+      {
+        "commits": 731,
+        "compactions": 306,
+        "conflicts": 351,
+        "final_sequence": 731,
+        "operations": 5000,
+        "oracle_sha256": "fbb962da2996b52ff657c3d6d88e322e66a327554d46a9f6281d41101c90b1e2",
+        "reopens": 19,
+        "seed": 0,
+        "snapshot_backups": 267
+      },
+      {
+        "commits": 744,
+        "compactions": 380,
+        "conflicts": 355,
+        "final_sequence": 744,
+        "operations": 5000,
+        "oracle_sha256": "e10a44af479c8bc8f52ef922805ed0dd199cc7bc85536f6f0b5022689ff631ab",
+        "reopens": 19,
+        "seed": 17,
+        "snapshot_backups": 236
+      },
+      {
+        "commits": 785,
+        "compactions": 327,
+        "conflicts": 383,
+        "final_sequence": 785,
+        "operations": 5000,
+        "oracle_sha256": "e64a5f9fb8de7214822cc174c1b9b321bcaccfa6f18a29a145059d61a76ec0d2",
+        "reopens": 19,
+        "seed": 1729,
+        "snapshot_backups": 248
+      },
+      {
+        "commits": 723,
+        "compactions": 342,
+        "conflicts": 351,
+        "final_sequence": 723,
+        "operations": 5000,
+        "oracle_sha256": "1a5670a13bb560f18b69cca041fab16b6bd3f02f9d86b9f7fa01d63064968cea",
+        "reopens": 19,
+        "seed": 65537,
+        "snapshot_backups": 252
+      }
+    ],
+    "root_contract_sha256": "2749a4c0ce1ce9ca9ea32df8876885b816b6f7e32f5208595b5eae7af6622477",
+    "root_digest_inputs": [
+      "ruff.toml",
+      "CONTRIBUTING.md",
+      "docs/REQUIREMENTS.md",
+      "portfolio.toml",
+      "scripts/portfolio.py"
+    ],
+    "schema_version": 1,
+    "scope": "Independent dictionary copies, concurrent-lifetime writer/read snapshots, forced conflicts, private overlays, compaction, reopen, and historical backup/restore; one serialized owner, not parallel thread load.",
+    "seconds": 6.182891474999906,
+    "source_commit": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+    "source_content_sha256": "612bd722be088d69603cb074d620965a3eddf6dd7e3c48d53e7d8e4e0d4366ec",
+    "source_dirty": true,
+    "source_scope": "project",
+    "source_unchanged": true,
+    "status": "passed",
+    "suite": "overlapping-transaction-histories",
+    "total_operations": 20000
+  },
+  "version_seek": {
+    "baseline": {
+      "algorithm_file_sha256": {
+        "memtable": "3c5bbd77da08fc94de20321448532530eed79d84a6f10b3153fed1f1515c190f",
+        "sstable": "ff5e23f5ad386af87ce6f2c4a6990499dc3958f7f09893e637d816f8a4916c93"
+      },
+      "checks": {
+        "algorithm_files_unchanged": true,
+        "logarithmic_block_work": false
+      },
+      "comparison_baseline_revision": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+      "cpu": "AMD EPYC 9V74 80-Core Processor",
+      "digest_inputs": "src/**, tests/**, benchmarks/**, examples/** (excluding __pycache__); pyproject.toml; uv.lock; .python-version",
+      "limits": "One deterministic hot key on a local filesystem; no whole-workload, cold-device, or production-capacity claim.",
+      "lockfile_sha256": "33d8e55d6e7773df668c53066b89481c06c274b4e3989b5cba83d33581f7667d",
+      "median_memtable_seconds": 0.12263921900012065,
+      "median_table_seconds": 0.8218675789998997,
+      "memory_limit_bytes": 34359738368,
+      "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+      "packaging_context": "source-checkout",
+      "parameters": {
+        "cache_blocks": 32,
+        "key_hex": "686f74",
+        "memory_queries": 100,
+        "repetitions": 5,
+        "setup_timing": "excluded: fresh skip-list construction and SSTable file write per repetition",
+        "snapshot_sequence": 1,
+        "table_queries": 30,
+        "value_bytes": 128,
+        "versions": 20000,
+        "warmup": "none; each repetition begins with an empty application block cache"
+      },
+      "pid": 68650,
+      "project": "strata",
+      "python": "3.14.8",
+      "results": [
+        {
+          "block_read_bytes": 87610800,
+          "block_reads": 1350,
+          "cache_hits": 0,
+          "cold_lookup_block_bound": 8,
+          "memtable_seconds": 0.12173284800019246,
+          "table_blocks": 45,
+          "table_seconds": 0.811407915000018
+        },
+        {
+          "block_read_bytes": 87610800,
+          "block_reads": 1350,
+          "cache_hits": 0,
+          "cold_lookup_block_bound": 8,
+          "memtable_seconds": 0.1199676719998024,
+          "table_blocks": 45,
+          "table_seconds": 1.027364438999939
+        },
+        {
+          "block_read_bytes": 87610800,
+          "block_reads": 1350,
+          "cache_hits": 0,
+          "cold_lookup_block_bound": 8,
+          "memtable_seconds": 0.17942506800000046,
+          "table_blocks": 45,
+          "table_seconds": 0.924146157999985
+        },
+        {
+          "block_read_bytes": 87610800,
+          "block_reads": 1350,
+          "cache_hits": 0,
+          "cold_lookup_block_bound": 8,
+          "memtable_seconds": 0.12263921900012065,
+          "table_blocks": 45,
+          "table_seconds": 0.8218675789998997
+        },
+        {
+          "block_read_bytes": 87610800,
+          "block_reads": 1350,
+          "cache_hits": 0,
+          "cold_lookup_block_bound": 8,
+          "memtable_seconds": 0.12788668200028042,
+          "table_blocks": 45,
+          "table_seconds": 0.7431878709999182
+        }
+      ],
+      "root_contract_sha256": "22edb3da2cde0f86a789e333d06c4dd245dcc4d517e384870f61b890d041105e",
+      "root_digest_inputs": [
+        "ruff.toml",
+        "CONTRIBUTING.md",
+        "docs/REQUIREMENTS.md",
+        "portfolio.toml",
+        "scripts/portfolio.py"
+      ],
+      "schema_version": 1,
+      "source_commit": null,
+      "source_content_sha256": "433247cb6a1ff214192f255e482e0ae8e6f80bcd09f372603119c243206bec42",
+      "source_dirty": null,
+      "source_label": "baseline-export-39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+      "source_scope": "project",
+      "status": "failed",
+      "suite": "hot-version-seek",
+      "workload_script_sha256": "8fe421de6f19f33cd267f21d7c2078f50ee8b55a351ea86ca21a1797f2716c73"
+    },
+    "review": {
+      "algorithm_file_sha256": {
+        "memtable": "afcb39c4fb3dcd0ccf835b165313124c8c77a4f17c962ba4b784d7693af229fa",
+        "sstable": "d3e0b93040bc27bea4524f553818d9b7d95473ad6c51c31faf2d24162b1cb532"
+      },
+      "checks": {
+        "algorithm_files_unchanged": true,
+        "logarithmic_block_work": true
+      },
+      "comparison_baseline_revision": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+      "cpu": "AMD EPYC 9V74 80-Core Processor",
+      "digest_inputs": "src/**, tests/**, benchmarks/**, examples/** (excluding __pycache__); pyproject.toml; uv.lock; .python-version",
+      "limits": "One deterministic hot key on a local filesystem; no whole-workload, cold-device, or production-capacity claim.",
+      "lockfile_sha256": "33d8e55d6e7773df668c53066b89481c06c274b4e3989b5cba83d33581f7667d",
+      "median_memtable_seconds": 0.000254244000188919,
+      "median_table_seconds": 0.00332426300019506,
+      "memory_limit_bytes": 34359738368,
+      "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+      "packaging_context": "source-checkout",
+      "parameters": {
+        "cache_blocks": 32,
+        "key_hex": "686f74",
+        "memory_queries": 100,
+        "repetitions": 5,
+        "setup_timing": "excluded: fresh skip-list construction and SSTable file write per repetition",
+        "snapshot_sequence": 1,
+        "table_queries": 30,
+        "value_bytes": 128,
+        "versions": 20000,
+        "warmup": "none; each repetition begins with an empty application block cache"
+      },
+      "pid": 71198,
+      "project": "strata",
+      "python": "3.14.8",
+      "results": [
+        {
+          "block_read_bytes": 369136,
+          "block_reads": 6,
+          "cache_hits": 204,
+          "cold_lookup_block_bound": 8,
+          "memtable_seconds": 0.00023194999994302634,
+          "table_blocks": 45,
+          "table_seconds": 0.00332426300019506
+        },
+        {
+          "block_read_bytes": 369136,
+          "block_reads": 6,
+          "cache_hits": 204,
+          "cold_lookup_block_bound": 8,
+          "memtable_seconds": 0.00033003799990183325,
+          "table_blocks": 45,
+          "table_seconds": 0.003061026000068523
+        },
+        {
+          "block_read_bytes": 369136,
+          "block_reads": 6,
+          "cache_hits": 204,
+          "cold_lookup_block_bound": 8,
+          "memtable_seconds": 0.000257147999946028,
+          "table_blocks": 45,
+          "table_seconds": 0.002981366000312846
+        },
+        {
+          "block_read_bytes": 369136,
+          "block_reads": 6,
+          "cache_hits": 204,
+          "cold_lookup_block_bound": 8,
+          "memtable_seconds": 0.00021861999994143844,
+          "table_blocks": 45,
+          "table_seconds": 0.0035427329999038193
+        },
+        {
+          "block_read_bytes": 369136,
+          "block_reads": 6,
+          "cache_hits": 204,
+          "cold_lookup_block_bound": 8,
+          "memtable_seconds": 0.000254244000188919,
+          "table_blocks": 45,
+          "table_seconds": 0.0037081420000504295
+        }
+      ],
+      "root_contract_sha256": "2749a4c0ce1ce9ca9ea32df8876885b816b6f7e32f5208595b5eae7af6622477",
+      "root_digest_inputs": [
+        "ruff.toml",
+        "CONTRIBUTING.md",
+        "docs/REQUIREMENTS.md",
+        "portfolio.toml",
+        "scripts/portfolio.py"
+      ],
+      "schema_version": 1,
+      "source_commit": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+      "source_content_sha256": "612bd722be088d69603cb074d620965a3eddf6dd7e3c48d53e7d8e4e0d4366ec",
+      "source_dirty": true,
+      "source_label": "review-working-tree",
+      "source_scope": "project",
+      "status": "passed",
+      "suite": "hot-version-seek",
+      "workload_script_sha256": "8fe421de6f19f33cd267f21d7c2078f50ee8b55a351ea86ca21a1797f2716c73"
+    }
+  }
+}

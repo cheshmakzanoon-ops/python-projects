@@ -1,4 +1,40 @@
-# A published manifest can outlive failed cleanup
+# Recovery must distinguish framing from arbitrary values
+
+A valid byte value can contain another complete, checksummed WAL frame. During
+the storage-core audit, a child owner committed one acknowledged transaction,
+then was stopped after writing all but the final three bytes of a second
+transaction whose value contained that pattern. The v1 reader treated the inner
+value as a later transaction hidden by a corrupted outer length and refused to
+recover even the acknowledged prefix. No malformed public input was involved.
+
+A more selective search heuristic would still fail for some arbitrary byte
+value: v1 did not independently protect its declared length, so the ambiguous
+file images lacked enough information. The repair adds an independent header
+checksum to new `STW2` frames. When that header validates and its final payload is
+short, recovery knows it is an incomplete append and never interprets value bytes
+as frame boundaries. Valid legacy frames remain readable, while ambiguous legacy
+tails remain unchanged and explicitly refused. A frozen fixture and actual old
+binaries exercise both transfer directions; [FORMAT.md](FORMAT.md) records the
+remaining limits.
+
+The same audit found that physical tail repair happened before replay was checked
+against the manifest. A file with both a missing prefix and a torn suffix was
+modified even though open failed. `RecoveryPlan` now separates read-only physical
+validation from logical replay and authorized repair. The file signature is
+checked again before truncation. That ownership boundary also lets `verify()`
+audit actual file bytes without repairing them or trusting the application LRU.
+Detected corruption poisons writes so later maintenance cannot obscure the fault.
+
+Historical point lookup exposed a different issue: a correct old snapshot walked
+every newer version. A 20,000-version key crossed 45 SSTable blocks, exceeding the
+32-block cache and causing 1,350 block reads for 30 repeated queries. Compound
+skip-list seeks and version-aware block search reduced that to six reads in all
+five measured repetitions, while preserving a one-block latest-value fast path.
+The [small workload](BENCHMARKS.md#hot-version-point-reads) records deterministic
+work separately from descriptive timing. Independent dictionary histories then
+challenge the changed retention, conflict, backup and reopen behavior.
+
+## Earlier publication and descriptor case
 
 The problem was to make an embedded byte store explain exactly what remains
 true after failure. A synchronized WAL must retain complete acknowledged
@@ -51,7 +87,7 @@ a separate valid-schema, wrong-content-hash test preserves end-to-end integrity
 checking. The reviewer's independent MVCC/corruption/poison/manifest-loss script
 also passes unchanged after these fixes.
 
-The current 79-test suite passes on CPython 3.13.16 and 3.14.8. Branch-aware
+The historical 79-test suite passed on CPython 3.13.16 and 3.14.8. Branch-aware
 storage-core combined coverage is 95.49% (96.82% statements, 91.43% branches);
 this includes the state machine and binary I/O,
 and excludes measurement/provenance/demo adapters explicitly. A separate required

@@ -10,7 +10,7 @@ import pytest
 from pp_strata import Corruption, Database
 from pp_strata.codec.records import Record, encode
 from pp_strata.io import frame
-from pp_strata.wal.frames import MAGIC, WAL
+from pp_strata.wal.frames import LEGACY_MAGIC, WAL
 
 
 @pytest.mark.parametrize("flushed", [False, True])
@@ -102,7 +102,7 @@ def test_recovery_refuses_missing_complete_transactions(
     batches = [Record(b"first", 1, b"a"), Record(b"last", 3, b"b")]
     if missing_prefix:
         batches = [Record(b"last", 2, b"b")]
-    wal = b"".join(MAGIC + frame(encode([record])) for record in batches)
+    wal = b"".join(LEGACY_MAGIC + frame(encode([record])) for record in batches)
     (path / "WAL").write_bytes(wal)
 
     with pytest.raises(Corruption, match="WAL sequence gap"):

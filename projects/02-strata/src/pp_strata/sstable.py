@@ -167,6 +167,7 @@ class Table:
             if expected_offset != index_offset:
                 raise Corruption("SSTable index does not cover data")
             self.first_keys = [block.first for block in self.blocks]
+            self.last_keys = [block.last for block in self.blocks]
         except (ValueError, UnicodeError, KeyError, TypeError, struct.error) as exc:
             os.close(self.fd)
             raise Corruption("invalid SSTable metadata") from exc
@@ -212,11 +213,30 @@ class Table:
     def get(self, key: bytes, sequence: int) -> Record | None:
         if not self.bloom.contains(key):
             return None
-        for record in self.records(key):
-            if record.key != key:
-                break
-            if record.sequence <= sequence:
-                return record
+        # Block key ranges first bound the search. Within a long hot-key run,
+        # terminal internal keys let us skip blocks of newer invisible versions.
+        first = bisect.bisect_left(self.last_keys, key)
+        stop = bisect.bisect_right(self.first_keys, key)
+        target = key, -sequence
+        if first >= stop:
+            return None
+        # The usual latest-version lookup still needs only its first block.
+        leading = self._block(first)
+        index = bisect.bisect_left(leading, target, key=lambda record: record.order)
+        if index < len(leading):
+            return leading[index] if leading[index].key == key else None
+        low, high = first + 1, stop
+        while low < high:
+            middle = (low + high) // 2
+            if self._block(middle)[-1].order < target:
+                low = middle + 1
+            else:
+                high = middle
+        if low < stop:
+            records = self._block(low)
+            index = bisect.bisect_left(records, target, key=lambda record: record.order)
+            if index < len(records) and records[index].key == key:
+                return records[index]
         return None
 
     def close(self) -> None:

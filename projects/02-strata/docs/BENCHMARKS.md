@@ -142,3 +142,61 @@ CPU, memory cgroup, interpreter, source/lock/contract hashes, raw repetitions,
 and correctness checks are in the respective JSON artifacts. The accepted
 committed-source wrappers above supersede these provisional development
 measurements without changing their historical meaning.
+
+
+## Hot-version point reads
+
+`benchmarks/version_seek.py` exercises one key with 20,000 committed versions and
+128-byte values. Each of five fresh repetitions constructs a skip-list and an
+SSTable, then performs 100 memtable and 30 SSTable lookups at snapshot sequence 1.
+Construction/serialization are excluded from the timings. The application block
+cache starts empty and holds 32 blocks; no explicit lookup warmup is performed.
+This deliberately exposes old-version traversal and cache churn, not whole-engine
+write performance or cold-device latency.
+
+```sh
+uv run --locked python benchmarks/version_seek.py \
+  --source-label local-review --output /tmp/strata-version-seek.json
+```
+
+The report records the workload script hash, actual algorithm-file hashes,
+interpreter/source context, individual repetitions, block/byte work, and a
+logarithmic cold-search bound. It rejects an existing output. The correctness and
+work-bound gates can fail; elapsed time is never a test assertion. To compare an
+older implementation, run the same script with that project's exported `src/` on
+`PYTHONPATH`, label the export explicitly, and retain both reports. An export
+without Git metadata is reported with no observed source commit; its verified
+export revision and algorithm hashes establish the comparison.
+
+| Five-repeat observation | Baseline `39d3a8d` | Reviewed lookup implementation |
+| --- | ---: | ---: |
+| Table blocks | 45 | 45 |
+| Block reads per 30 queries, every repetition | 1,350 | 6 |
+| Block bytes per 30 queries, every repetition | 87,610,800 | 369,136 |
+| Median 100-query memtable loop | 0.122639 s | 0.000254 s |
+| Median 30-query table loop | 0.821868 s | 0.003324 s |
+
+The stable result is 225 times fewer application block reads for this fixture.
+The timings are descriptive shared-host observations. This improvement does not
+imply the same factor for scans, current-version reads, compaction, or a real
+application. Current-version point lookup keeps its one-block fast path.
+[The raw review record](../artifacts/storage-core-review.json) retains all five
+before/after repetitions, exact hashes, and limits. The baseline was a verified
+Git export; its work-bound gate failed while value correctness held.
+
+## Overlapping transaction histories
+
+The same review ran four deterministic seeds (`0`, `17`, `1729`, `65537`) with
+5,000 scheduled operations each. Independent full dictionary copies represented
+transaction starting views and read snapshots; a separate change map decided
+which written keys must conflict. The exercise checked private overlays, empty
+and prefix-related byte keys, repeated writes, forced competing writers,
+compaction, reopen, and historical backup/restore. It observed 2,983 nonempty
+commits, 1,440 conflicts, 1,355 explicitly selected compactions, 76 owner reopens,
+and 1,003 historical backup/restores. Additional compactions occur during detached
+iterator checks and periodic barriers. Every final dictionary digest matched.
+
+This is a 20,000-operation correctness exercise with overlapping handle lifetimes,
+not a parallel throughput result or a replacement for the historical 500,000-step
+extended suite. The raw review record above retains per-seed counts and exact
+source inputs. Normal tests run a shorter 1,000-operation version for each seed.

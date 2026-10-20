@@ -65,9 +65,20 @@ class Memtable:
             node_or_none = node_or_none.forward[0]
 
     def get(self, key: bytes, sequence: int) -> Record | None:
-        for record in self.records(key):
-            if record.key != key:
-                break
-            if record.sequence <= sequence:
+        # Seek the complete internal key, not the beginning of the user-key run.
+        # Old snapshots must not walk every newer version of a hot key.
+        target = key, -sequence
+        node = self.head
+        for level in range(LEVELS - 1, -1, -1):
+            while (following := node.forward[level]) is not None:
+                assert following.record is not None
+                if following.record.order >= target:
+                    break
+                node = following
+        candidate = node.forward[0]
+        if candidate is not None:
+            record = candidate.record
+            assert record is not None
+            if record.key == key:
                 return record
         return None

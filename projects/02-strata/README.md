@@ -71,17 +71,21 @@ uv build --python 3.14.8
 
 Python 3.13.16 is also supported. Use a separate virtual environment when testing
 the two interpreters, and run their builds sequentially. The acceptance suite
-includes process termination, short writes, failed synchronization, malformed
-files, missing log records, snapshot retention, backup integrity, and write skew.
+includes overlapping transaction histories, process termination, torn framing,
+short writes, failed synchronization, corruption after cached reads, version
+retention, descriptor release, legacy restore, and write skew. Historical point
+lookups seek internal versions rather than walking every newer hot-key value;
+the benchmark guide includes a small reproducible workload for that case.
 The [verification record](docs/VERIFICATION.md) separates current checks from
 historical large workloads.
 
 The standard benchmark writes 250,000 initial records, runs 200,000 mixed
 operations, and adds 50,000 hot-key churn operations. Full compaction, materialized
-scans/backups, and per-key conflict metadata limit scale. Historical measurements
+scans/backups, and long-lived snapshot retention limit scale. Compaction reclaims
+obsolete deleted-key conflict heads once older handles close. Historical measurements
 are in [benchmarks](docs/BENCHMARKS.md); they are not production-capacity claims.
 
 Further reading: [architecture](docs/ARCHITECTURE.md),
-[formats and design decisions](docs/DECISIONS.md),
+[persistent formats](docs/FORMAT.md), [design decisions](docs/DECISIONS.md),
 [acceptance mapping](docs/ACCEPTANCE.md), [case study](docs/CASE_STUDY.md),
 and [dependency and fixture provenance](docs/THIRD_PARTY.md).

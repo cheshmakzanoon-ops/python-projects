@@ -10,13 +10,14 @@ import re
 import threading
 import uuid
 from collections import Counter
-from collections.abc import Iterator
+from collections.abc import Iterator, Sequence
 from contextlib import ExitStack
 from pathlib import Path
 from types import TracebackType
 from typing import Literal, Self
 
 from pp_strata.codec.records import MAX_BATCH, Record, encode, validate
+from pp_strata.compaction import VersionRetention
 from pp_strata.errors import Closed, Conflict, Corruption, OwnerBusy, WriterFailed
 from pp_strata.io import (
     Failpoint,
@@ -143,11 +144,10 @@ class Database:
                     wal = WAL(self.path / "WAL", failpoint, create=False)
                 except FileNotFoundError as exc:
                     raise Corruption("missing WAL in initialized database") from exc
-            for batch in wal.recover():
-                if batch[0].sequence <= self._checkpoint:
-                    continue
-                if batch[0].sequence != self._sequence + 1:
-                    raise Corruption("WAL sequence gap after manifest checkpoint")
+            plan = wal.scan()
+            replay = plan.replay_after(self._checkpoint)
+            wal.apply_recovery(plan)
+            for batch in replay:
                 self._publish(batch)
             self._wal = wal
             self._cleanup_orphans()
@@ -172,9 +172,9 @@ class Database:
         if self._closed or os.getpid() != self._owner_pid:
             raise Closed("database closed or inherited across fork; open a new owner")
         if write and self._failed:
-            raise WriterFailed("WAL/manifest state uncertain; close and reopen before writing")
+            raise WriterFailed("persistence state uncertain; close and reopen before writing")
 
-    def _publish(self, batch: list[Record]) -> None:
+    def _publish(self, batch: Sequence[Record]) -> None:
         for record in batch:
             self._memtable.add(record)
             self._latest[record.key] = record.sequence
@@ -203,10 +203,14 @@ class Database:
     def _get(self, key: bytes, sequence: int) -> bytes | None:
         with self._lock:
             self._check()
-            candidates = [self._memtable.get(key, sequence)]
-            candidates.extend(table.get(key, sequence) for table in self._tables)
-            records = [record for record in candidates if record is not None]
-            return max(records, key=lambda record: record.sequence).value if records else None
+            try:
+                candidates = [self._memtable.get(key, sequence)]
+                candidates.extend(table.get(key, sequence) for table in self._tables)
+                records = [record for record in candidates if record is not None]
+                return max(records, key=lambda record: record.sequence).value if records else None
+            except (Corruption, OSError):
+                self._failed = True
+                raise
 
     def _records(self, start: bytes = b"", stop: bytes | None = None) -> Iterator[Record]:
         streams = [self._memtable.records(start, stop)]
@@ -222,14 +226,18 @@ class Database:
         # remain safe even if the caller closes the snapshot before iterating.
         with self._lock:
             self._check()
-            result: list[tuple[bytes, bytes]] = []
-            seen: bytes | None = None
-            for record in self._records(start, stop):
-                if record.sequence <= sequence and record.key != seen:
-                    seen = record.key
-                    if record.value is not None:
-                        result.append((record.key, record.value))
-            return result
+            try:
+                result: list[tuple[bytes, bytes]] = []
+                seen: bytes | None = None
+                for record in self._records(start, stop):
+                    if record.sequence <= sequence and record.key != seen:
+                        seen = record.key
+                        if record.value is not None:
+                            result.append((record.key, record.value))
+                return result
+            except (Corruption, OSError):
+                self._failed = True
+                raise
 
     def _commit(self, tx: Transaction) -> int:
         with self._lock:
@@ -296,33 +304,21 @@ class Database:
             if not self._tables:
                 return
             oldest = min(self._pins) if self._pins else self._sequence
-            pinned = bool(self._pins)
-
-            def retained() -> Iterator[Record]:
-                seen_key: bytes | None = None
-                kept_floor = False
-                for record in self._records():
-                    if record.key != seen_key:
-                        seen_key, kept_floor = record.key, False
-                    if record.sequence > oldest:
-                        yield record
-                    elif not kept_floor:
-                        kept_floor = True
-                        if record.value is not None or pinned:
-                            yield record
-
+            retention = VersionRetention(oldest, bool(self._pins))
             new: Table | None = None
             try:
-                new = self._new_table(retained())
+                new = self._new_table(retention.records(self._records()))
                 self._install([new])
                 old, self._tables = self._tables, [new]
+                self._latest = retention.heads
                 # Readers finish under the lock or hold detached tuples. Close
                 # descriptors before cleanup can fail, so poisoned close leaks none.
-                for table in old:
-                    self._retired_block_reads += table.block_reads
-                    self._retired_read_bytes += table.read_bytes
-                    self._retired_cache_hits += table.cache_hits
-                    table.close()
+                with ExitStack() as cleanup:
+                    for table in old:
+                        self._retired_block_reads += table.block_reads
+                        self._retired_read_bytes += table.read_bytes
+                        self._retired_cache_hits += table.cache_hits
+                        cleanup.callback(table.close)
                 self._failpoint("before_obsolete_cleanup")
                 for table in old:
                     table.path.unlink()
@@ -344,6 +340,7 @@ class Database:
                 "writer_failed": self._failed,
                 "active_snapshots": sum(self._pins.values()),
                 "oldest_snapshot": min(self._pins) if self._pins else None,
+                "conflict_heads": len(self._latest),
                 "memtable_records": self._memtable.count,
                 "tables": [t.path.name for t in self._tables],
                 "disk_bytes": sum(p.stat().st_size for p in self.path.iterdir() if p.is_file()),
@@ -358,9 +355,53 @@ class Database:
 
     def verify(self) -> dict[str, object]:
         with self._lock:
-            self._check()
-            count = sum(1 for _ in self._records())
-            return {"status": "passed", "internal_records": count, "sequence": self._sequence}
+            self._check(write=True)
+            try:
+                return self._verify_persistent()
+            except (Corruption, OSError):
+                self._failed = True
+                raise
+
+    def _verify_persistent(self) -> dict[str, object]:
+        """Audit fresh persisted structures; caller holds the publication mutex."""
+        expected = {
+            "format": 1,
+            "sequence": self._checkpoint,
+            "tables": [table.path.name for table in self._tables],
+        }
+        if read_metadata(self.path / "MANIFEST") != expected:
+            raise Corruption("persistent manifest differs from installed table set")
+        count = 0
+        for table in self._tables:
+            # Reopen metadata and blocks with no cache: successful logical
+            # reads do not establish that their persistent bytes remain valid.
+            fresh = Table(table.path, cache_blocks=0)
+            try:
+                for record in fresh.records():
+                    if record.sequence > self._checkpoint or not fresh.bloom.contains(record.key):
+                        raise Corruption("table sequence or Bloom disagrees with manifest")
+                    count += 1
+            finally:
+                fresh.close()
+        fresh_wal = WAL(self.path / "WAL", create=False)
+        try:
+            plan = fresh_wal.scan()
+            if plan.discarded_bytes:
+                raise Corruption("incomplete WAL tail; reopen for recovery")
+            replay = plan.replay_after(self._checkpoint)
+            records = sorted(
+                (record for batch in replay for record in batch), key=lambda r: r.order
+            )
+            if records != list(self._memtable.records()):
+                raise Corruption("persistent WAL differs from published memtable")
+        finally:
+            fresh_wal.close()
+        return {
+            "status": "passed",
+            "internal_records": count + len(records),
+            "sequence": self._sequence,
+            "wal_frames": len(plan.batches),
+        }
 
     def backup(
         self, destination: str | Path, *, snapshot: Snapshot | None = None
