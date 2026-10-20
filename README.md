@@ -39,7 +39,7 @@ Architecture documents explain transaction and persistence boundaries. Case stud
 
 The [verification method](docs/architecture/VERIFICATION.md) explains independent references, controlled failure schedules, deterministic work bounds, and the limitations of each kind of evidence.
 
-The [latest reliability and interface review](docs/QUALITY_REVIEW.md) documents the persistence, validation, security, and usability changes across all ten products, with their committed-source verification results.
+The [core systems review](docs/CORE_REVIEW.md) documents the algorithm, concurrency, recovery, and evaluation changes across all ten products, with independent counterexamples, migration procedures, measured tradeoffs, and committed-source verification. The [earlier interface review](docs/QUALITY_REVIEW.md) retains its own scope and results.
 
 ## Scope and limitations
 

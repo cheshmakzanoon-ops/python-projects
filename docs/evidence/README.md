@@ -1,8 +1,8 @@
 # Verification records
 
 [Current verification status](../STATUS.md) identifies the latest tested source. The
-[reliability and interface review](../QUALITY_REVIEW.md) describes subsequent product
-and tooling changes. Records below retain their original source revisions; they do
+[core systems review](../CORE_REVIEW.md) explains the latest algorithm, state-machine,
+recovery, and tooling changes. Records below retain their original source revisions; they do
 not certify later code or repeat historical performance measurements.
 
 Historical command arrays and logs use `$DISPATCHER_PYTHON` for a machine-specific
@@ -12,7 +12,20 @@ original bytes. Source identities, inputs, outcomes, and measurements are unchan
 Embedded historical artifact hashes refer to the original bytes; the publication
 map binds them to these portable copies.
 
-The [October 20 review record](quality-review-2026-10-20.json) identifies fixed source
+The [core review matrix](core-review-2026-10-20.json) identifies final implementation
+`a33a513840d81f6e2cdb1b730540d906122bb254`: 3,044 project test executions,
+twenty package/build/installed-wheel checks, public demos and CI workloads, and
+six public integration executions passed. The [shared record](core-review-shared-2026-10-20.json)
+separately records 238 tooling test executions, lint, strict typing, strict documentation,
+and exact source/input inventories. The [focused comparison](core-focused-2026-10-20.json)
+embeds the actual five-repeat observations, commands, module/workload identities,
+source inventory, original-byte artifact hashes, and scope limitations. Portable
+publication paths preserve raw-file hashes; hashes establish local consistency,
+not signed authenticity. Raw logs, JUnit and compact output files are retained
+under ignored `.local/core-review-final/` and `.local/core-review-focused-final/`.
+Large generated data, environments and live databases are excluded from Git.
+
+The preceding [October 20 interface review record](quality-review-2026-10-20.json) identifies fixed source
 `0e52603de3bfbe50094904b5c5b9620af2ac0178`: 2,274 project test executions,
 122 shared tooling test executions, twenty package/demo/CI-workload checks, and
 six public integration runs passed. It also records the dependency-advisory and
@@ -45,7 +58,7 @@ The [acceptance audit](final/acceptance-summary.json) checks 30 accepted project
 
 The [integration verification snapshot](final/handoff-summary.json) reproduces all ten small demos and all three integrations from one clean commit. Its shared-root record checks the current informational manifest statuses, 13 tooling tests, and the strict documentation build; earlier full-workload records retain their actual measurement commits.
 
-All ten full standard profiles are accepted:
+The original review accepted all ten full standard profiles:
 
 | Product | Standard execution record | Principal scale |
 | --- | --- | --- |

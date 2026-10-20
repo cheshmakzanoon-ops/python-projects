@@ -1,0 +1,1203 @@
+{
+  "schema_version": 1,
+  "kind": "shared-tool-verification",
+  "status": "passed",
+  "publication_helper": {
+    "name": "publish_shared_core.py",
+    "sha256": "5d64d78aa31fcfc2a8bcec5aae2a28ded1e523b3fe42b2c27496fc7e359c96f3"
+  },
+  "source_commit": "a33a513840d81f6e2cdb1b730540d906122bb254",
+  "verified_started_at_utc": "2026-10-20T09:20:55.636830+00:00",
+  "verified_finished_at_utc": "2026-10-20T09:21:09.497037+00:00",
+  "scope": "Shared root tests on CPython 3.13.16/3.14.8 (119 each), scripts/integrations Ruff format/lint, six strict mypy modules per interpreter, one strict documentation/link build on 3.14.8.",
+  "source": {
+    "source_scope": "all tracked regular files in the detached clone",
+    "source_digest_algorithm": "scripts/evidence.digest: length-framed relative UTF-8 path and file bytes, sorted unique paths",
+    "source_content_sha256": "3c0509fdcf9edce3765ff6795b96ee02bc9b5bfd0ce314f941f10ffbce537bab",
+    "shared_content_sha256": "51b0ea0d869c6368042eaafa8222c5f91e8c47e0312c5b9ecb62bcc1ccdb1da4",
+    "documentation_content_sha256": "41f4f18f0282dd5a5e37929d0ecef86935f8c4d87911dbbd2cf93f3ceeaf83ed",
+    "quality_lockfile_sha256": "61c49b25d17d3739cd2b154c04c336d5afe9a88451d667e75f4ce4a3da1f92e0",
+    "shared_input_roots": [
+      "CONTRIBUTING.md",
+      "docs/REQUIREMENTS.md",
+      "portfolio.toml",
+      "ruff.toml",
+      "scripts",
+      "tooling/quality/pyproject.toml",
+      "tooling/quality/uv.lock",
+      ".github/workflows",
+      "integrations"
+    ]
+  },
+  "source_input_count": 1140,
+  "documentation_input_count": 156,
+  "shared_files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "bytes": 5923,
+      "sha256": "52f5b563db9f71746f415d6043da260e00926c94d1f9a8682e746156a9eb84f9"
+    },
+    {
+      "path": ".github/workflows/extended.yml",
+      "bytes": 4252,
+      "sha256": "ee59fec1b40fdfe5c34af3cbb4367586706704a470702f9f50203931fdc8325f"
+    },
+    {
+      "path": ".github/workflows/security.yml",
+      "bytes": 672,
+      "sha256": "0b42f82acf80f39be3e297214ffb739853031fcdf45af2495f12e88120cc666c"
+    },
+    {
+      "path": ".github/workflows/source-export.yml",
+      "bytes": 521,
+      "sha256": "28dc78e3ac87a443e2233763fb2f525e5a5d23a8cfe16d89707089a9688ae84e"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "bytes": 8433,
+      "sha256": "7b8fee1400fe3affb3e5456e1d2d9bf392e42669d35ce325ba84f05f5a63bfdf"
+    },
+    {
+      "path": "docs/REQUIREMENTS.md",
+      "bytes": 44675,
+      "sha256": "86e8b29cd8a738949f1ba94d740c75a3ec2b0abb921a441f1003e193658c3b56"
+    },
+    {
+      "path": "integrations/01-settlement/README.md",
+      "bytes": 1198,
+      "sha256": "055860cd5ed0bc4a1c26d6a7ee7db8aeabeea08611f0aff4e5432c1e0f028c5a"
+    },
+    {
+      "path": "integrations/01-settlement/anchor_stage.py",
+      "bytes": 7383,
+      "sha256": "be2625fe64a6d74673f68b54ac590daa731159554f6e89b3004d20eb159d7d1c"
+    },
+    {
+      "path": "integrations/01-settlement/meridian_stage.py",
+      "bytes": 5448,
+      "sha256": "106f8af555593393713258988fa77930f193135a76c49b5f618e840f4c7a5607"
+    },
+    {
+      "path": "integrations/02-stream-lake/README.md",
+      "bytes": 993,
+      "sha256": "1f64e01c876feb2fdaf1d3f35bd280a600bbabb8ed2055698e1389a5a27557dd"
+    },
+    {
+      "path": "integrations/02-stream-lake/current_stage.py",
+      "bytes": 2704,
+      "sha256": "9f8235c34e99e0374ba02a60b6e3cffd1c1315c2a01adebd7d94dd404e56fe15"
+    },
+    {
+      "path": "integrations/02-stream-lake/quarry_stage.py",
+      "bytes": 4188,
+      "sha256": "ec9caf3682decd190d4bf177ba5f2824ee6d79bd151beb4347aa734d17a5a088"
+    },
+    {
+      "path": "integrations/03-code-search/README.md",
+      "bytes": 978,
+      "sha256": "3fc8e390466fd9ebe81d409a794fcfbcd464d355a7ee8111c246b4620ec134ae"
+    },
+    {
+      "path": "integrations/03-code-search/atlas_stage.py",
+      "bytes": 4590,
+      "sha256": "0eef1863071afaca9ff38ee6e3930c7282dd93def3ed4d36e06f4e7de34ae8c1"
+    },
+    {
+      "path": "integrations/03-code-search/pytrace_stage.py",
+      "bytes": 4597,
+      "sha256": "6d8fea671585a42ff03fc271f5cedca9feb7ad797c3cb1d9f5bd6fdf918390f2"
+    },
+    {
+      "path": "integrations/run.py",
+      "bytes": 5689,
+      "sha256": "8ac33efdeaa3e811a96b9207a3b454bcbd1a7b2c3d331ff7c6b5a5989bc27ea2"
+    },
+    {
+      "path": "portfolio.toml",
+      "bytes": 4874,
+      "sha256": "84e5ce1e973fe2e3334986cfea86cafea7d4dbb41d09b0fa12a66ebf575bab8b"
+    },
+    {
+      "path": "ruff.toml",
+      "bytes": 88,
+      "sha256": "e7e5347ff2feb98c861ae5c30fefa309103c0fa693f761c48c91be098f23cc4f"
+    },
+    {
+      "path": "scripts/audit_dependencies.py",
+      "bytes": 5678,
+      "sha256": "e31b597996c2017a67e0e94feb6acab0d0a9fe96c54095451f772ce9e64f603a"
+    },
+    {
+      "path": "scripts/catalog.py",
+      "bytes": 7010,
+      "sha256": "34cec24033064afa6eea5a4cd35194a3eedd2158f6180fdc739e161390ebdc29"
+    },
+    {
+      "path": "scripts/check_architecture.py",
+      "bytes": 4561,
+      "sha256": "5d90c2106e3cd4f438bf7fd4e6664432ca9aaffdc28c61838c646db4a01f97ed"
+    },
+    {
+      "path": "scripts/check_docs.py",
+      "bytes": 1875,
+      "sha256": "ea97e6cd468a4072b5cac6463f9b23664606cb19476ca25458785e012227fd81"
+    },
+    {
+      "path": "scripts/ci_status.py",
+      "bytes": 3417,
+      "sha256": "0f32140518209a501b8b2d75df6096b96a1d19c7fa9d1e6eab87e084f97cdd86"
+    },
+    {
+      "path": "scripts/cloud_install.sh",
+      "bytes": 852,
+      "sha256": "b16f7671d9214d871356a7abc87fb48b765f341fafe45fcce1dc2c04b6c03a01"
+    },
+    {
+      "path": "scripts/evidence.py",
+      "bytes": 3225,
+      "sha256": "7a87e3097fc90854706e181b708e5004f30c3db013f7669668a6334e7913b5d6"
+    },
+    {
+      "path": "scripts/mkdocs_source_links.py",
+      "bytes": 1178,
+      "sha256": "9ac86bb92e6bf9b3146e4a7e74722ee61b8e378a356901113dccbed7dcc65629"
+    },
+    {
+      "path": "scripts/portfolio.py",
+      "bytes": 9719,
+      "sha256": "7cc347a079129f61631c8eea0c451ec337255492de64e4b2eec9c65b6abfacd9"
+    },
+    {
+      "path": "scripts/select_projects.py",
+      "bytes": 2417,
+      "sha256": "0c83cc1600a9256869f4d729724d786c6469de301a30c1bda8bf5677ed8b3256"
+    },
+    {
+      "path": "scripts/services.py",
+      "bytes": 4110,
+      "sha256": "b2f3f109e58adb657813ca9b23314e76241aaf10194a2ba84b06947567978bc2"
+    },
+    {
+      "path": "scripts/summarize_verification.py",
+      "bytes": 10738,
+      "sha256": "8290ff8cddb12c67058f60be8ee1b776126ce0185d3e29741ec1f8b3f8f46462"
+    },
+    {
+      "path": "scripts/test_results.py",
+      "bytes": 2570,
+      "sha256": "eda0fbcc730770531115f22140946c168ce0ff35bd99985feb18dfdbe20c2617"
+    },
+    {
+      "path": "scripts/tests/conftest.py",
+      "bytes": 175,
+      "sha256": "d52dd19b0e11d7d40f0280b2d917c37e9b37584af15bf8348eafc2d456da0d4f"
+    },
+    {
+      "path": "scripts/tests/test_architecture.py",
+      "bytes": 1620,
+      "sha256": "3c43924bcc8209dcda81b58d7c9a2822495dda2f5a946796d0592ecba4b00101"
+    },
+    {
+      "path": "scripts/tests/test_catalog.py",
+      "bytes": 1799,
+      "sha256": "a087a8f538c68af76dd7e51f6a1e0454fefbfdffbfb281cb1283e0761a236ad8"
+    },
+    {
+      "path": "scripts/tests/test_ci_status.py",
+      "bytes": 1500,
+      "sha256": "2f9dd74c5fc0b4b8f9724126bb9c2d853932e171bcd1fe56d9a27cb54e493236"
+    },
+    {
+      "path": "scripts/tests/test_dependency_audit.py",
+      "bytes": 4524,
+      "sha256": "a13ef8b8a38bd32da6f7c3394211e41a9723a546280e7193c8a418e7a8da4cd0"
+    },
+    {
+      "path": "scripts/tests/test_dispatcher.py",
+      "bytes": 7921,
+      "sha256": "3adb5701f79c6cd727d91353c1ab407b7cec10a52f8479715daa587be7f377b4"
+    },
+    {
+      "path": "scripts/tests/test_evidence.py",
+      "bytes": 2028,
+      "sha256": "47b8fe5249b6695a4f6f457cd75fd1e801671616a6289bcf22ebfb6f059f75f0"
+    },
+    {
+      "path": "scripts/tests/test_integration_environment.py",
+      "bytes": 4429,
+      "sha256": "1ba4f1c7905f3c56a3c01cfc9c6a285341c23071542c15c7c472b611bc86abbd"
+    },
+    {
+      "path": "scripts/tests/test_selection.py",
+      "bytes": 3772,
+      "sha256": "847293a161d2b7fcd7d90b5eb15e40dcca2abd46bdb001e8f0d3975084442374"
+    },
+    {
+      "path": "scripts/tests/test_services.py",
+      "bytes": 4353,
+      "sha256": "cf070c839dfe501bc3a12f792649150607e2f901bb60c71c0c719b0d74e3d3f4"
+    },
+    {
+      "path": "scripts/tests/test_snapshot.py",
+      "bytes": 4253,
+      "sha256": "d437099082442a15c8422c6fad1c78aaf80e96df041a4b64951e99abd9a1887b"
+    },
+    {
+      "path": "scripts/tests/test_test_results.py",
+      "bytes": 2726,
+      "sha256": "8156fd931530b47e023df372666e14e4d805ad09a69115897099f88bf271c126"
+    },
+    {
+      "path": "scripts/tests/test_verification_publication.py",
+      "bytes": 7103,
+      "sha256": "5ddbe4cb71bfe4e1c4b4b48048c4419de9d58f21651cb4a5556355d0e4336143"
+    },
+    {
+      "path": "scripts/tests/test_workflows.py",
+      "bytes": 1520,
+      "sha256": "24599cf9a60da7293e8e47c568403b8f55925dd25f06230f859a16702e87deb8"
+    },
+    {
+      "path": "scripts/verify_snapshot.py",
+      "bytes": 14058,
+      "sha256": "98e76c368fef513d037d2767d662e6459913a9e7512e6d59d35d670e9ec037ea"
+    },
+    {
+      "path": "scripts/wheel_smoke.py",
+      "bytes": 3641,
+      "sha256": "5694c2aa0bf7f24ba6aa3e2c2703b487aaf391228d20d50de6fda39bb3086a2b"
+    },
+    {
+      "path": "tooling/quality/pyproject.toml",
+      "bytes": 186,
+      "sha256": "b4bec528cf223ec3c2ac81eae908d37a16601225fae3522980921f8fab4cd5ef"
+    },
+    {
+      "path": "tooling/quality/uv.lock",
+      "bytes": 120633,
+      "sha256": "61c49b25d17d3739cd2b154c04c336d5afe9a88451d667e75f4ce4a3da1f92e0"
+    }
+  ],
+  "source_conditions": {
+    "source_clean_before": true,
+    "source_clean_after": true,
+    "source_detached_before": true,
+    "source_detached_after": true,
+    "source_unchanged_after": true
+  },
+  "ci_mypy_targets": [
+    "scripts/portfolio.py",
+    "scripts/select_projects.py",
+    "scripts/catalog.py",
+    "scripts/check_architecture.py",
+    "scripts/test_results.py",
+    "scripts/summarize_verification.py"
+  ],
+  "uv_version": "uv 0.12.23 (x86_64-unknown-linux-gnu)",
+  "interpreters": [
+    {
+      "python": "3.13.16",
+      "status": "passed",
+      "runtime_before": {
+        "python": "3.13.16",
+        "implementation": "CPython",
+        "executable": "$VERIFICATION_COPY/.local/venvs/quality-shared-3.13.16/bin/python",
+        "prefix": "$VERIFICATION_COPY/.local/venvs/quality-shared-3.13.16",
+        "cwd": "$VERIFICATION_COPY",
+        "tools": {
+          "pytest": "9.1.1",
+          "ruff": "0.17.1",
+          "mypy": "2.4.0",
+          "mkdocs": "1.6.1",
+          "pyyaml": "6.0.3"
+        }
+      },
+      "runtime_after": {
+        "python": "3.13.16",
+        "implementation": "CPython",
+        "executable": "$VERIFICATION_COPY/.local/venvs/quality-shared-3.13.16/bin/python",
+        "prefix": "$VERIFICATION_COPY/.local/venvs/quality-shared-3.13.16",
+        "cwd": "$VERIFICATION_COPY",
+        "tools": {
+          "pytest": "9.1.1",
+          "ruff": "0.17.1",
+          "mypy": "2.4.0",
+          "mkdocs": "1.6.1",
+          "pyyaml": "6.0.3"
+        }
+      },
+      "checks": [
+        "python31316-setup",
+        "python31316-runtime-before",
+        "python31316-tests",
+        "python31316-test-outcomes",
+        "python31316-ruff-format",
+        "python31316-ruff-check",
+        "python31316-mypy",
+        "python31316-runtime-after"
+      ],
+      "tests": {
+        "passed": 119,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "junit": {
+        "path": "python31316-pytest.xml",
+        "bytes": 17942,
+        "sha256": "f8c3e4de9b64c2554a04a0eaa09551a7fa979e64f13ef2fbb7f80ed08f1429d2"
+      },
+      "outcome_record": {
+        "path": "python31316-test-outcomes.json",
+        "bytes": 167,
+        "sha256": "dcfd7ddb0dd3143731530e7f95a32735b6511722cc9e4f0c8b8d41f1995925ed"
+      },
+      "freshness": "runner requires a nonexistent per-interpreter report before pytest; exact report path/command, inventory and executed outcomes rechecked"
+    },
+    {
+      "python": "3.14.8",
+      "status": "passed",
+      "runtime_before": {
+        "python": "3.14.8",
+        "implementation": "CPython",
+        "executable": "$VERIFICATION_COPY/.local/venvs/quality-shared-3.14.8/bin/python",
+        "prefix": "$VERIFICATION_COPY/.local/venvs/quality-shared-3.14.8",
+        "cwd": "$VERIFICATION_COPY",
+        "tools": {
+          "pytest": "9.1.1",
+          "ruff": "0.17.1",
+          "mypy": "2.4.0",
+          "mkdocs": "1.6.1",
+          "pyyaml": "6.0.3"
+        }
+      },
+      "runtime_after": {
+        "python": "3.14.8",
+        "implementation": "CPython",
+        "executable": "$VERIFICATION_COPY/.local/venvs/quality-shared-3.14.8/bin/python",
+        "prefix": "$VERIFICATION_COPY/.local/venvs/quality-shared-3.14.8",
+        "cwd": "$VERIFICATION_COPY",
+        "tools": {
+          "pytest": "9.1.1",
+          "ruff": "0.17.1",
+          "mypy": "2.4.0",
+          "mkdocs": "1.6.1",
+          "pyyaml": "6.0.3"
+        }
+      },
+      "checks": [
+        "python3148-setup",
+        "python3148-runtime-before",
+        "python3148-tests",
+        "python3148-test-outcomes",
+        "python3148-ruff-format",
+        "python3148-ruff-check",
+        "python3148-mypy",
+        "python3148-docs",
+        "python3148-runtime-after"
+      ],
+      "tests": {
+        "passed": 119,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "junit": {
+        "path": "python3148-pytest.xml",
+        "bytes": 17942,
+        "sha256": "5af7ec55844bb7660bb3835d6262f02c2f3d37cf405e1c7b8e3d3ead562e316a"
+      },
+      "outcome_record": {
+        "path": "python3148-test-outcomes.json",
+        "bytes": 167,
+        "sha256": "dcfd7ddb0dd3143731530e7f95a32735b6511722cc9e4f0c8b8d41f1995925ed"
+      },
+      "freshness": "runner requires a nonexistent per-interpreter report before pytest; exact report path/command, inventory and executed outcomes rechecked"
+    }
+  ],
+  "commands": [
+    {
+      "name": "uv-version",
+      "command": [
+        "uv",
+        "--version"
+      ],
+      "cwd": "$SOURCE_CHECKOUT",
+      "started_at_utc": "2026-10-20T09:20:55.637420+00:00",
+      "seconds": 0.01698282899997139,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "uv-version.log",
+      "log_sha256": "bda25a2f047af04626be126cd42f9e6b995ee476ad4b94ac47d3a528a6f4cea9",
+      "log_bytes": 38
+    },
+    {
+      "name": "clone",
+      "command": [
+        "git",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "clone",
+        "--quiet",
+        "--no-hardlinks",
+        "--no-checkout",
+        "$SOURCE_CHECKOUT",
+        "$VERIFICATION_COPY"
+      ],
+      "cwd": "$SOURCE_CHECKOUT",
+      "started_at_utc": "2026-10-20T09:20:55.657434+00:00",
+      "seconds": 0.05903166899952339,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "clone.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0
+    },
+    {
+      "name": "checkout",
+      "command": [
+        "git",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "checkout",
+        "--quiet",
+        "--detach",
+        "a33a513840d81f6e2cdb1b730540d906122bb254"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:20:55.716963+00:00",
+      "seconds": 0.12737061799998628,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "checkout.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0
+    },
+    {
+      "name": "source-before",
+      "command": [
+        "python",
+        "$RAW_SHARED_EVIDENCE/capture_inputs.py",
+        "$VERIFICATION_COPY",
+        "$RAW_SHARED_EVIDENCE/source-before.json"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:20:55.844911+00:00",
+      "seconds": 0.41924211400055356,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "source-before.log",
+      "log_sha256": "af12a37d2145f616e002669c9acdbfbee9309b9224c930b0707d58d107f2132b",
+      "log_bytes": 303
+    },
+    {
+      "name": "python31316-setup",
+      "command": [
+        "uv",
+        "sync",
+        "--locked",
+        "--python",
+        "3.13.16",
+        "--project",
+        "$VERIFICATION_COPY/tooling/quality"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:20:56.269492+00:00",
+      "seconds": 0.718917390999195,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "python31316-setup.log",
+      "log_sha256": "ad3b38fc1373afda6404556534d2d1fc6f67dea5f8a636870cecf36cd6d55080",
+      "log_bytes": 678
+    },
+    {
+      "name": "python31316-runtime-before",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.13.16",
+        "--project",
+        "$VERIFICATION_COPY/tooling/quality",
+        "python",
+        "$RAW_SHARED_EVIDENCE/runtime_info.py",
+        "3.13.16",
+        "$VERIFICATION_COPY/.local/venvs/quality-shared-3.13.16",
+        "$VERIFICATION_COPY",
+        "$RAW_SHARED_EVIDENCE/python31316-runtime-before.json"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:20:56.988900+00:00",
+      "seconds": 0.2096172760002446,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "python31316-runtime-before.log",
+      "log_sha256": "fb6f64dec9cb3753a1fe4ef389c6cb7d8e5f63621d4ca176a9f631301f23a62a",
+      "log_bytes": 478
+    },
+    {
+      "name": "python31316-tests",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.13.16",
+        "--project",
+        "$VERIFICATION_COPY/tooling/quality",
+        "python",
+        "-m",
+        "pytest",
+        "scripts/tests",
+        "--junitxml",
+        "$RAW_SHARED_EVIDENCE/python31316-pytest.xml"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:20:57.199388+00:00",
+      "seconds": 3.9282349499999327,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "python31316-tests.log",
+      "log_sha256": "fc65413fb3031ee2589bb94984cda6709ddaa6bdf8a07212c8d619a9d54a70db",
+      "log_bytes": 1496
+    },
+    {
+      "name": "python31316-test-outcomes",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.13.16",
+        "--project",
+        "$VERIFICATION_COPY/tooling/quality",
+        "python",
+        "$RAW_SHARED_EVIDENCE/check_junit.py",
+        "$VERIFICATION_COPY",
+        "$RAW_SHARED_EVIDENCE/python31316-pytest.xml",
+        "119",
+        "$RAW_SHARED_EVIDENCE/python31316-test-outcomes.json"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:21:01.128024+00:00",
+      "seconds": 0.05202869999993709,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "python31316-test-outcomes.log",
+      "log_sha256": "d8f35045421604f1ed2839b4343025c920c104bc7607d9525d7eabfe41e3bad9",
+      "log_bytes": 151
+    },
+    {
+      "name": "python31316-ruff-format",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.13.16",
+        "--project",
+        "$VERIFICATION_COPY/tooling/quality",
+        "ruff",
+        "format",
+        "--check",
+        "scripts",
+        "integrations"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:21:01.180691+00:00",
+      "seconds": 0.03421143700052198,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "python31316-ruff-format.log",
+      "log_sha256": "21a61ae0f7b0971d38a01e6a0b3b4e7d53ef9ca8a0e23eb8c6ab3742fbb5f1c7",
+      "log_bytes": 27
+    },
+    {
+      "name": "python31316-ruff-check",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.13.16",
+        "--project",
+        "$VERIFICATION_COPY/tooling/quality",
+        "ruff",
+        "check",
+        "scripts",
+        "integrations"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:21:01.215304+00:00",
+      "seconds": 0.025822616000368726,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "python31316-ruff-check.log",
+      "log_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+      "log_bytes": 19
+    },
+    {
+      "name": "python31316-mypy",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.13.16",
+        "--project",
+        "$VERIFICATION_COPY/tooling/quality",
+        "mypy",
+        "--strict",
+        "scripts/portfolio.py",
+        "scripts/select_projects.py",
+        "scripts/catalog.py",
+        "scripts/check_architecture.py",
+        "scripts/test_results.py",
+        "scripts/summarize_verification.py"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:21:01.241622+00:00",
+      "seconds": 1.1208591860004162,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "python31316-mypy.log",
+      "log_sha256": "ab35ee42183d4d6d3ba483825ab037d18a5a15622d03be01d82220b1564851ff",
+      "log_bytes": 43
+    },
+    {
+      "name": "python31316-runtime-after",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.13.16",
+        "--project",
+        "$VERIFICATION_COPY/tooling/quality",
+        "python",
+        "$RAW_SHARED_EVIDENCE/runtime_info.py",
+        "3.13.16",
+        "$VERIFICATION_COPY/.local/venvs/quality-shared-3.13.16",
+        "$VERIFICATION_COPY",
+        "$RAW_SHARED_EVIDENCE/python31316-runtime-after.json"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:21:02.363068+00:00",
+      "seconds": 0.08217867399980605,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "python31316-runtime-after.log",
+      "log_sha256": "fb6f64dec9cb3753a1fe4ef389c6cb7d8e5f63621d4ca176a9f631301f23a62a",
+      "log_bytes": 478
+    },
+    {
+      "name": "python3148-setup",
+      "command": [
+        "uv",
+        "sync",
+        "--locked",
+        "--python",
+        "3.14.8",
+        "--project",
+        "$VERIFICATION_COPY/tooling/quality"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:21:02.446131+00:00",
+      "seconds": 0.3030858989995977,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "python3148-setup.log",
+      "log_sha256": "ef79079d2fc7b9875724413c22edd0b8250f1d7a5bf9ab487ac4cfbb38345dd5",
+      "log_bytes": 676
+    },
+    {
+      "name": "python3148-runtime-before",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.14.8",
+        "--project",
+        "$VERIFICATION_COPY/tooling/quality",
+        "python",
+        "$RAW_SHARED_EVIDENCE/runtime_info.py",
+        "3.14.8",
+        "$VERIFICATION_COPY/.local/venvs/quality-shared-3.14.8",
+        "$VERIFICATION_COPY",
+        "$RAW_SHARED_EVIDENCE/python3148-runtime-before.json"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:21:02.750190+00:00",
+      "seconds": 0.1529826639998646,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "python3148-runtime-before.log",
+      "log_sha256": "ebf18d3ede9cfb0ff21a61c551d9936c7d827b47c4c2834be3d6dfd8a7ee8b8f",
+      "log_bytes": 475
+    },
+    {
+      "name": "python3148-tests",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.14.8",
+        "--project",
+        "$VERIFICATION_COPY/tooling/quality",
+        "python",
+        "-m",
+        "pytest",
+        "scripts/tests",
+        "--junitxml",
+        "$RAW_SHARED_EVIDENCE/python3148-pytest.xml"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:21:02.904082+00:00",
+      "seconds": 4.141223704000367,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "python3148-tests.log",
+      "log_sha256": "c943581795ee048bff067cff8fac06fbc7695f6bf51b0e82b4f9a7d199c8aa61",
+      "log_bytes": 1494
+    },
+    {
+      "name": "python3148-test-outcomes",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.14.8",
+        "--project",
+        "$VERIFICATION_COPY/tooling/quality",
+        "python",
+        "$RAW_SHARED_EVIDENCE/check_junit.py",
+        "$VERIFICATION_COPY",
+        "$RAW_SHARED_EVIDENCE/python3148-pytest.xml",
+        "119",
+        "$RAW_SHARED_EVIDENCE/python3148-test-outcomes.json"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:21:07.045809+00:00",
+      "seconds": 0.06565532499917026,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "python3148-test-outcomes.log",
+      "log_sha256": "d8f35045421604f1ed2839b4343025c920c104bc7607d9525d7eabfe41e3bad9",
+      "log_bytes": 151
+    },
+    {
+      "name": "python3148-ruff-format",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.14.8",
+        "--project",
+        "$VERIFICATION_COPY/tooling/quality",
+        "ruff",
+        "format",
+        "--check",
+        "scripts",
+        "integrations"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:21:07.112166+00:00",
+      "seconds": 0.027726463000362855,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "python3148-ruff-format.log",
+      "log_sha256": "21a61ae0f7b0971d38a01e6a0b3b4e7d53ef9ca8a0e23eb8c6ab3742fbb5f1c7",
+      "log_bytes": 27
+    },
+    {
+      "name": "python3148-ruff-check",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.14.8",
+        "--project",
+        "$VERIFICATION_COPY/tooling/quality",
+        "ruff",
+        "check",
+        "scripts",
+        "integrations"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:21:07.140444+00:00",
+      "seconds": 0.030768944000556075,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "python3148-ruff-check.log",
+      "log_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+      "log_bytes": 19
+    },
+    {
+      "name": "python3148-mypy",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.14.8",
+        "--project",
+        "$VERIFICATION_COPY/tooling/quality",
+        "mypy",
+        "--strict",
+        "scripts/portfolio.py",
+        "scripts/select_projects.py",
+        "scripts/catalog.py",
+        "scripts/check_architecture.py",
+        "scripts/test_results.py",
+        "scripts/summarize_verification.py"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:21:07.171724+00:00",
+      "seconds": 1.0685114749994682,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "python3148-mypy.log",
+      "log_sha256": "ab35ee42183d4d6d3ba483825ab037d18a5a15622d03be01d82220b1564851ff",
+      "log_bytes": 43
+    },
+    {
+      "name": "python3148-docs",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.14.8",
+        "--project",
+        "$VERIFICATION_COPY/tooling/quality",
+        "python",
+        "scripts/check_docs.py"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:21:08.240912+00:00",
+      "seconds": 0.6705461359997571,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "python3148-docs.log",
+      "log_sha256": "325b24b968aab60fcd1e9651fafe6c5b4e5cd6d60d8540f48cd3acd4ce0be5f1",
+      "log_bytes": 265
+    },
+    {
+      "name": "python3148-runtime-after",
+      "command": [
+        "uv",
+        "run",
+        "--locked",
+        "--python",
+        "3.14.8",
+        "--project",
+        "$VERIFICATION_COPY/tooling/quality",
+        "python",
+        "$RAW_SHARED_EVIDENCE/runtime_info.py",
+        "3.14.8",
+        "$VERIFICATION_COPY/.local/venvs/quality-shared-3.14.8",
+        "$VERIFICATION_COPY",
+        "$RAW_SHARED_EVIDENCE/python3148-runtime-after.json"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:21:08.912392+00:00",
+      "seconds": 0.084990550000839,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "python3148-runtime-after.log",
+      "log_sha256": "ebf18d3ede9cfb0ff21a61c551d9936c7d827b47c4c2834be3d6dfd8a7ee8b8f",
+      "log_bytes": 475
+    },
+    {
+      "name": "source-after",
+      "command": [
+        "python",
+        "$RAW_SHARED_EVIDENCE/capture_inputs.py",
+        "$VERIFICATION_COPY",
+        "$RAW_SHARED_EVIDENCE/source-after.json"
+      ],
+      "cwd": "$VERIFICATION_COPY",
+      "started_at_utc": "2026-10-20T09:21:08.998209+00:00",
+      "seconds": 0.35666725900046004,
+      "process_exit_code": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "status": "passed",
+      "log": "source-after.log",
+      "log_sha256": "af12a37d2145f616e002669c9acdbfbee9309b9224c930b0707d58d107f2132b",
+      "log_bytes": 303
+    }
+  ],
+  "tests": {
+    "passed": 238,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "strict_documentation_runs": 1,
+  "numeric_thread_limits": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "GOTO_NUM_THREADS": "1"
+  },
+  "removed_inherited_selector_names": [],
+  "raw_evidence": {
+    "directory": "$RAW_SHARED_EVIDENCE",
+    "inventory": {
+      "path": "inventory.json",
+      "bytes": 5909,
+      "sha256": "c0d01a5a23a98330dc74e36a82727a4b69b74fd4d26b67334ef5d539d7e24f0b"
+    },
+    "verification_record": {
+      "path": "verification.json",
+      "bytes": 23412,
+      "sha256": "17030c815bbe64f445de75176ed91ea7e94c0e1fa23b1887b6d394e3cd818fde"
+    },
+    "files": [
+      {
+        "path": "capture_inputs.py",
+        "bytes": 2422,
+        "sha256": "512be0d8cf639c6b41adf0729d16f0541ade2ca16f2990d04681a784beea6a05"
+      },
+      {
+        "path": "check_junit.py",
+        "bytes": 534,
+        "sha256": "ad0f40aeaa80f7a059bb5b1985dbbfa2d32c4ab1800a2e984534c5136eb12496"
+      },
+      {
+        "path": "checkout.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "clone.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "python31316-mypy.log",
+        "bytes": 43,
+        "sha256": "ab35ee42183d4d6d3ba483825ab037d18a5a15622d03be01d82220b1564851ff"
+      },
+      {
+        "path": "python31316-pytest.xml",
+        "bytes": 17942,
+        "sha256": "f8c3e4de9b64c2554a04a0eaa09551a7fa979e64f13ef2fbb7f80ed08f1429d2"
+      },
+      {
+        "path": "python31316-ruff-check.log",
+        "bytes": 19,
+        "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+      },
+      {
+        "path": "python31316-ruff-format.log",
+        "bytes": 27,
+        "sha256": "21a61ae0f7b0971d38a01e6a0b3b4e7d53ef9ca8a0e23eb8c6ab3742fbb5f1c7"
+      },
+      {
+        "path": "python31316-runtime-after.json",
+        "bytes": 516,
+        "sha256": "64a212722872cddb347db93663858482e4908dfe9a5bc224dfd2644d40e6925a"
+      },
+      {
+        "path": "python31316-runtime-after.log",
+        "bytes": 478,
+        "sha256": "fb6f64dec9cb3753a1fe4ef389c6cb7d8e5f63621d4ca176a9f631301f23a62a"
+      },
+      {
+        "path": "python31316-runtime-before.json",
+        "bytes": 516,
+        "sha256": "64a212722872cddb347db93663858482e4908dfe9a5bc224dfd2644d40e6925a"
+      },
+      {
+        "path": "python31316-runtime-before.log",
+        "bytes": 478,
+        "sha256": "fb6f64dec9cb3753a1fe4ef389c6cb7d8e5f63621d4ca176a9f631301f23a62a"
+      },
+      {
+        "path": "python31316-setup.log",
+        "bytes": 678,
+        "sha256": "ad3b38fc1373afda6404556534d2d1fc6f67dea5f8a636870cecf36cd6d55080"
+      },
+      {
+        "path": "python31316-test-outcomes.json",
+        "bytes": 167,
+        "sha256": "dcfd7ddb0dd3143731530e7f95a32735b6511722cc9e4f0c8b8d41f1995925ed"
+      },
+      {
+        "path": "python31316-test-outcomes.log",
+        "bytes": 151,
+        "sha256": "d8f35045421604f1ed2839b4343025c920c104bc7607d9525d7eabfe41e3bad9"
+      },
+      {
+        "path": "python31316-tests.log",
+        "bytes": 1496,
+        "sha256": "fc65413fb3031ee2589bb94984cda6709ddaa6bdf8a07212c8d619a9d54a70db"
+      },
+      {
+        "path": "python3148-docs.log",
+        "bytes": 265,
+        "sha256": "325b24b968aab60fcd1e9651fafe6c5b4e5cd6d60d8540f48cd3acd4ce0be5f1"
+      },
+      {
+        "path": "python3148-mypy.log",
+        "bytes": 43,
+        "sha256": "ab35ee42183d4d6d3ba483825ab037d18a5a15622d03be01d82220b1564851ff"
+      },
+      {
+        "path": "python3148-pytest.xml",
+        "bytes": 17942,
+        "sha256": "5af7ec55844bb7660bb3835d6262f02c2f3d37cf405e1c7b8e3d3ead562e316a"
+      },
+      {
+        "path": "python3148-ruff-check.log",
+        "bytes": 19,
+        "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+      },
+      {
+        "path": "python3148-ruff-format.log",
+        "bytes": 27,
+        "sha256": "21a61ae0f7b0971d38a01e6a0b3b4e7d53ef9ca8a0e23eb8c6ab3742fbb5f1c7"
+      },
+      {
+        "path": "python3148-runtime-after.json",
+        "bytes": 513,
+        "sha256": "6bba1a3cddcd911cac7815cbf984a66c57ad563456b645b9052ead0f1c1e65be"
+      },
+      {
+        "path": "python3148-runtime-after.log",
+        "bytes": 475,
+        "sha256": "ebf18d3ede9cfb0ff21a61c551d9936c7d827b47c4c2834be3d6dfd8a7ee8b8f"
+      },
+      {
+        "path": "python3148-runtime-before.json",
+        "bytes": 513,
+        "sha256": "6bba1a3cddcd911cac7815cbf984a66c57ad563456b645b9052ead0f1c1e65be"
+      },
+      {
+        "path": "python3148-runtime-before.log",
+        "bytes": 475,
+        "sha256": "ebf18d3ede9cfb0ff21a61c551d9936c7d827b47c4c2834be3d6dfd8a7ee8b8f"
+      },
+      {
+        "path": "python3148-setup.log",
+        "bytes": 676,
+        "sha256": "ef79079d2fc7b9875724413c22edd0b8250f1d7a5bf9ab487ac4cfbb38345dd5"
+      },
+      {
+        "path": "python3148-test-outcomes.json",
+        "bytes": 167,
+        "sha256": "dcfd7ddb0dd3143731530e7f95a32735b6511722cc9e4f0c8b8d41f1995925ed"
+      },
+      {
+        "path": "python3148-test-outcomes.log",
+        "bytes": 151,
+        "sha256": "d8f35045421604f1ed2839b4343025c920c104bc7607d9525d7eabfe41e3bad9"
+      },
+      {
+        "path": "python3148-tests.log",
+        "bytes": 1494,
+        "sha256": "c943581795ee048bff067cff8fac06fbc7695f6bf51b0e82b4f9a7d199c8aa61"
+      },
+      {
+        "path": "run_shared_verification.py",
+        "bytes": 21118,
+        "sha256": "0fd12c71c9a102a76e1228b29fccf506e9d7f2ea2b34b86ecd2a967aeee13031"
+      },
+      {
+        "path": "runtime_info.py",
+        "bytes": 792,
+        "sha256": "54f7b8943c9d64731c891b878d1cb65d7f5a4db5fe1f9713463fd1faa1004f7c"
+      },
+      {
+        "path": "source-after.json",
+        "bytes": 302874,
+        "sha256": "91862ee91ef3ae7d4991423b55c579f321d045c7bdbeda0407712516ccac9d78"
+      },
+      {
+        "path": "source-after.log",
+        "bytes": 303,
+        "sha256": "af12a37d2145f616e002669c9acdbfbee9309b9224c930b0707d58d107f2132b"
+      },
+      {
+        "path": "source-before.json",
+        "bytes": 302874,
+        "sha256": "91862ee91ef3ae7d4991423b55c579f321d045c7bdbeda0407712516ccac9d78"
+      },
+      {
+        "path": "source-before.log",
+        "bytes": 303,
+        "sha256": "af12a37d2145f616e002669c9acdbfbee9309b9224c930b0707d58d107f2132b"
+      },
+      {
+        "path": "uv-version.log",
+        "bytes": 38,
+        "sha256": "bda25a2f047af04626be126cd42f9e6b995ee476ad4b94ac47d3a528a6f4cea9"
+      },
+      {
+        "path": "verification.json",
+        "bytes": 23412,
+        "sha256": "17030c815bbe64f445de75176ed91ea7e94c0e1fa23b1887b6d394e3cd818fde"
+      }
+    ]
+  },
+  "publication": "Executables use portable names; clone, primary checkout and raw output prefixes use tokens. Original raw record/inventory/log/JUnit SHA-256 values identify unmodified local files; command path rewriting does not relabel their hashes.",
+  "limitations": [
+    "Hashes establish local consistency, not signed authenticity against someone replacing both evidence and inventory.",
+    "The removed disposable clone is represented by retained captures; committed blobs and all declared source/shared/document digests were independently rehashed from the exact Git commit.",
+    "JUnit freshness relies on the retained runner's new-report guard; executed leaf outcomes are independently read with the verified scripts/test_results.py.",
+    "Product tests, public integrations, browser checks, focused/standard measurements, and production capacity are separate evidence scopes."
+  ]
+}

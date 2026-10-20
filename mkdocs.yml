@@ -7,7 +7,8 @@ use_directory_urls: false
 nav:
   - Reviewer guide: PORTFOLIO_GUIDE.md
   - Status: STATUS.md
-  - Reliability and interfaces: QUALITY_REVIEW.md
+  - Core systems review: CORE_REVIEW.md
+  - Earlier reliability and interfaces: QUALITY_REVIEW.md
   - Earlier correctness review: REVIEW.md
   - Environment: ENVIRONMENT.md
   - Verification evidence: evidence/README.md

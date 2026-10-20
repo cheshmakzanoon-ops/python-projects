@@ -1,0 +1,4029 @@
+{
+  "schema_version": 1,
+  "kind": "committed-source-focused-core-comparison",
+  "final_commit": "a33a513840d81f6e2cdb1b730540d906122bb254",
+  "baseline_commit": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+  "python": "3.14.8",
+  "repetitions": 5,
+  "serial_session": true,
+  "physical_host_exclusivity_claimed": false,
+  "validation": {
+    "original_file": "validation.json",
+    "original_sha256": "932b308ca336943f356054db856ef7adcd23ad8774741b8766a92283950a85f6",
+    "payload": {
+      "schema_version": 1,
+      "passed": true,
+      "checks": {
+        "six_serial_commands_exit_zero": true,
+        "all_requested_measurement_arrays_have_five_samples": true,
+        "all_package_import_paths_and_hashes_match_selected_snapshots": true,
+        "all_driver_hashes_match_final_commit_files": true,
+        "paired_dataset_hashes_match": true,
+        "resonance_alignment_mapping_hashes_match": true,
+        "all_source_and_driver_files_unchanged": true,
+        "measured_final_clone_clean_before_after": true,
+        "primary_clean_before": true,
+        "primary_documentation_edits_recorded_after": true,
+        "routecraft_all_plans_identical_and_verified": true
+      },
+      "inventoried_files": 236,
+      "limitations": [
+        "Routecraft compares only the old insertion module with final support code; its regret control has one declared pair.",
+        "Current baseline candidate checks are a full-scan formula; indexed checks are instrumented.",
+        "Resonance quality/mapping summary reflects the deterministic reported outputs; semantic witnesses deliberately differ after correctness fixes.",
+        "Serial local measurements do not establish physical-host exclusivity, standard-workload performance or production capacity."
+      ]
+    }
+  },
+  "commands": {
+    "original_file": "commands.json",
+    "original_sha256": "6089918b818e5def7892aed89a40aa3fc0b7eccfb4d8151ad6d0e8cae8f7a164",
+    "original_bytes": 22055,
+    "payload": {
+      "schema_version": 1,
+      "final_commit": "a33a513840d81f6e2cdb1b730540d906122bb254",
+      "baseline_commit": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+      "started_at_utc": "2026-10-20T09:19:28.541779+00:00",
+      "status": "completed",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+      "serial_session": true,
+      "host_isolation_claim": "Other repository tasks idle by coordination; physical-host exclusivity is not established.",
+      "environment": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONHASHSEED": "0",
+        "PYTHONNOUSERSITE": "1"
+      },
+      "commands": [
+        {
+          "name": "current",
+          "argv": [
+            "$PRIMARY_CHECKOUT/projects/03-current/.venv/bin/python",
+            "source/final/projects/03-current/benchmarks/join_density.py",
+            "--baseline",
+            "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+            "--records",
+            "12000",
+            "--repetitions",
+            "5",
+            "--output",
+            "results/current.json"
+          ],
+          "cwd": "source/final/projects/03-current",
+          "environment": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "NUMEXPR_NUM_THREADS": "1",
+            "VECLIB_MAXIMUM_THREADS": "1",
+            "PYTHONDONTWRITEBYTECODE": "1",
+            "PYTHONHASHSEED": "0",
+            "PYTHONNOUSERSITE": "1",
+            "PYTHONPATH": "source/final/projects/03-current/src",
+            "PYTHONHOME": null
+          },
+          "interpreter_environment": {
+            "python": "3.14.8",
+            "executable": "$PRIMARY_CHECKOUT/projects/03-current/.venv/bin/python",
+            "distributions": [
+              [
+                "Pygments",
+                "2.21.0"
+              ],
+              [
+                "annotated-doc",
+                "0.0.5"
+              ],
+              [
+                "ast_serialize",
+                "0.13.1"
+              ],
+              [
+                "coverage",
+                "7.16.2"
+              ],
+              [
+                "hypothesis",
+                "6.170.1"
+              ],
+              [
+                "iniconfig",
+                "2.3.1"
+              ],
+              [
+                "librt",
+                "0.16.0"
+              ],
+              [
+                "markdown-it-py",
+                "4.2.0"
+              ],
+              [
+                "mdurl",
+                "0.1.2"
+              ],
+              [
+                "mypy",
+                "2.4.0"
+              ],
+              [
+                "mypy_extensions",
+                "1.1.0"
+              ],
+              [
+                "packaging",
+                "26.3"
+              ],
+              [
+                "pathspec",
+                "1.1.1"
+              ],
+              [
+                "pluggy",
+                "1.7.0"
+              ],
+              [
+                "pp-current",
+                "0.1.0"
+              ],
+              [
+                "pytest",
+                "9.1.1"
+              ],
+              [
+                "pytest-cov",
+                "7.1.0"
+              ],
+              [
+                "rich",
+                "15.0.0"
+              ],
+              [
+                "ruff",
+                "0.17.1"
+              ],
+              [
+                "shellingham",
+                "1.5.4"
+              ],
+              [
+                "sortedcontainers",
+                "2.4.0"
+              ],
+              [
+                "typer",
+                "0.27.3"
+              ],
+              [
+                "typing_extensions",
+                "4.16.0"
+              ]
+            ]
+          },
+          "stdout": "logs/current.stdout.txt",
+          "stderr": "logs/current.stderr.txt",
+          "output": "results/current.json",
+          "started_at_utc": "2026-10-20T09:19:28.633892+00:00",
+          "exit_code": 0,
+          "finished_at_utc": "2026-10-20T09:19:37.688382+00:00",
+          "elapsed_seconds": 9.05445544199938
+        },
+        {
+          "name": "pytrace-baseline",
+          "argv": [
+            "$PRIMARY_CHECKOUT/projects/06-pytrace/.venv/bin/python",
+            "source/final/projects/06-pytrace/benchmarks/semantic_scaling.py",
+            "--label",
+            "baseline-39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+            "--repetitions",
+            "5",
+            "--output",
+            "results/pytrace-baseline.json"
+          ],
+          "cwd": "source/final/projects/06-pytrace",
+          "environment": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "NUMEXPR_NUM_THREADS": "1",
+            "VECLIB_MAXIMUM_THREADS": "1",
+            "PYTHONDONTWRITEBYTECODE": "1",
+            "PYTHONHASHSEED": "0",
+            "PYTHONNOUSERSITE": "1",
+            "PYTHONPATH": "source/baseline/projects/06-pytrace/src",
+            "PYTHONHOME": null
+          },
+          "interpreter_environment": {
+            "python": "3.14.8",
+            "executable": "$PRIMARY_CHECKOUT/projects/06-pytrace/.venv/bin/python",
+            "distributions": [
+              [
+                "PyYAML",
+                "6.0.3"
+              ],
+              [
+                "Pygments",
+                "2.21.0"
+              ],
+              [
+                "ast_serialize",
+                "0.13.1"
+              ],
+              [
+                "attrs",
+                "26.1.0"
+              ],
+              [
+                "coverage",
+                "7.16.2"
+              ],
+              [
+                "hypothesis",
+                "6.170.1"
+              ],
+              [
+                "iniconfig",
+                "2.3.1"
+              ],
+              [
+                "jsonschema",
+                "4.26.0"
+              ],
+              [
+                "jsonschema-specifications",
+                "2025.9.1"
+              ],
+              [
+                "libcst",
+                "1.9.0"
+              ],
+              [
+                "librt",
+                "0.16.0"
+              ],
+              [
+                "mypy",
+                "2.4.0"
+              ],
+              [
+                "mypy_extensions",
+                "1.1.0"
+              ],
+              [
+                "packaging",
+                "26.3"
+              ],
+              [
+                "pathspec",
+                "1.1.1"
+              ],
+              [
+                "pluggy",
+                "1.7.0"
+              ],
+              [
+                "pp-pytrace",
+                "0.1.0"
+              ],
+              [
+                "pytest",
+                "9.1.1"
+              ],
+              [
+                "pytest-cov",
+                "7.1.0"
+              ],
+              [
+                "referencing",
+                "0.37.0"
+              ],
+              [
+                "rpds-py",
+                "2026.9.1"
+              ],
+              [
+                "ruff",
+                "0.17.1"
+              ],
+              [
+                "sortedcontainers",
+                "2.4.0"
+              ],
+              [
+                "types-jsonschema",
+                "4.26.0.20261006"
+              ],
+              [
+                "typing_extensions",
+                "4.16.0"
+              ]
+            ]
+          },
+          "stdout": "logs/pytrace-baseline.stdout.txt",
+          "stderr": "logs/pytrace-baseline.stderr.txt",
+          "output": "results/pytrace-baseline.json",
+          "started_at_utc": "2026-10-20T09:19:37.762604+00:00",
+          "exit_code": 0,
+          "finished_at_utc": "2026-10-20T09:19:58.359796+00:00",
+          "elapsed_seconds": 20.597170187999836
+        },
+        {
+          "name": "pytrace-final",
+          "argv": [
+            "$PRIMARY_CHECKOUT/projects/06-pytrace/.venv/bin/python",
+            "source/final/projects/06-pytrace/benchmarks/semantic_scaling.py",
+            "--label",
+            "final-a33a513840d81f6e2cdb1b730540d906122bb254",
+            "--repetitions",
+            "5",
+            "--output",
+            "results/pytrace-final.json"
+          ],
+          "cwd": "source/final/projects/06-pytrace",
+          "environment": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "NUMEXPR_NUM_THREADS": "1",
+            "VECLIB_MAXIMUM_THREADS": "1",
+            "PYTHONDONTWRITEBYTECODE": "1",
+            "PYTHONHASHSEED": "0",
+            "PYTHONNOUSERSITE": "1",
+            "PYTHONPATH": "source/final/projects/06-pytrace/src",
+            "PYTHONHOME": null
+          },
+          "interpreter_environment": {
+            "python": "3.14.8",
+            "executable": "$PRIMARY_CHECKOUT/projects/06-pytrace/.venv/bin/python",
+            "distributions": [
+              [
+                "PyYAML",
+                "6.0.3"
+              ],
+              [
+                "Pygments",
+                "2.21.0"
+              ],
+              [
+                "ast_serialize",
+                "0.13.1"
+              ],
+              [
+                "attrs",
+                "26.1.0"
+              ],
+              [
+                "coverage",
+                "7.16.2"
+              ],
+              [
+                "hypothesis",
+                "6.170.1"
+              ],
+              [
+                "iniconfig",
+                "2.3.1"
+              ],
+              [
+                "jsonschema",
+                "4.26.0"
+              ],
+              [
+                "jsonschema-specifications",
+                "2025.9.1"
+              ],
+              [
+                "libcst",
+                "1.9.0"
+              ],
+              [
+                "librt",
+                "0.16.0"
+              ],
+              [
+                "mypy",
+                "2.4.0"
+              ],
+              [
+                "mypy_extensions",
+                "1.1.0"
+              ],
+              [
+                "packaging",
+                "26.3"
+              ],
+              [
+                "pathspec",
+                "1.1.1"
+              ],
+              [
+                "pluggy",
+                "1.7.0"
+              ],
+              [
+                "pp-pytrace",
+                "0.1.0"
+              ],
+              [
+                "pytest",
+                "9.1.1"
+              ],
+              [
+                "pytest-cov",
+                "7.1.0"
+              ],
+              [
+                "referencing",
+                "0.37.0"
+              ],
+              [
+                "rpds-py",
+                "2026.9.1"
+              ],
+              [
+                "ruff",
+                "0.17.1"
+              ],
+              [
+                "sortedcontainers",
+                "2.4.0"
+              ],
+              [
+                "types-jsonschema",
+                "4.26.0.20261006"
+              ],
+              [
+                "typing_extensions",
+                "4.16.0"
+              ]
+            ]
+          },
+          "stdout": "logs/pytrace-final.stdout.txt",
+          "stderr": "logs/pytrace-final.stderr.txt",
+          "output": "results/pytrace-final.json",
+          "started_at_utc": "2026-10-20T09:19:58.424822+00:00",
+          "exit_code": 0,
+          "finished_at_utc": "2026-10-20T09:20:01.251268+00:00",
+          "elapsed_seconds": 2.825973430999511
+        },
+        {
+          "name": "routecraft",
+          "argv": [
+            "$PRIMARY_CHECKOUT/projects/09-routecraft/.venv/bin/python",
+            "source/final/projects/09-routecraft/benchmarks/insertion_work.py",
+            "--baseline-file",
+            "source/baseline/projects/09-routecraft/src/pp_routecraft/construction/insertion.py",
+            "--repetitions",
+            "5",
+            "--output",
+            "results/routecraft.json"
+          ],
+          "cwd": "source/final/projects/09-routecraft",
+          "environment": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "NUMEXPR_NUM_THREADS": "1",
+            "VECLIB_MAXIMUM_THREADS": "1",
+            "PYTHONDONTWRITEBYTECODE": "1",
+            "PYTHONHASHSEED": "0",
+            "PYTHONNOUSERSITE": "1",
+            "PYTHONPATH": "source/final/projects/09-routecraft/src",
+            "PYTHONHOME": null
+          },
+          "interpreter_environment": {
+            "python": "3.14.8",
+            "executable": "$PRIMARY_CHECKOUT/projects/09-routecraft/.venv/bin/python",
+            "distributions": [
+              [
+                "Pygments",
+                "2.21.0"
+              ],
+              [
+                "ast_serialize",
+                "0.13.1"
+              ],
+              [
+                "contourpy",
+                "1.4.0"
+              ],
+              [
+                "coverage",
+                "7.16.2"
+              ],
+              [
+                "cycler",
+                "0.12.1"
+              ],
+              [
+                "fonttools",
+                "4.67.0"
+              ],
+              [
+                "hypothesis",
+                "6.170.1"
+              ],
+              [
+                "iniconfig",
+                "2.3.1"
+              ],
+              [
+                "kiwisolver",
+                "1.5.1"
+              ],
+              [
+                "librt",
+                "0.16.0"
+              ],
+              [
+                "matplotlib",
+                "3.11.2"
+              ],
+              [
+                "mypy",
+                "2.4.0"
+              ],
+              [
+                "mypy_extensions",
+                "1.1.0"
+              ],
+              [
+                "numpy",
+                "2.5.4"
+              ],
+              [
+                "packaging",
+                "26.3"
+              ],
+              [
+                "pathspec",
+                "1.1.1"
+              ],
+              [
+                "pillow",
+                "13.0.0"
+              ],
+              [
+                "pluggy",
+                "1.7.0"
+              ],
+              [
+                "pp-routecraft",
+                "0.1.0"
+              ],
+              [
+                "pyparsing",
+                "3.3.3"
+              ],
+              [
+                "pytest",
+                "9.1.1"
+              ],
+              [
+                "pytest-cov",
+                "7.1.0"
+              ],
+              [
+                "python-dateutil",
+                "2.9.0.post0"
+              ],
+              [
+                "ruff",
+                "0.17.1"
+              ],
+              [
+                "six",
+                "1.17.0"
+              ],
+              [
+                "sortedcontainers",
+                "2.4.0"
+              ],
+              [
+                "typing_extensions",
+                "4.16.0"
+              ]
+            ]
+          },
+          "stdout": "logs/routecraft.stdout.txt",
+          "stderr": "logs/routecraft.stderr.txt",
+          "output": "results/routecraft.json",
+          "started_at_utc": "2026-10-20T09:20:01.328828+00:00",
+          "exit_code": 0,
+          "finished_at_utc": "2026-10-20T09:20:08.670953+00:00",
+          "elapsed_seconds": 7.342098029999761
+        },
+        {
+          "name": "resonance-baseline",
+          "argv": [
+            "$PRIMARY_CHECKOUT/projects/10-resonance/.venv/bin/python",
+            "source/final/projects/10-resonance/benchmarks/core_review.py",
+            "--repetitions",
+            "5",
+            "--output",
+            "results/resonance-baseline.json"
+          ],
+          "cwd": "source/final/projects/10-resonance",
+          "environment": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "NUMEXPR_NUM_THREADS": "1",
+            "VECLIB_MAXIMUM_THREADS": "1",
+            "PYTHONDONTWRITEBYTECODE": "1",
+            "PYTHONHASHSEED": "0",
+            "PYTHONNOUSERSITE": "1",
+            "PYTHONPATH": "source/baseline/projects/10-resonance/src",
+            "PYTHONHOME": null
+          },
+          "interpreter_environment": {
+            "python": "3.14.8",
+            "executable": "$PRIMARY_CHECKOUT/projects/10-resonance/.venv/bin/python",
+            "distributions": [
+              [
+                "Pygments",
+                "2.21.0"
+              ],
+              [
+                "ast_serialize",
+                "0.13.1"
+              ],
+              [
+                "cffi",
+                "2.1.1"
+              ],
+              [
+                "contourpy",
+                "1.4.0"
+              ],
+              [
+                "coverage",
+                "7.16.2"
+              ],
+              [
+                "cycler",
+                "0.12.1"
+              ],
+              [
+                "fonttools",
+                "4.67.0"
+              ],
+              [
+                "hypothesis",
+                "6.170.1"
+              ],
+              [
+                "iniconfig",
+                "2.3.1"
+              ],
+              [
+                "kiwisolver",
+                "1.5.1"
+              ],
+              [
+                "librt",
+                "0.16.0"
+              ],
+              [
+                "matplotlib",
+                "3.11.2"
+              ],
+              [
+                "mido",
+                "1.3.3"
+              ],
+              [
+                "mypy",
+                "2.4.0"
+              ],
+              [
+                "mypy_extensions",
+                "1.1.0"
+              ],
+              [
+                "numpy",
+                "2.5.4"
+              ],
+              [
+                "packaging",
+                "26.3"
+              ],
+              [
+                "pathspec",
+                "1.1.1"
+              ],
+              [
+                "pillow",
+                "13.0.0"
+              ],
+              [
+                "pluggy",
+                "1.7.0"
+              ],
+              [
+                "pp-resonance",
+                "0.1.0"
+              ],
+              [
+                "pycparser",
+                "3.11"
+              ],
+              [
+                "pyparsing",
+                "3.3.3"
+              ],
+              [
+                "pytest",
+                "9.1.1"
+              ],
+              [
+                "pytest-cov",
+                "7.1.0"
+              ],
+              [
+                "python-dateutil",
+                "2.9.0.post0"
+              ],
+              [
+                "ruff",
+                "0.17.1"
+              ],
+              [
+                "scipy",
+                "1.18.1"
+              ],
+              [
+                "six",
+                "1.17.0"
+              ],
+              [
+                "sortedcontainers",
+                "2.4.0"
+              ],
+              [
+                "soundfile",
+                "0.14.0"
+              ],
+              [
+                "typing_extensions",
+                "4.16.0"
+              ]
+            ]
+          },
+          "stdout": "logs/resonance-baseline.stdout.txt",
+          "stderr": "logs/resonance-baseline.stderr.txt",
+          "output": "results/resonance-baseline.json",
+          "started_at_utc": "2026-10-20T09:20:08.749367+00:00",
+          "exit_code": 0,
+          "finished_at_utc": "2026-10-20T09:20:15.987560+00:00",
+          "elapsed_seconds": 7.238155628000641
+        },
+        {
+          "name": "resonance-final",
+          "argv": [
+            "$PRIMARY_CHECKOUT/projects/10-resonance/.venv/bin/python",
+            "source/final/projects/10-resonance/benchmarks/core_review.py",
+            "--repetitions",
+            "5",
+            "--output",
+            "results/resonance-final.json"
+          ],
+          "cwd": "source/final/projects/10-resonance",
+          "environment": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "NUMEXPR_NUM_THREADS": "1",
+            "VECLIB_MAXIMUM_THREADS": "1",
+            "PYTHONDONTWRITEBYTECODE": "1",
+            "PYTHONHASHSEED": "0",
+            "PYTHONNOUSERSITE": "1",
+            "PYTHONPATH": "source/final/projects/10-resonance/src",
+            "PYTHONHOME": null
+          },
+          "interpreter_environment": {
+            "python": "3.14.8",
+            "executable": "$PRIMARY_CHECKOUT/projects/10-resonance/.venv/bin/python",
+            "distributions": [
+              [
+                "Pygments",
+                "2.21.0"
+              ],
+              [
+                "ast_serialize",
+                "0.13.1"
+              ],
+              [
+                "cffi",
+                "2.1.1"
+              ],
+              [
+                "contourpy",
+                "1.4.0"
+              ],
+              [
+                "coverage",
+                "7.16.2"
+              ],
+              [
+                "cycler",
+                "0.12.1"
+              ],
+              [
+                "fonttools",
+                "4.67.0"
+              ],
+              [
+                "hypothesis",
+                "6.170.1"
+              ],
+              [
+                "iniconfig",
+                "2.3.1"
+              ],
+              [
+                "kiwisolver",
+                "1.5.1"
+              ],
+              [
+                "librt",
+                "0.16.0"
+              ],
+              [
+                "matplotlib",
+                "3.11.2"
+              ],
+              [
+                "mido",
+                "1.3.3"
+              ],
+              [
+                "mypy",
+                "2.4.0"
+              ],
+              [
+                "mypy_extensions",
+                "1.1.0"
+              ],
+              [
+                "numpy",
+                "2.5.4"
+              ],
+              [
+                "packaging",
+                "26.3"
+              ],
+              [
+                "pathspec",
+                "1.1.1"
+              ],
+              [
+                "pillow",
+                "13.0.0"
+              ],
+              [
+                "pluggy",
+                "1.7.0"
+              ],
+              [
+                "pp-resonance",
+                "0.1.0"
+              ],
+              [
+                "pycparser",
+                "3.11"
+              ],
+              [
+                "pyparsing",
+                "3.3.3"
+              ],
+              [
+                "pytest",
+                "9.1.1"
+              ],
+              [
+                "pytest-cov",
+                "7.1.0"
+              ],
+              [
+                "python-dateutil",
+                "2.9.0.post0"
+              ],
+              [
+                "ruff",
+                "0.17.1"
+              ],
+              [
+                "scipy",
+                "1.18.1"
+              ],
+              [
+                "six",
+                "1.17.0"
+              ],
+              [
+                "sortedcontainers",
+                "2.4.0"
+              ],
+              [
+                "soundfile",
+                "0.14.0"
+              ],
+              [
+                "typing_extensions",
+                "4.16.0"
+              ]
+            ]
+          },
+          "stdout": "logs/resonance-final.stdout.txt",
+          "stderr": "logs/resonance-final.stderr.txt",
+          "output": "results/resonance-final.json",
+          "started_at_utc": "2026-10-20T09:20:16.070008+00:00",
+          "exit_code": 0,
+          "finished_at_utc": "2026-10-20T09:20:18.642700+00:00",
+          "elapsed_seconds": 2.572656995000216
+        }
+      ],
+      "finished_at_utc": "2026-10-20T09:20:18.643491+00:00"
+    }
+  },
+  "metrics": {
+    "current": {
+      "readings": 12000,
+      "baseline_median_seconds": 1.4989404859998103,
+      "final_median_seconds": 0.16852785500032041,
+      "baseline_candidate_checks": 72006000,
+      "baseline_counter_scope": "full-scan formula",
+      "final_candidate_checks": 6,
+      "final_counter_scope": "engine diagnostic",
+      "baseline_peak_process_rss_bytes": 22282240,
+      "final_peak_process_rss_bytes": 23572480,
+      "dataset_sha256": "b3c53f32c3cf9f99ad21c068bad1f2a765ca4caa3a74b5fcf7c8991b61bcd4bf"
+    },
+    "pytrace": [
+      {
+        "functions": 100,
+        "baseline_median_seconds": 0.04483981700013828,
+        "final_median_seconds": 0.03021785600049043,
+        "baseline_transfer_steps": 702,
+        "final_transfer_steps": 1002,
+        "source_sha256": "cbddd135c187d45d42075a46c80a253d95579dc78b6b8911b53456a3a931af03"
+      },
+      {
+        "functions": 300,
+        "baseline_median_seconds": 0.35022405100062315,
+        "final_median_seconds": 0.10415810399990733,
+        "baseline_transfer_steps": 2102,
+        "final_transfer_steps": 3002,
+        "source_sha256": "abe28483f9b454904ba9e995ecb7dfebb00bce9623212ebc86987a423416eac3"
+      },
+      {
+        "functions": 900,
+        "baseline_median_seconds": 3.5811714010005744,
+        "final_median_seconds": 0.24850883799990697,
+        "baseline_transfer_steps": 6302,
+        "final_transfer_steps": 9002,
+        "source_sha256": "8a1fe1479f12ba01b46fe6e65552c85d4ecbf86b9d1bdb2637ee63740d9e7b70"
+      }
+    ],
+    "routecraft": {
+      "scope": "Controlled algorithm-module comparison: pinned historical insertion module and current insertion module share the imported current support package. Not a complete historical-package comparison or standard workload; host isolation is not established by this driver.",
+      "cases": [
+        {
+          "customers": 40,
+          "instance_sha256": "9de4734a04fc6c00f502486e5cbe3b805f64efabab353935618c6eb938e01482",
+          "objective": [
+            1,
+            727
+          ],
+          "baseline": {
+            "median_seconds": 0.02070629799982271,
+            "schedule_calls": 861,
+            "scheduled_customer_visits": 22960
+          },
+          "revised": {
+            "median_seconds": 0.002121730999533611,
+            "schedule_calls": 42,
+            "scheduled_customer_visits": 860
+          }
+        },
+        {
+          "customers": 80,
+          "instance_sha256": "d7e33ccb9471768afa5d7bbc369c8df8df99ce089223a58630ec9f9d9b48ddcc",
+          "objective": [
+            1,
+            1107
+          ],
+          "baseline": {
+            "median_seconds": 0.14768221200029075,
+            "schedule_calls": 3321,
+            "scheduled_customer_visits": 177120
+          },
+          "revised": {
+            "median_seconds": 0.006610872999772255,
+            "schedule_calls": 82,
+            "scheduled_customer_visits": 3320
+          }
+        },
+        {
+          "customers": 160,
+          "instance_sha256": "3e54038b0d30e61374b4eb802438c179c934e165e546b8a41fb1ae62af9ed4d1",
+          "objective": [
+            1,
+            1875
+          ],
+          "baseline": {
+            "median_seconds": 1.2198344529997485,
+            "schedule_calls": 13041,
+            "scheduled_customer_visits": 1391040
+          },
+          "revised": {
+            "median_seconds": 0.02369966399965051,
+            "schedule_calls": 162,
+            "scheduled_customer_visits": 13040
+          }
+        }
+      ],
+      "regret_control_pairs": 1
+    },
+    "resonance": {
+      "alignment": [
+        {
+          "reference_notes": 100,
+          "detected_notes": 92,
+          "cells": 9393,
+          "baseline_median_seconds": 0.02426491599999281,
+          "final_median_seconds": 0.003624748000220279,
+          "dataset_sha256": "ba1a5565384ea984b2188d4870cf604390ad5d8a3aafdc8d1eaf9adcf326f507",
+          "mapping_sha256": "44387220705dcec5dea037769bcd861e3080bd287b7d271f41d55b73c579045d"
+        },
+        {
+          "reference_notes": 300,
+          "detected_notes": 277,
+          "cells": 83678,
+          "baseline_median_seconds": 0.20926619799956825,
+          "final_median_seconds": 0.03253315999972983,
+          "dataset_sha256": "aa7cef380560f45c4e4cce81d324d773bfab7d7a0dd8114ab646c3edf58f0d71",
+          "mapping_sha256": "3764880ecc4d0a967238115221b72a1a5920c4c16720ffcd6f0efd58045b9059"
+        },
+        {
+          "reference_notes": 600,
+          "detected_notes": 554,
+          "cells": 333555,
+          "baseline_median_seconds": 0.8494016790000387,
+          "final_median_seconds": 0.12878574800015485,
+          "dataset_sha256": "8d537b0f0bbcd7f32463d80ee3b0d97f972af5c39b74071617015423ba1cf8d4",
+          "mapping_sha256": "1332ea9411dc4101ab4b7dc40bcf177f32929e10b689b911c09bb881ff507899"
+        }
+      ],
+      "audio": {
+        "duration_seconds": 12,
+        "baseline_median_seconds": 0.300124882000091,
+        "final_median_seconds": 0.3199149980000584,
+        "eligible_frames": 709,
+        "voiced_misses": 0,
+        "within_10_cents_all_eligible": 1.0,
+        "truth_and_detected_notes": 14,
+        "detected_onsets": 14,
+        "peak_input_buffer_samples": 9984,
+        "dataset_sha256": "43542d0b50941ee2765d12e10e5ef0004111e82231e42467080f3c718b5a0363"
+      }
+    }
+  },
+  "limitations": [
+    "Routecraft compares only the old insertion module with final support code; its regret control has one declared pair.",
+    "Current baseline candidate checks are a full-scan formula; indexed checks are instrumented.",
+    "Resonance quality/mapping summary reflects the deterministic reported outputs; semantic witnesses deliberately differ after correctness fixes.",
+    "Serial local measurements do not establish physical-host exclusivity, standard-workload performance or production capacity."
+  ],
+  "primary_checkout_after": {
+    "clean": false,
+    "changed_paths": [
+      "README.md",
+      "mkdocs.yml",
+      "docs/CORE_REVIEW.md"
+    ],
+    "measured_source": false,
+    "status": {
+      "clean": false,
+      "entries": [
+        {
+          "status": " M",
+          "path": "README.md"
+        },
+        {
+          "status": " M",
+          "path": "mkdocs.yml"
+        },
+        {
+          "status": "??",
+          "path": "docs/CORE_REVIEW.md"
+        }
+      ],
+      "porcelain_z_sha256": "ce5a9d8f1fb5016714d755c5015bc94b496cc1e3357a7b7ec92504a8a28d9eaf"
+    }
+  },
+  "evidence_files": [
+    {
+      "path": "commands.json",
+      "sha256": "6089918b818e5def7892aed89a40aa3fc0b7eccfb4d8151ad6d0e8cae8f7a164",
+      "bytes": 22055
+    },
+    {
+      "path": "source-inventory-before.json",
+      "sha256": "e5ecb320401d6dd808a1e195127e662a228ff113479695fbbeb4d80331897173",
+      "bytes": 52463
+    },
+    {
+      "path": "source-inventory-after.json",
+      "sha256": "f924ac3aebd2af1c6575085f3ecf4f950b2c4b208545790bd540e9e2ebd7c1a8",
+      "bytes": 51482
+    },
+    {
+      "path": "validation.json",
+      "sha256": "932b308ca336943f356054db856ef7adcd23ad8774741b8766a92283950a85f6",
+      "bytes": 1200
+    },
+    {
+      "path": "run_focused.py",
+      "sha256": "813cde58d4cf32d597b8aca7d3b46744ea54efaaed1ab27bb9a9afecf912c8c8",
+      "bytes": 4331
+    },
+    {
+      "path": "validate_focused.py",
+      "sha256": "b6d777b7b899f46a2cd0e63782391bf3b0ab4c22e5f0f83cec206103bff5acc4",
+      "bytes": 16593
+    },
+    {
+      "path": "results/current.json",
+      "sha256": "83413769b802d28c4bba201103cd5d6692ad7f9309451d15b3f5eda59f5d6a43",
+      "bytes": 3553
+    },
+    {
+      "path": "results/pytrace-baseline.json",
+      "sha256": "cc449c0b0f1351ad03fd85498fb886ab218d40c1705e794265b0ffb53e64d078",
+      "bytes": 6122
+    },
+    {
+      "path": "results/pytrace-final.json",
+      "sha256": "e6515f0d22da93b097e621811d312bfd43623a3bde95fa7a21438d5a3c9f9a2d",
+      "bytes": 6264
+    },
+    {
+      "path": "results/resonance-baseline.json",
+      "sha256": "8f2b6ef39fb9593958177bd1105760e960e08f7c31accd1654ce60c38fbedcea",
+      "bytes": 11389
+    },
+    {
+      "path": "results/resonance-final.json",
+      "sha256": "996ed536bbf8be26b41d0a7ccbae5cce908d991a8e62bb0008a32ee7cca2ba47",
+      "bytes": 11364
+    },
+    {
+      "path": "results/routecraft.json",
+      "sha256": "5647f56485913bc47f1745a9385af806937ffb3184a4fb621bf66b27ebecf4e5",
+      "bytes": 8951
+    },
+    {
+      "path": "logs/current.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "logs/current.stdout.txt",
+      "sha256": "0f3e03aa8df22ede808a04cbea6a26563d6966d3435be754d3ceed2b4e408fe3",
+      "bytes": 81
+    },
+    {
+      "path": "logs/pytrace-baseline.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "logs/pytrace-baseline.stdout.txt",
+      "sha256": "cc449c0b0f1351ad03fd85498fb886ab218d40c1705e794265b0ffb53e64d078",
+      "bytes": 6122
+    },
+    {
+      "path": "logs/pytrace-final.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "logs/pytrace-final.stdout.txt",
+      "sha256": "e6515f0d22da93b097e621811d312bfd43623a3bde95fa7a21438d5a3c9f9a2d",
+      "bytes": 6264
+    },
+    {
+      "path": "logs/resonance-baseline.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "logs/resonance-baseline.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "logs/resonance-final.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "logs/resonance-final.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "logs/routecraft.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "logs/routecraft.stdout.txt",
+      "sha256": "a9b3ad48b2152d1fde87c5e77dc18861db6f0512828b920d381166fc9058d661",
+      "bytes": 209
+    }
+  ],
+  "path_normalization": {
+    "method": "Parsed JSON values only; replace output-root prefixes with relative paths and the original checkout prefix with $PRIMARY_CHECKOUT. Original measurement bytes remain untouched.",
+    "original_output_prefix": "/workspace/python-projects/.local/core-review-focused-final",
+    "original_primary_prefix": "/workspace/python-projects",
+    "original_hash_scope": "SHA-256 and byte counts refer to original retained files before JSON parsing or path normalization."
+  },
+  "observations": {
+    "current": {
+      "original_file": "results/current.json",
+      "original_sha256": "83413769b802d28c4bba201103cd5d6692ad7f9309451d15b3f5eda59f5d6a43",
+      "original_bytes": 3553,
+      "payload": {
+        "schema_version": 1,
+        "scenario": "same-key readings without watermarks, one sparse metadata probe, then end",
+        "records": 12002,
+        "repetitions": 5,
+        "source": {
+          "schema_version": 1,
+          "project": "current",
+          "source_commit": "a33a513840d81f6e2cdb1b730540d906122bb254",
+          "source_dirty": false,
+          "source_scope": "project",
+          "source_content_sha256": "91924a0db27061e07bd36c72669dfb4f5fedb014334b2d19ac89dc7fd82f812f",
+          "root_contract_sha256": "74f88cde025ec5595ee0c4d1e407391592dae9ec013c4e1c26854abf75ee41ce",
+          "lockfile_sha256": "baf15ac83a35752ad671410a6466a49a8b6f5b43d6210beed3cb3bd6982239a3",
+          "python": "3.14.8",
+          "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+          "cpu": "unknown",
+          "memory_limit_bytes": null,
+          "seed": null,
+          "dataset_id": "b3c53f32c3cf9f99ad21c068bad1f2a765ca4caa3a74b5fcf7c8991b61bcd4bf",
+          "profile": "focused-join",
+          "warmup_runs": 0,
+          "measurement_runs": 5
+        },
+        "driver_sha256": "75bbbd6c435c99904c29559c68e93c948cdfd629791a597ca7799a3794a4535b",
+        "probe_sha256": "3f566fe5063523f237a09a1be94a1bb670f4869ba35775b0252a01d5c878816c",
+        "measured_at_utc": "2026-10-20T09:19:28.803633+00:00",
+        "scope": "Engine.apply elapsed time; Record creation/imports excluded; process RSS includes all probe allocations",
+        "limits": "Synthetic comparison on a shared machine, not a standard workload or production capacity claim",
+        "baseline_commit": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+        "baseline": {
+          "processing_seconds": [
+            1.4989404859998103,
+            1.4990711010004816,
+            1.6737659729997176,
+            1.4255978339997455,
+            1.3996849449995352
+          ],
+          "median_seconds": 1.4989404859998103,
+          "peak_process_rss_bytes": 22282240,
+          "checks": [
+            {
+              "join_pairs": 5,
+              "window_results": 2,
+              "candidate_checks": 72006000,
+              "counter_scope": "full-scan formula"
+            },
+            {
+              "join_pairs": 5,
+              "window_results": 2,
+              "candidate_checks": 72006000,
+              "counter_scope": "full-scan formula"
+            },
+            {
+              "join_pairs": 5,
+              "window_results": 2,
+              "candidate_checks": 72006000,
+              "counter_scope": "full-scan formula"
+            },
+            {
+              "join_pairs": 5,
+              "window_results": 2,
+              "candidate_checks": 72006000,
+              "counter_scope": "full-scan formula"
+            },
+            {
+              "join_pairs": 5,
+              "window_results": 2,
+              "candidate_checks": 72006000,
+              "counter_scope": "full-scan formula"
+            }
+          ]
+        },
+        "indexed": {
+          "processing_seconds": [
+            0.16852785500032041,
+            0.16698050100058026,
+            0.16995997599951806,
+            0.16569914699994115,
+            0.16859564799960935
+          ],
+          "median_seconds": 0.16852785500032041,
+          "peak_process_rss_bytes": 23572480,
+          "checks": [
+            {
+              "join_pairs": 5,
+              "window_results": 2,
+              "candidate_checks": 6,
+              "counter_scope": "engine diagnostic"
+            },
+            {
+              "join_pairs": 5,
+              "window_results": 2,
+              "candidate_checks": 6,
+              "counter_scope": "engine diagnostic"
+            },
+            {
+              "join_pairs": 5,
+              "window_results": 2,
+              "candidate_checks": 6,
+              "counter_scope": "engine diagnostic"
+            },
+            {
+              "join_pairs": 5,
+              "window_results": 2,
+              "candidate_checks": 6,
+              "counter_scope": "engine diagnostic"
+            },
+            {
+              "join_pairs": 5,
+              "window_results": 2,
+              "candidate_checks": 6,
+              "counter_scope": "engine diagnostic"
+            }
+          ]
+        }
+      }
+    },
+    "pytrace-baseline": {
+      "original_file": "results/pytrace-baseline.json",
+      "original_sha256": "cc449c0b0f1351ad03fd85498fb886ab218d40c1705e794265b0ffb53e64d078",
+      "original_bytes": 6122,
+      "payload": {
+        "schema_version": 2,
+        "workload": "pytrace-semantic-scaling-v2",
+        "label": "baseline-39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+        "python": "3.14.8",
+        "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+        "package_path": "source/baseline/projects/06-pytrace/src/pp_pytrace",
+        "package_content_sha256": "8e5b8f2a64b83e489e5ca813c243c3b7ed2fa5771382e62df48afa40a4d0bec4",
+        "package_inputs": [
+          "__init__.py",
+          "analysis/__init__.py",
+          "analysis/engine.py",
+          "analysis/lattice.py",
+          "cache.py",
+          "cfg/__init__.py",
+          "cfg/blocks.py",
+          "cli.py",
+          "codemods/__init__.py",
+          "codemods/plan.py",
+          "codemods/transforms.py",
+          "evidence.py",
+          "frontend/__init__.py",
+          "frontend/discovery.py",
+          "frontend/parser_worker.py",
+          "reporting/__init__.py",
+          "reporting/models.py",
+          "reporting/sarif.py",
+          "rules/__init__.py",
+          "rules/registry.py",
+          "semantics/__init__.py",
+          "semantics/symbols.py",
+          "trusted_api.py",
+          "workloads.py"
+        ],
+        "imported_modules": {
+          "pp_pytrace": "source/baseline/projects/06-pytrace/src/pp_pytrace/__init__.py",
+          "pp_pytrace.analysis": "source/baseline/projects/06-pytrace/src/pp_pytrace/analysis/__init__.py",
+          "pp_pytrace.analysis.engine": "source/baseline/projects/06-pytrace/src/pp_pytrace/analysis/engine.py",
+          "pp_pytrace.analysis.lattice": "source/baseline/projects/06-pytrace/src/pp_pytrace/analysis/lattice.py",
+          "pp_pytrace.cache": "source/baseline/projects/06-pytrace/src/pp_pytrace/cache.py",
+          "pp_pytrace.cfg": "source/baseline/projects/06-pytrace/src/pp_pytrace/cfg/__init__.py",
+          "pp_pytrace.cfg.blocks": "source/baseline/projects/06-pytrace/src/pp_pytrace/cfg/blocks.py",
+          "pp_pytrace.codemods": "source/baseline/projects/06-pytrace/src/pp_pytrace/codemods/__init__.py",
+          "pp_pytrace.codemods.plan": "source/baseline/projects/06-pytrace/src/pp_pytrace/codemods/plan.py",
+          "pp_pytrace.codemods.transforms": "source/baseline/projects/06-pytrace/src/pp_pytrace/codemods/transforms.py",
+          "pp_pytrace.frontend": "source/baseline/projects/06-pytrace/src/pp_pytrace/frontend/__init__.py",
+          "pp_pytrace.frontend.discovery": "source/baseline/projects/06-pytrace/src/pp_pytrace/frontend/discovery.py",
+          "pp_pytrace.reporting": "source/baseline/projects/06-pytrace/src/pp_pytrace/reporting/__init__.py",
+          "pp_pytrace.reporting.models": "source/baseline/projects/06-pytrace/src/pp_pytrace/reporting/models.py",
+          "pp_pytrace.rules": "source/baseline/projects/06-pytrace/src/pp_pytrace/rules/__init__.py",
+          "pp_pytrace.rules.registry": "source/baseline/projects/06-pytrace/src/pp_pytrace/rules/registry.py",
+          "pp_pytrace.semantics": "source/baseline/projects/06-pytrace/src/pp_pytrace/semantics/__init__.py",
+          "pp_pytrace.semantics.symbols": "source/baseline/projects/06-pytrace/src/pp_pytrace/semantics/symbols.py"
+        },
+        "workload_path": "source/final/projects/06-pytrace/benchmarks/semantic_scaling.py",
+        "workload_sha256": "c17f7597414e01e040c6f5b276642854c24ed956fe5f6dccdf41531aed0b113f",
+        "repetitions": 5,
+        "inputs_unchanged": true,
+        "scope": "Analysis-only repeats on pre-parsed identical ASTs; includes analyzer construction, CFG, fixed point, lexical scopes and diagnostics; excludes parsing/cache/I/O",
+        "limitation": "Synthetic functions, one shared host; describes this mechanism, not production throughput or broad analyzer accuracy",
+        "measurements": [
+          {
+            "functions": 100,
+            "bytes": 10200,
+            "source_sha256": "cbddd135c187d45d42075a46c80a253d95579dc78b6b8911b53456a3a931af03",
+            "seconds": [
+              0.042588299000271945,
+              0.046835597000608686,
+              0.04450991799967596,
+              0.04483981700013828,
+              0.04674239700034377
+            ],
+            "measurement_runs": 5,
+            "median_seconds": 0.04483981700013828,
+            "blocks": 702,
+            "transfer_steps": 702,
+            "diagnostics": 200,
+            "shell_findings": 100
+          },
+          {
+            "functions": 300,
+            "bytes": 30800,
+            "source_sha256": "abe28483f9b454904ba9e995ecb7dfebb00bce9623212ebc86987a423416eac3",
+            "seconds": [
+              0.33361775299999863,
+              0.3921566259996325,
+              0.3335965809992558,
+              0.3629514559997915,
+              0.35022405100062315
+            ],
+            "measurement_runs": 5,
+            "median_seconds": 0.35022405100062315,
+            "blocks": 2102,
+            "transfer_steps": 2102,
+            "diagnostics": 600,
+            "shell_findings": 300
+          },
+          {
+            "functions": 900,
+            "bytes": 92600,
+            "source_sha256": "8a1fe1479f12ba01b46fe6e65552c85d4ecbf86b9d1bdb2637ee63740d9e7b70",
+            "seconds": [
+              3.940926197999943,
+              3.585946944999705,
+              3.5811714010005744,
+              3.528674875999968,
+              3.278395772999829
+            ],
+            "measurement_runs": 5,
+            "median_seconds": 3.5811714010005744,
+            "blocks": 6302,
+            "transfer_steps": 6302,
+            "diagnostics": 1800,
+            "shell_findings": 900
+          }
+        ]
+      }
+    },
+    "pytrace-final": {
+      "original_file": "results/pytrace-final.json",
+      "original_sha256": "e6515f0d22da93b097e621811d312bfd43623a3bde95fa7a21438d5a3c9f9a2d",
+      "original_bytes": 6264,
+      "payload": {
+        "schema_version": 2,
+        "workload": "pytrace-semantic-scaling-v2",
+        "label": "final-a33a513840d81f6e2cdb1b730540d906122bb254",
+        "python": "3.14.8",
+        "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+        "package_path": "source/final/projects/06-pytrace/src/pp_pytrace",
+        "package_content_sha256": "9b2b3ce36917bc761ee2429d046d4bd8b1a83e1b650eae96de358ecd3b7a5d44",
+        "package_inputs": [
+          "__init__.py",
+          "analysis/__init__.py",
+          "analysis/engine.py",
+          "analysis/lattice.py",
+          "analysis/solver.py",
+          "cache.py",
+          "cfg/__init__.py",
+          "cfg/blocks.py",
+          "cli.py",
+          "codemods/__init__.py",
+          "codemods/plan.py",
+          "codemods/transforms.py",
+          "evidence.py",
+          "frontend/__init__.py",
+          "frontend/discovery.py",
+          "frontend/parser_worker.py",
+          "reporting/__init__.py",
+          "reporting/models.py",
+          "reporting/sarif.py",
+          "rules/__init__.py",
+          "rules/registry.py",
+          "semantics/__init__.py",
+          "semantics/symbols.py",
+          "trusted_api.py",
+          "workloads.py"
+        ],
+        "imported_modules": {
+          "pp_pytrace": "source/final/projects/06-pytrace/src/pp_pytrace/__init__.py",
+          "pp_pytrace.analysis": "source/final/projects/06-pytrace/src/pp_pytrace/analysis/__init__.py",
+          "pp_pytrace.analysis.engine": "source/final/projects/06-pytrace/src/pp_pytrace/analysis/engine.py",
+          "pp_pytrace.analysis.lattice": "source/final/projects/06-pytrace/src/pp_pytrace/analysis/lattice.py",
+          "pp_pytrace.analysis.solver": "source/final/projects/06-pytrace/src/pp_pytrace/analysis/solver.py",
+          "pp_pytrace.cache": "source/final/projects/06-pytrace/src/pp_pytrace/cache.py",
+          "pp_pytrace.cfg": "source/final/projects/06-pytrace/src/pp_pytrace/cfg/__init__.py",
+          "pp_pytrace.cfg.blocks": "source/final/projects/06-pytrace/src/pp_pytrace/cfg/blocks.py",
+          "pp_pytrace.codemods": "source/final/projects/06-pytrace/src/pp_pytrace/codemods/__init__.py",
+          "pp_pytrace.codemods.plan": "source/final/projects/06-pytrace/src/pp_pytrace/codemods/plan.py",
+          "pp_pytrace.codemods.transforms": "source/final/projects/06-pytrace/src/pp_pytrace/codemods/transforms.py",
+          "pp_pytrace.frontend": "source/final/projects/06-pytrace/src/pp_pytrace/frontend/__init__.py",
+          "pp_pytrace.frontend.discovery": "source/final/projects/06-pytrace/src/pp_pytrace/frontend/discovery.py",
+          "pp_pytrace.reporting": "source/final/projects/06-pytrace/src/pp_pytrace/reporting/__init__.py",
+          "pp_pytrace.reporting.models": "source/final/projects/06-pytrace/src/pp_pytrace/reporting/models.py",
+          "pp_pytrace.rules": "source/final/projects/06-pytrace/src/pp_pytrace/rules/__init__.py",
+          "pp_pytrace.rules.registry": "source/final/projects/06-pytrace/src/pp_pytrace/rules/registry.py",
+          "pp_pytrace.semantics": "source/final/projects/06-pytrace/src/pp_pytrace/semantics/__init__.py",
+          "pp_pytrace.semantics.symbols": "source/final/projects/06-pytrace/src/pp_pytrace/semantics/symbols.py"
+        },
+        "workload_path": "source/final/projects/06-pytrace/benchmarks/semantic_scaling.py",
+        "workload_sha256": "c17f7597414e01e040c6f5b276642854c24ed956fe5f6dccdf41531aed0b113f",
+        "repetitions": 5,
+        "inputs_unchanged": true,
+        "scope": "Analysis-only repeats on pre-parsed identical ASTs; includes analyzer construction, CFG, fixed point, lexical scopes and diagnostics; excludes parsing/cache/I/O",
+        "limitation": "Synthetic functions, one shared host; describes this mechanism, not production throughput or broad analyzer accuracy",
+        "measurements": [
+          {
+            "functions": 100,
+            "bytes": 10200,
+            "source_sha256": "cbddd135c187d45d42075a46c80a253d95579dc78b6b8911b53456a3a931af03",
+            "seconds": [
+              0.041320581999571004,
+              0.03911253600017517,
+              0.03021785600049043,
+              0.0297230309997758,
+              0.030180460999872594
+            ],
+            "measurement_runs": 5,
+            "median_seconds": 0.03021785600049043,
+            "blocks": 1204,
+            "transfer_steps": 1002,
+            "diagnostics": 200,
+            "shell_findings": 100
+          },
+          {
+            "functions": 300,
+            "bytes": 30800,
+            "source_sha256": "abe28483f9b454904ba9e995ecb7dfebb00bce9623212ebc86987a423416eac3",
+            "seconds": [
+              0.10602647199993953,
+              0.10415810399990733,
+              0.11694263600020349,
+              0.1020719359994473,
+              0.09106845499991323
+            ],
+            "measurement_runs": 5,
+            "median_seconds": 0.10415810399990733,
+            "blocks": 3604,
+            "transfer_steps": 3002,
+            "diagnostics": 600,
+            "shell_findings": 300
+          },
+          {
+            "functions": 900,
+            "bytes": 92600,
+            "source_sha256": "8a1fe1479f12ba01b46fe6e65552c85d4ecbf86b9d1bdb2637ee63740d9e7b70",
+            "seconds": [
+              0.31168944199998805,
+              0.2342127319998326,
+              0.24850883799990697,
+              0.22409495699957915,
+              0.2707854860000225
+            ],
+            "measurement_runs": 5,
+            "median_seconds": 0.24850883799990697,
+            "blocks": 10804,
+            "transfer_steps": 9002,
+            "diagnostics": 1800,
+            "shell_findings": 900
+          }
+        ]
+      }
+    },
+    "routecraft": {
+      "original_file": "results/routecraft.json",
+      "original_sha256": "5647f56485913bc47f1745a9385af806937ffb3184a4fb621bf66b27ebecf4e5",
+      "original_bytes": 8951,
+      "payload": {
+        "schema_version": 1,
+        "kind": "paired-construction-diagnostic",
+        "scope": "Controlled algorithm-module comparison: pinned historical insertion module and current insertion module share the imported current support package. Not a complete historical-package comparison or standard workload; host isolation is not established by this driver.",
+        "python": "3.14.8",
+        "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+        "seed": 1729,
+        "source_commit": "a33a513840d81f6e2cdb1b730540d906122bb254",
+        "source_dirty": false,
+        "source_scope": "driver checkout Python source/tests, pyproject.toml, uv.lock, .python-version; relative path + NUL + bytes. Actual imported package is recorded separately.",
+        "source_content_sha256": "46c0167fa7a9f16eacf7fdd82b3157333d8d22395457d40aad5f5ebcfc02f25d",
+        "source_checkout_path": "source/final/projects/09-routecraft",
+        "imported_package": {
+          "path": "source/final/projects/09-routecraft/src/pp_routecraft",
+          "content_sha256": "ba2045fb7c8c076b7a647ea296bbc1bc38d92007ea6bc597a23c9e50b3b9b1ea",
+          "hash_scope": "all .py and py.typed files; relative path + NUL + bytes",
+          "shared_by": [
+            "historical insertion module",
+            "current insertion module"
+          ]
+        },
+        "current_insertion_module": {
+          "path": "source/final/projects/09-routecraft/src/pp_routecraft/construction/insertion.py",
+          "sha256": "ec6c53c329baa410a9784b59038e0e73fde6c6fac09023820f76ab1dd962273c"
+        },
+        "driver_sha256": "7de7520fd1e063700f3275212b58b24dacf5ee224c6afa64f3389dd028d4f278",
+        "source_unchanged": true,
+        "baseline_commit": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+        "baseline_file_sha256": "12eb2cb042c2d05a85c31f10a81157fe53f83638bfbc9bfba718e392c19eb883",
+        "baseline_file_path": "source/baseline/projects/09-routecraft/src/pp_routecraft/construction/insertion.py",
+        "baseline_scope": "only construction/insertion.py from the pinned commit; its package imports use the recorded current support package",
+        "parameters": {
+          "customers": [
+            40,
+            80,
+            160
+          ],
+          "single_vehicle": true,
+          "capacity_per_customer": 3,
+          "due_and_shift_end": 1000000,
+          "repetitions": 5,
+          "measured_pairs": 15,
+          "warmup_customers": 12,
+          "warmup_seed": 1729,
+          "warmup_instance_sha256": "e7970557cd53b7a6d188be8e7237eef3769948f0555d36f554382a15c96cff82",
+          "threads": 1,
+          "regret": false
+        },
+        "work_counter_scope": "Complete optimizer route schedule calls/customer visits; excludes candidate certificate arithmetic, profile building, verification and allocation costs.",
+        "cases": [
+          {
+            "customers": 40,
+            "regret": false,
+            "repetitions": 5,
+            "instance_sha256": "9de4734a04fc6c00f502486e5cbe3b805f64efabab353935618c6eb938e01482",
+            "objective": [
+              1,
+              727
+            ],
+            "plans_identical": true,
+            "baseline": [
+              {
+                "elapsed_seconds": 0.020740297999509494,
+                "schedule_calls": 861,
+                "scheduled_customer_visits": 22960
+              },
+              {
+                "elapsed_seconds": 0.024077463000139687,
+                "schedule_calls": 861,
+                "scheduled_customer_visits": 22960
+              },
+              {
+                "elapsed_seconds": 0.020084789999600616,
+                "schedule_calls": 861,
+                "scheduled_customer_visits": 22960
+              },
+              {
+                "elapsed_seconds": 0.01866224399964267,
+                "schedule_calls": 861,
+                "scheduled_customer_visits": 22960
+              },
+              {
+                "elapsed_seconds": 0.02070629799982271,
+                "schedule_calls": 861,
+                "scheduled_customer_visits": 22960
+              }
+            ],
+            "revised": [
+              {
+                "elapsed_seconds": 0.00194532400018943,
+                "schedule_calls": 42,
+                "scheduled_customer_visits": 860
+              },
+              {
+                "elapsed_seconds": 0.0027146460006406414,
+                "schedule_calls": 42,
+                "scheduled_customer_visits": 860
+              },
+              {
+                "elapsed_seconds": 0.002121730999533611,
+                "schedule_calls": 42,
+                "scheduled_customer_visits": 860
+              },
+              {
+                "elapsed_seconds": 0.0017838309995568125,
+                "schedule_calls": 42,
+                "scheduled_customer_visits": 860
+              },
+              {
+                "elapsed_seconds": 0.0024148330003299634,
+                "schedule_calls": 42,
+                "scheduled_customer_visits": 860
+              }
+            ]
+          },
+          {
+            "customers": 80,
+            "regret": false,
+            "repetitions": 5,
+            "instance_sha256": "d7e33ccb9471768afa5d7bbc369c8df8df99ce089223a58630ec9f9d9b48ddcc",
+            "objective": [
+              1,
+              1107
+            ],
+            "plans_identical": true,
+            "baseline": [
+              {
+                "elapsed_seconds": 0.1700217719999273,
+                "schedule_calls": 3321,
+                "scheduled_customer_visits": 177120
+              },
+              {
+                "elapsed_seconds": 0.15179349500067474,
+                "schedule_calls": 3321,
+                "scheduled_customer_visits": 177120
+              },
+              {
+                "elapsed_seconds": 0.14060029900065274,
+                "schedule_calls": 3321,
+                "scheduled_customer_visits": 177120
+              },
+              {
+                "elapsed_seconds": 0.1407171050004763,
+                "schedule_calls": 3321,
+                "scheduled_customer_visits": 177120
+              },
+              {
+                "elapsed_seconds": 0.14768221200029075,
+                "schedule_calls": 3321,
+                "scheduled_customer_visits": 177120
+              }
+            ],
+            "revised": [
+              {
+                "elapsed_seconds": 0.006600918999538408,
+                "schedule_calls": 82,
+                "scheduled_customer_visits": 3320
+              },
+              {
+                "elapsed_seconds": 0.0076917440001125215,
+                "schedule_calls": 82,
+                "scheduled_customer_visits": 3320
+              },
+              {
+                "elapsed_seconds": 0.006610872999772255,
+                "schedule_calls": 82,
+                "scheduled_customer_visits": 3320
+              },
+              {
+                "elapsed_seconds": 0.006216968999979144,
+                "schedule_calls": 82,
+                "scheduled_customer_visits": 3320
+              },
+              {
+                "elapsed_seconds": 0.006763833999684721,
+                "schedule_calls": 82,
+                "scheduled_customer_visits": 3320
+              }
+            ]
+          },
+          {
+            "customers": 160,
+            "regret": false,
+            "repetitions": 5,
+            "instance_sha256": "3e54038b0d30e61374b4eb802438c179c934e165e546b8a41fb1ae62af9ed4d1",
+            "objective": [
+              1,
+              1875
+            ],
+            "plans_identical": true,
+            "baseline": [
+              {
+                "elapsed_seconds": 1.2198344529997485,
+                "schedule_calls": 13041,
+                "scheduled_customer_visits": 1391040
+              },
+              {
+                "elapsed_seconds": 1.2147125420005978,
+                "schedule_calls": 13041,
+                "scheduled_customer_visits": 1391040
+              },
+              {
+                "elapsed_seconds": 1.225418666999758,
+                "schedule_calls": 13041,
+                "scheduled_customer_visits": 1391040
+              },
+              {
+                "elapsed_seconds": 1.2139308260002508,
+                "schedule_calls": 13041,
+                "scheduled_customer_visits": 1391040
+              },
+              {
+                "elapsed_seconds": 1.247921724000662,
+                "schedule_calls": 13041,
+                "scheduled_customer_visits": 1391040
+              }
+            ],
+            "revised": [
+              {
+                "elapsed_seconds": 0.023067348999575188,
+                "schedule_calls": 162,
+                "scheduled_customer_visits": 13040
+              },
+              {
+                "elapsed_seconds": 0.022772755000005418,
+                "schedule_calls": 162,
+                "scheduled_customer_visits": 13040
+              },
+              {
+                "elapsed_seconds": 0.024791730999822903,
+                "schedule_calls": 162,
+                "scheduled_customer_visits": 13040
+              },
+              {
+                "elapsed_seconds": 0.02381302499998128,
+                "schedule_calls": 162,
+                "scheduled_customer_visits": 13040
+              },
+              {
+                "elapsed_seconds": 0.02369966399965051,
+                "schedule_calls": 162,
+                "scheduled_customer_visits": 13040
+              }
+            ]
+          }
+        ],
+        "regret_control": {
+          "customers": 40,
+          "seed": 1730,
+          "repetitions": 1,
+          "instance_sha256": "efbf72a337d9d55478dbab9255650203e4db3c531f56ff92f6c467bf9f1883c7",
+          "plans_identical": true,
+          "baseline": {
+            "elapsed_seconds": 0.020989173999623745,
+            "schedule_calls": 5904,
+            "scheduled_customer_visits": 10434
+          },
+          "revised": {
+            "elapsed_seconds": 0.004697526999734691,
+            "schedule_calls": 60,
+            "scheduled_customer_visits": 231
+          }
+        },
+        "correctness_checks": {
+          "all_plans_independently_verified": true,
+          "all_paired_plans_identical": true,
+          "source_unchanged": true,
+          "imported_package_unchanged": true,
+          "pinned_baseline_unchanged": true
+        }
+      }
+    },
+    "resonance-baseline": {
+      "original_file": "results/resonance-baseline.json",
+      "original_sha256": "8f2b6ef39fb9593958177bd1105760e960e08f7c31accd1654ce60c38fbedcea",
+      "original_bytes": 11389,
+      "payload": {
+        "workload": "resonance-core-review-v2",
+        "python": "3.14.8",
+        "workload_path": "source/final/projects/10-resonance/benchmarks/core_review.py",
+        "workload_sha256": "1df3620267e50c6ee03e64ad92fbf6e96bb27869dbf948db8b33f1b8eecebbee",
+        "package_path": "source/baseline/projects/10-resonance/src/pp_resonance",
+        "package_python_sha256": "c208e151c67a774a303f6d7e43af1ea36b8f97292e762f35dfd30a6335ea2aeb",
+        "package_inputs": [
+          "__init__.py",
+          "alignment/__init__.py",
+          "alignment/dynamic.py",
+          "analysis.py",
+          "audio_io/__init__.py",
+          "audio_io/pcm.py",
+          "benchmark.py",
+          "cli.py",
+          "formats.py",
+          "metrics/__init__.py",
+          "metrics/evaluate.py",
+          "midi/__init__.py",
+          "midi/export.py",
+          "model.py",
+          "notes/__init__.py",
+          "notes/decode.py",
+          "onsets/__init__.py",
+          "onsets/detect.py",
+          "pitch/__init__.py",
+          "pitch/difference.py",
+          "provenance.py",
+          "reports/__init__.py",
+          "reports/render.py",
+          "spectral/__init__.py",
+          "spectral/transforms.py",
+          "streaming/__init__.py",
+          "streaming/framing.py",
+          "synthesis/__init__.py",
+          "synthesis/tones.py"
+        ],
+        "imported_modules": {
+          "pp_resonance": "source/baseline/projects/10-resonance/src/pp_resonance/__init__.py",
+          "pp_resonance.alignment": "source/baseline/projects/10-resonance/src/pp_resonance/alignment/__init__.py",
+          "pp_resonance.alignment.dynamic": "source/baseline/projects/10-resonance/src/pp_resonance/alignment/dynamic.py",
+          "pp_resonance.analysis": "source/baseline/projects/10-resonance/src/pp_resonance/analysis.py",
+          "pp_resonance.audio_io": "source/baseline/projects/10-resonance/src/pp_resonance/audio_io/__init__.py",
+          "pp_resonance.audio_io.pcm": "source/baseline/projects/10-resonance/src/pp_resonance/audio_io/pcm.py",
+          "pp_resonance.formats": "source/baseline/projects/10-resonance/src/pp_resonance/formats.py",
+          "pp_resonance.metrics": "source/baseline/projects/10-resonance/src/pp_resonance/metrics/__init__.py",
+          "pp_resonance.metrics.evaluate": "source/baseline/projects/10-resonance/src/pp_resonance/metrics/evaluate.py",
+          "pp_resonance.model": "source/baseline/projects/10-resonance/src/pp_resonance/model.py",
+          "pp_resonance.notes": "source/baseline/projects/10-resonance/src/pp_resonance/notes/__init__.py",
+          "pp_resonance.notes.decode": "source/baseline/projects/10-resonance/src/pp_resonance/notes/decode.py",
+          "pp_resonance.onsets": "source/baseline/projects/10-resonance/src/pp_resonance/onsets/__init__.py",
+          "pp_resonance.onsets.detect": "source/baseline/projects/10-resonance/src/pp_resonance/onsets/detect.py",
+          "pp_resonance.pitch": "source/baseline/projects/10-resonance/src/pp_resonance/pitch/__init__.py",
+          "pp_resonance.pitch.difference": "source/baseline/projects/10-resonance/src/pp_resonance/pitch/difference.py",
+          "pp_resonance.spectral": "source/baseline/projects/10-resonance/src/pp_resonance/spectral/__init__.py",
+          "pp_resonance.spectral.transforms": "source/baseline/projects/10-resonance/src/pp_resonance/spectral/transforms.py",
+          "pp_resonance.streaming": "source/baseline/projects/10-resonance/src/pp_resonance/streaming/__init__.py",
+          "pp_resonance.streaming.framing": "source/baseline/projects/10-resonance/src/pp_resonance/streaming/framing.py",
+          "pp_resonance.synthesis": "source/baseline/projects/10-resonance/src/pp_resonance/synthesis/__init__.py",
+          "pp_resonance.synthesis.tones": "source/baseline/projects/10-resonance/src/pp_resonance/synthesis/tones.py"
+        },
+        "repetitions": 5,
+        "inputs_unchanged": true,
+        "limits": {
+          "alignment_max_cells": 4000000,
+          "audio_seconds": 12.0,
+          "alignment_repeats": 5,
+          "audio_repeats": 5,
+          "threads": 1,
+          "exclusive_host": false
+        },
+        "alignment": [
+          {
+            "reference_notes": 100,
+            "detected_notes": 92,
+            "cells": 9393,
+            "dataset_sha256": "ba1a5565384ea984b2188d4870cf604390ad5d8a3aafdc8d1eaf9adcf326f507",
+            "mapping_sha256": "44387220705dcec5dea037769bcd861e3080bd287b7d271f41d55b73c579045d",
+            "seconds": [
+              0.024210624000261305,
+              0.02404389299954346,
+              0.025129620999905455,
+              0.024437076000140223,
+              0.02426491599999281
+            ],
+            "measurement_runs": 5,
+            "median_seconds": 0.02426491599999281,
+            "cost": 10.266770833333336
+          },
+          {
+            "reference_notes": 300,
+            "detected_notes": 277,
+            "cells": 83678,
+            "dataset_sha256": "aa7cef380560f45c4e4cce81d324d773bfab7d7a0dd8114ab646c3edf58f0d71",
+            "mapping_sha256": "3764880ecc4d0a967238115221b72a1a5920c4c16720ffcd6f0efd58045b9059",
+            "seconds": [
+              0.21301144800054317,
+              0.20242057199993724,
+              0.20494117399994138,
+              0.20926619799956825,
+              0.2234495060001791
+            ],
+            "measurement_runs": 5,
+            "median_seconds": 0.20926619799956825,
+            "cost": 29.60031249999999
+          },
+          {
+            "reference_notes": 600,
+            "detected_notes": 554,
+            "cells": 333555,
+            "dataset_sha256": "8d537b0f0bbcd7f32463d80ee3b0d97f972af5c39b74071617015423ba1cf8d4",
+            "mapping_sha256": "1332ea9411dc4101ab4b7dc40bcf177f32929e10b689b911c09bb881ff507899",
+            "seconds": [
+              0.8362210819996108,
+              0.8875217479999264,
+              0.9440034959998229,
+              0.8494016790000387,
+              0.8421094269997411
+            ],
+            "measurement_runs": 5,
+            "median_seconds": 0.8494016790000387,
+            "cost": 59.1934166666668
+          }
+        ],
+        "semantic_witnesses": {
+          "cmnd_scale_invariant": false,
+          "tiny_above_configured_silence_is_voiced": false,
+          "onsets_before_future_peak": [
+            3584
+          ],
+          "onsets_after_future_peak": [
+            16384
+          ],
+          "input_samples_accepted_before_iteration": 0,
+          "first_frame_preserves_caller_input": false,
+          "duplicate_frame_starts_after_close": true,
+          "full_output_eligible_frames": 47,
+          "one_frame_output_eligible_frames": 1,
+          "one_frame_output_recall": 1.0,
+          "weak_onsets_leave_note_boundaries_unchanged": false
+        },
+        "dynamic_synthetic_phrase": {
+          "dataset_sha256": "43542d0b50941ee2765d12e10e5ef0004111e82231e42467080f3c718b5a0363",
+          "parameters": {
+            "tones": [
+              {
+                "midi": 40,
+                "onset": 0.27499999999999997,
+                "duration": 0.42,
+                "amplitude": 0.06,
+                "pluck": true,
+                "vibrato_cents": 20,
+                "bend_cents": 100
+              },
+              {
+                "midi": 45,
+                "onset": 1.05,
+                "duration": 0.42,
+                "amplitude": 0.6,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 50,
+                "onset": 1.825,
+                "duration": 0.42,
+                "amplitude": 0.06,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 55,
+                "onset": 2.525,
+                "duration": 0.42,
+                "amplitude": 0.6,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 59,
+                "onset": 3.3,
+                "duration": 0.42,
+                "amplitude": 0.06,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 64,
+                "onset": 4.075,
+                "duration": 0.42,
+                "amplitude": 0.6,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 69,
+                "onset": 4.7749999999999995,
+                "duration": 0.42,
+                "amplitude": 0.06,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 76,
+                "onset": 5.55,
+                "duration": 0.42,
+                "amplitude": 0.6,
+                "pluck": true,
+                "vibrato_cents": 20,
+                "bend_cents": 0
+              },
+              {
+                "midi": 83,
+                "onset": 6.325,
+                "duration": 0.42,
+                "amplitude": 0.06,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 88,
+                "onset": 7.0249999999999995,
+                "duration": 0.42,
+                "amplitude": 0.6,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 40,
+                "onset": 7.8,
+                "duration": 0.42,
+                "amplitude": 0.06,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 45,
+                "onset": 8.575000000000001,
+                "duration": 0.42,
+                "amplitude": 0.6,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 100
+              },
+              {
+                "midi": 50,
+                "onset": 9.275,
+                "duration": 0.42,
+                "amplitude": 0.06,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 55,
+                "onset": 10.05,
+                "duration": 0.42,
+                "amplitude": 0.6,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              }
+            ],
+            "rate": 48000,
+            "duration": 12.0,
+            "block": 8192,
+            "seed": 1729,
+            "noise": 0.0005
+          },
+          "seconds": [
+            0.3082781020002585,
+            0.30220254699997895,
+            0.300124882000091,
+            0.29077963400050066,
+            0.2992665980000311
+          ],
+          "measurement_runs": 5,
+          "median_seconds": 0.300124882000091,
+          "eligible_frames": 709,
+          "voiced_misses": 0,
+          "within_10_cents_all_eligible": 1.0,
+          "truth_notes": 14,
+          "detected_notes": 14,
+          "detected_onsets": 14,
+          "peak_input_buffer_samples": 9984
+        },
+        "limits_of_inference": [
+          "Authored synthetic signals; no real-recording or polyphonic accuracy claim.",
+          "Shared-host microtimings describe these inputs, not an exclusive standard benchmark.",
+          "Package digest covers Python code; workload/dataset hashes fix the comparison inputs."
+        ]
+      }
+    },
+    "resonance-final": {
+      "original_file": "results/resonance-final.json",
+      "original_sha256": "996ed536bbf8be26b41d0a7ccbae5cce908d991a8e62bb0008a32ee7cca2ba47",
+      "original_bytes": 11364,
+      "payload": {
+        "workload": "resonance-core-review-v2",
+        "python": "3.14.8",
+        "workload_path": "source/final/projects/10-resonance/benchmarks/core_review.py",
+        "workload_sha256": "1df3620267e50c6ee03e64ad92fbf6e96bb27869dbf948db8b33f1b8eecebbee",
+        "package_path": "source/final/projects/10-resonance/src/pp_resonance",
+        "package_python_sha256": "fbd4f7e07615cff14f69239b081101ea2ea2501d1b5d4e6a305dba241bf438af",
+        "package_inputs": [
+          "__init__.py",
+          "alignment/__init__.py",
+          "alignment/dynamic.py",
+          "analysis.py",
+          "audio_io/__init__.py",
+          "audio_io/pcm.py",
+          "benchmark.py",
+          "cli.py",
+          "formats.py",
+          "metrics/__init__.py",
+          "metrics/evaluate.py",
+          "midi/__init__.py",
+          "midi/export.py",
+          "model.py",
+          "notes/__init__.py",
+          "notes/decode.py",
+          "onsets/__init__.py",
+          "onsets/detect.py",
+          "pitch/__init__.py",
+          "pitch/difference.py",
+          "provenance.py",
+          "reports/__init__.py",
+          "reports/render.py",
+          "spectral/__init__.py",
+          "spectral/transforms.py",
+          "streaming/__init__.py",
+          "streaming/framing.py",
+          "synthesis/__init__.py",
+          "synthesis/tones.py"
+        ],
+        "imported_modules": {
+          "pp_resonance": "source/final/projects/10-resonance/src/pp_resonance/__init__.py",
+          "pp_resonance.alignment": "source/final/projects/10-resonance/src/pp_resonance/alignment/__init__.py",
+          "pp_resonance.alignment.dynamic": "source/final/projects/10-resonance/src/pp_resonance/alignment/dynamic.py",
+          "pp_resonance.analysis": "source/final/projects/10-resonance/src/pp_resonance/analysis.py",
+          "pp_resonance.audio_io": "source/final/projects/10-resonance/src/pp_resonance/audio_io/__init__.py",
+          "pp_resonance.audio_io.pcm": "source/final/projects/10-resonance/src/pp_resonance/audio_io/pcm.py",
+          "pp_resonance.formats": "source/final/projects/10-resonance/src/pp_resonance/formats.py",
+          "pp_resonance.metrics": "source/final/projects/10-resonance/src/pp_resonance/metrics/__init__.py",
+          "pp_resonance.metrics.evaluate": "source/final/projects/10-resonance/src/pp_resonance/metrics/evaluate.py",
+          "pp_resonance.model": "source/final/projects/10-resonance/src/pp_resonance/model.py",
+          "pp_resonance.notes": "source/final/projects/10-resonance/src/pp_resonance/notes/__init__.py",
+          "pp_resonance.notes.decode": "source/final/projects/10-resonance/src/pp_resonance/notes/decode.py",
+          "pp_resonance.onsets": "source/final/projects/10-resonance/src/pp_resonance/onsets/__init__.py",
+          "pp_resonance.onsets.detect": "source/final/projects/10-resonance/src/pp_resonance/onsets/detect.py",
+          "pp_resonance.pitch": "source/final/projects/10-resonance/src/pp_resonance/pitch/__init__.py",
+          "pp_resonance.pitch.difference": "source/final/projects/10-resonance/src/pp_resonance/pitch/difference.py",
+          "pp_resonance.spectral": "source/final/projects/10-resonance/src/pp_resonance/spectral/__init__.py",
+          "pp_resonance.spectral.transforms": "source/final/projects/10-resonance/src/pp_resonance/spectral/transforms.py",
+          "pp_resonance.streaming": "source/final/projects/10-resonance/src/pp_resonance/streaming/__init__.py",
+          "pp_resonance.streaming.framing": "source/final/projects/10-resonance/src/pp_resonance/streaming/framing.py",
+          "pp_resonance.synthesis": "source/final/projects/10-resonance/src/pp_resonance/synthesis/__init__.py",
+          "pp_resonance.synthesis.tones": "source/final/projects/10-resonance/src/pp_resonance/synthesis/tones.py"
+        },
+        "repetitions": 5,
+        "inputs_unchanged": true,
+        "limits": {
+          "alignment_max_cells": 4000000,
+          "audio_seconds": 12.0,
+          "alignment_repeats": 5,
+          "audio_repeats": 5,
+          "threads": 1,
+          "exclusive_host": false
+        },
+        "alignment": [
+          {
+            "reference_notes": 100,
+            "detected_notes": 92,
+            "cells": 9393,
+            "dataset_sha256": "ba1a5565384ea984b2188d4870cf604390ad5d8a3aafdc8d1eaf9adcf326f507",
+            "mapping_sha256": "44387220705dcec5dea037769bcd861e3080bd287b7d271f41d55b73c579045d",
+            "seconds": [
+              0.003579409999474592,
+              0.0037746439993497916,
+              0.003624748000220279,
+              0.003739110999958939,
+              0.0035009120001632255
+            ],
+            "measurement_runs": 5,
+            "median_seconds": 0.003624748000220279,
+            "cost": 10.266770833333332
+          },
+          {
+            "reference_notes": 300,
+            "detected_notes": 277,
+            "cells": 83678,
+            "dataset_sha256": "aa7cef380560f45c4e4cce81d324d773bfab7d7a0dd8114ab646c3edf58f0d71",
+            "mapping_sha256": "3764880ecc4d0a967238115221b72a1a5920c4c16720ffcd6f0efd58045b9059",
+            "seconds": [
+              0.03316561399969942,
+              0.03219847499985917,
+              0.03086880899991229,
+              0.032694352000362414,
+              0.03253315999972983
+            ],
+            "measurement_runs": 5,
+            "median_seconds": 0.03253315999972983,
+            "cost": 29.600312499999998
+          },
+          {
+            "reference_notes": 600,
+            "detected_notes": 554,
+            "cells": 333555,
+            "dataset_sha256": "8d537b0f0bbcd7f32463d80ee3b0d97f972af5c39b74071617015423ba1cf8d4",
+            "mapping_sha256": "1332ea9411dc4101ab4b7dc40bcf177f32929e10b689b911c09bb881ff507899",
+            "seconds": [
+              0.12617137399956846,
+              0.13085198499993567,
+              0.12878574800015485,
+              0.129902072000732,
+              0.12778118300047936
+            ],
+            "measurement_runs": 5,
+            "median_seconds": 0.12878574800015485,
+            "cost": 59.193416666666664
+          }
+        ],
+        "semantic_witnesses": {
+          "cmnd_scale_invariant": true,
+          "tiny_above_configured_silence_is_voiced": true,
+          "onsets_before_future_peak": [
+            3584
+          ],
+          "onsets_after_future_peak": [
+            3584,
+            16384
+          ],
+          "input_samples_accepted_before_iteration": 4096,
+          "first_frame_preserves_caller_input": true,
+          "duplicate_frame_starts_after_close": false,
+          "full_output_eligible_frames": 47,
+          "one_frame_output_eligible_frames": 47,
+          "one_frame_output_recall": 0.02127659574468085,
+          "weak_onsets_leave_note_boundaries_unchanged": true
+        },
+        "dynamic_synthetic_phrase": {
+          "dataset_sha256": "43542d0b50941ee2765d12e10e5ef0004111e82231e42467080f3c718b5a0363",
+          "parameters": {
+            "tones": [
+              {
+                "midi": 40,
+                "onset": 0.27499999999999997,
+                "duration": 0.42,
+                "amplitude": 0.06,
+                "pluck": true,
+                "vibrato_cents": 20,
+                "bend_cents": 100
+              },
+              {
+                "midi": 45,
+                "onset": 1.05,
+                "duration": 0.42,
+                "amplitude": 0.6,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 50,
+                "onset": 1.825,
+                "duration": 0.42,
+                "amplitude": 0.06,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 55,
+                "onset": 2.525,
+                "duration": 0.42,
+                "amplitude": 0.6,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 59,
+                "onset": 3.3,
+                "duration": 0.42,
+                "amplitude": 0.06,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 64,
+                "onset": 4.075,
+                "duration": 0.42,
+                "amplitude": 0.6,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 69,
+                "onset": 4.7749999999999995,
+                "duration": 0.42,
+                "amplitude": 0.06,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 76,
+                "onset": 5.55,
+                "duration": 0.42,
+                "amplitude": 0.6,
+                "pluck": true,
+                "vibrato_cents": 20,
+                "bend_cents": 0
+              },
+              {
+                "midi": 83,
+                "onset": 6.325,
+                "duration": 0.42,
+                "amplitude": 0.06,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 88,
+                "onset": 7.0249999999999995,
+                "duration": 0.42,
+                "amplitude": 0.6,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 40,
+                "onset": 7.8,
+                "duration": 0.42,
+                "amplitude": 0.06,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 45,
+                "onset": 8.575000000000001,
+                "duration": 0.42,
+                "amplitude": 0.6,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 100
+              },
+              {
+                "midi": 50,
+                "onset": 9.275,
+                "duration": 0.42,
+                "amplitude": 0.06,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              },
+              {
+                "midi": 55,
+                "onset": 10.05,
+                "duration": 0.42,
+                "amplitude": 0.6,
+                "pluck": true,
+                "vibrato_cents": 0,
+                "bend_cents": 0
+              }
+            ],
+            "rate": 48000,
+            "duration": 12.0,
+            "block": 8192,
+            "seed": 1729,
+            "noise": 0.0005
+          },
+          "seconds": [
+            0.32164643999931286,
+            0.3199149980000584,
+            0.3191947719997188,
+            0.3279369800002314,
+            0.3127110499999617
+          ],
+          "measurement_runs": 5,
+          "median_seconds": 0.3199149980000584,
+          "eligible_frames": 709,
+          "voiced_misses": 0,
+          "within_10_cents_all_eligible": 1.0,
+          "truth_notes": 14,
+          "detected_notes": 14,
+          "detected_onsets": 14,
+          "peak_input_buffer_samples": 9984
+        },
+        "limits_of_inference": [
+          "Authored synthetic signals; no real-recording or polyphonic accuracy claim.",
+          "Shared-host microtimings describe these inputs, not an exclusive standard benchmark.",
+          "Package digest covers Python code; workload/dataset hashes fix the comparison inputs."
+        ]
+      }
+    }
+  },
+  "source_inventory": {
+    "before_original_file": "source-inventory-before.json",
+    "before_original_sha256": "e5ecb320401d6dd808a1e195127e662a228ff113479695fbbeb4d80331897173",
+    "before": {
+      "schema_version": 1,
+      "started_at_utc": "2026-10-20T09:18:40.554616+00:00",
+      "final_commit": "a33a513840d81f6e2cdb1b730540d906122bb254",
+      "baseline_commit": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+      "baseline_archive_sha256": "8f6f03373b350215f8f8c255115f7241405f4985f18d4b6593a9eba1d315a859",
+      "primary_clean_before": true,
+      "final_clean_before": true,
+      "source_root_paths": {
+        "baseline": "source/baseline",
+        "final": "source/final"
+      },
+      "scope": "All source files, project config/lock/interpreter pins, plus final Python benchmark drivers",
+      "files": [
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/.python-version",
+          "bytes": 7,
+          "sha256": "5abd4dc1efa09469b88916c8e4e027a8c266a9b6d06f43ac9da3e30cd00b4ab5"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/pyproject.toml",
+          "bytes": 935,
+          "sha256": "1fc52e43f68f0d7a717bd67ddf0eaf51a500ec04e02c53962ec64fb7e20c7c08"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/__init__.py",
+          "bytes": 566,
+          "sha256": "4ab9f9507b22bf036b48cd3206b5e0c1b9a342e10ac1f9c219f7f0a933b6e26d"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/checkpoints/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/cli.py",
+          "bytes": 12151,
+          "sha256": "a016eeb79c8b36f78d94b4b2d330c2a98bb939a42d18c2cf36ebfbd16a0d489f"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/diagnostics/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/diagnostics/oracle.py",
+          "bytes": 4789,
+          "sha256": "064d081d8b5b378fd3e476e920314e62cd7341fed897785e6a8f8fecf77cef24"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/diagnostics/workload.py",
+          "bytes": 1979,
+          "sha256": "3cf82bdd0a0a7cfe9da2f2cb3160293a35c75a86c4663d71445e1e577b5eefc2"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/event_time/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/event_time/policy.py",
+          "bytes": 1475,
+          "sha256": "fd01725f78cbc6dce4cf286d7a7d2bff9ae1abc316020de7e0147e102d8b02d9"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/ingress/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/ingress/journal.py",
+          "bytes": 10374,
+          "sha256": "c0f67dee467b1552b525838c017121722a666667f52c0a289049246e24543adf"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/ingress/schema.py",
+          "bytes": 5025,
+          "sha256": "d11c7280b0e6bf28a9c4f93c014491c0f47f5a994eb7c9491830e33690e22e3c"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/model/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/model/envelope.py",
+          "bytes": 3555,
+          "sha256": "2eb9b91f0e8b957c8cde960022f39f7dc2d331691d346d8dfa49fbfd8a47c88b"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/operators/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/operators/tumbling.py",
+          "bytes": 1116,
+          "sha256": "8e8c0c27987a91cadebec311a675a494816808dcd74688c2f5ba2c810d4f4d7d"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/py.typed",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/runtime/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/runtime/asyncio.py",
+          "bytes": 4012,
+          "sha256": "cec7eee4d30d59dbb8bfe2f6d73c55a22a3b4a93bdb838c1c185d5e4e75614e6"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/runtime/engine.py",
+          "bytes": 16959,
+          "sha256": "b75316e5737faac80e6ecb71cbfc32da9ec1a8bd9d3d1c5cdc50fc5ddfd7dca2"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/sinks/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/sinks/idempotent.py",
+          "bytes": 1806,
+          "sha256": "8e1096cb516cac420cbf248a535f28b6877574b81ee4a628d9ee5459e3c1f810"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/sources/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/src/pp_current/sources/ndjson.py",
+          "bytes": 505,
+          "sha256": "4ac669cc398e134c30249a4de5f6f49ac54728c4103cebc4f3ac10e5bd901878"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/03-current/uv.lock",
+          "bytes": 119240,
+          "sha256": "baf15ac83a35752ad671410a6466a49a8b6f5b43d6210beed3cb3bd6982239a3"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/.python-version",
+          "bytes": 7,
+          "sha256": "5abd4dc1efa09469b88916c8e4e027a8c266a9b6d06f43ac9da3e30cd00b4ab5"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/pyproject.toml",
+          "bytes": 751,
+          "sha256": "cbc8d7e6e7715e9ca8621de18d7d1238135b2d8047ce86de4ad009259258d3c4"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/__init__.py",
+          "bytes": 350,
+          "sha256": "c4d89035a376af57cec2935403b474bb2a4e69d8c567ef5cd7dd3c0387b529d8"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/analysis/__init__.py",
+          "bytes": 35,
+          "sha256": "0a885b85f100f046b1dc845f986c2844dbf58b133d3d6215f4ef099060d9c30f"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/analysis/engine.py",
+          "bytes": 18722,
+          "sha256": "9a627392efea7a1c1d9979f62182b92f131aeb1689322ee31885c076589322d7"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/analysis/lattice.py",
+          "bytes": 1421,
+          "sha256": "683eb87907c14ddb73fd17a9f81eca03cf14d764a72b19d3de52a44800266b66"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/cache.py",
+          "bytes": 10774,
+          "sha256": "66e2dc66e25053273687847f8e1ccbef908f28cef2094f1cc61a9ec7f57330bf"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/cfg/__init__.py",
+          "bytes": 30,
+          "sha256": "6fb5780f7a3ed4f89669a0c76316ff4350032eedd0e6c427e7c7f309500c3afc"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/cfg/blocks.py",
+          "bytes": 2678,
+          "sha256": "5eff1448012454d03653f2eb6b72008fcfd1ab76473da9317091671ae4fe6133"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/cli.py",
+          "bytes": 7742,
+          "sha256": "a529696a4612d6a1bd02b1d546dbe2805999770493590540b1a30d5ef4592e3f"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/codemods/__init__.py",
+          "bytes": 35,
+          "sha256": "9eec4b0a1dce790f537389647054bd6f98552028b27a7b46358aa35d0399f570"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/codemods/plan.py",
+          "bytes": 7782,
+          "sha256": "7057665b139b29e53efa278fc4473466e7e43bbc47d4895b890dccf6081c6c99"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/codemods/transforms.py",
+          "bytes": 6782,
+          "sha256": "e0e851e7ea17d3cdaba3481335cb43c8fe48d7f90d2ba6780f82ef07db366c9f"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/evidence.py",
+          "bytes": 3849,
+          "sha256": "955982d6fd14a831628ca0ce4c9be390cbac6ffbc456e9b110b56781403ebd3a"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/frontend/__init__.py",
+          "bytes": 35,
+          "sha256": "fa4c0ab283138c1f872ecdd44f3dbf60b359464d1a76d03c4d99bc9ece288164"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/frontend/discovery.py",
+          "bytes": 6115,
+          "sha256": "68339ad3e8318ef7b28c05cff315df69779fed8e7db3235ca47ab9e94af6b22f"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/frontend/parser_worker.py",
+          "bytes": 2220,
+          "sha256": "9955ff77f2f198c0147ee17f8a37c1f79cafbcf02dc8d961258499d83fdcb06f"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/py.typed",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/reporting/__init__.py",
+          "bytes": 36,
+          "sha256": "e6cfa3f74203d9910654c7078f81770212de9ae2b09cf2f13e141f045cc83f6d"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/reporting/models.py",
+          "bytes": 1534,
+          "sha256": "a795d4b9139856e113fad5dd4da610c5e57e7cab107e2a52193e98221847e83d"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/reporting/sarif-schema-2.1.0.json",
+          "bytes": 112768,
+          "sha256": "c3b4bb2d6093897483348925aaa73af03b3e3f4bd4ca38cef26dcb4212a2682e"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/reporting/sarif.py",
+          "bytes": 3390,
+          "sha256": "b149cad84ad75740f3af721eb0da11feba801a1a9c8a727e8b1c0089146f04a4"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/rules/__init__.py",
+          "bytes": 32,
+          "sha256": "fd298f44448d7585e155e741dfc40338083eb375b422aeca214f4f73015a4a12"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/rules/registry.py",
+          "bytes": 1364,
+          "sha256": "9efb8618b888d16edf785fcee312bb0fd9e579e3a09871026ae44516ce6d5ea7"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/semantics/__init__.py",
+          "bytes": 36,
+          "sha256": "cd42efc78b8636dfa6477d7b9f3c76074c4571f07da037a7c7dfc399479d65ca"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/semantics/symbols.py",
+          "bytes": 2658,
+          "sha256": "3636531eef24c7466733c3ee13eadfd16cd0c2a2f33faa014da93aae3c1ac1c5"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/trusted_api.py",
+          "bytes": 749,
+          "sha256": "da1f8dfe03773df46e45a72a59b444d7b61dcefdc8f8d380fe67814ca3c44ddb"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/src/pp_pytrace/workloads.py",
+          "bytes": 10920,
+          "sha256": "9fc0083eeeb614fa633ad7e59581c1b8d5520c64832694194f95ff1b69b0cc4c"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/06-pytrace/uv.lock",
+          "bytes": 169404,
+          "sha256": "4e0752505efdd7261423861af80c8e7fb9f89ce9569d5f09be728826d5507660"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/.python-version",
+          "bytes": 7,
+          "sha256": "5abd4dc1efa09469b88916c8e4e027a8c266a9b6d06f43ac9da3e30cd00b4ab5"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/pyproject.toml",
+          "bytes": 822,
+          "sha256": "9e2c4ab59829cc012d96fbe4408b610887d28fa02064a3102103e71e27649a57"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/__init__.py",
+          "bytes": 933,
+          "sha256": "6f41d36e84e37854bd38daeb52560c3a0eaa82c265162de3787a68b8366ae56f"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/benchmark.py",
+          "bytes": 11355,
+          "sha256": "26d98b49a7626709fccd6cde34975920848625e0e2696b3e36b367a7c64045a9"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/cli.py",
+          "bytes": 8125,
+          "sha256": "b63953171a93bc30d6e377f11ba61096d20320e5b61ed0e95f1cb12ceca2c25f"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/construction/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/construction/insertion.py",
+          "bytes": 6821,
+          "sha256": "12eb2cb042c2d05a85c31f10a81157fe53f83638bfbc9bfba718e392c19eb883"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/domain/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/domain/instance.py",
+          "bytes": 2093,
+          "sha256": "a06cf689373f85fe22afa4b3a880350f8a7f379b3a41a4647ab45c6415d40109"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/fixtures.py",
+          "bytes": 3470,
+          "sha256": "8d27f5c9941e2ca465b9fa8dded6bc129e7fa59d9551aa3be591c49f0af1e6a2"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/neighborhoods/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/neighborhoods/moves.py",
+          "bytes": 5336,
+          "sha256": "8782a607ae01beb11aaf169824ead09b24b757761824d19dfd7a1f7057c3b117"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/py.typed",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/reference/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/reference/exhaustive.py",
+          "bytes": 2660,
+          "sha256": "1e52f9aff18dcc12e5f92e80988e58d5660cd45e0c3ff6f11929f491ec4de755"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/replanning/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/replanning/rolling.py",
+          "bytes": 3720,
+          "sha256": "b89fd1652b05f39e14c24a0d2c7f8c96f871e9933548752ba95c5834079faafa"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/reporting/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/reporting/report.py",
+          "bytes": 11086,
+          "sha256": "25cec321056e79da7e5f35b010ed12acda3978f52c7d9d8d75e765c13464cb34"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/reporting/serialization.py",
+          "bytes": 6036,
+          "sha256": "ad39636980af7b2b46500b852bd176a2ae541c07f465d3c9d2c41ac77c255c2d"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/search/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/search/solver.py",
+          "bytes": 7222,
+          "sha256": "68e96b17c9478a87239514b33e89050c4e9885bf0bb99e3b4b2a250c9c210a99"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/validation/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/src/pp_routecraft/validation/verifier.py",
+          "bytes": 11593,
+          "sha256": "f4dd7b31e0f413e73604043c51e0c339a59d2d5478b6d86e55a0bab3e99f3b3f"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/09-routecraft/uv.lock",
+          "bytes": 224780,
+          "sha256": "9aef9e96a988bfdd7403447241e67af694abf1c7d3910e57cae691e55643a011"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/.python-version",
+          "bytes": 7,
+          "sha256": "5abd4dc1efa09469b88916c8e4e027a8c266a9b6d06f43ac9da3e30cd00b4ab5"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/pyproject.toml",
+          "bytes": 889,
+          "sha256": "5b7c00077703337b2972b9dd8b332d184e892c78e3d980891d930827effd7d54"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/__init__.py",
+          "bytes": 304,
+          "sha256": "b83e47cff12e39ffd977ea0770e21ef9df38c0bcd72765cf07f5aed7b1b4d568"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/alignment/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/alignment/dynamic.py",
+          "bytes": 6655,
+          "sha256": "84e1c65467f7093083c5e9947d50bc82e9a544a5b712ab17c8a6f2e4ef6d133f"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/analysis.py",
+          "bytes": 3376,
+          "sha256": "1559f6525c105a93be482ecf7f3b8bb66bdc75184dbde14fffdee9d995e541d4"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/audio_io/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/audio_io/pcm.py",
+          "bytes": 2717,
+          "sha256": "5edca5fcae028537fd93b1bd24f5fdffd1f23f1609d472eaeed6852f5b4f502d"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/benchmark.py",
+          "bytes": 4937,
+          "sha256": "8c44b4ad134bbdf0bfd7fd4a415fd6fe936dbb197ca9b0eb4745b5d8c23a2934"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/cli.py",
+          "bytes": 10915,
+          "sha256": "5c68faf759e5019a6aa344ac6f437e4a8e4399456c9bf749859191ecb5bfe873"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/formats.py",
+          "bytes": 1660,
+          "sha256": "3dc1ef56f0f30579d0804615daad9b7fd1243fe15d0dbb89dfbc50a05373e225"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/metrics/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/metrics/evaluate.py",
+          "bytes": 6454,
+          "sha256": "c3cf17b64679e90a45c13c9139e775912dba6b1ae39ab612f71560352ea2e1ee"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/midi/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/midi/export.py",
+          "bytes": 5813,
+          "sha256": "8844411c9b5f40578c0aae12de8b293fd26e359454bf6965c78d574a39ff6332"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/model.py",
+          "bytes": 3081,
+          "sha256": "17c3a440df186a719e651884e9a30b9866a5891dd8e8cdfd47c82d7332eefc64"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/notes/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/notes/decode.py",
+          "bytes": 3704,
+          "sha256": "c293dcebbb7378da797f9b16262f0e60be29a24870003ce92c8e964e0e9009d5"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/onsets/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/onsets/detect.py",
+          "bytes": 1109,
+          "sha256": "9ae028a595825195d543c944ae58b01505962c80ba9b105609f3a8d79072743f"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/pitch/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/pitch/difference.py",
+          "bytes": 2677,
+          "sha256": "0a87f46ba83e6ab85e8dedb7d56a795ccbe9fe81cba58b3526fdc876f945266d"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/provenance.py",
+          "bytes": 4553,
+          "sha256": "4733b0da3f4556fbcfaa156caab772b74050df6757cceb2527092e87989870ea"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/py.typed",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/reports/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/reports/analysis.html",
+          "bytes": 6027,
+          "sha256": "b2affe5f11399eab392166858d977439c72d64f48ebe7a29c8efad7c70804e5e"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/reports/render.py",
+          "bytes": 5302,
+          "sha256": "6d4dc1f4a33f5a426d6b745cbf08a9b3a6fe8a7d309ef07172bd6efcc5d25dd2"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/spectral/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/spectral/transforms.py",
+          "bytes": 1552,
+          "sha256": "b4c18ee379b84fdc44985a34e0d84eb88d9feaaab83991ccd989a9d8caff8ff9"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/streaming/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/streaming/framing.py",
+          "bytes": 1539,
+          "sha256": "bba89cf8b6c61085903f49f4e59aec12b235db0008cf519c726383ef0fd1c488"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/synthesis/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/src/pp_resonance/synthesis/tones.py",
+          "bytes": 3567,
+          "sha256": "0742adfe1ac6dae9246b4bfcd55987d2cd2a29e5436103fbed465ba67290d12d"
+        },
+        {
+          "snapshot": "baseline",
+          "path": "projects/10-resonance/uv.lock",
+          "bytes": 265899,
+          "sha256": "8ac205930d14ebd160772d9950380e6e966aa61e740a0f3cd169c195f15cbefc"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/.python-version",
+          "bytes": 7,
+          "sha256": "5abd4dc1efa09469b88916c8e4e027a8c266a9b6d06f43ac9da3e30cd00b4ab5"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/benchmarks/join_density.py",
+          "bytes": 6137,
+          "sha256": "75bbbd6c435c99904c29559c68e93c948cdfd629791a597ca7799a3794a4535b"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/pyproject.toml",
+          "bytes": 935,
+          "sha256": "1fc52e43f68f0d7a717bd67ddf0eaf51a500ec04e02c53962ec64fb7e20c7c08"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/__init__.py",
+          "bytes": 641,
+          "sha256": "77b7f5b02219176e5d62d9be0d3ed1cbfe03b421035ee0bf2fea808e063eb7ee"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/checkpoints/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/cli.py",
+          "bytes": 14241,
+          "sha256": "3878369700e40b4f4a9f6214e4f364e7bd3ce9ea40370f3dd258094a81ca0818"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/diagnostics/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/diagnostics/oracle.py",
+          "bytes": 4983,
+          "sha256": "7548be18c3dba04ac1aca138068ca9744f82041357aa2df37254b72065f718a1"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/diagnostics/workload.py",
+          "bytes": 1979,
+          "sha256": "3cf82bdd0a0a7cfe9da2f2cb3160293a35c75a86c4663d71445e1e577b5eefc2"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/errors.py",
+          "bytes": 336,
+          "sha256": "6f2865f31e0b9c46073eb64a841e9c05828f56ec5d1dfb073344567eca3d9cb6"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/event_time/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/event_time/policy.py",
+          "bytes": 1824,
+          "sha256": "7367c4f3c2aee73b51e643c87bfb2a0a368e184aaf1fd02f5a7a115305e1ec81"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/ingress/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/ingress/journal.py",
+          "bytes": 11957,
+          "sha256": "23dc85f0456cfcf5944480f571a3767fc0c8273fbee24c475036825c0f66d95a"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/ingress/schema.py",
+          "bytes": 5025,
+          "sha256": "d11c7280b0e6bf28a9c4f93c014491c0f47f5a994eb7c9491830e33690e22e3c"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/model/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/model/envelope.py",
+          "bytes": 3617,
+          "sha256": "8ee0892f47dcc745dd48fc8284201a6678ec1f5b1525ccb3c31d9fe547e98296"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/operators/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/operators/tumbling.py",
+          "bytes": 1564,
+          "sha256": "fb2454fed86c4f320baa9ae3befb34fad0160c9214595ac9806531b087407e0d"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/py.typed",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/runtime/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/runtime/asyncio.py",
+          "bytes": 6222,
+          "sha256": "6473499b21f53d0dcf7f0fad11d5510d614244b766ad8620e78a517b6a9d19d3"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/runtime/engine.py",
+          "bytes": 20380,
+          "sha256": "38487deea2cb0c747ae7cab47af1b5bc2bffc2473895c13181023347a373ae82"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/sinks/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/sinks/idempotent.py",
+          "bytes": 1806,
+          "sha256": "8e1096cb516cac420cbf248a535f28b6877574b81ee4a628d9ee5459e3c1f810"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/sources/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/src/pp_current/sources/ndjson.py",
+          "bytes": 580,
+          "sha256": "c461305d32b7df9236edb44e123801fa6d3dd0c8316ea652414ea19796eb200a"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/03-current/uv.lock",
+          "bytes": 119240,
+          "sha256": "baf15ac83a35752ad671410a6466a49a8b6f5b43d6210beed3cb3bd6982239a3"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/.python-version",
+          "bytes": 7,
+          "sha256": "5abd4dc1efa09469b88916c8e4e027a8c266a9b6d06f43ac9da3e30cd00b4ab5"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/benchmarks/generate_corpus.py",
+          "bytes": 6326,
+          "sha256": "5eb56405f1dc0a3d6ed007d9ad162fa14efcddff0d9803d53d65b73eac1f0d2c"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/benchmarks/semantic_scaling.py",
+          "bytes": 4849,
+          "sha256": "c17f7597414e01e040c6f5b276642854c24ed956fe5f6dccdf41531aed0b113f"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/pyproject.toml",
+          "bytes": 751,
+          "sha256": "cbc8d7e6e7715e9ca8621de18d7d1238135b2d8047ce86de4ad009259258d3c4"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/__init__.py",
+          "bytes": 350,
+          "sha256": "c4d89035a376af57cec2935403b474bb2a4e69d8c567ef5cd7dd3c0387b529d8"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/analysis/__init__.py",
+          "bytes": 35,
+          "sha256": "0a885b85f100f046b1dc845f986c2844dbf58b133d3d6215f4ef099060d9c30f"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/analysis/engine.py",
+          "bytes": 22644,
+          "sha256": "98a8063602b49cd5ba9c14c949fdf2466eca175e53150445af69ae838bbe8a68"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/analysis/lattice.py",
+          "bytes": 1870,
+          "sha256": "37452ab676da9df137570ec630f01e6d9067177e110a39b4c4490aeb03f9643b"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/analysis/solver.py",
+          "bytes": 2553,
+          "sha256": "a3a8ba4240468c3c32c67f09b8aa5044be05f58164434a8152db472e6d2dc62f"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/cache.py",
+          "bytes": 10835,
+          "sha256": "aba9726308ccf2ebfca4aaf09dc9fe5c944fee46c6940d867651a7f79942be38"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/cfg/__init__.py",
+          "bytes": 30,
+          "sha256": "6fb5780f7a3ed4f89669a0c76316ff4350032eedd0e6c427e7c7f309500c3afc"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/cfg/blocks.py",
+          "bytes": 9681,
+          "sha256": "56659e02d3bb9181b70ace85daea9364cda85a18380516e27394d0bcdb801003"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/cli.py",
+          "bytes": 7742,
+          "sha256": "a529696a4612d6a1bd02b1d546dbe2805999770493590540b1a30d5ef4592e3f"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/codemods/__init__.py",
+          "bytes": 35,
+          "sha256": "9eec4b0a1dce790f537389647054bd6f98552028b27a7b46358aa35d0399f570"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/codemods/plan.py",
+          "bytes": 7782,
+          "sha256": "7057665b139b29e53efa278fc4473466e7e43bbc47d4895b890dccf6081c6c99"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/codemods/transforms.py",
+          "bytes": 6819,
+          "sha256": "3cc4d2d9a9d92855dd1f7b4d0fa387e1b57bbe55d414da6e4cb194a67469340a"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/evidence.py",
+          "bytes": 3849,
+          "sha256": "955982d6fd14a831628ca0ce4c9be390cbac6ffbc456e9b110b56781403ebd3a"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/frontend/__init__.py",
+          "bytes": 35,
+          "sha256": "fa4c0ab283138c1f872ecdd44f3dbf60b359464d1a76d03c4d99bc9ece288164"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/frontend/discovery.py",
+          "bytes": 6115,
+          "sha256": "68339ad3e8318ef7b28c05cff315df69779fed8e7db3235ca47ab9e94af6b22f"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/frontend/parser_worker.py",
+          "bytes": 2220,
+          "sha256": "9955ff77f2f198c0147ee17f8a37c1f79cafbcf02dc8d961258499d83fdcb06f"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/py.typed",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/reporting/__init__.py",
+          "bytes": 36,
+          "sha256": "e6cfa3f74203d9910654c7078f81770212de9ae2b09cf2f13e141f045cc83f6d"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/reporting/models.py",
+          "bytes": 1948,
+          "sha256": "6dcfde85fc42be8ec4df0386dcc869307d606bab2e71cfd82fc11e1b1d577bc8"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/reporting/sarif-schema-2.1.0.json",
+          "bytes": 112768,
+          "sha256": "c3b4bb2d6093897483348925aaa73af03b3e3f4bd4ca38cef26dcb4212a2682e"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/reporting/sarif.py",
+          "bytes": 3390,
+          "sha256": "b149cad84ad75740f3af721eb0da11feba801a1a9c8a727e8b1c0089146f04a4"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/rules/__init__.py",
+          "bytes": 32,
+          "sha256": "fd298f44448d7585e155e741dfc40338083eb375b422aeca214f4f73015a4a12"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/rules/registry.py",
+          "bytes": 1364,
+          "sha256": "9efb8618b888d16edf785fcee312bb0fd9e579e3a09871026ae44516ce6d5ea7"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/semantics/__init__.py",
+          "bytes": 36,
+          "sha256": "cd42efc78b8636dfa6477d7b9f3c76074c4571f07da037a7c7dfc399479d65ca"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/semantics/symbols.py",
+          "bytes": 5614,
+          "sha256": "3e87dee6b31b912aecb636b4e8a9bcda83f6d00c89d060009efc5fa862aaacb2"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/trusted_api.py",
+          "bytes": 749,
+          "sha256": "da1f8dfe03773df46e45a72a59b444d7b61dcefdc8f8d380fe67814ca3c44ddb"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/src/pp_pytrace/workloads.py",
+          "bytes": 10920,
+          "sha256": "9fc0083eeeb614fa633ad7e59581c1b8d5520c64832694194f95ff1b69b0cc4c"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/06-pytrace/uv.lock",
+          "bytes": 169404,
+          "sha256": "4e0752505efdd7261423861af80c8e7fb9f89ce9569d5f09be728826d5507660"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/.python-version",
+          "bytes": 7,
+          "sha256": "5abd4dc1efa09469b88916c8e4e027a8c266a9b6d06f43ac9da3e30cd00b4ab5"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/benchmarks/insertion_work.py",
+          "bytes": 9660,
+          "sha256": "7de7520fd1e063700f3275212b58b24dacf5ee224c6afa64f3389dd028d4f278"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/pyproject.toml",
+          "bytes": 822,
+          "sha256": "9e2c4ab59829cc012d96fbe4408b610887d28fa02064a3102103e71e27649a57"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/__init__.py",
+          "bytes": 933,
+          "sha256": "6f41d36e84e37854bd38daeb52560c3a0eaa82c265162de3787a68b8366ae56f"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/benchmark.py",
+          "bytes": 11469,
+          "sha256": "32f6a60b8cc2df5b5576725ac02a2cc6740200df20fe64cbfe718275a36a19c7"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/cli.py",
+          "bytes": 8125,
+          "sha256": "b63953171a93bc30d6e377f11ba61096d20320e5b61ed0e95f1cb12ceca2c25f"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/construction/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/construction/insertion.py",
+          "bytes": 8685,
+          "sha256": "ec6c53c329baa410a9784b59038e0e73fde6c6fac09023820f76ab1dd962273c"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/construction/profile.py",
+          "bytes": 2625,
+          "sha256": "f5f340a7a71f596d106d669cfa1856aeaf432d3bd092f9f42fe143773111caa8"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/domain/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/domain/instance.py",
+          "bytes": 2093,
+          "sha256": "a06cf689373f85fe22afa4b3a880350f8a7f379b3a41a4647ab45c6415d40109"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/fixtures.py",
+          "bytes": 3470,
+          "sha256": "8d27f5c9941e2ca465b9fa8dded6bc129e7fa59d9551aa3be591c49f0af1e6a2"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/neighborhoods/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/neighborhoods/moves.py",
+          "bytes": 5336,
+          "sha256": "8782a607ae01beb11aaf169824ead09b24b757761824d19dfd7a1f7057c3b117"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/py.typed",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/reference/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/reference/exhaustive.py",
+          "bytes": 3726,
+          "sha256": "bf7ff40d4ba3372bcc43264e7bfbee9bc5d97b1f94c72d355f196ecef391d751"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/replanning/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/replanning/rolling.py",
+          "bytes": 3720,
+          "sha256": "b89fd1652b05f39e14c24a0d2c7f8c96f871e9933548752ba95c5834079faafa"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/reporting/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/reporting/report.py",
+          "bytes": 11086,
+          "sha256": "25cec321056e79da7e5f35b010ed12acda3978f52c7d9d8d75e765c13464cb34"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/reporting/serialization.py",
+          "bytes": 6036,
+          "sha256": "ad39636980af7b2b46500b852bd176a2ae541c07f465d3c9d2c41ac77c255c2d"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/search/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/search/solver.py",
+          "bytes": 7582,
+          "sha256": "b263cf46703a4db90ae2e6bf2038e1c47939278935d4d6c4b039f0507c778835"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/validation/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/src/pp_routecraft/validation/verifier.py",
+          "bytes": 11593,
+          "sha256": "f4dd7b31e0f413e73604043c51e0c339a59d2d5478b6d86e55a0bab3e99f3b3f"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/09-routecraft/uv.lock",
+          "bytes": 224780,
+          "sha256": "9aef9e96a988bfdd7403447241e67af694abf1c7d3910e57cae691e55643a011"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/.python-version",
+          "bytes": 7,
+          "sha256": "5abd4dc1efa09469b88916c8e4e027a8c266a9b6d06f43ac9da3e30cd00b4ab5"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/benchmarks/core_review.py",
+          "bytes": 10679,
+          "sha256": "1df3620267e50c6ee03e64ad92fbf6e96bb27869dbf948db8b33f1b8eecebbee"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/pyproject.toml",
+          "bytes": 889,
+          "sha256": "5b7c00077703337b2972b9dd8b332d184e892c78e3d980891d930827effd7d54"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/__init__.py",
+          "bytes": 304,
+          "sha256": "b83e47cff12e39ffd977ea0770e21ef9df38c0bcd72765cf07f5aed7b1b4d568"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/alignment/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/alignment/dynamic.py",
+          "bytes": 7243,
+          "sha256": "e21bd333f67f7a4cea48a5dd96a5a5c4ce02ada8ff069bcadd5f4591dbea4b52"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/analysis.py",
+          "bytes": 3376,
+          "sha256": "1559f6525c105a93be482ecf7f3b8bb66bdc75184dbde14fffdee9d995e541d4"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/audio_io/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/audio_io/pcm.py",
+          "bytes": 2717,
+          "sha256": "5edca5fcae028537fd93b1bd24f5fdffd1f23f1609d472eaeed6852f5b4f502d"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/benchmark.py",
+          "bytes": 5137,
+          "sha256": "dc6603f3e39594ca92872625664f218b7e99b5f0e780edae4c5e9dda08efa26b"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/cli.py",
+          "bytes": 10965,
+          "sha256": "40cee5b6ede77062c5b96845478c1d3edc33c0d76f28f6376a4fd82c30e0f4b5"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/formats.py",
+          "bytes": 1660,
+          "sha256": "3dc1ef56f0f30579d0804615daad9b7fd1243fe15d0dbb89dfbc50a05373e225"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/metrics/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/metrics/evaluate.py",
+          "bytes": 7792,
+          "sha256": "4bfc52be1fc167d8c765daf9812a84b69d6202032fbf3fb4d78315969a6f768b"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/midi/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/midi/export.py",
+          "bytes": 5813,
+          "sha256": "8844411c9b5f40578c0aae12de8b293fd26e359454bf6965c78d574a39ff6332"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/model.py",
+          "bytes": 3081,
+          "sha256": "17c3a440df186a719e651884e9a30b9866a5891dd8e8cdfd47c82d7332eefc64"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/notes/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/notes/decode.py",
+          "bytes": 4153,
+          "sha256": "0266897c076e82ab4aa70e868e1b25f83082e305c9b06b33d7cf975a8a758218"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/onsets/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/onsets/detect.py",
+          "bytes": 1631,
+          "sha256": "29b858db6dcb34735fab036423b90e07200177c89c930efff9feff9ac3d2aa54"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/pitch/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/pitch/difference.py",
+          "bytes": 2826,
+          "sha256": "77a4c04281b529ee39fbf54a1297a1694304367667dad1773feb4a1a02740168"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/provenance.py",
+          "bytes": 4553,
+          "sha256": "4733b0da3f4556fbcfaa156caab772b74050df6757cceb2527092e87989870ea"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/py.typed",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/reports/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/reports/analysis.html",
+          "bytes": 6027,
+          "sha256": "b2affe5f11399eab392166858d977439c72d64f48ebe7a29c8efad7c70804e5e"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/reports/render.py",
+          "bytes": 6383,
+          "sha256": "db8dbe60796ab3c89c5c99a5a68842c32c2c901ab69a846bb523afb6fe7357db"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/spectral/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/spectral/transforms.py",
+          "bytes": 1552,
+          "sha256": "b4c18ee379b84fdc44985a34e0d84eb88d9feaaab83991ccd989a9d8caff8ff9"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/streaming/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/streaming/framing.py",
+          "bytes": 3294,
+          "sha256": "13be38246f55a0d6a481fa2be626e5cc6861365d09df02e56492bb464ef5c000"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/synthesis/__init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/src/pp_resonance/synthesis/tones.py",
+          "bytes": 3567,
+          "sha256": "0742adfe1ac6dae9246b4bfcd55987d2cd2a29e5436103fbed465ba67290d12d"
+        },
+        {
+          "snapshot": "final",
+          "path": "projects/10-resonance/uv.lock",
+          "bytes": 265899,
+          "sha256": "8ac205930d14ebd160772d9950380e6e966aa61e740a0f3cd169c195f15cbefc"
+        }
+      ],
+      "preparation_commands": [
+        {
+          "argv": [
+            "git",
+            "clone",
+            "--no-hardlinks",
+            "--no-checkout",
+            "$PRIMARY_CHECKOUT",
+            "source/final"
+          ],
+          "cwd": "$PRIMARY_CHECKOUT",
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": "Cloning into 'source/final'...\ndone.\n"
+        },
+        {
+          "argv": [
+            "git",
+            "checkout",
+            "--detach",
+            "a33a513840d81f6e2cdb1b730540d906122bb254"
+          ],
+          "cwd": "source/final",
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": "HEAD is now at a33a513 fix(atlas): recognize catalogs before atomic initialization\n"
+        },
+        {
+          "argv": [
+            "git",
+            "--no-optional-locks",
+            "status",
+            "--porcelain"
+          ],
+          "cwd": "source/final",
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    "after_original_file": "source-inventory-after.json",
+    "after_original_sha256": "f924ac3aebd2af1c6575085f3ecf4f950b2c4b208545790bd540e9e2ebd7c1a8",
+    "after": {
+      "schema_version": 1,
+      "checked_at_utc": "2026-10-20T09:26:09.579413+00:00",
+      "identical_to_before": true,
+      "final_clean_after": true,
+      "primary_clean_after": false,
+      "primary_status_after": {
+        "clean": false,
+        "entries": [
+          {
+            "status": " M",
+            "path": "README.md"
+          },
+          {
+            "status": " M",
+            "path": "mkdocs.yml"
+          },
+          {
+            "status": "??",
+            "path": "docs/CORE_REVIEW.md"
+          }
+        ],
+        "porcelain_z_sha256": "ce5a9d8f1fb5016714d755c5015bc94b496cc1e3357a7b7ec92504a8a28d9eaf"
+      },
+      "primary_changed_paths_after": [
+        "README.md",
+        "mkdocs.yml",
+        "docs/CORE_REVIEW.md"
+      ],
+      "primary_changes_outside_measured_projects": true
+    },
+    "after_file_list": "Identical to the before inventory; embedded once to avoid duplicating236 entries."
+  }
+}
