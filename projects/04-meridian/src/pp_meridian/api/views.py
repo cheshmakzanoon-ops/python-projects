@@ -150,7 +150,17 @@ def endpoint(request: HttpRequest, operation: str, identity: UUID | None = None)
                 status=201,
             )
         if operation == "run":
-            result = reconcile.run(user, tenant, _identity(data, "account_id"))
+            row_ids = data.get("row_ids")
+            if row_ids is not None and (
+                not isinstance(row_ids, list) or not all(isinstance(item, str) for item in row_ids)
+            ):
+                raise ValueError("row_ids must be a list of UUID strings")
+            result = reconcile.run(
+                user,
+                tenant,
+                _identity(data, "account_id"),
+                [UUID(item) for item in row_ids] if row_ids is not None else None,
+            )
             return JsonResponse({"id": str(result.id), "summary": result.summary}, status=201)
         if operation == "run_detail":
             assert identity is not None

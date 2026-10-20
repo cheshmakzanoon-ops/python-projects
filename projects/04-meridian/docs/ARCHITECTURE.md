@@ -1,25 +1,147 @@
-# Components and consistency boundaries
+# Ledger, publication, and review transactions
 
-`domain` has no Django dependency: strict decimal-to-integer conversion, immutable journal values, stable largest-remainder allocation, and independent historical folding. `reconciliation` likewise runs without framework setup: UTC/reference normalization, sparse amount/currency/date candidate generation, bounded connected components, and authored min-cost residual-network assignment. `application` coordinates verified membership, explicit row locking, transactions, and review decisions. `persistence` owns schema and PostgreSQL enforcement. `api` authenticates Django users and translates JSON decimal strings to domain values.
+Meridian separates accounting facts from derived state. Posted journals and their
+postings are the authority. Account balances are rebuildable projections;
+reconciliation proposals suggest associations without changing accounting history.
+PostgreSQL enforces conservation and publication rules even for ordinary direct
+SQL writers. End-user authorization belongs to the application; no RLS claim is made.
 
-A posting transaction checks membership, locks the tenant sequencing row, checks canonical idempotency, locks accounts in UUID order, creates a journal and postings, adjusts projections, inserts the idempotent result, and commits. A BEFORE INSERT journal trigger increments the locked tenant counter and assigns its sequence. Its tenant row lock survives through commit. One tenant therefore has a serialized stream of writes; multiple tenants can progress independently. Historical queries see a committed prefix, unlike a standalone database sequence that can allocate numbers before other transactions commit.
+## Component boundaries
 
-Isolation is PostgreSQL READ COMMITTED with explicit tenant serialization and ordered account locks. It is not a blanket SERIALIZABLE claim. Entire atomic operations retry only PostgreSQL serialization failures/deadlocks (40001/40P01), at most four retries with bounded jitter; other failures propagate. An interrupted transaction rolls back journal, postings, projection updates, counter increment, and idempotent result together.
+| Component | Responsibility |
+| --- | --- |
+| `domain/` | Integer money, immutable journal values, allocation, and independent history folding; no Django dependency. |
+| `reconciliation/` | UTC/reference normalization, sparse candidate construction, min-cost assignment, and ambiguity proof; no Django dependency. |
+| `application/ledger.py` | Authorization reservation, ordered locks, whole-transaction retry, posting, reversal, replay, and projection repair. |
+| `application/reconcile.py` | Immutable imports, bounded account/row scopes, run publication, and terminal decisions. |
+| `persistence/` | Models, incremental migrations, database guards, deferred constraints, and native backup/restore. |
+| `api/` | Basic authentication, explicit tenant membership, bounded JSON, and HTTP errors. |
 
-Deferred constraint triggers validate each newly inserted journal's final 2..256 posting count, exact numeric sum, and linked full reversal. BEFORE triggers enforce account/journal tenant and currency agreement and prohibit appending postings to a previously committed journal. Account identity/currency cannot change after any posting, statement import, or reconciliation run, including an empty run. Statement and run insertion also take shared account locks, so direct SQL mutation cannot race the first history record. A shared row lock on the account closes the race between direct posting insertion and account mutation. UPDATE/DELETE triggers protect journals, postings, idempotency results, statements, decisions, and approved matches. Ordinary database writers cannot bypass them; database superusers retain administrative power. End-user authorization is enforced by verified application membership on every use case/read path; this project does not claim database RLS.
+## Journal transaction
 
-Balance is a rebuildable projection. User-facing historical balance calculations fold immutable history independently, so an inconsistent derived balance can be detected and repaired under the same tenant lock. Integer posting bounds are ±10^15 minor units; stored projection sums are signed PostgreSQL bigint and overflow rejects the entire transaction.
+A posting owns its outer transaction. Calling it inside another `atomic()` block
+fails: a returned journal must represent a committed result, and deferred failures
+must reach the retry loop rather than escape through a caller's later commit.
 
-Statements have stable account/source/row identity and a canonical normalized hash. Reimports return existing rows; mismatched reuse fails. Runs scope both sides to one tenant bank account. Approved matches have global (across runs) unique row and posting foreign keys. Approval locks the proposal, creates that match and records an audit event in one transaction. Competing runs cannot consume the same identity; the losing approval rolls back and reports conflict. A run remains a proposal even when its solver result is unique. No heuristic changes financial history.
+1. Validate money, conservation, account uniqueness, and the canonical request key.
+2. Acquire shared row locks on the active user and verified membership. Revocation,
+   membership deletion, and deactivation cannot commit ahead of this write.
+3. Lock the tenant sequencing row exclusively. This serializes that tenant's
+   postings and projection rebuilds while other tenants remain independent.
+4. Check the tenant/key cache. On a retry, recompute the digest from the referenced
+   immutable journal, including postings and reversal target. A stored digest
+   alone cannot prove that the cached result represents the request.
+5. Lock posting accounts in UUID order and verify tenant/currency agreement.
+6. Insert an unsealed journal. A database trigger increments the tenant counter
+   and assigns its sequence while holding the counter row lock through commit.
+7. Insert postings, update the derived balances with parameterized SQL, and insert
+   the idempotent result. Missing projection rows abort the transaction.
+8. Deferred database checks verify 2–256 nonzero postings, exact numeric zero sum,
+   and the full inverse of an original journal when this is a reversal. The check
+   seals the journal. Deferred counter checks require each allocated sequence to
+   identify an inserted journal and the current counter to equal the final maximum.
+   Commit publishes facts, counter, projections, and key together.
 
-Failure boundaries: committed PostgreSQL transactions rely on server durability settings; process-death tests cover uncommitted rollback, not arbitrary device power loss. Basic credentials and local settings are for loopback demonstration; deployment requires TLS, secret provisioning, least privilege, database backups, and an external user lifecycle.
+Isolation is READ COMMITTED with these explicit locks, not generic SERIALIZABLE
+execution. SQLSTATE `40001` and `40P01` restart the entire operation, with at most
+four retries and bounded jitter. A conflict or validation failure is not retried.
+Rollback removes the counter increment and every partial fact/projection/key write.
 
-A ledger use case owns its outer transaction. Calling it inside another atomic block fails explicitly: deferred commit-time failures must be visible to the retry loop, and an inner savepoint cannot promise that an outer caller will commit. Projections update with one parameterized SQL UPDATE over the already validated/locked account list; missing projection rows abort and require operator replay. Audit detects and can reconstruct missing projections as well as incorrect amounts.
+## Sealing and historical order
 
-A composite PostgreSQL foreign key binds each idempotency row's (journal_id, tenant_id) to the immutable journal's (id, tenant_id). Cached-return code independently verifies that tenant binding before returning any journal. Reconciliation runs and proposal identities are immutable after publication; only a proposal's explicit decision status can change. Migration 0005 validates existing cache and statement/proposal history rather than accepting previously inconsistent rows.
+`meridian_journal.sealed` is database-private publication state. Historical rows
+receive `true` during migration. New journal inserts always start with `false`;
+the deferred balance/reversal checker changes only that flag to `true`. The
+journal guard permits only this monotonic transition with every other field
+unchanged. Updates to business fields, reopening, deletion, and later posting
+appends are rejected. Sealing early does not bypass the deferred accounting check.
 
-HTTP parsing rejects duplicate JSON members, non-finite numbers, unrepresentable text,
-and excessive nesting before reaching application services. Pagination offsets fit
-PostgreSQL bigint. API and view responses prohibit caching of authenticated records.
-Operator views use escaped semantic tables; error messages are plain text, and a
-restrictive page CSP permits only inline styling. Method errors include `Allow`.
+A journal created inside a savepoint remains appendable by its own transaction
+until publication. The previous implementation compared tuple `xmin` with a
+truncated transaction ID; a savepoint assigns a different physical tuple XID and
+incorrectly rejected that valid case. Publication state avoids tuple freezing,
+transaction wraparound, and transaction-number collisions after cross-cluster
+restore. It costs one additional journal update per successful posting.
+
+The sequencing counter can change only through nested journal allocation. New
+tenants start at zero. Ordinary SQL cannot reset or jump the counter and later
+insert a lower sequence into an already observed historical prefix. Migration
+rejects counters inconsistent with the exact `1..last_sequence` history, including
+interior gaps whose maximum still matches the counter.
+
+A PostgreSQL `BEFORE INSERT` trigger runs even when `ON CONFLICT DO NOTHING`
+subsequently skips that row. The immediate counter guard therefore cannot by itself
+prove publication. Each deferred counter-update event checks its allocated sequence
+with an indexed journal lookup; another indexed lookup verifies the final current
+counter against the maximum. Checking only the final maximum would miss an ignored
+insert followed by a successful insert in the same transaction. Savepoint rollback
+removes both its allocation and its queued deferred check. Multiple successful
+journals in one transaction validate against final state without requiring a
+full-history count on each post. An ignored journal insert is rejected at commit
+rather than consuming a gap; application idempotent retries return the existing
+journal before attempting another insert.
+
+## Lock relationships
+
+| Operation | Locks after shared user/membership authorization |
+| --- | --- |
+| Post or reverse | Tenant, then account rows in UUID order, then derived balance rows. |
+| Audit or rebuild | Tenant, then projection writes in account UUID order. |
+| Statement import | Account; the account guard retains tenant/currency identity. |
+| Matching run | Account; statement/match availability remains stable while the graph is assembled. |
+| Decision | Selected proposal; database proposal/match guards take a shared account lock. |
+
+Shared authorization locks permit concurrent writes by the same user to independent
+tenants. They conflict with revocation/deactivation updates, not with each other.
+A revocation already holding its row causes a new writer to wait and recheck the
+verified/active predicates after it commits. Read-only paths check membership at
+request time; they do not reserve authority for a later independent operation.
+
+Imports and matching helpers may participate in an explicitly supplied outer
+transaction. Their locks and deferred checks then last until that outer commit;
+returning from a nested helper is not an independent durability acknowledgement.
+The HTTP configuration does not wrap requests in an additional transaction.
+
+## Independent projections
+
+Historical balance reads fold only the selected account and sequence prefix, never
+trusting its stored projection. Public `history()` deliberately returns a list;
+internal replay streams ordered postings in 4,096-row fetch batches. Rebuild memory
+therefore depends on account totals and diagnostics rather than retaining every
+posting object. The rebuild joins accounts to projections in one streamed query
+and uses 512-row UPSERT batches to repair both missing and incorrect rows.
+
+The tenant lock excludes concurrent journal publication during audit/rebuild. A
+posting queued behind a rebuild increments the repaired projection afterward;
+it cannot be overwritten by a stale repair. Stored sums must fit PostgreSQL bigint;
+overflow rejects the whole transaction. Process-death tests cover rollback, not
+all possible storage-device failures.
+
+## Matching and decisions
+
+Runs select one tenant-owned account and optionally explicit unmatched statement
+UUIDs. At most 10,000 rows and 50,000 SQL-prefiltered postings enter a run; exceeding
+either rejects the whole scope. Posting prefiltering preserves signed amount and
+the envelope of the selected rows' seven-day UTC calendar windows. Exact candidate
+construction still applies each row's own window and caps every connected component
+at 32 rows and 256 edges. There is no candidate truncation or partial publication.
+Selected row UUIDs are retained in the immutable run summary.
+
+The solver uses unit-capacity min-cost flow. Every statement has an unmatched edge;
+residual reverse arcs allow earlier choices to be reassigned. Bellman-Ford preserves
+exact integer costs. For each selected pair, forbidding it and solving again detects
+an equal-cost alternative. An extra check covers adding an equally priced edge between
+an unmatched row and unused posting without removing an existing pair. Independent
+complete enumeration verifies both cost and ambiguity on dense and sparse tiny graphs.
+
+| Final proposal state | Approved match | Decision audit |
+| --- | --- | --- |
+| Pending | None | None |
+| Approved | Exactly one matching row/posting identity | Exactly one `approve` event |
+| Rejected | None | Exactly one `reject` event |
+
+Deferred checks enforce this table at commit. Decisions are terminal; proposals
+cannot be deleted, moved to a different primary UUID, or reopened. Approval consumes statement and posting
+identities globally across runs through unique constraints. Concurrent approvals
+cannot both commit. A later competing run may contain a now-stale proposal; its
+approval fails rather than changing or consuming another match.

@@ -5,6 +5,8 @@ from datetime import date, datetime
 
 from .normalize import normalize_reference
 
+DEFAULT_WINDOW_DAYS = 7
+
 
 class ComponentTooLarge(ValueError):
     pass
@@ -26,7 +28,9 @@ class Edge:
     cost: int
 
 
-def candidates(rows: list[MatchEntry], postings: list[MatchEntry], days: int = 7) -> list[Edge]:
+def candidates(
+    rows: list[MatchEntry], postings: list[MatchEntry], days: int = DEFAULT_WINDOW_DAYS
+) -> list[Edge]:
     if not 0 <= days <= 31:
         raise ValueError("date window must be 0..31 days")
     buckets: dict[tuple[int, str, object], list[MatchEntry]] = {}

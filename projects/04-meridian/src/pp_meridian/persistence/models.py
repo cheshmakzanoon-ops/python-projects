@@ -119,6 +119,14 @@ class Proposal(models.Model):
     ambiguous = models.BooleanField(default=False)
     status = models.CharField(max_length=12, default="pending")
 
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(status__in=["pending", "approved", "rejected"]),
+                name="proposal_status",
+            )
+        ]
+
 
 class ApprovedMatch(models.Model):
     proposal = models.OneToOneField(Proposal, primary_key=True, on_delete=models.PROTECT)
@@ -131,3 +139,12 @@ class DecisionAudit(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     decision = models.CharField(max_length=12)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["proposal"], name="one_proposal_decision"),
+            models.CheckConstraint(
+                condition=models.Q(decision__in=["approve", "reject"]),
+                name="decision_action",
+            ),
+        ]

@@ -550,7 +550,7 @@ def test_me08_migration_from_previous_fixture_schema():
     P.objects.create(journal=j, account=a, amount=100)
     P.objects.create(journal=j, account=b, amount=-100)
     executor = MigrationExecutor(connection)
-    executor.migrate([("meridian", "0005_tenant_identity_history")])
+    executor.migrate([("meridian", "0006_transaction_contracts")])
     assert Journal.objects.get(id=j.id).sequence == 1
     with pytest.raises(IntegrityError), transaction.atomic():
         Journal.objects.filter(id=j.id).update(currency="CAD")
@@ -744,7 +744,7 @@ def test_me06_legacy_poisoned_cache_defense_and_upgrade_validation(ledger):
         # Administrative repair applies only to this isolated previous-schema test fixture.
         with connection.cursor() as cursor:
             cursor.execute("TRUNCATE meridian_idempotency")
-        MigrationExecutor(connection).migrate([("meridian", "0005_tenant_identity_history")])
+        MigrationExecutor(connection).migrate([("meridian", "0006_transaction_contracts")])
 
 
 def test_me06_statement_and_empty_run_freeze_account_identity(ledger):
@@ -892,4 +892,4 @@ def test_me06_upgrade_rejects_legacy_statement_currency_inconsistency(ledger):
             MigrationExecutor(connection).migrate([("meridian", "0005_tenant_identity_history")])
     finally:
         Account.objects.filter(id=accounts[2].id).update(currency="USD")
-        MigrationExecutor(connection).migrate([("meridian", "0005_tenant_identity_history")])
+        MigrationExecutor(connection).migrate([("meridian", "0006_transaction_contracts")])
