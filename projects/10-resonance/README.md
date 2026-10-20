@@ -59,6 +59,10 @@ scope. A score uses versioned JSON, unique note IDs, integer MIDI pitches,
 onset/duration in seconds or beats and an explicit tempo; see
 [the reference format](examples/reference.json).
 
+The report verifies that its plotted samples match its embedded WAV. Provenance
+records the full source-file hash separately from the encoded playback hash,
+sample count and full/prefix scope. Keep input files unchanged throughout a run.
+
 For Python callers:
 
 ```python
@@ -86,6 +90,8 @@ extreme noise and accuracy across unfamiliar guitars/styles are outside the
 validated synthetic guarantees.
 
 - [Architecture](docs/ARCHITECTURE.md) and [decisions](docs/DECISIONS.md): algorithms, timing and memory tradeoffs.
+- [Numerical methodology](docs/METHODOLOGY.md): pitch/attack semantics, abstention, fixed evaluation denominators and independent oracles.
 - [Operations](docs/OPERATIONS.md): commands, input budgets, diagnostics, cleanup and MIDI rules.
 - [Fixture contracts](docs/FIXTURES.md), [acceptance map](docs/ACCEPTANCE.md) and [verification history](docs/VERIFICATION.md): reproducible expectations and results.
 - [Benchmarks](docs/BENCHMARKS.md), [case study](docs/CASE_STUDY.md) and [provenance](docs/THIRD_PARTY.md): measured behavior and limitations.
+- [Core review](docs/CORE_REVIEW.md): reproduced algorithmic defects, rolling-row alignment and bounded baseline comparisons.

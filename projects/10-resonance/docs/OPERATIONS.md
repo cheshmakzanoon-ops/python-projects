@@ -15,9 +15,10 @@ rejected. Scores require numeric tempo/onset/duration values, integer MIDI pitch
 and unique nonempty IDs of at most 200 characters. Boolean values are not numbers
 in these contracts.
 
-Alignment allocates two quadratic matrices. The default budget is 4,000,000 cells
-(including the leading row/column), about 36 MB for the matrices, checked before
-allocation. Split a long reference into phrases if that budget is exceeded. Python
+Alignment retains one byte per traceback cell and two rolling cost rows. The
+default budget is 4,000,000 cells (including the leading row/column), about 4 MB
+for traceback plus Python cost rows and result records, checked before allocation.
+The running time is still quadratic. Split a long reference into phrases if that budget is exceeded. Python
 callers may opt into a larger `align(..., max_cells=N)` budget after accounting for
 both memory and quadratic running time. Empty-reference and empty-detection cases
 remain supported. Frame size and hop must be integers; supported analysis frame
@@ -30,3 +31,61 @@ sizes are 1,024–65,536 samples, with hop in `[1, size]`. Thresholds must be fi
 Diagnostics: clipping means full-scale input may distort periodicity; short files cannot establish notes; aperiodic/uncertain frames remain in the trajectory. Low confidence is not a musical error. If a stereo instrument disappears in one channel, inspect both channels or convert explicitly before analysis. Resample unsupported rates with an explicitly configured external converter; never relabel a file's sample rate.
 
 MIDI timing policy: 480 ticks/beat, explicit default 120 BPM. Any positive sample interval that rounds to zero MIDI ticks is rejected before output is written. The Python export API accepts a different positive 24-bit microseconds-per-beat tempo; the independent checker validates it without assuming 120 BPM.
+
+## Python API ownership and evaluation
+
+`analyze_chunks` consumes each feed completely, including its final empty flush.
+For direct framer use, `feed` immediately copies input. Exhaust a `FrameBatch`,
+or call its `close()` before feeding again. Closing does not discard pending
+samples. If a final batch was interrupted, resume it with
+`framer.feed(np.empty(0), final=True)`; appending new samples after beginning the
+flush raises an error. Reusing a caller's array after feed is safe, and each
+returned frame owns an independent copy. To retain the chunk-plus-overlap memory
+bound, drain batches before appending input; repeated early closes can retain a
+larger backlog. A framer is not thread safe.
+
+Challenge trajectory evaluation now requires independent recording length:
+
+```python
+from pp_resonance.metrics.evaluate import trajectory_metrics
+
+metrics = trajectory_metrics(
+    report.pitches,
+    tones,
+    report.sample_rate,
+    report.config.frame.size,
+    sample_count=report.sample_count,
+    hop=report.config.frame.hop,
+)
+```
+
+Dropping output frames no longer improves coverage by removing them from the
+denominator. Duplicate/off-grid timestamps are rejected. Consumers must accept
+JSON null for conditional errors when nothing was measured; miss counts and
+coverage remain numeric. See [METHODOLOGY.md](METHODOLOGY.md) before comparing
+pitch, note-summary and attack measures.
+
+Keep source recordings unchanged for the whole analysis, hash and preview read.
+`provenance.audio_sha256` identifies the source bytes; `provenance.playback`
+identifies the exact encoded WAV embedded in HTML, with its rate/count and
+`full` or `prefix` scope. Rendering rejects a supplied plot array that differs
+from those decoded bytes. Preserve JSON, HTML, WAV and MIDI together. If playback
+appears unrelated to the figure, verify the playback digest and regenerate the
+whole output directory from an immutable input instead of replacing one file.
+
+## Focused core workload
+
+Run the bounded review exercise independently of the 60/600-second profiles:
+
+```sh
+uv run --locked python benchmarks/core_review.py --output /tmp/resonance-core.json
+```
+
+It measures 100/300/600-reference-note alignment problems with three repetitions
+and one 12-second authored phrase at alternating amplitudes. It records source,
+workload and dataset hashes, mapping hashes, input-derived pitch coverage and
+semantic witnesses. Set numerical threads to one as above. Compare only reports
+with matching workload/dataset hashes and read the shared-host timing limits.
+The exercise does not replace the clean pitch-grid gate or a real-recording
+corpus evaluation. Historical baseline reproduction and exact measurements are
+in [CORE_REVIEW.md](CORE_REVIEW.md).

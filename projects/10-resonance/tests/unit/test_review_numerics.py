@@ -22,9 +22,9 @@ def test_cents_remains_finite_for_finite_extreme_frequencies() -> None:
 
 @pytest.mark.parametrize("value", [float("nan"), float("inf"), 0.0, -440.0])
 def test_trajectory_metrics_count_invalid_estimates_as_misses(value: float) -> None:
-    frame = PitchFrame(10000, 11024, value, 0.9, 0.2, "voiced")
-    result = trajectory_metrics([frame], [Tone(69, 0.1, 0.4)], 48000)
-    assert result["eligible_voiced_frames"] == 1
-    assert result["voiced_misses"] == 1
+    frame = PitchFrame(9984, 11008, value, 0.9, 0.2, "voiced")
+    result = trajectory_metrics([frame], [Tone(69, 0.1, 0.4)], 48000, sample_count=48000)
+    assert result["eligible_voiced_frames"] == 47
+    assert result["voiced_misses"] == 47
     assert result["voicing_recall"] == 0
     assert result["within_10_cents_all_eligible"] == 0

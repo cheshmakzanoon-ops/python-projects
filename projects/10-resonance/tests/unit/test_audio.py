@@ -65,15 +65,15 @@ def test_fixed_denominator_challenge_metrics_include_misses_and_silence() -> Non
 
     tone = Tone(69, 0.1, 0.4)
     frames = [
-        PitchFrame(10000, 11024, 440, 0.99, 0.2, "voiced"),
-        PitchFrame(13000, 14024, None, 0, 0.2, "uncertain"),
-        PitchFrame(30000, 31024, 440, 0.9, 0.01, "voiced"),
+        PitchFrame(9984, 11008, 440, 0.99, 0.2, "voiced"),
+        PitchFrame(13056, 14080, None, 0, 0.2, "uncertain"),
+        PitchFrame(29952, 30976, 440, 0.9, 0.01, "voiced"),
     ]
-    metrics = trajectory_metrics(frames, [tone], 48000)
-    assert metrics["eligible_voiced_frames"] == 2
-    assert metrics["voiced_misses"] == 1
+    metrics = trajectory_metrics(frames, [tone], 48000, sample_count=48000)
+    assert metrics["eligible_voiced_frames"] == 47
+    assert metrics["voiced_misses"] == 46
     assert metrics["false_voiced_silence_frames"] == 1
-    assert metrics["within_10_cents_all_eligible"] == 0.5
+    assert metrics["within_10_cents_all_eligible"] == 1 / 47
     assert note_metrics([], [tone], 48000)["misses"] == 1
 
 

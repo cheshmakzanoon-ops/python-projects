@@ -6,7 +6,7 @@ from typing import TypedDict
 import numpy as np
 
 from pp_resonance.analysis import analyze
-from pp_resonance.model import NoteEvent, PitchFrame
+from pp_resonance.model import AudioSpec, FrameConfig, NoteEvent, PitchFrame
 from pp_resonance.notes.decode import cents, frequency
 from pp_resonance.synthesis.tones import Tone, render
 
@@ -70,7 +70,9 @@ def pitch_grid(seed: int = 1729) -> PitchMetrics:
     return coverage_metrics(errors)
 
 
-def note_metrics(notes: list[NoteEvent], truth: list[Tone], rate: int) -> dict[str, float | int]:
+def note_metrics(
+    notes: list[NoteEvent], truth: list[Tone], rate: int
+) -> dict[str, float | int | None]:
     # Ordered nearest-time evaluation is independent of the production DP aligner.
     remaining = set(range(len(notes)))
     matched, onset_errors, pitch_errors = 0, [], []
@@ -89,32 +91,63 @@ def note_metrics(notes: list[NoteEvent], truth: list[Tone], rate: int) -> dict[s
         "matched_notes": matched,
         "misses": len(truth) - matched,
         "extras": len(remaining),
-        "onset_mae_seconds": float(np.mean(onset_errors)) if onset_errors else 0.0,
-        "pitch_mae_semitones": float(np.mean(pitch_errors)) if pitch_errors else 0.0,
+        "onset_mae_seconds": float(np.mean(onset_errors)) if onset_errors else None,
+        "pitch_mae_semitones": float(np.mean(pitch_errors)) if pitch_errors else None,
     }
 
 
 def trajectory_metrics(
-    frames: list[PitchFrame], truth: list[Tone], rate: int, frame_size: int = 2048
-) -> dict[str, float | int]:
-    """Ground truth comes only from analytic generator phase and event intervals."""
+    frames: list[PitchFrame],
+    truth: list[Tone],
+    rate: int,
+    frame_size: int = 2048,
+    *,
+    sample_count: int,
+    hop: int = 256,
+) -> dict[str, float | int | None]:
+    """Score the input's complete framing grid, including omitted output frames.
+
+    Ground truth is analytic phase and event intervals. Recording length and
+    framing configuration are independent inputs, never inferred from estimates.
+    Conditional errors are undefined (None) when no valid voiced estimate exists.
+    """
+    AudioSpec(rate)
+    FrameConfig(frame_size, hop)
+    if type(sample_count) is not int or sample_count < 0:
+        raise ValueError("Evaluation requires a nonnegative integer sample count")
+    by_start = {}
+    for observed in frames:
+        if (
+            type(observed.start) is not int
+            or not 0 <= observed.start < sample_count
+            or observed.start % hop
+            or observed.center != observed.start + frame_size // 2
+            or observed.start in by_start
+        ):
+            raise ValueError("Evaluation frames must have unique timestamps on the input grid")
+        by_start[observed.start] = observed
     errors: list[float] = []
     eligible, missed, silence, false_voiced = 0, 0, 0, 0
     confidences = []
-    for frame in frames:
-        time = frame.center / rate
+    expected_starts = range(0, sample_count, hop)
+    for start in expected_starts:
+        frame = by_start.get(start)
+        time = (start + frame_size // 2) / rate
+        valid = (
+            frame is not None
+            and frame.frequency is not None
+            and math.isfinite(frame.frequency)
+            and frame.frequency > 0
+        )
         event = next(
             (t for t in truth if t.onset + 0.10 <= time <= t.onset + t.duration - 0.05), None
         )
         if event is not None:
             eligible += 1
-            if (
-                frame.frequency is None
-                or not math.isfinite(frame.frequency)
-                or frame.frequency <= 0
-            ):
+            if not valid:
                 missed += 1
                 continue
+            assert frame is not None and frame.frequency is not None
             relative = time - event.onset
             vibrato = event.vibrato_cents * np.log(2) / 1200 * np.sin(2 * np.pi * 5 * relative)
             bend = event.bend_cents * np.log(2) / 1200 * relative / event.duration
@@ -122,26 +155,29 @@ def trajectory_metrics(
             errors.append(abs(cents(frame.frequency, expected)))
             confidences.append(frame.confidence)
         elif not any(
-            t.onset < (frame.start + frame_size) / rate
-            and t.onset + t.duration > frame.start / rate
+            t.onset < (start + frame_size) / rate and t.onset + t.duration > start / rate
             for t in truth
         ):
             silence += 1
-            false_voiced += frame.frequency is not None
+            false_voiced += valid
     return {
+        "expected_output_frames": len(expected_starts),
+        "missing_output_frames": len(expected_starts) - len(by_start),
         "eligible_voiced_frames": eligible,
         "voiced_misses": missed,
         "voicing_recall": (eligible - missed) / eligible if eligible else 0,
         "silence_frames": silence,
         "false_voiced_silence_frames": false_voiced,
         "within_10_cents_all_eligible": sum(e <= 10 for e in errors) / eligible if eligible else 0,
-        "conditional_median_abs_cents": float(np.median(errors)) if errors else 0,
-        "conditional_p95_abs_cents": float(np.percentile(errors, 95)) if errors else 0,
-        "mean_voiced_confidence": float(np.mean(confidences)) if confidences else 0,
+        "conditional_median_abs_cents": float(np.median(errors)) if errors else None,
+        "conditional_p95_abs_cents": float(np.percentile(errors, 95)) if errors else None,
+        "mean_voiced_confidence": float(np.mean(confidences)) if confidences else None,
     }
 
 
-def onset_metrics(samples: list[int], truth: list[Tone], rate: int) -> dict[str, float | int]:
+def onset_metrics(
+    samples: list[int], truth: list[Tone], rate: int
+) -> dict[str, float | int | None]:
     remaining = set(range(len(samples)))
     errors = []
     for tone in truth:
@@ -156,6 +192,6 @@ def onset_metrics(samples: list[int], truth: list[Tone], rate: int) -> dict[str,
         "detected_onsets": len(samples),
         "misses": len(truth) - len(errors),
         "extras": len(remaining),
-        "mean_abs_error_seconds": float(np.mean(errors)) if errors else 0,
-        "max_abs_error_seconds": max(errors, default=0),
+        "mean_abs_error_seconds": float(np.mean(errors)) if errors else None,
+        "max_abs_error_seconds": max(errors) if errors else None,
     }

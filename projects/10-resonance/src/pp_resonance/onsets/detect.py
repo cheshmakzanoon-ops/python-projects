@@ -15,13 +15,20 @@ def detect(
     if not fluxes:
         return []
     values = np.asarray(fluxes)
+    # Frame RMS contains pitch-period ripple, especially near the low-frequency
+    # bound. Smooth adjacent frames before asking whether the envelope rises;
+    # the extra one-frame horizon is inside the adaptive threshold's horizon.
+    envelope = np.convolve(energies, np.ones(3) / 3, mode="same") if energies is not None else None
     events = []
     last = -rate
-    global_floor = max(1e-8, float(np.max(values)) * 0.08)
     for i in range(1, len(values) - 1):
-        baseline = float(np.median(values[max(0, i - 8) : i + 9]))
-        threshold = max(global_floor, 1.5 * baseline)
-        rising = energies is None or energies[i] > energies[i - 1] * 1.001
+        neighborhood = values[max(0, i - 8) : i + 9]
+        baseline = float(np.median(neighborhood))
+        # All adaptation shares the declared eight-frame horizon. A distant
+        # loud attack must not retrospectively erase an earlier quiet attack.
+        floor = max(1e-8, float(np.max(neighborhood)) * 0.08)
+        threshold = max(floor, 1.5 * baseline)
+        rising = envelope is None or envelope[i] > envelope[i - 1] * 1.001
         if (
             rising
             and values[i] > threshold

@@ -2,6 +2,59 @@
 
 The original RE-01–RE-08 acceptance, compatibility checks and 600-second standard workload have recorded evidence below. Historical measurements describe their stated revisions; later changes do not relabel them as current results.
 
+## Core review: October 20, 2026
+
+The revised tree passes **200 tests** on each supported interpreter, with
+`ResourceWarning` treated as an error: CPython 3.14.8 in **11.80 s**, followed by
+isolated CPython 3.13.16 in **11.89 s**. Ruff format/lint, strict mypy over 29
+source files, and source-distribution/wheel builds pass for both environments.
+Fresh runtime-only wheel installations run outside the checkout on each Python
+version, producing a playable six-note demo and independently checking all six
+MIDI events. Dependencies and the lockfile are unchanged.
+
+The 93 additional cases cover algebraic normalization and analytic frequency,
+finite-horizon onset decisions, consistent attack credibility, caller-buffer
+ownership, partial iteration and interrupted finalization, independent input
+denominators, exhaustive edit-path optimization, rational MIDI seconds at two
+rates/four tempos, and exact embedded-playback provenance. Nine relevant cases
+were also executed against exported baseline `39d3a8d` and failed there; the
+[failure capture](../artifacts/deep-core-baseline-failures.txt) is retained.
+The [raw baseline](../artifacts/deep-core-baseline-39d3a8d.json) separately
+demonstrates that dropping 46 of 47 eligible estimates previously changed
+reported recall to 1.0; the revised evaluator retains 47 and reports `1/47`.
+
+The fixed [core workload](../benchmarks/core_review.py) measures alignment at
+100/300/600 reference notes, three repetitions each, plus one 12-second authored
+dynamic-amplitude phrase. Matching workload and dataset hashes identify the
+comparison. Largest alignment median is **0.8725203620 → 0.1250271200 s**, with
+identical correspondence/timing/cents mapping hashes. Scores use rolling rows
+and traceback uses one byte per cell. The phrase has 14 detected notes/onsets
+and all 709 eligible frames within 10 cents in both snapshots; its single
+processing observation is **0.3107096430 → 0.3958439230 s**. This supports the
+bounded alignment optimization and correctness witnesses, without claiming a
+general analysis speedup. See [CORE_REVIEW.md](CORE_REVIEW.md) for exact inputs,
+hashes, all repetitions and inference limits.
+
+Chromium checks of the fresh installed-wheel report at **1440 px** and **390 px**
+confirm native keyboard playback advances through the 4.9-second clip, no page
+overflow, and no violations under the selected Axe WCAG 2 A/AA and 2.1 A/AA tags.
+These checks cover this report, not comprehensive accessibility conformance.
+Figures are released on rendering failure, and mismatch rejection occurs before
+figure allocation. Source audio hashes and encoded playback hashes now have
+separate explicit meanings in both JSON and HTML.
+
+Independent read-only review additionally checked 48 partial/interrupted-flush
+schedules, including hop 1, hop equal to frame size and non-power-of-two frames,
+and 200 exact-rational exhaustive alignment cases. The representable-energy
+limit for extremely small/large floats is documented in
+[METHODOLOGY.md](METHODOLOGY.md); synthetic validation does not establish
+real-recording accuracy. Original long-workload evidence below is unchanged.
+
+Commands use the existing thread/cache settings below, then the compatibility
+environment under `.local/venvs/resonance-3.13.16` with explicit `--python
+3.13.16`. The bounded baseline/current workload runs sequentially. No expensive
+60/600-second profile was rerun in this core review.
+
 ## Review: October 20, 2026
 
 The reviewed working tree passes **107 tests on each supported interpreter**:

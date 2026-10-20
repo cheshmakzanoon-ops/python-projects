@@ -1,5 +1,16 @@
 # Benchmarks
 
+The revised core has a separate [bounded review](CORE_REVIEW.md): matching
+baseline/current workloads, exhaustive alignment oracles, a 12-second dynamic
+phrase and raw source/dataset hashes. Its 600-reference-note alignment median
+changes from 0.8725 to 0.1250 seconds on a shared host, with identical mappings.
+The single phrase observation is slower after the semantic changes and is
+reported in that record; no general analysis speedup is claimed. Current
+challenge evaluation uses an input-derived grid and null undefined conditional
+errors, as specified in [METHODOLOGY.md](METHODOLOGY.md).
+
+## Historical standard workload
+
 The accepted standard run processed a 600-second synthetic recording on CPython 3.14.8 from clean committed source `59443e2bcdfc6a1dd81f8334c108474eef2d3030`. The [raw benchmark](../../../docs/evidence/final/standard/resonance-3.14.8-benchmark-benchmark.json) records every metric and input; the [verification wrapper](../../../docs/evidence/final/standard/resonance-3.14.8.json) records the successful demo/standard commands and unchanged source after execution. This is measured offline processing on the recorded Linux/Xeon environment, not a hard real-time guarantee or a cross-machine speed claim.
 
 The workload uses seed 1729, 48,000 Hz audio, 2,048-sample frames, 256-sample hops, 8,192-sample input blocks, one process, and OMP/OpenBLAS/MKL thread counts of one. It contains harmonics, rests, noise standard deviation 0.0005, annotated onset perturbations of -25/0/+25 ms, 20-cent vibrato and 100-cent bend parameters. A four-second kernel warmup with the first four tones precedes five full 600-second measurements. Chunk synthesis, framing, pitch, onset and note decoding are timed; alignment, subsequent numerical evaluation, disk output and HTML rendering are outside those processing times.

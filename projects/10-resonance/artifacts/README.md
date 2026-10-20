@@ -20,3 +20,11 @@ contains the five-repeat 60-second workload, source/environment hashes and
 challenge errors. Both retain their actual dirty development-source identifiers;
 [verification history](../docs/VERIFICATION.md) distinguishes later checks and
 immutable benchmark records.
+
+The later core review retains separate
+[baseline](deep-core-baseline-39d3a8d.json) and
+[revised](deep-core-review.json) bounded workloads, plus the
+[baseline regression failures](deep-core-baseline-failures.txt). Exact scope,
+dataset hashes, algorithm changes and statistical limits are documented in
+[CORE_REVIEW.md](../docs/CORE_REVIEW.md). These new files do not replace the
+historical standard workload or sample manifest.

@@ -102,8 +102,6 @@ def save_demo(path: Path, seed: int) -> dict[str, object]:
     report.alignment = align(reference, report.notes, rate)
     provenance = metadata(seed, "demo")
     provenance["audio_sha256"] = hashlib.sha256((path / "audio.wav").read_bytes()).hexdigest()
-    data = report_json(report, provenance)
-    (path / "analysis.json").write_text(json.dumps(data, indent=2, allow_nan=False))
     (path / "reference.json").write_text(
         json.dumps(
             {
@@ -127,7 +125,7 @@ def save_demo(path: Path, seed: int) -> dict[str, object]:
     checked = check_bytes(path / "transcription.mid")
     if len(checked) != len(report.notes):
         raise RuntimeError("Independent MIDI check failed")
-    render(
+    provenance["playback"] = render(
         path / "analysis.html",
         report,
         path / "audio.wav",
@@ -135,6 +133,8 @@ def save_demo(path: Path, seed: int) -> dict[str, object]:
         reference,
         provenance,
     )
+    data = report_json(report, provenance)
+    (path / "analysis.json").write_text(json.dumps(data, indent=2, allow_nan=False))
     return {
         "notes": len(report.notes),
         "midi_checked": len(checked),
@@ -237,7 +237,7 @@ def main() -> None:
                 )
             write(output / "audio.wav", clip, spec.sample_rate)
             encoded, _ = sf.read(output / "audio.wav", dtype="float64")
-            render(
+            provenance["playback"] = render(
                 output / "analysis.html",
                 report,
                 output / "audio.wav",

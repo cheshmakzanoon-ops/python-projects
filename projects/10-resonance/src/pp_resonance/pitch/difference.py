@@ -34,7 +34,9 @@ def normalize(values: Samples) -> Samples:
         values[1:] * np.arange(1, len(values)),
         denominator,
         out=result[1:],
-        where=denominator > 1e-20,
+        # CMND is dimensionless: an absolute energy epsilon changes the pitch
+        # decision when the same waveform is represented at another scale.
+        where=denominator > 0,
     )
     return result
 

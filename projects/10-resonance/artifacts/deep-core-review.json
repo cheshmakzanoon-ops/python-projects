@@ -1,0 +1,228 @@
+{
+  "workload": "resonance-core-review-v1",
+  "python": "3.14.8",
+  "workload_sha256": "24cff444860775f172a48910620ade1e2bf0fe9784afc914794778ec7e789879",
+  "package_path": "/workspace/python-projects/projects/10-resonance/src/pp_resonance",
+  "package_python_sha256": "fbd4f7e07615cff14f69239b081101ea2ea2501d1b5d4e6a305dba241bf438af",
+  "limits": {
+    "alignment_max_cells": 4000000,
+    "audio_seconds": 12.0,
+    "alignment_repeats": 3,
+    "audio_repeats": 1,
+    "threads": 1,
+    "exclusive_host": false
+  },
+  "alignment": [
+    {
+      "reference_notes": 100,
+      "detected_notes": 92,
+      "cells": 9393,
+      "dataset_sha256": "ba1a5565384ea984b2188d4870cf604390ad5d8a3aafdc8d1eaf9adcf326f507",
+      "mapping_sha256": "44387220705dcec5dea037769bcd861e3080bd287b7d271f41d55b73c579045d",
+      "seconds": [
+        0.0039285359998757485,
+        0.0035528789994714316,
+        0.003490895000140881
+      ],
+      "median_seconds": 0.0035528789994714316,
+      "cost": 10.266770833333332
+    },
+    {
+      "reference_notes": 300,
+      "detected_notes": 277,
+      "cells": 83678,
+      "dataset_sha256": "aa7cef380560f45c4e4cce81d324d773bfab7d7a0dd8114ab646c3edf58f0d71",
+      "mapping_sha256": "3764880ecc4d0a967238115221b72a1a5920c4c16720ffcd6f0efd58045b9059",
+      "seconds": [
+        0.03149630900043121,
+        0.03067255199948704,
+        0.02948462499989546
+      ],
+      "median_seconds": 0.03067255199948704,
+      "cost": 29.600312499999998
+    },
+    {
+      "reference_notes": 600,
+      "detected_notes": 554,
+      "cells": 333555,
+      "dataset_sha256": "8d537b0f0bbcd7f32463d80ee3b0d97f972af5c39b74071617015423ba1cf8d4",
+      "mapping_sha256": "1332ea9411dc4101ab4b7dc40bcf177f32929e10b689b911c09bb881ff507899",
+      "seconds": [
+        0.17281788800028153,
+        0.12502711999968597,
+        0.12118815000030736
+      ],
+      "median_seconds": 0.12502711999968597,
+      "cost": 59.193416666666664
+    }
+  ],
+  "semantic_witnesses": {
+    "cmnd_scale_invariant": true,
+    "tiny_above_configured_silence_is_voiced": true,
+    "onsets_before_future_peak": [
+      3584
+    ],
+    "onsets_after_future_peak": [
+      3584,
+      16384
+    ],
+    "input_samples_accepted_before_iteration": 4096,
+    "first_frame_preserves_caller_input": true,
+    "duplicate_frame_starts_after_close": false,
+    "full_output_eligible_frames": 47,
+    "one_frame_output_eligible_frames": 47,
+    "one_frame_output_recall": 0.02127659574468085,
+    "weak_onsets_leave_note_boundaries_unchanged": true
+  },
+  "dynamic_synthetic_phrase": {
+    "dataset_sha256": "43542d0b50941ee2765d12e10e5ef0004111e82231e42467080f3c718b5a0363",
+    "parameters": {
+      "tones": [
+        {
+          "midi": 40,
+          "onset": 0.27499999999999997,
+          "duration": 0.42,
+          "amplitude": 0.06,
+          "pluck": true,
+          "vibrato_cents": 20,
+          "bend_cents": 100
+        },
+        {
+          "midi": 45,
+          "onset": 1.05,
+          "duration": 0.42,
+          "amplitude": 0.6,
+          "pluck": true,
+          "vibrato_cents": 0,
+          "bend_cents": 0
+        },
+        {
+          "midi": 50,
+          "onset": 1.825,
+          "duration": 0.42,
+          "amplitude": 0.06,
+          "pluck": true,
+          "vibrato_cents": 0,
+          "bend_cents": 0
+        },
+        {
+          "midi": 55,
+          "onset": 2.525,
+          "duration": 0.42,
+          "amplitude": 0.6,
+          "pluck": true,
+          "vibrato_cents": 0,
+          "bend_cents": 0
+        },
+        {
+          "midi": 59,
+          "onset": 3.3,
+          "duration": 0.42,
+          "amplitude": 0.06,
+          "pluck": true,
+          "vibrato_cents": 0,
+          "bend_cents": 0
+        },
+        {
+          "midi": 64,
+          "onset": 4.075,
+          "duration": 0.42,
+          "amplitude": 0.6,
+          "pluck": true,
+          "vibrato_cents": 0,
+          "bend_cents": 0
+        },
+        {
+          "midi": 69,
+          "onset": 4.7749999999999995,
+          "duration": 0.42,
+          "amplitude": 0.06,
+          "pluck": true,
+          "vibrato_cents": 0,
+          "bend_cents": 0
+        },
+        {
+          "midi": 76,
+          "onset": 5.55,
+          "duration": 0.42,
+          "amplitude": 0.6,
+          "pluck": true,
+          "vibrato_cents": 20,
+          "bend_cents": 0
+        },
+        {
+          "midi": 83,
+          "onset": 6.325,
+          "duration": 0.42,
+          "amplitude": 0.06,
+          "pluck": true,
+          "vibrato_cents": 0,
+          "bend_cents": 0
+        },
+        {
+          "midi": 88,
+          "onset": 7.0249999999999995,
+          "duration": 0.42,
+          "amplitude": 0.6,
+          "pluck": true,
+          "vibrato_cents": 0,
+          "bend_cents": 0
+        },
+        {
+          "midi": 40,
+          "onset": 7.8,
+          "duration": 0.42,
+          "amplitude": 0.06,
+          "pluck": true,
+          "vibrato_cents": 0,
+          "bend_cents": 0
+        },
+        {
+          "midi": 45,
+          "onset": 8.575000000000001,
+          "duration": 0.42,
+          "amplitude": 0.6,
+          "pluck": true,
+          "vibrato_cents": 0,
+          "bend_cents": 100
+        },
+        {
+          "midi": 50,
+          "onset": 9.275,
+          "duration": 0.42,
+          "amplitude": 0.06,
+          "pluck": true,
+          "vibrato_cents": 0,
+          "bend_cents": 0
+        },
+        {
+          "midi": 55,
+          "onset": 10.05,
+          "duration": 0.42,
+          "amplitude": 0.6,
+          "pluck": true,
+          "vibrato_cents": 0,
+          "bend_cents": 0
+        }
+      ],
+      "rate": 48000,
+      "duration": 12.0,
+      "block": 8192,
+      "seed": 1729,
+      "noise": 0.0005
+    },
+    "seconds": 0.39584392300002946,
+    "eligible_frames": 709,
+    "voiced_misses": 0,
+    "within_10_cents_all_eligible": 1.0,
+    "truth_notes": 14,
+    "detected_notes": 14,
+    "detected_onsets": 14,
+    "peak_input_buffer_samples": 9984
+  },
+  "limits_of_inference": [
+    "Authored synthetic signals; no real-recording or polyphonic accuracy claim.",
+    "Shared-host microtimings describe these inputs, not an exclusive standard benchmark.",
+    "Package digest covers Python code; workload/dataset hashes fix the comparison inputs."
+  ]
+}

@@ -74,6 +74,7 @@ def test_failed_report_plot_releases_its_figure(
     from matplotlib.figure import Figure
 
     report = analyze(np.zeros(4800, dtype=np.float64), 48000)
+    write(tmp_path / "audio.wav", np.zeros(4800), 48000)
     before = plt.get_fignums()
 
     def fail_save(*args: object, **kwargs: object) -> None:

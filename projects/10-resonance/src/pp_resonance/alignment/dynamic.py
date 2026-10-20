@@ -10,6 +10,16 @@ from pp_resonance.model import AlignedNote, AudioSpec, NoteEvent, ReferenceNote
 
 MAX_SCORE_NOTES = 10_000
 MAX_ALIGNMENT_CELLS = 4_000_000
+GAP_COST = 1.2
+
+
+def _match_cost(ref: ReferenceNote, note: NoteEvent, rate: int, tempo_scale: float) -> float:
+    """Nominal-pitch edit cost; cents/duration remain diagnostic, not score terms."""
+    return (
+        abs(ref.midi - note.midi) * 1.5
+        + min(2, abs(ref.start * tempo_scale - note.start) / rate)
+        + (3 if note.confidence < 0.8 else 0)
+    )
 
 
 def _number(value: object, label: str) -> float:
@@ -130,23 +140,26 @@ def align(
                     raise ValueError("Alignment requires confidence in [0,1]")
             ids.add(event.id)
             previous_start = event.start
-    dp = np.zeros((rows + 1, cols + 1))
-    operations = np.zeros((rows + 1, cols + 1), dtype=np.int8)
-    dp[:, 0] = np.arange(rows + 1) * 1.2
-    dp[0, :] = np.arange(cols + 1) * 1.2
+    # Traceback needs one operation byte per cell, not every historical cost.
+    # Python row lists also avoid tiny NumPy allocations/argmin in the hot loop.
+    previous = [j * GAP_COST for j in range(cols + 1)]
+    current = [0.0] * (cols + 1)
+    operations = np.empty((rows + 1, cols + 1), dtype=np.uint8)
     operations[:, 0] = 1
     operations[0, :] = 2
     for i, ref in enumerate(reference, 1):
+        current[0] = i * GAP_COST
         for j, note in enumerate(detected, 1):
-            # Low-confidence estimates cannot become authoritative matches.
-            match = (
-                abs(ref.midi - note.midi) * 1.5
-                + min(2, abs(ref.start * tempo_scale - note.start) / rate)
-                + (3 if note.confidence < 0.8 else 0)
-            )
-            costs = (dp[i - 1, j - 1] + match, dp[i - 1, j] + 1.2, dp[i, j - 1] + 1.2)
-            operation = int(np.argmin(costs))
-            dp[i, j], operations[i, j] = costs[operation], operation
+            best = previous[j - 1] + _match_cost(ref, note, rate, tempo_scale)
+            operation = 0
+            deletion, insertion = previous[j] + GAP_COST, current[j - 1] + GAP_COST
+            # Strict comparisons retain match, deletion, insertion tie priority.
+            if deletion < best:
+                best, operation = deletion, 1
+            if insertion < best:
+                best, operation = insertion, 2
+            current[j], operations[i, j] = best, operation
+        previous, current = current, previous
     result = []
     i, j = rows, cols
     while i or j:
@@ -157,16 +170,16 @@ def align(
                 AlignedNote(
                     ref.id,
                     note.id,
-                    float(dp[i, j] - dp[i - 1, j - 1]),
+                    _match_cost(ref, note, rate, tempo_scale),
                     note.start - round(ref.start * tempo_scale),
                     (note.midi - ref.midi) * 100 + note.cents,
                 )
             )
             i, j = i - 1, j - 1
         elif operation == 1:
-            result.append(AlignedNote(reference[i - 1].id, None, 1.2, None, None))
+            result.append(AlignedNote(reference[i - 1].id, None, GAP_COST, None, None))
             i -= 1
         else:
-            result.append(AlignedNote(None, detected[j - 1].id, 1.2, None, None))
+            result.append(AlignedNote(None, detected[j - 1].id, GAP_COST, None, None))
             j -= 1
     return result[::-1]

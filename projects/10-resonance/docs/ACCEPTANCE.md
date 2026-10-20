@@ -20,4 +20,21 @@ and `test_json_boundaries.py`. Their current counts and commands are recorded in
 [verification history](VERIFICATION.md); the 25-test records above describe their
 original revisions.
 
+The core review adds independent coverage rather than redefining the original
+gates:
+
+| Concern | Independent evidence |
+| --- | --- |
+| Signal scale and temporal locality | `test_core_semantics.py`: algebraic CMND scale invariance, analytic 440 Hz estimates at both rates, distant-future onset invariance and weak-attack boundary invariance |
+| Iterator ownership | Immediate input reuse, prohibited interleaved feeds, interrupted-final retry, and four partial-consumption schedules checked against directly padded input slices |
+| Fixed trajectory denominator | Missing/empty output scored on the input-derived grid, ambiguous timestamps rejected, and undefined conditional errors represented as null |
+| Edit optimum | `test_alignment_oracle.py`: every monotone path scored independently in 40 seeded problems, plus exact tie and explicit tempo cases |
+| Export timing and playback | `test_core_exports.py`: mido reconstruction with exact rational half-tick bounds at two rates/four tempos, mismatched plot/playback rejection, and embedded WAV bytes/digest checked against JSON |
+
+The [core review record](CORE_REVIEW.md) includes nine failing tests against
+exported baseline `39d3a8d`, raw semantic witnesses and identical workload/dataset
+hashes for bounded alignment comparisons. Full current checks are listed in
+[VERIFICATION.md](VERIFICATION.md). [METHODOLOGY.md](METHODOLOGY.md) defines
+exactly what each reported denominator, error and confidence means.
+
 RE-01–RE-08 are closed for their declared synthetic fixtures and platform. The final standard [wrapper](../../../docs/evidence/final/standard/resonance-3.14.8.json) and [raw measurements](../../../docs/evidence/final/standard/resonance-3.14.8-benchmark-benchmark.json) identify clean tested commit `59443e2bcdfc6a1dd81f8334c108474eef2d3030` and unchanged executable source. All four benchmark correctness checks passed. Challenge metrics still include two extra onset events and 18 aligned summaries more than 50 cents from nominal pitch; these do not replace or relax the fixed clean gates. See [BENCHMARKS.md](BENCHMARKS.md) for timing/reference interpretation and memory limits. Historical dirty development captures remain separate; no real-recording, polyphonic or hard real-time guarantee is implied.

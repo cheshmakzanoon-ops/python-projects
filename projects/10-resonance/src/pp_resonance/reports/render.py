@@ -1,6 +1,7 @@
 """Playable self-contained report with authentic plots and explicit uncertainty."""
 
 import base64
+import hashlib
 import html
 import io
 import json
@@ -14,6 +15,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+import soundfile as sf
 
 from pp_resonance.model import AnalysisReport, ReferenceNote, Samples
 
@@ -39,8 +41,26 @@ def render(
     audio: Samples,
     reference: list[ReferenceNote],
     provenance: dict[str, object],
-) -> None:
+) -> dict[str, object]:
+    """Render a verified encoded clip and return its playback provenance.
+
+    The plotted samples must be the decoded mono WAV being embedded. Source
+    recording provenance remains separate because a preview can be re-encoded.
+    """
     rate = report.sample_rate
+    encoded_audio = audio_path.read_bytes()
+    with sf.SoundFile(io.BytesIO(encoded_audio)) as recording:
+        if recording.format != "WAV" or recording.channels != 1 or recording.samplerate != rate:
+            raise ValueError("Report playback requires mono WAV at the analysis sample rate")
+        decoded = recording.read(dtype="float64")
+    if len(audio) > report.sample_count or not np.array_equal(audio, decoded):
+        raise ValueError("Report plot samples must match the embedded playback clip")
+    playback: dict[str, object] = {
+        "sha256": hashlib.sha256(encoded_audio).hexdigest(),
+        "sample_rate": rate,
+        "sample_count": len(audio),
+        "scope": "prefix" if len(audio) < report.sample_count else "full",
+    }
     fig, axes = plt.subplots(3, 1, figsize=(12, 8), constrained_layout=True, sharex=True)
     try:
         time = np.arange(len(audio)) / rate
@@ -87,7 +107,7 @@ def render(
     finally:
         plt.close(fig)
     image = base64.b64encode(buffer.getvalue()).decode()
-    audio_data = base64.b64encode(audio_path.read_bytes()).decode()
+    audio_data = base64.b64encode(encoded_audio).decode()
     rows = "".join(
         f'<tr><th scope="row">{html.escape(n.id)}</th><td>{n.midi}</td><td>{n.start / rate:.3f}</td>'
         f"<td>{n.end / rate:.3f}</td><td>{n.cents:+.2f}</td>"
@@ -124,10 +144,11 @@ def render(
         image=image,
         diagnostics=diagnostics,
         rows=rows,
-        provenance=html.escape(json.dumps(provenance, indent=2)),
+        provenance=html.escape(json.dumps({**provenance, "playback": playback}, indent=2)),
         alignment=html.escape(json.dumps([asdict(a) for a in report.alignment], indent=2)),
         trajectory=json.dumps(trajectory, allow_nan=False),
     )
     path.write_text(document, encoding="utf-8")
     # Keep a small independently viewable actual figure alongside the HTML.
     (path.parent / "analysis.png").write_bytes(buffer.getvalue())
+    return playback
