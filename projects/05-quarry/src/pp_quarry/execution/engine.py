@@ -20,8 +20,9 @@ from pp_quarry.model.events import canonical
 from pp_quarry.planning.dag import DEFAULT_DAG, Node, fingerprint, order
 from pp_quarry.planning.partitions import bucket
 from pp_quarry.sources import file_hash, read
-from pp_quarry.storage.catalog import check_storage_paths, connect
-from pp_quarry.storage.files import literal, manifest_path, persist
+from pp_quarry.storage.catalog import check_storage_paths, connect, read_format
+from pp_quarry.storage.files import literal, manifest_path, persist, verify_entry
+from pp_quarry.storage.manifest import validate_manifest
 
 
 class Conflict(ValueError):
@@ -41,6 +42,17 @@ class Config:
     max_record_bytes: int = 65536
 
     def __post_init__(self) -> None:
+        if any(
+            type(value) is not int
+            for value in (
+                self.buckets,
+                self.batch_size,
+                self.memory_mb,
+                self.threads,
+                self.max_record_bytes,
+            )
+        ):
+            raise ValueError("resource settings must be integers, not booleans or fractions")
         bucket(b"validate", self.buckets)
         if self.batch_size < 1 or self.memory_mb < 32 or self.threads not in {1, 2}:
             raise ValueError("batch >=1, memory >=32 MB and threads 1..2 required")
@@ -72,18 +84,16 @@ class Lakehouse:
         (self.root / "data").mkdir(exist_ok=True)
         (self.root / "tmp").mkdir(exist_ok=True)
         self.db = connect(self.root)
-        row = self.db.execute("SELECT value FROM config WHERE key='format'").fetchone()
-        stored = json.loads(row[0]) if row else None
-        if stored and (
-            stored.get("format_version") != 1
-            or stored.get("bucket_hash") != "sha256-canonical-key-first8-big-endian"
-            or stored.get("salt") is not None
-        ):
+        try:
+            self._configure(config)
+        except BaseException:
             self.db.close()
-            raise ValueError("unsupported stored format/hash; explicit migration required")
+            raise
+
+    def _configure(self, config: Config | None) -> None:
+        stored = read_format(self.db)
         self.config = config or (Config(**stored["config"]) if stored else Config())
         if stored and stored["config"]["buckets"] != self.config.buckets:
-            self.db.close()
             raise ValueError("bucket count migration required")
         if not stored:
             from dataclasses import asdict
@@ -125,7 +135,7 @@ class Lakehouse:
             if snapshot is not None:
                 raise ValueError(f"unknown snapshot {snapshot}")
             return {"snapshot": None, "partitions": {}, "contract": Contract().to_dict()}
-        return dict(json.loads(row[1]), snapshot=row[0])
+        return dict(validate_manifest(json.loads(row[1]), self.config.buckets), snapshot=row[0])
 
     def snapshots(self) -> list[int]:
         return [row[0] for row in self.db.execute("SELECT id FROM snapshots ORDER BY id")]
@@ -291,6 +301,7 @@ class Lakehouse:
             quality = self._quality(chosen, plan)
             manifest = self._execute(plan, dag)
             manifest["quality"] = quality
+            validate_manifest(manifest, self.config.buckets)
             if fault == "after_files":
                 self._crash(fault)
             if file_hash(Path(source)) != digest:
@@ -421,7 +432,7 @@ class Lakehouse:
                 for node in self._graph(dag):
                     entry = nodes[node.name]
                     if entry["action"] == "reuse":
-                        manifest_path(self.root, entry["old"]["path"])
+                        verify_entry(self.root, entry["old"])
                         output[node.name] = dict(entry["old"], reused=True)
                         manifest["stats"]["reused_nodes"] += 1
                         continue
@@ -524,14 +535,7 @@ class Lakehouse:
         files = rows = 0
         for nodes in manifest["partitions"].values():
             for entry in nodes.values():
-                path = manifest_path(self.root, entry["path"])
-                if file_hash(path) != entry["sha256"] or path.stat().st_size != entry["bytes"]:
-                    raise ValueError(f"checksum/size mismatch: {path.name}")
-                if str(pq.read_schema(path)) != entry["schema"]:
-                    raise ValueError("Parquet schema mismatch")
-                metadata = pq.ParquetFile(path).metadata
-                if metadata.num_rows != entry["rows"]:
-                    raise ValueError("row count mismatch")
+                verify_entry(self.root, entry)
                 files += 1
                 rows += entry["rows"]
         return {"files": files, "rows": rows}

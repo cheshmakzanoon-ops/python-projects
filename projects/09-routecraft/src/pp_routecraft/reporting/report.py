@@ -11,6 +11,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
+from matplotlib.patches import Patch  # noqa: E402
 
 from pp_routecraft.domain.instance import Plan, RoutingInstance, SolveResult  # noqa: E402
 from pp_routecraft.reporting.serialization import instance_dict  # noqa: E402
@@ -34,9 +35,15 @@ OWNED_FILES = frozenset(
 )
 
 
-def output_directory(path: Path) -> Path:
-    if not path.is_absolute() or path == Path(path.anchor) or path.is_symlink():
+def _validate_output_path(path: Path) -> None:
+    if not path.is_absolute() or path == Path(path.anchor):
         raise ValueError("output must be an absolute, nonsymlink, owned directory")
+    if any(parent.is_symlink() for parent in (path, *path.parents)):
+        raise ValueError("refusing symlink output or ancestor")
+
+
+def output_directory(path: Path) -> Path:
+    _validate_output_path(path)
     if path.exists() and not path.is_dir():
         raise ValueError("output is not a directory")
     if path.exists() and any(path.iterdir()) and not (path / ".routecraft-owned").is_file():
@@ -53,7 +60,8 @@ def output_directory(path: Path) -> Path:
 
 
 def clean_output(path: Path) -> None:
-    if not path.is_absolute() or path.is_symlink() or not (path / ".routecraft-owned").is_file():
+    _validate_output_path(path)
+    if not (path / ".routecraft-owned").is_file():
         raise ValueError("clean-demo requires an explicitly owned absolute directory")
     if (path / ".routecraft-owned").read_text() != "pp-routecraft schema=1\n":
         raise ValueError("invalid ownership marker")
@@ -91,13 +99,15 @@ def render(instance: RoutingInstance, plan: Plan, output: Path, *, prefix: str =
             a, b = positions[source], positions[target]
             axes.annotate("", xy=b, xytext=a, arrowprops={"arrowstyle": "->", "lw": 0.6})
     for job, (x, y) in positions.items():
-        axes.annotate(str(job), (x, y), fontsize=7)
+        axes.annotate("Depot" if job == 0 else str(job), (x, y), fontsize=7)
     axes.set(
         title=f"Synthetic island routes — {plan.objective[0]} vehicles, {plan.objective[1]} travel units",
         xlabel="Synthetic x coordinate",
         ylabel="Synthetic y coordinate",
     )
-    axes.legend(fontsize=7, ncol=2)
+    axes.set_aspect("equal", adjustable="datalim")
+    if axes.get_legend_handles_labels()[0]:
+        axes.legend(fontsize=7, ncol=2)
     figure.tight_layout()
     figure.savefig(output / f"{prefix}routes.svg")
     plt.close(figure)
@@ -108,6 +118,13 @@ def render(instance: RoutingInstance, plan: Plan, output: Path, *, prefix: str =
         state = state_map.get(vid)
         for index, visit in enumerate(visits):
             if state and index == len(state.executed):
+                if state.time > clock:
+                    axes.broken_barh(
+                        [(clock, state.time - clock)],
+                        (lane - 0.3, 0.6),
+                        facecolors="#a8a8a8",
+                        hatch="//",
+                    )
                 clock = state.time
             axes.broken_barh(
                 [(clock, max(0, visit.arrival - clock))],
@@ -120,22 +137,46 @@ def render(instance: RoutingInstance, plan: Plan, output: Path, *, prefix: str =
                 (lane - 0.3, 0.6),
                 facecolors="#efc86b",
             )
-            axes.broken_barh(
-                [(visit.service_start, max(1, visit.departure - visit.service_start))],
-                (lane - 0.3, 0.6),
-                facecolors="#4caa79",
-            )
+            if visit.departure > visit.service_start:
+                axes.broken_barh(
+                    [(visit.service_start, visit.departure - visit.service_start)],
+                    (lane - 0.3, 0.6),
+                    facecolors="#4caa79",
+                )
+            else:
+                axes.plot(visit.service_start, lane, marker="|", markersize=9, color="#4caa79")
             axes.text(visit.service_start, lane + 0.25, str(visit.stop_id), fontsize=6)
             clock = visit.departure
         if visits:
+            if state and len(state.executed) == len(visits):
+                if state.time > clock:
+                    axes.broken_barh(
+                        [(clock, state.time - clock)],
+                        (lane - 0.3, 0.6),
+                        facecolors="#a8a8a8",
+                        hatch="//",
+                    )
+                clock = state.time
             axes.broken_barh(
                 [(clock, max(0, returned - clock))], (lane - 0.3, 0.6), facecolors="#7da7d9"
             )
     axes.set(
         yticks=list(range(len(report.schedules))),
         yticklabels=[f"V{vid}" for vid, _, _ in report.schedules],
-        xlabel="Integer time units (blue travel, yellow wait, green service)",
+        xlabel="Integer time units",
         title="Verified service-start schedule, including depot returns",
+    )
+    axes.legend(
+        handles=[
+            Patch(facecolor="#7da7d9", label="Directed travel"),
+            Patch(facecolor="#efc86b", label="Window waiting"),
+            Patch(facecolor="#4caa79", label="Service (tick when duration is zero)"),
+            Patch(facecolor="#a8a8a8", hatch="//", label="Delay at actual boundary"),
+        ],
+        fontsize=7,
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.14),
+        ncol=2,
     )
     figure.tight_layout()
     figure.savefig(output / f"{prefix}timeline.svg")
@@ -201,14 +242,20 @@ def provenance(project: Path) -> dict[str, object]:
             for p in (project / folder).rglob("*")
             if p.is_file()
             and "__pycache__" not in p.parts
-            and p.name != "AGENT_STATUS.md"
+            and p.name != "VERIFICATION.md"
             and "evidence" not in p.parts
         )
     for path in sorted(inputs):
         if path.is_file():
             digest.update(str(path.relative_to(project)).encode() + b"\0" + path.read_bytes())
     root_digest = hashlib.sha256()
-    for name in ("AGENTS.md", "ruff.toml", "portfolio.toml", "scripts/portfolio.py"):
+    for name in (
+        "CONTRIBUTING.md",
+        "docs/REQUIREMENTS.md",
+        "ruff.toml",
+        "portfolio.toml",
+        "scripts/portfolio.py",
+    ):
         path = root / name
         if path.exists():
             root_digest.update(name.encode() + b"\0" + path.read_bytes())

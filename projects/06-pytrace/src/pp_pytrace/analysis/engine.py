@@ -241,6 +241,10 @@ class Analyzer:
             return UNKNOWN
         if isinstance(node, ast.Subscript):
             base = self.expression(node.value, env)
+            # Index/slice expressions run after the receiver and can contain
+            # sinks or assignment expressions even though heap lookup itself
+            # remains an unknown value in this name-state model.
+            self.expression(node.slice, env)
             return base.join(UNKNOWN)
         if isinstance(node, ast.IfExp):
             self.expression(node.test, env)
@@ -268,13 +272,17 @@ class Analyzer:
             BOTTOM,
         )
 
-    def bind(self, target: ast.AST, value: Value, env: Environment) -> None:
+    def bind(
+        self, target: ast.AST, value: Value, env: Environment, *, evaluate_target: bool = True
+    ) -> None:
         if isinstance(target, ast.Name):
             env[target.id] = value
         elif isinstance(target, (ast.Tuple, ast.List)):
             for item in target.elts:
                 self.bind(item, value.join(UNKNOWN), env)
         else:
+            if evaluate_target:
+                self.expression(target, env)
             self.emit(
                 "PT900",
                 target,
@@ -299,10 +307,17 @@ class Analyzer:
         elif isinstance(node, ast.AnnAssign):
             if node.value is not None:
                 self.bind(node.target, self.expression(node.value, env), env)
+            elif not isinstance(node.target, ast.Name):
+                # A bare name annotation leaves its binding unchanged, but a
+                # subscript/attribute target still evaluates its expressions.
+                self.expression(node.target, env)
         elif isinstance(node, ast.AugAssign):
             value = self.expression(node.target, env).join(self.expression(node.value, env))
             self.bind(
-                node.target, Value(value.taint, True, value.unknown, origins=value.origins), env
+                node.target,
+                Value(value.taint, True, value.unknown, origins=value.origins),
+                env,
+                evaluate_target=False,
             )
         elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
             env[node.name] = UNKNOWN

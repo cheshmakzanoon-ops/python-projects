@@ -10,6 +10,32 @@ from pp_anchor.cli import app, clean_demo, database_url, drop_schema, output_dir
 from pp_anchor.definitions.model import canonical
 
 
+@pytest.mark.parametrize("value", [{"text": "\x00"}, {"text": "\ud800"}, {"\udc00": "key"}])
+def test_canonical_rejects_text_not_representable_in_postgresql(value):
+    with pytest.raises(ValueError):
+        canonical(value)
+
+
+def test_canonical_rejects_deep_and_cyclic_values_without_recursion_error():
+    nested = []
+    current = nested
+    for _ in range(100):
+        child = []
+        current.append(child)
+        current = child
+    with pytest.raises(ValueError, match="nesting"):
+        canonical(nested)
+    cycle = []
+    cycle.append(cycle)
+    with pytest.raises(ValueError, match="nesting"):
+        canonical(cycle)
+
+
+def test_canonical_preserves_valid_unicode_and_shared_container_references():
+    shared = {"text": "Montréal 🏦"}
+    assert canonical([shared, shared]) == canonical([shared, dict(shared)])
+
+
 @pytest.mark.parametrize(
     "changes",
     [
@@ -29,6 +55,8 @@ from pp_anchor.definitions.model import canonical
         {"delay": -1},
         {"retry_delay": math.inf},
         {"delay": "soon"},
+        {"delay": True},
+        {"delay": 10**1000},
     ],
 )
 def test_invalid_step_inputs(changes):
@@ -58,6 +86,7 @@ def test_invalid_definition_json(data):
     [
         ("", 1, (Step("a"),)),
         ("x", 0, (Step("a"),)),
+        ("x", 2_147_483_648, (Step("a"),)),
         ("x", 1, ()),
         ("x", 1, tuple(Step(str(i)) for i in range(1001))),
     ],

@@ -30,6 +30,8 @@ def _finite_coordinate(value: object) -> bool:
 
 def input_errors(instance: RoutingInstance) -> tuple[str, ...]:
     errors: list[str] = []
+    if not isinstance(instance.matrix_version, str) or not instance.matrix_version:
+        errors.append("matrix version must be a nonempty string")
     ids = [s.id for s in instance.stops]
     vids = [v.id for v in instance.vehicles]
     identifiers = [instance.depot, *ids, *vids]

@@ -21,15 +21,20 @@ def metadata(seed: int, profile: str) -> dict[str, object]:
     project = Path(__file__).resolve().parents[2]
     repository = project.parents[1]
     if not (project / "pyproject.toml").exists():
+        package = Path(__file__).parent
+        resources = [
+            path
+            for path in package.rglob("*")
+            if path.is_file() and "__pycache__" not in path.parts and path.suffix != ".pyc"
+        ]
         return {
             "schema_version": 1,
             "project": "resonance",
             "source_commit": None,
             "source_dirty": None,
             "source_scope": "installed-wheel",
-            "source_content_sha256": digest(
-                list(Path(__file__).parent.rglob("*.py")), Path(__file__).parent
-            ),
+            "source_content_sha256": digest(resources, package),
+            "source_inputs": [str(path.relative_to(package)) for path in sorted(resources)],
             "root_contract_sha256": None,
             "lockfile_sha256": None,
             "python": sys.version,
@@ -59,11 +64,17 @@ def metadata(seed: int, profile: str) -> dict[str, object]:
             }
             for part in p.relative_to(project).parts
         )
-        and p.name not in {"AGENT_STATUS.md", ".coverage", "coverage.xml"}
+        and p.name not in {"VERIFICATION.md", ".coverage", "coverage.xml"}
     ]
     roots = [
         repository / p
-        for p in ["AGENTS.md", "ruff.toml", "portfolio.toml", "scripts/portfolio.py"]
+        for p in [
+            "CONTRIBUTING.md",
+            "docs/REQUIREMENTS.md",
+            "ruff.toml",
+            "portfolio.toml",
+            "scripts/portfolio.py",
+        ]
         if (repository / p).exists()
     ]
     try:
@@ -103,7 +114,7 @@ def metadata(seed: int, profile: str) -> dict[str, object]:
         "source_scope": "project",
         "source_content_sha256": digest(sources, project),
         "source_inputs": [str(p.relative_to(project)) for p in sorted(sources)],
-        "source_digest_inputs": "all project files excluding caches, dist, artifacts, results, AGENT_STATUS and coverage outputs",
+        "source_digest_inputs": "all project files excluding caches, dist, artifacts, results, VERIFICATION.md and coverage outputs",
         "root_contract_sha256": digest(roots, repository),
         "root_contract_inputs": [str(p.relative_to(repository)) for p in sorted(roots)],
         "lockfile_sha256": hashlib.sha256((project / "uv.lock").read_bytes()).hexdigest(),

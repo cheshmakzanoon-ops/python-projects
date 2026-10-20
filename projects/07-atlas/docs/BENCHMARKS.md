@@ -23,7 +23,7 @@ uses synchronous FULL; segments and their directory are fsynced before publicati
 
 ## Final committed standard measurement
 
-The coordinator ran the standard profile serially from a clean immutable clone of
+The recorded run executed the standard profile serially from a clean immutable clone of
 commit `59443e2bcdfc6a1dd81f8334c108474eef2d3030`, using CPython 3.14.8 on Linux
 with an Intel Xeon Platinum 8573C, a 32 GiB memory limit, one process and thread
 limits of 1. The run indexed **100,000 documents / 40,000,000 tokens** and measured
@@ -91,7 +91,7 @@ current procedure, 2 useful rationale and 1 incident context. Omitted documents
 are unjudged and treated as 0. Restricted operations notes are invisible to the
 public evaluation principal. Recall is over the authored relevant pool.
 
-The coordinator completed a separate semantic review without consulting
+An independent reviewer completed a separate semantic review without consulting
 per-query scorer output or changing judgments. The [judgment review](../../../docs/evidence/atlas-judgment-review.md)
 records corpus and judgment hashes, rubric agreement, semantic spot checks and
 limitations. This review does not establish agreement among human assessors or

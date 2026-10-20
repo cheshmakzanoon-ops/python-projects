@@ -17,3 +17,9 @@ Failure boundaries: committed PostgreSQL transactions rely on server durability 
 A ledger use case owns its outer transaction. Calling it inside another atomic block fails explicitly: deferred commit-time failures must be visible to the retry loop, and an inner savepoint cannot promise that an outer caller will commit. Projections update with one parameterized SQL UPDATE over the already validated/locked account list; missing projection rows abort and require operator replay. Audit detects and can reconstruct missing projections as well as incorrect amounts.
 
 A composite PostgreSQL foreign key binds each idempotency row's (journal_id, tenant_id) to the immutable journal's (id, tenant_id). Cached-return code independently verifies that tenant binding before returning any journal. Reconciliation runs and proposal identities are immutable after publication; only a proposal's explicit decision status can change. Migration 0005 validates existing cache and statement/proposal history rather than accepting previously inconsistent rows.
+
+HTTP parsing rejects duplicate JSON members, non-finite numbers, unrepresentable text,
+and excessive nesting before reaching application services. Pagination offsets fit
+PostgreSQL bigint. API and view responses prohibit caching of authenticated records.
+Operator views use escaped semantic tables; error messages are plain text, and a
+restrictive page CSP permits only inline styling. Method errors include `Allow`.

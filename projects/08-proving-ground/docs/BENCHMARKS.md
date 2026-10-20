@@ -8,7 +8,7 @@ The original generator produced **250,000 observations, 40 sensors and 500 asset
 
 Dataset digest: `7ab7b11b08606ab8e5d8b3c84368bf6ef000dee43486bdf3e7e2f92cc678cad7`. Split digest: `84f03e97bb4a9d7bd07201f9578275dc459bcabe212069e0df15d71d38d5c7a6`. Each evaluation binds these identities to its candidate artifact. Gate thresholds were fixed before fitting; candidate selection used validation PR-AUC, and the final test report was computed afterward.
 
-The coordinator retained a [compact observation of the actual frozen split](../../../docs/evidence/final/standard/proving-ground-split-observation.json), including counts, exact boundaries, dataset identity and the full split-file checksum. Full row-ID lists are omitted; they can be regenerated from the recorded profile and seed.
+The [compact observation of the actual frozen split](../../../docs/evidence/final/standard/proving-ground-split-observation.json) records counts, exact boundaries, dataset identity and the full split-file checksum. Full row-ID lists are omitted; they can be regenerated from the recorded profile and seed.
 
 | Model | Full fit seconds | Validation PR-AUC | ROC-AUC | Brier | Model bytes |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -34,7 +34,7 @@ The postselection logistic test report used 49,000 observations and 14,248 fault
 
 The five inference measurements were 2.115305, 2.360746, 2.085273, 2.840591 and 2.306749 ms. The five transition measurements included the SQLite generation transition, hash/type/version-verified disk load and atomic serving snapshot swap; they do not include HTTP latency. The sample p95 is interpolated from five measurements and is not a stable production tail estimate. Each family was fitted once; five repetitions apply to inference and transitions, not training.
 
-The run used an Intel Xeon Platinum 8573C, Linux x86_64, a 34,359,738,368-byte cgroup limit and OMP_NUM_THREADS=OPENBLAS_NUM_THREADS=MKL_NUM_THREADS=1 under the coordinator's serialized workload lease. The lifecycle timer excludes dispatcher overhead; the wrapper separately records 25.698055 s for the whole standard command. These are local synthetic-workload measurements, not a production-capacity claim.
+The run used an Intel Xeon Platinum 8573C, Linux x86_64, a 34,359,738,368-byte cgroup limit and OMP_NUM_THREADS=OPENBLAS_NUM_THREADS=MKL_NUM_THREADS=1 during a serialized workload run. The lifecycle timer excludes dispatcher overhead; the wrapper separately records 25.698055 s for the whole standard command. These are local synthetic-workload measurements, not a production-capacity claim.
 
 Correctness checks passed: prior rejected, corrupt artifact copy refused, offline/served pipeline parity at absolute tolerance 1e-12, unchanged source, audited rollback generation 8. Final readiness showed requested/applied generation 8, logistic model version 2 and no load error. The raw audit binds every decision to candidate/data/split/evaluation/policy identities and records all real tree/logistic rollback transitions.
 
@@ -43,14 +43,14 @@ Correctness checks passed: prior rejected, corrupt artifact copy refused, offlin
 ```bash
 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
   uv run --locked python -m pp_proving_ground.cli benchmark --profile ci --output /tmp/pg-ci --seed 1729
-# Run standard alone with the portfolio's exclusive resource lease:
+# Run standard alone alone on an idle machine:
 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
   uv run --locked python -m pp_proving_ground.cli benchmark --profile standard --output /tmp/pg-standard --seed 1729
 ```
 
 CI uses 5,000 rows, 50 assets and 12 sensors. The accepted full standard result above is not inferred from CI. [Python 3.13.16 compatibility evidence](../../../docs/evidence/final/python313/proving-ground-3.13.16.json) and [Python 3.14.8 evidence](../../../docs/evidence/final/python314/proving-ground-3.14.8.json) record clean-source normal checks, demos and CI benchmarks; both suites passed 103 tests. [Independent review](../../../docs/evidence/INDEPENDENT_REVIEW.md) closed 58 additional checks.
 
-The standard wrapper project digest is `eeea22a62454d2e7ae28c739abf45172110edab8f5ebcc24d5037d1a94e39552`; raw runner project digest is `2000f7eb808d0229d9db549fe3683efbb9ced676a49ee8eab7310e66cba01ab6`; lock digest is `48ddce6dd70acac05a8094cf70e3d40ee7feb534591e49776292ef00436a508f`. These project hashes use separate declared input scopes; the wrapper also includes README in its explicit source-input manifest. Its broader root-contract manifest likewise differs from the raw runner's AGENTS.md/ruff.toml/portfolio.toml/scripts/portfolio.py scope. Both identify the same clean source commit and confirm unchanged inputs after execution; compare each digest only against its declared input list.
+The standard wrapper project digest is `eeea22a62454d2e7ae28c739abf45172110edab8f5ebcc24d5037d1a94e39552`; raw runner project digest is `2000f7eb808d0229d9db549fe3683efbb9ced676a49ee8eab7310e66cba01ab6`; lock digest is `48ddce6dd70acac05a8094cf70e3d40ee7feb534591e49776292ef00436a508f`. These project hashes use separate declared input scopes; the wrapper also includes README in its explicit source-input manifest. Its broader root-contract manifest likewise differs from the raw runner's narrower historical root-contract scope. Both identify the same clean source commit and confirm unchanged inputs after execution; compare each digest only against its declared input list.
 
 Every result records seed, dataset identity, parameters, actual interpreter/OS/CPU/memory information, thread settings, measurements and correctness checks. Generated reports/artifacts are excluded from source hashing to avoid self-reference. Unknown environment metadata is never fabricated. The synthetic outcome construction favors linear effects: logistic strength here does not establish superiority on real equipment. Asset-bootstrap intervals describe this generated population, drift alone does not demonstrate accuracy loss, and serialization bytes need not repeat across saves or platforms.
 

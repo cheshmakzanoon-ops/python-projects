@@ -5,7 +5,7 @@ from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 
 from pp_anchor.definitions.model import JSON, validate_activity_result
-from pp_anchor.persistence.engine import Engine, StaleLeaseError, Task
+from pp_anchor.persistence.engine import Engine, StaleLeaseError, Task, validate_lease_seconds
 
 Activity = Callable[["ActivityContext"], Awaitable[JSON]]
 
@@ -65,8 +65,9 @@ class Worker:
         lease_seconds: float = 5,
         heartbeat: bool = True,
     ) -> None:
-        if concurrency < 1:
-            raise ValueError("concurrency must be positive")
+        if type(concurrency) is not int or concurrency < 1:
+            raise ValueError("concurrency must be a positive integer")
+        validate_lease_seconds(lease_seconds)
         self.engine = engine
         self.registry = registry or ActivityRegistry()
         self.concurrency, self.lease_seconds, self.heartbeat_enabled = (

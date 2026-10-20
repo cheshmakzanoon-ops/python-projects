@@ -30,6 +30,15 @@ needed when resolving this acknowledgement ambiguity. Do not retry indefinitely
 inside a poisoned owner. Repairing a CRC mismatch by editing checksums is not
 supported: preserve the files and restore a validated backup.
 
+On `Corruption`, preserve the complete directory before further investigation.
+A missing WAL or a gap in replayed commit sequences now fails open explicitly;
+do not create a replacement empty WAL to force startup. An initialized database
+always requires its original log, even when its last flush left the log empty.
+The safe recovery path is a validated backup or a separately reviewed repair
+that accounts for the missing files. Format-one directories remain compatible;
+an old initialization interrupted after manifest creation but before WAL creation
+is now refused because it cannot be distinguished safely from log loss.
+
 Backups refuse an existing destination and paths inside the source database.
 The returned report identifies the source snapshot and content digest. Use
 `db.backup(new_path, snapshot=old_snapshot)` to export a retained historical view.

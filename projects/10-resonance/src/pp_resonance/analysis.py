@@ -59,7 +59,7 @@ def analyze_chunks(
         diagnostics.append("no confident sustained notes; silence or uncertain/polyphonic input")
     uncertain = sum(p.frequency is None and p.rms >= config.silence_rms for p in pitches)
     if uncertain:
-        diagnostics.append(f"{uncertain} non-silent frames were uncertain; no criticism inferred")
+        diagnostics.append(f"{uncertain} non-silent frames lacked a reliable pitch estimate")
     return AnalysisReport(
         1,
         rate,

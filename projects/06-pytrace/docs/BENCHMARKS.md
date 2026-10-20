@@ -1,6 +1,6 @@
 # Benchmark evidence
 
-The coordinator accepted the final standard run from immutable source commit `59443e2bcdfc6a1dd81f8334c108474eef2d3030`, with `source_dirty: false`. The [raw benchmark report](../../../docs/evidence/final/standard/pytrace-3.14.8-benchmark-benchmark.json) records the workload and measurements; the [coordinator verification wrapper](../../../docs/evidence/final/standard/pytrace-3.14.8.json) records the exact dispatcher commands, successful exit codes and unchanged source scope. Their hashes cover explicitly different input lists; use each report's declared scope rather than treating their digests as interchangeable.
+The standard benchmark ran from immutable source commit `59443e2bcdfc6a1dd81f8334c108474eef2d3030`, with `source_dirty: false`. The [raw benchmark report](../../../docs/evidence/final/standard/pytrace-3.14.8-benchmark-benchmark.json) records the workload and measurements; the [verification wrapper](../../../docs/evidence/final/standard/pytrace-3.14.8.json) records the exact dispatcher commands, successful exit codes and unchanged source scope. Their hashes cover explicitly different input lists; use each report's declared scope rather than treating their digests as interchangeable.
 
 | Final standard measurement | Actual result |
 | --- | --- |
@@ -42,7 +42,7 @@ Run:
 
 ```bash
 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 uv run --locked python -m pp_pytrace.cli benchmark --profile ci --output /tmp/pytrace-ci --seed 1729
-# Run alone under the coordinator resource lease:
+# Run the standard profile without other benchmarks:
 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 uv run --locked python -m pp_pytrace.cli benchmark --profile standard --output /tmp/pytrace-standard --seed 1729
 ```
 

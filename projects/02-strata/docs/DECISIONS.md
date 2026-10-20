@@ -14,7 +14,9 @@ WAL frames are `STW1, u32 payload_length, u32 CRC32(payload), payload`.
 One frame contains one nonempty transaction, one sequence, and unique user keys.
 Recovery requires strictly increasing frame sequences. Only an incomplete final
 frame is truncated and synced. Invalid magic, oversized lengths, complete
-checksum failures, duplicates, and nonmonotonic sequences fail closed. When an
+checksum failures, duplicates, and nonconsecutive sequences fail closed. The
+first replayed transaction must immediately follow the manifest checkpoint;
+a missing prefix or interior transaction is corruption. When an
 incomplete claimed length covers a later valid frame, recovery reports interior
 corruption instead of hiding later data. A maliciously changed incomplete length
 without a detectable later frame cannot always be distinguished from a real
@@ -63,6 +65,11 @@ state. Errors are never converted into successful acknowledgements.
 Creating a new database hierarchy also syncs each newly created directory's
 parent entry, walking from the previously existing ancestor down. Syncing only
 the final database directory would leave its own creation outside that boundary.
+Initialization syncs an empty regular-file WAL before publishing the first
+manifest. Once a manifest exists, a missing WAL is file loss, not a request to
+initialize an empty log. Interrupted initialization can resume only with an empty
+WAL, optional pending manifest, and owner-lock file; other content is preserved
+and rejected. This ordering requires no change to the version-one format.
 
 This assumes a local POSIX filesystem with truthful fsync/rename behavior, one
 owner, no external mutation, and functioning storage. Process-kill tests cannot

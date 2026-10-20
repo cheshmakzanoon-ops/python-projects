@@ -10,6 +10,21 @@ from datetime import date
 from pp_quarry.model.events import JSON, Event
 
 
+def _finite_bound(value: object) -> float | None:
+    if value is None:
+        return None
+    if type(value) not in {int, float}:
+        raise ValueError("quality bounds must be finite numbers")
+    assert isinstance(value, (int, float))
+    try:
+        result = float(value)
+    except OverflowError as exc:
+        raise ValueError("quality bounds must be finite numbers") from exc
+    if not math.isfinite(result):
+        raise ValueError("quality bounds must be finite numbers")
+    return result
+
+
 @dataclass(frozen=True)
 class Field:
     kind: str
@@ -35,8 +50,16 @@ class Contract:
     max_rows: int | None = None
 
     def __post_init__(self) -> None:
+        if type(self.min_rows) is not int or (
+            self.max_rows is not None and type(self.max_rows) is not int
+        ):
+            raise ValueError("dataset row bounds must be integers")
         if self.min_rows < 0 or (self.max_rows is not None and self.max_rows < self.min_rows):
             raise ValueError("invalid dataset row-count bounds")
+        _finite_bound(self.minimum)
+        _finite_bound(self.maximum)
+        if any(not isinstance(name, str) or not name or "\x00" in name for name in self.fields):
+            raise ValueError("contract field names must be nonempty strings without NUL bytes")
         if any(
             f.kind not in {"string", "number", "integer", "boolean", "json"}
             for f in self.fields.values()
@@ -126,22 +149,16 @@ class Contract:
             if not isinstance(kind, str) or type(nullable) is not bool:
                 raise ValueError("invalid field spec: string kind and boolean nullable required")
             specs[name] = Field(kind, nullable)
-        minimum, maximum = value.get("minimum"), value.get("maximum")
+        minimum = _finite_bound(value.get("minimum"))
+        maximum = _finite_bound(value.get("maximum"))
         min_rows = value.get("min_rows", 0)
         max_rows = value.get("max_rows")
         if type(min_rows) is not int or (max_rows is not None and type(max_rows) is not int):
             raise ValueError("dataset row bounds must be integers")
-        for bound in (minimum, maximum):
-            if bound is not None and (
-                not isinstance(bound, (int, float))
-                or isinstance(bound, bool)
-                or not math.isfinite(bound)
-            ):
-                raise ValueError("quality bounds must be finite numbers")
         return cls(
             specs,
-            float(minimum) if isinstance(minimum, (float, int)) else None,
-            float(maximum) if isinstance(maximum, (float, int)) else None,
+            minimum,
+            maximum,
             min_rows if isinstance(min_rows, int) else 0,
             max_rows if isinstance(max_rows, int) else None,
         )

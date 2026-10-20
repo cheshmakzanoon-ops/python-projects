@@ -51,7 +51,7 @@ terms still require repeated adjacent positions. Empty queries list authorized
 filtered documents with zero score, ordered by ID. Ties always use stable ID.
 
 Results include term score contributions and visible N, df, average length, k1/b.
-The 128-entry LRU includes tenant, subject, visible-set digest, ACL revision,
+The 128-entry LRU includes tenant, subject, ACL revision,
 generation, normalized query, filters, ranking settings and pagination. Revocation
 changes its identity before any new request can use a prior result. A request
 already holding a snapshot may finish under that snapshot. Index loading and
@@ -62,3 +62,14 @@ letters/numbers/marks, and keeps original character bounds. It handles Hangul
 starter composition, compatibility ligatures and combining accents. Snippets
 escape source before inserting controlled `<mark>` elements. They never splice
 normalized-character offsets into original text.
+
+The HTTP export adapter uses `export_page`: it computes visibility and the total
+from one snapshot, then constructs only the requested page of public document
+records. The current-generation index remains materialized in memory; bounded
+export projection does not remove that separate scaling limitation.
+
+The browser view loads local stylesheet/script assets, applies a restrictive CSP,
+and renders document text as text. Controlled snippet marks are the only HTML
+retained in results. Responses disable caching, framing and content-type sniffing.
+Bearer values have no form field name, never enter a URL or browser storage, and
+are cleared with results on connection changes and page exit.

@@ -6,6 +6,7 @@ import ast
 import hashlib
 import json
 import platform
+import tempfile
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
@@ -15,6 +16,7 @@ from pp_pytrace.frontend.discovery import (
     Limits,
     ParseFailure,
     discover,
+    guard_output,
     parse,
     read_bounded,
     read_source,
@@ -125,6 +127,8 @@ def analyze(
     excludes: tuple[str, ...] = (".venv/*", ".git/*", "__pycache__/*"),
 ) -> Result:
     files = discover(root, excludes, limits)
+    if cache is not None:
+        guard_output(cache, files)
     root = root.resolve(strict=True)
     base = root.parent if root.is_file() else root
     previous = _load_cache(cache, root) if cache and cache.exists() else {}
@@ -263,18 +267,32 @@ def analyze(
         findings.extend(diagnostics)
     if cache:
         cache.parent.mkdir(parents=True, exist_ok=True)
-        temporary = cache.with_name(cache.name + ".tmp")
-        temporary.write_text(
-            json.dumps(
-                {
-                    "schema_version": 1,
-                    "version": ENGINE_VERSION,
-                    "root": str(root),
-                    "entries": entries,
-                },
-                indent=2,
-            )
-            + "\n"
-        )
-        temporary.replace(cache)
+        # Exclusive creation prevents an old/predictable .tmp symlink from
+        # redirecting a write. Independent analyses can publish safely; the last
+        # complete result wins and fingerprints invalidate any stale entries.
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            prefix=".pytrace-cache-",
+            suffix=".tmp",
+            dir=cache.parent,
+            delete=False,
+        ) as stream:
+            temporary = Path(stream.name)
+            try:
+                json.dump(
+                    {
+                        "schema_version": 1,
+                        "version": ENGINE_VERSION,
+                        "root": str(root),
+                        "entries": entries,
+                    },
+                    stream,
+                    indent=2,
+                )
+                stream.write("\n")
+                stream.close()
+                temporary.replace(cache)
+            finally:
+                temporary.unlink(missing_ok=True)
     return Result(tuple(findings), tuple(invalidated), len(files), iterations, failures, hits)

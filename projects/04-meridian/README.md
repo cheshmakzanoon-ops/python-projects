@@ -23,7 +23,9 @@ Every JSON endpoint requires HTTP Basic authentication using a Django user, `X-T
 {"currency":"USD","reference":"invoice-100","postings":[{"account_id":"ACCOUNT_UUID","amount":"100.00"},{"account_id":"OFFSET_UUID","amount":"-100.00"}]}
 ```
 
-The API returns journal/posting identities and integer minor units. Read [API](docs/API.md), [architecture](docs/ARCHITECTURE.md), [acceptance](docs/ACCEPTANCE.md), [operations](docs/OPERATIONS.md), and [benchmarks](docs/BENCHMARKS.md). No claim of regulatory compliance or production banking suitability is made.
+The API returns journal/posting identities and integer minor units. Focused record views show journal postings, ordered account history, and reconciliation proposals as responsive tables with explicit currency units and ambiguity markers. They require the same authentication and tenant headers as the API.
+
+Read [API](docs/API.md), [verification](docs/VERIFICATION.md), [architecture](docs/ARCHITECTURE.md), [acceptance](docs/ACCEPTANCE.md), [operations](docs/OPERATIONS.md), and [benchmarks](docs/BENCHMARKS.md). No claim of regulatory compliance or production banking suitability is made.
 
 ```sh
 MERIDIAN_PG_CONTAINER=your-explicit-local-postgres-container uv run --locked pytest

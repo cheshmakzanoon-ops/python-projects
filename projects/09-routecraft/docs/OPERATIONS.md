@@ -26,8 +26,8 @@ uv run --locked python -m pp_routecraft.cli verify --instance /tmp/rc-input/inst
 `--seconds` adds a cooperative wall limit. Zero seconds without an existing
 incumbent returns `NO_FEASIBLE_PLAN_FOUND`, never proven infeasibility. In Python,
 pass `initial=verified_plan` and `cancelled=callback` to retain an incumbent through
-cancellation. Only tiny `solve --exact` can prove infeasibility. Invalid API input
-returns `INVALID_INPUT`; malformed CLI JSON/file errors exit 2; verifier rejection
+cancellation. Stop conditions are checked before construction, before a fallback constructor, and before each search operation; an observed cancellation cannot be undone by a later callback result. Only tiny `solve --exact` can prove infeasibility. Invalid API input
+returns `INVALID_INPUT`; CLI invalid input/budgets, malformed JSON and file errors exit 2, preserving any solver diagnostics in `result.json`; verifier rejection
 exits 1. A heuristic unknown result is represented in its JSON result, not hidden.
 
 For a rolling update, supply an expanded instance with one state per vehicle and
@@ -43,11 +43,15 @@ No database or recovery daemon is involved. Restore by verifying the plan agains
 its input before replanning. A JSON objective can be inspected but is not trusted.
 Change a route's objective or duplicate a customer to trigger verifier diagnostics.
 
-Outputs require an absolute, nonsymlink, empty or explicitly owned directory.
+Outputs require an absolute, empty or explicitly owned directory. Symlinks in the output path, any ancestor, ownership marker, or fixed output filename are rejected before writing or cleanup.
 `clean-demo --output /tmp/routecraft-demo` deletes only fixed Routecraft-owned
 filenames and its exact ownership marker; unrelated files survive. It refuses
 unowned directories and symlink targets. Never use a generic recursive removal
 command to reset arbitrary user data.
 
-Checks: `ruff format --check .`, `ruff check .`, `mypy src`, `pytest`, `uv build`.
+The [JSON contract](FORMAT.md) lists accepted fields and defaults. Unknown fields, duplicate object keys and unsupported schema versions fail explicitly. A matrix version must be a nonempty string.
+
+Checks: `uv run --locked ruff format --check .`, `uv run --locked ruff check .`, `uv run --locked mypy src`, `uv run --locked pytest`, `uv build`.
 Run the wheel-installed demo from outside the source tree as a packaging check.
+
+The timeline uses verified durations. Delays between an executed prefix and the actual departure boundary appear separately from travel; zero-duration service appears as a tick. For earlier executed visits, the report replays the model's earliest feasible history, not a full timestamped execution log. Keep the original instance and state sequence if actual historical timestamps are required.

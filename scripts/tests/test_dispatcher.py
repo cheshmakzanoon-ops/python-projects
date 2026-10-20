@@ -78,3 +78,20 @@ def test_finished_parent_cannot_leave_running_descendant(tmp_path):
         time.sleep(0.05)
     else:
         raise AssertionError("finished command left a running descendant")
+
+
+def test_task_uses_one_explicit_interpreter_for_run_build_and_wheel(monkeypatch):
+    calls = []
+    monkeypatch.delenv("PORTFOLIO_PYTHON", raising=False)
+    monkeypatch.setattr(portfolio, "execute", lambda command, *args: calls.append(command) or 0)
+    project = next(p for p in portfolio.manifest() if p["slug"] == "current")
+    assert portfolio.project_task("check", project) == 0
+    for command in calls[:-1]:
+        assert command[command.index("--python") + 1] == project["default_python"]
+    assert calls[-1][-1] == project["default_python"]
+    calls.clear()
+    monkeypatch.setenv("PORTFOLIO_PYTHON", "3.13.16")
+    assert portfolio.project_task("check", project) == 0
+    for command in calls[:-1]:
+        assert command[command.index("--python") + 1] == "3.13.16"
+    assert calls[-1][-1] == "3.13.16"

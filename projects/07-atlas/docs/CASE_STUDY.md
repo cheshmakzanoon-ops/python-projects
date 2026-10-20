@@ -37,14 +37,15 @@ contributions and proves subsequent searches retain authentic results.
 
 ## Verification and measured limits
 
-Python 3.13.16 and 3.14.8 compatibility checks each pass 40 tests. Whole-package
+The original acceptance snapshot passed 40 tests on each of Python 3.13.16 and
+3.14.8. Later regression suites are recorded in [VERIFICATION.md](VERIFICATION.md). Whole-package
 branch-inclusive coverage is 97%. Failure scenarios include concurrent writers,
 stale merges, process death before publication, SQLite rollback, hidden-document
-updates, next-request revocation and cached-file corruption. The coordinator's
+updates, next-request revocation and cached-file corruption. The
 code-search integration passes through real PyTrace findings and public Atlas
 interfaces, including deletion, merge, tenant isolation and permission changes.
 
-The coordinator ran the full standard workload serially from clean immutable
+The recorded run executed the full standard workload serially from clean immutable
 commit `59443e2bcdfc6a1dd81f8334c108474eef2d3030`. It indexed 100,000 documents
 of 400 tokens each in **543.2294 s**, or **184.084 documents/s**, then measured
 2,000 queries over five repetitions. Warm p50/p95/p99 were
@@ -64,8 +65,7 @@ timing. Indexed ACL visibility and compact positional arrays are justified next
 steps; they have not been implemented or assigned invented speedups.
 
 The separate judged collection improves heldout nDCG@10 from 0.69740 to 0.95150
-by honoring explicit phrase positions, without heldout parameter tuning. The
-coordinator completed an independent [semantic judgment audit](../../../docs/evidence/atlas-judgment-review.md)
+by honoring explicit phrase positions, without heldout parameter tuning. An independent reviewer completed an independent [semantic judgment audit](../../../docs/evidence/atlas-judgment-review.md)
 without consulting per-query scorer output. Fifty queries still have imperfect
 graded ordering, and all failures remain in the historical quality report.
 Repeated technical templates and pooled labels limit the relevance claim to this

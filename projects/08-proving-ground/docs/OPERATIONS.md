@@ -11,7 +11,21 @@ uv run --locked python -m pp_proving_ground.cli model-card --output /tmp/pg-demo
 uv run --locked python -m pp_proving_ground.cli serve --output /tmp/pg-demo --port 8108
 ```
 
-`GET /health` checks process liveness. `GET /ready` returns 503 while the requested model has not been successfully applied, including a load error. `GET /models?after=0&limit=20` lists model identities. `POST /predict` accepts `{"records":[{"sensor_00":0.1,...}]}` with every named sensor present, values numeric or null. Predictions include artifact digest, actual loaded model version and applied deployment generation. Send JSON lists of those records to `predict --input /absolute/records.json --output /tmp/pg-demo` for the same fitted pipeline through the CLI.
+`GET /health` checks process liveness. `GET /ready` returns 503 while the requested model has not been successfully applied, including a load error. `GET /models?after=0&limit=20` lists model identities. `POST /predict` requires every named sensor, finite numeric values or explicit null, and a top-level `records` list. For the default 12-sensor demo:
+
+```sh
+curl --fail-with-body http://127.0.0.1:8108/predict \
+  --header 'Content-Type: application/json' \
+  --data '{"records":[{"sensor_00":0.1,"sensor_01":-0.2,"sensor_02":0,"sensor_03":null,"sensor_04":0,"sensor_05":0,"sensor_06":0,"sensor_07":0,"sensor_08":0,"sensor_09":0,"sensor_10":0,"sensor_11":0}]}'
+```
+
+Predictions include artifact digest, actual loaded model version and applied
+deployment generation. The CLI `predict --input /absolute/records.json --output
+/tmp/pg-demo` accepts a JSON list of records, without the HTTP `records` wrapper,
+and uses the same fitted pipeline. Both paths reject booleans, numeric strings,
+infinity and NaN; use null for missing sensors. Requests over 2 MiB return 413,
+invalid rows return 422, and a process with no loaded model returns 503.
+Validation errors identify the field and reason without echoing its value.
 
 The server polls requested generation changes and attempts each new generation once. `/refresh` retries the current requested generation, for example after restoring an exact original artifact. Retained old predictions always retain old metadata. Loopback-only unauthenticated operation is intentional; the project does not supply production authentication or public deployment.
 
@@ -31,6 +45,7 @@ These numbers are examples; use actual registry output. A stale generation fails
 - `artifact checksum mismatch`: preserve evidence, restore the original immutable bytes from a trusted backup, or deploy a different verified artifact. Never rewrite a manifest checksum to legitimize corruption.
 - `unreviewed model types`: the serializer found an unsupported class; do not automatically trust the returned class list. Only the documented types were reviewed. Unsupported estimators need a separate compatibility/security review.
 - `unsupported persistence-library versions`: recreate the locked environment. Cross-version model loading is intentionally refused.
+- manifest/schema or preprocessing mismatch: inspect the recorded feature names and original training pipeline. Supported class names alone do not authorize reordered steps, duplicate steps, changed preprocessing, or a different feature count. Keep the rejected artifact for diagnosis and train a new supported candidate; do not edit its immutable manifest.
 - generation comparison failure: inspect the winning deployment, then make a fresh reviewed decision using its actual generation. Do not blindly retry a competing promotion.
 - missing/undefined metrics: check validation counts and class balance. One-class validation cannot establish required ROC/PR discrimination.
 - schema/drift: `drift --output /tmp/pg-demo --incoming /absolute/new-data.parquet` compares the supplied versioned input against the original dataset. Distribution differences alone do not prove accuracy loss.
@@ -53,4 +68,8 @@ uv build
 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 uv run --locked python -m pp_proving_ground.cli benchmark --profile ci --output /tmp/pg-ci --seed 1729
 ```
 
-The standard profile uses 250,000 rows and 40 sensors; acquire the portfolio's exclusive benchmark lease first. Run it from an immutable committed source export with `PP_PROVING_GROUND_SOURCE_ROOT` set to that project directory if using a clean installed wheel. Provenance reads source and Git metadata without mutating Git. Missing source metadata is marked unavailable, never invented.
+The standard profile uses 250,000 rows and 40 sensors. Run it alone on an idle
+machine, from an immutable committed source export, with
+`PP_PROVING_GROUND_SOURCE_ROOT` set to that project directory if using a clean
+installed wheel. Provenance reads source and Git metadata without mutating Git.
+Missing source metadata is marked unavailable, never invented.

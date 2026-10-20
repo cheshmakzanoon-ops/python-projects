@@ -1,6 +1,6 @@
 # Reviewer guide
 
-Start with the [verified status](STATUS.md), which separates local checks, required workloads and remote CI. All ten products are independent packages. The [master brief](../PYTHON_PORTFOLIO_MASTER_EXECUTION_BRIEF.md) is preserved unchanged as the specification; each product maps its eight acceptance IDs in `docs/ACCEPTANCE.md`.
+Start with [verification status](STATUS.md), which separates local checks, measured workloads, and hosted CI. All ten products are independent packages. [Product requirements](REQUIREMENTS.md) define their scope; each product maps acceptance criteria to tests in `docs/ACCEPTANCE.md`.
 
 For a five-minute first run, install uv 0.12.23, then run:
 
@@ -42,11 +42,11 @@ Use [repository architecture](architecture/REPOSITORY.md) to understand dependen
 | Search/ML | [Atlas engine](../projects/07-atlas/src/pp_atlas/engine.py) | [Persistence and authorization](../projects/07-atlas/tests/integration/test_persistence_auth.py): hidden documents and revocation |
 | Music | [Resonance pitch difference](../projects/10-resonance/src/pp_resonance/pitch/difference.py) | [Independent numerical references](../projects/10-resonance/tests/unit/test_numerics.py) |
 
-## Explain the work in an interview
+## Engineering decisions
 
-For each case study, explain the invariant first, the rejected alternative and its cost, the reproduced failure, the actual measured workload, and the next justified improvement. Distinguish a measured bottleneck from a suspected optimization opportunity. The linked studies retain development observations with their limits; final reports are indexed by verified status.
+Each case study connects an invariant to a rejected alternative, a reproduced failure, a measured workload, and a justified next step. A measured bottleneck is distinct from an optimization hypothesis. The linked studies retain their original source revisions and limits; verification status indexes subsequent checks.
 
-| Product and case study | Main point to explain |
+| Product and case study | Design question |
 | --- | --- |
 | [Anchor](../projects/01-anchor/docs/CASE_STUDY.md) | Why an epoch check at acknowledgement cannot undo an already published effect; provider fencing and unresolved cleanup |
 | [Strata](../projects/02-strata/docs/CASE_STUDY.md) | Why uncertain publication poisons a writer; snapshot-safe compaction and the cost of durable commits |

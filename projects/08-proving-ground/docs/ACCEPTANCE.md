@@ -6,6 +6,13 @@ The project's mandatory tests have no skips or expected failures. Run all of the
 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 uv run --locked pytest -q --cov=pp_proving_ground --cov-branch
 ```
 
+`tests/integration/test_trust_boundaries.py` adds publication synchronization,
+canonical manifest, exact pipeline/schema, strict record, and HTTP error-response
+regressions. `tests/unit/test_body_limit.py` covers fragmented requests, exact
+size boundaries, oversize rejection before endpoint dispatch, and disconnects.
+The [verification record](VERIFICATION.md) reports current interpreter checks
+separately from the historical workload evidence below.
+
 | Gate | Mechanism and tests |
 | --- | --- |
 | PG-01 | `tests/acceptance/test_lifecycle.py`: complete seeded lifecycle; separate repeated fits for prior, logistic and tree reproduce held-out predictions at absolute tolerance `1e-12`. `test_loaded_pipeline_reproduces_predictions` verifies the persisted fitted pipeline. Parquet metadata/dataset identity and frozen split reproducibility are checked independently. |
@@ -29,6 +36,6 @@ The full standard gate also **passed** at clean commit `59443e2bcdfc6a1dd81f8334
 
 The wrapper project digest is `eeea22a62454d2e7ae28c739abf45172110edab8f5ebcc24d5037d1a94e39552` and the raw runner digest is `2000f7eb808d0229d9db549fe3683efbb9ced676a49ee8eab7310e66cba01ab6`; each uses its own explicit source-input scope. Both retain the same source commit, lock digest `48ddce6dd70acac05a8094cf70e3d40ee7feb534591e49776292ef00436a508f`, clean flag and unchanged-input checks. This does not imply that remote CI ran or that every other portfolio project passed.
 
-[Historical development captures](../artifacts/ci-development-summary.json) retain their original dirty-state provenance and are superseded for current verification by the accepted records above. Transient `/workspace/results/a08-*` paths are development history, not durable final evidence.
+[Historical development captures](../artifacts/ci-development-summary.json) retain their original dirty-state provenance. The accepted workload records above describe their named source revisions; current regressions are reported in [VERIFICATION.md](VERIFICATION.md). Transient workspace paths are not durable verification references.
 
-Independent authored regressions in `tests/integration/test_review_regressions.py` cover wrong/fractional physical Parquet types, duplicate columns, nonnull integer contracts, valid parameter overrides, NaN/inf split fields, exact integer membership indices and unrelated/future SQLite format refusal. Their pre-fix reproduction and closure are described in [CASE_STUDY](CASE_STUDY.md). [AGENT_STATUS](AGENT_STATUS.md) records completed local gates and the operational boundaries. Generated-equipment metrics and clustered uncertainty do not establish real-equipment utility or guarantee unseen-fleet behavior.
+Independent regressions in `tests/integration/test_review_regressions.py` cover wrong/fractional physical Parquet types, duplicate columns, nonnull integer contracts, valid parameter overrides, NaN/inf split fields, exact integer membership indices and unrelated/future SQLite format refusal. Their pre-fix reproduction and closure are described in [CASE_STUDY](CASE_STUDY.md). [verification](VERIFICATION.md) records completed local gates and the operational boundaries. Generated-equipment metrics and clustered uncertainty do not establish real-equipment utility or guarantee unseen-fleet behavior.

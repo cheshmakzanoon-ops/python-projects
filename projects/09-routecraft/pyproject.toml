@@ -1,7 +1,7 @@
 [project]
 name = "pp-routecraft"
 version = "0.1.0"
-description = "Routecraft: independent Python portfolio project"
+description = "Directed vehicle routing with time windows and independently verified rolling plans"
 requires-python = ">=3.13"
 dependencies = ["matplotlib>=3.10,<4"]
 [project.scripts]

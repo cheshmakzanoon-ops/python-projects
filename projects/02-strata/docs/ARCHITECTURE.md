@@ -52,6 +52,11 @@ Without pins it retains only the latest live value; a latest tombstone can be
 removed because no excluded older table exists. The manifest is synced before
 old descriptors close and files unlink. Recovery follows exactly the manifest,
 replays later complete WAL frames, and removes orphan table/pending files.
+The WAL must exist once the first manifest has been published. Consecutive
+transaction sequences connect replay to the manifest checkpoint; a missing
+prefix or interior frame fails as corruption rather than hiding lost writes.
+The initial empty WAL is synchronized before the first manifest, allowing safe
+retries after interrupted initialization without recreating a lost log.
 
 Backup materializes one consistent snapshot, writes bounded durable batches into
 a new independent database directory, compacts it, and records a content hash.

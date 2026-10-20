@@ -37,6 +37,10 @@ def load_projects(root: Path = ROOT) -> list[dict[str, Any]]:
             raise ValueError("project path must be a nonempty path within the repository")
         if resolved in directories or not p["required_python_versions"]:
             raise ValueError("duplicate directory or empty interpreter matrix")
+        if directory != resolved.relative_to(root.resolve()).as_posix():
+            raise ValueError("project directory must use its canonical repository-relative path")
+        if any(resolved.is_relative_to(d) or d.is_relative_to(resolved) for d in directories):
+            raise ValueError("project directories must not overlap")
         directories.add(resolved)
     return projects
 
@@ -58,9 +62,19 @@ def diff_paths(base: str | None, head: str, root: Path = ROOT) -> list[str] | No
     if not base or set(base) == {"0"}:
         return None
     try:
+        revisions = [
+            subprocess.check_output(
+                ["git", "rev-parse", "--verify", "--end-of-options", f"{ref}^{{commit}}"],
+                cwd=root,
+                timeout=30,
+                stderr=subprocess.DEVNULL,
+                text=True,
+            ).strip()
+            for ref in (base, head)
+        ]
         # --name-only -z without rename detection includes both sides of a rename.
         result = subprocess.run(
-            ["git", "diff", "--no-renames", "--name-only", "-z", base, head, "--"],
+            ["git", "diff", "--no-renames", "--name-only", "-z", *revisions, "--"],
             cwd=root,
             check=True,
             capture_output=True,

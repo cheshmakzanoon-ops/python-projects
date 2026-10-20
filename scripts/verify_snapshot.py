@@ -33,13 +33,25 @@ def main() -> int:
         parser.error("verification output must be empty; choose a fresh evidence directory")
     args.output.mkdir(parents=True, exist_ok=True)
     commit = subprocess.check_output(
-        ["git", "rev-parse", "--verify", f"{args.commit}^{{commit}}"], cwd=ROOT, text=True
+        ["git", "rev-parse", "--verify", "--end-of-options", f"{args.commit}^{{commit}}"],
+        cwd=ROOT,
+        text=True,
     ).strip()
     if set(args.checks.split(",")) - {"check", "demo", "benchmark", "extended"}:
         parser.error("--checks accepts check,demo,benchmark,extended")
     if "extended" in args.checks.split(",") and args.project != ["strata"]:
         parser.error("extended requires exactly --project strata")
     environment = os.environ.copy()
+    # An inherited project environment belongs to the caller's checkout. Reusing it
+    # would test editable source outside the immutable copy and mix interpreters.
+    for name in (
+        "UV_PROJECT_ENVIRONMENT",
+        "UV_PROJECT",
+        "UV_WORKING_DIR",
+        "PYTHONPATH",
+        "PYTHONHOME",
+    ):
+        environment.pop(name, None)
     environment["PORTFOLIO_PYTHON"] = args.python
     # Concurrent interpreters share a server, never a Django test database.
     environment["MERIDIAN_TEST_DB_NAME"] = "pp_verify_" + uuid.uuid4().hex

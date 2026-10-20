@@ -7,7 +7,7 @@ from pathlib import Path
 
 from pp_routecraft.benchmark import run_benchmark
 from pp_routecraft.construction.insertion import construct
-from pp_routecraft.domain.instance import Plan, SearchBudget
+from pp_routecraft.domain.instance import Plan, SearchBudget, Status
 from pp_routecraft.fixtures import island, new_request, tiny
 from pp_routecraft.reference.exhaustive import exhaustive
 from pp_routecraft.replanning.rolling import prepare_replan
@@ -163,6 +163,8 @@ def main() -> None:
                     }
                 )
             )
+            if result.status == Status.INVALID_INPUT:
+                parser.exit(2, f"routecraft: invalid input: {'; '.join(result.diagnostics)}\n")
         elif args.command == "compare":
             instance = tiny()
             reference = exhaustive(instance)
@@ -189,6 +191,8 @@ def main() -> None:
                     }
                 )
             )
+            if result.status == Status.INVALID_INPUT:
+                parser.exit(2, f"routecraft: invalid input: {'; '.join(result.diagnostics)}\n")
     except (ValueError, OSError, KeyError, TypeError) as error:
         parser.exit(2, f"routecraft: {error}\n")
 

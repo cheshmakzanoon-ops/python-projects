@@ -17,9 +17,12 @@ from pp_routecraft.domain.instance import (
 )
 
 
-def _dict(value: object) -> dict[str, object]:
+def _dict(value: object, allowed: tuple[str, ...]) -> dict[str, object]:
     if not isinstance(value, dict) or any(not isinstance(k, str) for k in value):
         raise ValueError("expected JSON object")
+    unknown = set(value) - set(allowed)
+    if unknown:
+        raise ValueError(f"unknown JSON fields: {', '.join(sorted(unknown))}")
     return {str(k): v for k, v in value.items()}
 
 
@@ -64,12 +67,15 @@ def instance_dict(instance: RoutingInstance) -> dict[str, object]:
 
 
 def instance_from_dict(value: object) -> RoutingInstance:
-    data = _dict(value)
+    data = _dict(
+        value,
+        ("schema_version", "stops", "vehicles", "travel", "depot", "matrix_version", "states"),
+    )
     if _int(data.get("schema_version")) != 1:
         raise ValueError("unsupported instance schema")
     stops = []
     for item in _list(data.get("stops")):
-        s = _dict(item)
+        s = _dict(item, ("id", "demand", "ready", "due", "service", "x", "y"))
         stops.append(
             Stop(
                 _int(s.get("id")),
@@ -83,7 +89,7 @@ def instance_from_dict(value: object) -> RoutingInstance:
         )
     vehicles = []
     for item in _list(data.get("vehicles")):
-        v = _dict(item)
+        v = _dict(item, ("id", "capacity", "start", "end"))
         vehicles.append(
             Vehicle(
                 _int(v.get("id")), _int(v.get("capacity")), _int(v.get("start")), _int(v.get("end"))
@@ -91,10 +97,13 @@ def instance_from_dict(value: object) -> RoutingInstance:
         )
     states = []
     for item in _list(data.get("states", [])):
-        s = _dict(item)
+        s = _dict(
+            item,
+            ("vehicle_id", "started", "executed", "node", "time", "onboard", "loaded", "boundary"),
+        )
         jobs = []
         for entry in _list(s.get("loaded")):
-            j = _dict(entry)
+            j = _dict(entry, ("stop_id", "quantity"))
             jobs.append(LoadedJob(_int(j.get("stop_id")), _int(j.get("quantity"))))
         states.append(
             VehicleState(
@@ -119,13 +128,15 @@ def instance_from_dict(value: object) -> RoutingInstance:
 
 
 def plan_from_dict(value: object) -> Plan:
-    data = _dict(value)
+    data = _dict(value, ("routes", "objective", "schema_version"))
+    if _int(data.get("schema_version")) != 1:
+        raise ValueError("unsupported plan schema")
     routes = []
     for item in _list(data.get("routes")):
-        r = _dict(item)
+        r = _dict(item, ("vehicle_id", "stops", "schedule", "return_time"))
         visits = []
         for entry in _list(r.get("schedule", [])):
-            s = _dict(entry)
+            s = _dict(entry, ("stop_id", "arrival", "service_start", "departure", "onboard_after"))
             visits.append(
                 VisitSchedule(
                     _int(s.get("stop_id")),
@@ -152,9 +163,22 @@ def plan_from_dict(value: object) -> Plan:
     )
 
 
+def _unique_keys(pairs: list[tuple[str, object]]) -> dict[str, object]:
+    data: dict[str, object] = {}
+    for key, value in pairs:
+        if key in data:
+            raise ValueError(f"duplicate JSON object key: {key}")
+        data[key] = value
+    return data
+
+
 def read_instance(path: Path) -> RoutingInstance:
-    return instance_from_dict(json.loads(path.read_text()))
+    return instance_from_dict(
+        json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=_unique_keys)
+    )
 
 
 def read_plan(path: Path) -> Plan:
-    return plan_from_dict(json.loads(path.read_text()))
+    return plan_from_dict(
+        json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=_unique_keys)
+    )

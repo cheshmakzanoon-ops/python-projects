@@ -39,7 +39,14 @@ def test_raw_trace_against_independent_batch_oracle(
             )
         )
     trace.append(Record("s", 0, len(trace), kind="end", ingress_ordinal=len(trace) + 1))
-    actual_dispositions = [engine.apply(record) for record in trace]
+    actual_dispositions = []
+    deliveries = []
+    for record in trace:
+        actual_dispositions.append(engine.apply(record))
+        deliveries.extend(engine.pending)
+        snapshot = engine.dump()
+        engine = Engine.restore(snapshot, config)
+        assert engine.dump() == snapshot
     expected_dispositions, expected = reconcile(
         [asdict(record) for record in trace],
         inputs=config.inputs,
@@ -51,7 +58,7 @@ def test_raw_trace_against_independent_batch_oracle(
     latest = {}
     import json
 
-    for delivery in engine.pending:
+    for delivery in deliveries:
         latest[delivery.operator_id + ":" + delivery.logical_result_key] = json.loads(
             delivery.payload
         )

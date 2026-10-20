@@ -10,8 +10,9 @@ from typing import Any
 
 import duckdb
 
-from pp_quarry.storage.catalog import connect
-from pp_quarry.storage.files import literal, manifest_path
+from pp_quarry.storage.catalog import connect, read_format
+from pp_quarry.storage.files import literal, verify_entry
+from pp_quarry.storage.manifest import validate_manifest
 
 
 class Snapshot:
@@ -33,8 +34,12 @@ class Snapshot:
             )
             if row is None:
                 raise ValueError("snapshot does not exist")
+            stored = read_format(self.db)
+            if stored is None:
+                raise ValueError("snapshot requires stored dataset format")
+            self._buckets: int = stored["config"]["buckets"]
             self.id: int = row[0]
-            self.manifest: dict[str, Any] = json.loads(row[1])
+            self.manifest = validate_manifest(json.loads(row[1]), self._buckets)
             self.db.execute("INSERT INTO pins VALUES (?,?)", (self.token, self.id))
             self.db.commit()
         except BaseException:
@@ -45,10 +50,13 @@ class Snapshot:
     def rows(self, node: str = "facts", limit: int | None = None) -> Iterator[dict[str, Any]]:
         if self.closed:
             raise ValueError("snapshot handle is closed")
-        if node not in {"normalized", "facts", "daily"} or (limit is not None and limit < 0):
+        if node not in {"normalized", "facts", "daily"} or (
+            limit is not None and (type(limit) is not int or limit < 0)
+        ):
             raise ValueError("unknown node or invalid limit")
+        validate_manifest(self.manifest, self._buckets)
         paths = [
-            str(manifest_path(self.root, nodes[node]["path"]))
+            str(verify_entry(self.root, nodes[node]))
             for nodes in self.manifest["partitions"].values()
         ]
         with duckdb.connect() as engine:

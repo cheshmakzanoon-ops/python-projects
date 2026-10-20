@@ -1,31 +1,91 @@
 # Resonance
 
-Resonance turns an offline monophonic guitar recording into pitch, onset, note and reference-alignment evidence. Its original NumPy/Python core implements fixed-window YIN, adaptive spectral-flux onsets, confidence-aware temporal decoding and monotone edit alignment. Listen to the actual generated audio beside its waveform, spectrogram, cents offsets and uncertainty in a self-contained HTML report.
+Resonance turns a monophonic guitar recording into a pitch trajectory, detected
+notes and an optional reference-score alignment. The analysis implements
+fixed-window YIN, adaptive spectral-flux onsets, confidence-aware note decoding
+and monotone edit alignment. A playable HTML report presents the recorded audio
+beside its waveform, spectrogram, note boundaries, cents offsets and uncertainty.
+
+## Quick start
+
+Run from `projects/10-resonance` with uv 0.12.23. The default is CPython 3.14.8;
+CPython 3.13.16 is also tested. No GPU, microphone, account or network service is
+required after installing dependencies.
 
 ```sh
-uv sync --locked --python 3.13.16
-uv run --locked python -m pp_resonance.cli demo --output /tmp/resonance-demo --seed 1729
-# Open /tmp/resonance-demo/analysis.html
-uv run --locked python -m pp_resonance.cli benchmark --profile ci --output /tmp/resonance-ci --seed 1729
-uv run --locked python -m pp_resonance.cli clean-demo --output /tmp/resonance-demo
+uv sync --locked --python 3.14.8
+uv run --locked resonance demo --output /tmp/resonance-demo --seed 1729
 ```
 
-Use absolute output paths. Nonempty directories require a Resonance ownership marker; cleanup preserves unrelated files. Shell examples use Linux/macOS paths; supply an absolute Windows path on Windows. Linux is the measured platform; Python 3.14.8 is the default; Python 3.13.16 is also a required, verified compatibility target.
+Open `/tmp/resonance-demo/analysis.html` in a browser. The demo analyzes six
+synthetic guitar-like plucks and compares them to their known reference. Playback
+uses the actual encoded PCM; it is not a reconstruction from estimated notes.
+The output directory contains:
+
+| File | Purpose |
+| --- | --- |
+| `analysis.html` | Responsive report with embedded audio, plots, diagnostics and note table |
+| `analysis.json` | Full versioned trajectory, events, configuration and provenance |
+| `analysis.png` | Standalone scientific figure |
+| `transcription.mid` | Monophonic MIDI with explicit tempo and deterministic quantization |
+| `audio.wav`, `reference.json` | Encoded signal and reference score |
+
+Use an absolute output path. Empty directories are accepted; nonempty ones need
+a matching Resonance ownership marker. Cleanup removes only known generated
+files and preserves unrelated files:
+
+```sh
+uv run --locked resonance clean-demo --output /tmp/resonance-demo
+```
+
+## Analyze a recording
+
+```sh
+uv run --locked resonance analyze --input /absolute/guitar.wav \
+  --output /tmp/guitar-analysis
+uv run --locked resonance align --input /absolute/guitar.wav \
+  --score /absolute/reference.json --output /tmp/guitar-alignment
+```
+
+Inputs must be 44.1 or 48 kHz mono/stereo audio. Stereo file analysis chooses one
+energetic channel from the first second and keeps it for the recording, avoiding
+antiphase cancellation. Unsupported rates require explicit resampling rather
+than relabeling sample positions. Silence produces no notes; clipping, very
+short recordings and uncertain frames produce diagnostics.
+
+Reports preview the first 30 seconds of longer recordings. The note table, JSON
+and MIDI cover the full recording, and the playback panel identifies the preview
+scope. A score uses versioned JSON, unique note IDs, integer MIDI pitches,
+onset/duration in seconds or beats and an explicit tempo; see
+[the reference format](examples/reference.json).
+
+For Python callers:
 
 ```python
-import soundfile as sf
-from pp_resonance import analyze
+from pathlib import Path
+from pp_resonance import analyze_chunks
+from pp_resonance.audio_io.pcm import blocks
 
-samples, rate = sf.read("guitar.wav", dtype="float64")
-report = analyze(samples, rate)
+spec, chunks = blocks(Path("guitar.wav"))
+report = analyze_chunks(chunks, spec.sample_rate)
 for note in report.notes:
-    print(note.midi, note.start / rate, note.cents, note.confidence)
+    print(note.midi, note.start / spec.sample_rate, note.cents, note.confidence)
 ```
 
-For bounded input buffers, `audio_io.pcm.blocks` and `analyze_chunks` stream PCM without retaining the recording. Output trajectory/event records grow with duration. Only 44.1/48 kHz mono/stereo files are supported. Stereo chooses one energetic channel rather than summing antiphase signals. Silence produces no notes. Unsupported rates produce an explicit error: try a 22.05-kHz file with `analyze --input FILE --output ABS`.
+The array API `analyze(samples, rate)` accepts a mono vector or stereo
+`(samples, 2)` matrix. Chunked analysis keeps the sample buffer bounded, but
+retains trajectories and events for offline decoding. Memory therefore grows
+with recording duration; this is not an indefinite streaming service.
 
-Other commands: `synthesize`, `analyze --input FILE [--score SCORE]`, `align --input FILE --score SCORE`, `compare` (fixed full pitch grid), and `export --input ANALYSIS_JSON`. All require `--output ABS`. Scores are versioned JSON with explicit seconds/beats and tempo; see [the score example](examples/reference.json).
+## Scope and verification
 
-The clean synthetic pitch grid and isolated plucks are reproducible acceptance fixtures, not evidence of universal real-guitar performance. Polyphony, extreme noise and artistic intention remain outside the inference guarantee. Bends/vibrato appear as median cents and within-event pitch spread; low-confidence frames never become definitive criticism.
+The baseline pitch range is E2–E6. Confidence measures periodicity evidence and is
+not a probability of musical correctness. Bends and vibrato remain visible as
+pitch spread; an intonation summary does not judge artistic intention. Polyphony,
+extreme noise and accuracy across unfamiliar guitars/styles are outside the
+validated synthetic guarantees.
 
-Read [architecture](docs/ARCHITECTURE.md), [numerical contracts](docs/FIXTURES.md), [acceptance](docs/ACCEPTANCE.md), [benchmarks](docs/BENCHMARKS.md), [operations](docs/OPERATIONS.md), [case study](docs/CASE_STUDY.md), and [provenance](docs/THIRD_PARTY.md).
+- [Architecture](docs/ARCHITECTURE.md) and [decisions](docs/DECISIONS.md): algorithms, timing and memory tradeoffs.
+- [Operations](docs/OPERATIONS.md): commands, input budgets, diagnostics, cleanup and MIDI rules.
+- [Fixture contracts](docs/FIXTURES.md), [acceptance map](docs/ACCEPTANCE.md) and [verification history](docs/VERIFICATION.md): reproducible expectations and results.
+- [Benchmarks](docs/BENCHMARKS.md), [case study](docs/CASE_STUDY.md) and [provenance](docs/THIRD_PARTY.md): measured behavior and limitations.

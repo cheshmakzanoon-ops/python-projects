@@ -14,6 +14,15 @@ PT001 requires a configured subprocess canonical target and enabled shell (or co
 
 `cache.py` fingerprints content, interpreter/parser limits, semantic implementation bytes, configuration, imported local-module transitive content and the module inventory. Cycles use reachable-set closure rather than recursive hashing. A module-inventory change conservatively invalidates all files, covering previously unresolved imports. Cache JSON is disposable; it is never executable.
 
+Cache publication uses a uniquely named, exclusively created temporary in the
+destination directory and replaces the destination only after serialization
+completes. Concurrent analyses may publish different snapshots; the last complete
+snapshot wins, and fingerprints invalidate stale entries on the next read. This
+is a disposable cache, so publication does not force directory persistence.
+Preflight rejects cache/report/plan destinations that alias source by path,
+symlink or hard link. It protects normal local operation, not mutation races
+against another process changing the filesystem during a run.
+
 Locations convert CPython UTF-8 byte offsets into one-based Unicode code-point columns. Each diagnostic includes a source-to-sink evidence sequence, confidence/coverage, stable content-derived identity and sink location. Suppression is recognized only in actual tokenizer comments with `# pytrace: ignore[PT001]` on the sink line. SARIF uses `unicodeCodePoints` and validates against the vendored official OASIS draft-04 schema.
 
 Codemods use LibCST qualified names, scope and source-position metadata. A plan contains selected relative paths, original byte hashes and complete replacements. Apply rechecks every file and recomputes the conservative transformation before any write, compiles replacements in the sandbox, writes backups and a journal, and atomically replaces individual files. A multi-file apply is recoverable, not transactionally atomic. No code path automatically repairs security diagnostics.

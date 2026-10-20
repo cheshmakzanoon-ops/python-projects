@@ -32,8 +32,8 @@ def provenance(project: Path) -> dict[str, object]:
     contracts = [
         path
         for path in [
-            root / "AGENTS.md",
-            root / "PYTHON_PORTFOLIO_MASTER_EXECUTION_BRIEF.md",
+            root / "CONTRIBUTING.md",
+            root / "docs/REQUIREMENTS.md",
             root / "ruff.toml",
             root / "portfolio.toml",
             root / "scripts/portfolio.py",

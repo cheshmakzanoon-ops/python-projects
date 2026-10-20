@@ -8,10 +8,13 @@ from dataclasses import replace
 from pathlib import Path
 from typing import Callable
 
+from pp_current.ingress.schema import STATEMENTS
+from pp_current.ingress.schema import validate as validate_schema
 from pp_current.model.envelope import Record
 from pp_current.runtime.engine import Config, Delivery, Engine
 
 Failpoint = Callable[[str], None]
+_BUSY_TIMEOUT = 10.0
 
 
 def no_failure(point: str) -> None:
@@ -49,40 +52,57 @@ class Journal:
                 uri=True,
                 isolation_level=None,
                 check_same_thread=False,
-                timeout=10,
+                timeout=_BUSY_TIMEOUT,
             )
         else:
             path.parent.mkdir(parents=True, exist_ok=True)
             self.db = sqlite3.connect(
-                path, isolation_level=None, check_same_thread=False, timeout=10
+                path, isolation_level=None, check_same_thread=False, timeout=_BUSY_TIMEOUT
             )
         try:
+            self._validate_format(allow_empty=not read_only)
             if not read_only:
                 self._initialize(max_disk_bytes)
-            if self.db.execute("SELECT version FROM format").fetchall() != [(1,)]:
-                raise ValueError("unsupported journal format")
         except BaseException:
             self.db.close()
             raise
 
+    def _validate_format(self, *, allow_empty: bool) -> bool:
+        """Recognize the journal before changing pragmas or creating any tables."""
+        return validate_schema(self.db, allow_empty=allow_empty)
+
     def _initialize(self, max_disk_bytes: int) -> None:
-        self.db.execute("PRAGMA journal_mode=WAL")
+        # SQLite's journal-mode transition can report BUSY without invoking its
+        # normal busy handler when two empty-file initializers race. Retry only
+        # that transient condition, within the connection's bounded wait budget.
+        deadline = time.monotonic() + _BUSY_TIMEOUT
+        while True:
+            try:
+                self.db.execute("PRAGMA journal_mode=WAL")
+                break
+            except sqlite3.OperationalError as error:
+                remaining = deadline - time.monotonic()
+                if (
+                    getattr(error, "sqlite_errorcode", 0) & 0xFF != sqlite3.SQLITE_BUSY
+                    or remaining <= 0
+                ):
+                    raise
+                time.sleep(min(0.01, remaining))
         self.db.execute("PRAGMA synchronous=FULL")
-        self.db.execute(f"PRAGMA max_page_count={max_disk_bytes // 4096}")
-        self.db.executescript("""
-        CREATE TABLE IF NOT EXISTS format(version INTEGER NOT NULL);
-        INSERT INTO format SELECT 1 WHERE NOT EXISTS (SELECT 1 FROM format);
-        CREATE TABLE IF NOT EXISTS ingress(ordinal INTEGER PRIMARY KEY, source TEXT NOT NULL,
-          partition INTEGER NOT NULL, offset INTEGER NOT NULL, wire TEXT NOT NULL,
-          UNIQUE(source,partition,offset));
-        CREATE TABLE IF NOT EXISTS checkpoint(id INTEGER PRIMARY KEY CHECK(id=1),
-          position INTEGER NOT NULL, state TEXT NOT NULL);
-        CREATE TABLE IF NOT EXISTS deliveries(job TEXT,operator TEXT,key TEXT,revision INTEGER,
-          payload TEXT NOT NULL,sent INTEGER NOT NULL DEFAULT 0,
-          PRIMARY KEY(job,operator,key,revision));
-        CREATE TABLE IF NOT EXISTS results(job TEXT,operator TEXT,key TEXT,revision INTEGER,
-          payload TEXT NOT NULL,PRIMARY KEY(job,operator,key));
-        """)
+        page_size = self.db.execute("PRAGMA page_size").fetchone()[0]
+        self.db.execute(f"PRAGMA max_page_count={max_disk_bytes // page_size}")
+        self.db.execute("BEGIN IMMEDIATE")
+        try:
+            # Another initializer may have completed after our first read.
+            if not self._validate_format(allow_empty=True):
+                for statement in STATEMENTS:
+                    self.db.execute(statement)
+                self.db.execute("INSERT INTO format VALUES(1)")
+            self.db.execute("COMMIT")
+        except BaseException:
+            if self.db.in_transaction:
+                self.db.execute("ROLLBACK")
+            raise
 
     def close(self) -> None:
         self.db.close()
@@ -124,7 +144,15 @@ class Journal:
         self.failpoint("admission-after-commit")
         return admitted
 
+    @staticmethod
+    def _validate_cursor(after: int, limit: int) -> None:
+        if type(after) is not int or not 0 <= after < 2**63:
+            raise ValueError("nonnegative integer journal cursor required")
+        if type(limit) is not int or not 1 <= limit < 2**63:
+            raise ValueError("positive integer page limit required")
+
     def read(self, after: int, limit: int = 1000) -> list[Record]:
+        self._validate_cursor(after, limit)
         rows = self.db.execute(
             "SELECT ordinal,wire FROM ingress WHERE ordinal>? ORDER BY ordinal LIMIT ?",
             (after, limit),
@@ -132,9 +160,18 @@ class Journal:
         return [Record.parse(raw, ordinal=ordinal) for ordinal, raw in rows]
 
     def recover(self, config: Config, job_id: str | None = None) -> Engine:
-        row = self.db.execute("SELECT state FROM checkpoint WHERE id=1").fetchone()
+        row = self.db.execute("SELECT position,state FROM checkpoint WHERE id=1").fetchone()
         if row:
-            engine = Engine.restore(row[0], config)
+            engine = Engine.restore(row[1], config)
+            last_ordinal = self.db.execute(
+                "SELECT COALESCE(MAX(ordinal),0) FROM ingress"
+            ).fetchone()[0]
+            if (
+                type(row[0]) is not int
+                or row[0] != engine.position
+                or engine.position > last_ordinal
+            ):
+                raise ValueError("checkpoint position does not match durable ingress")
             if job_id is not None and engine.job_id != job_id:
                 raise ValueError("checkpoint belongs to a different job")
             return engine
@@ -183,6 +220,7 @@ class Journal:
         )
 
     def pending(self, limit: int = 100) -> list[Delivery]:
+        self._validate_cursor(0, limit)
         return [
             Delivery(*row)
             for row in self.db.execute(

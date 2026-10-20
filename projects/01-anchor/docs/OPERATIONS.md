@@ -5,7 +5,7 @@ namespace. Set `ANCHOR_DATABASE_URL` in your shell/environment settings; values 
 written to histories, reports, or logs. Default schema is `anchor`, tests generate
 `anchor_test_*`, and owned CLI outputs use `anchor_demo_*` / `anchor_bench_*`.
 
-Install with `uv sync --locked --python 3.13.16`. Run `anchor scheduler`,
+Install with `uv sync --locked --python 3.14.8` (or the supported 3.13.16 interpreter). Run `anchor scheduler`,
 `anchor worker --concurrency 4`, and optionally `anchor serve --port 8101` in separate
 terminals (or use `uv run --locked python -m pp_anchor.cli` in place of `anchor`).
 Worker and scheduler are foreground processes; interrupt them to stop. Database rows
@@ -18,6 +18,14 @@ alive; readiness executes a database query. Neither endpoint promises worker cap
 Structured history records carry run, command, attempt, epoch, selected retry delay,
 error, result and sequence. `Engine.metrics()` reports run/task states, attempts,
 queue delay and owned schema database bytes.
+
+The [HTTP contract](HTTP_API.md) defines request bodies, errors and cursor pagination.
+History pages fetch at most the requested number of rows in SQL. State inspection
+and workflow transitions still replay complete histories; avoid using polling frequency
+as a substitute for measuring that cost on long-lived workflows. Lease durations must
+be finite positive seconds, capped at one year. Retry backoff doubles the configured
+base and caps the actual recorded delay at one year, so every allowed retry policy
+remains representable in the database.
 
 A `compensating` workflow with failed cleanup is not successfully cancelled. Inspect its
 history, repair the external cause, then call `engine.retry_compensation(run_id)` and

@@ -57,6 +57,6 @@ fails for the original defect before fixing behavior; include cross-project vali
 when a public exchange contract changes. Historical benchmark and acceptance records
 describe their recorded revision and must not be relabeled as evidence for later changes.
 
-Project owners format only their directories. Shared changes require coordination. A single coordinator owns Git mutations on main. Review stable project snapshots, stage explicit paths, commit coherent changes, and preserve existing remote history. Conventional commit prefixes are useful (`feat`, `fix`, `test`, `docs`, `build`) but accurate scope matters more. A passing test is evidence for its assertions, not a license to claim every acceptance requirement.
+Keep changes focused on one behavior or documented contract. Shared tooling and exchange-format changes need validation in every affected product and integration. Stage explicit paths, commit coherent changes, and preserve existing remote history. Conventional commit prefixes are useful (`feat`, `fix`, `test`, `docs`, `build`), but accurate scope matters more. Report failing, skipped, and unrun checks alongside passing results.
 
 Report the exact command, interpreter, source revision/content digest, seed, result, and limitations for tests and measurements. Do not commit private inputs, tokens, caches, environments, database files, or large generated assets.

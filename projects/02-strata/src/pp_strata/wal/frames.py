@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import stat
 import struct
 import zlib
 from pathlib import Path
@@ -16,11 +17,18 @@ HEADER = struct.Struct(">4sII")
 
 
 class WAL:
-    def __init__(self, path: Path, failpoint: Failpoint = noop) -> None:
+    def __init__(self, path: Path, failpoint: Failpoint = noop, *, create: bool = True) -> None:
         self.path = path
         self.failpoint = failpoint
-        self.fd = os.open(path, os.O_RDWR | os.O_CREAT, 0o600)
+        flags = os.O_RDWR | os.O_NONBLOCK | os.O_NOFOLLOW
+        if create:
+            flags |= os.O_CREAT
+        self.fd = os.open(path, flags, 0o600)
         try:
+            if not stat.S_ISREG(os.fstat(self.fd).st_mode):
+                raise Corruption("WAL must be a regular file")
+            if create:
+                os.fsync(self.fd)
             sync_directory(path.parent)
         except BaseException:
             # The caller cannot own or close this instance until construction
@@ -63,6 +71,8 @@ class WAL:
             sequence = records[0].sequence
             if sequence <= last_sequence or len({r.key for r in records}) != len(records):
                 raise Corruption("non-monotonic WAL sequence or duplicate key")
+            if last_sequence and sequence != last_sequence + 1:
+                raise Corruption("WAL sequence gap between complete frames")
             last_sequence = sequence
             batches.append(records)
             offset += HEADER.size + length

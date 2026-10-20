@@ -1,6 +1,6 @@
 # Operations
 
-Install the project independently with `uv sync --locked --python 3.13.16`. Python 3.14.8 is the default; explicitly selecting 3.13.16 retains the supported baseline. No GPU, microphone, network service, API key or external recording is required after dependencies install. Never commit local audio that lacks redistribution permission.
+Install the project independently with `uv sync --locked --python 3.14.8`. Python 3.13.16 remains a tested compatibility target; use an explicit interpreter and a separate environment when switching versions. No GPU, microphone, network service, API key or external recording is required after dependencies install. Never commit local audio that lacks redistribution permission.
 
 For reproducibility set `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1`; a writable `MPLCONFIGDIR` avoids slow temporary font cache creation in read-only home environments. Run Ruff format/check, `mypy src`, `pytest`, and `uv build`. The clean-wheel verification installs the distribution into a fresh environment and runs its demo outside the checkout.
 
@@ -8,7 +8,22 @@ For reproducibility set `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREAD
 
 `analyze --input FILE --output ABS [--score SCORE]` reads bounded SoundFile blocks, rejects unsupported rates/channels, and writes analysis.json, MIDI and a playable HTML report. Playback/figures use a bounded first-30-second clip; JSON/MIDI retain the whole recording. `align` uses the same audio analysis plus the reference; `export` rebuilds MIDI from analysis JSON. `compare` evaluates the frozen full pitch grid. `synthesize` creates the clean six-pluck phrase.
 
-`benchmark --profile ci|standard --output ABS --seed 1729` processes 60s/600s of generated audio with harmonics, rests, bends, vibrato, noise and timing perturbations, one warmup and five timed repetitions. Standard runs require the coordinator's exclusive resource lease. Timing excludes plot generation and file output. Peak process RSS is a high-water mark, not a per-allocation delta; unsupported OS memory measurement is null. Retained output records are intentional and not part of the bounded input buffer guarantee.
+Reference scores are UTF-8 JSON, at most 4,000,000 bytes and 10,000 notes. Analysis
+JSON supplied to `export` is limited to 64,000,000 bytes. JSON nesting is limited
+to 64 levels; nonfinite numbers, nonregular files and malformed record shapes are
+rejected. Scores require numeric tempo/onset/duration values, integer MIDI pitches
+and unique nonempty IDs of at most 200 characters. Boolean values are not numbers
+in these contracts.
+
+Alignment allocates two quadratic matrices. The default budget is 4,000,000 cells
+(including the leading row/column), about 36 MB for the matrices, checked before
+allocation. Split a long reference into phrases if that budget is exceeded. Python
+callers may opt into a larger `align(..., max_cells=N)` budget after accounting for
+both memory and quadratic running time. Empty-reference and empty-detection cases
+remain supported. Frame size and hop must be integers; supported analysis frame
+sizes are 1,024–65,536 samples, with hop in `[1, size]`. Thresholds must be finite.
+
+`benchmark --profile ci|standard --output ABS --seed 1729` processes 60s/600s of generated audio with harmonics, rests, bends, vibrato, noise and timing perturbations, one warmup and five timed repetitions. Standard runs require exclusive machine access. Timing excludes plot generation and file output. Peak process RSS is a high-water mark, not a per-allocation delta; unsupported OS memory measurement is null. Retained output records are intentional and not part of the bounded input buffer guarantee.
 
 `clean-demo --output ABS` validates ownership and deletes only its known generated names and marker. It refuses symlinked output files; it preserves arbitrary additional user files. Never recursively delete an arbitrary selected directory. Concurrent writers to the same output directory are unsupported: use isolated paths per run.
 

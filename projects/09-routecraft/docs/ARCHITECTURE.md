@@ -33,7 +33,7 @@ Annealing can accept greater travel on the same number of vehicles. It never
 accepts a hard violation; every complete candidate passes the independent
 verifier. Reversal recomputes internal **directed** arcs. Iteration mode is
 reproducible for equal input, seed, package versions and budget. Wall-clock mode
-reports actual iterations and makes no deterministic-count promise.
+reports actual iterations and makes no deterministic-count promise. Cancellation is latched when observed; both construction attempts and every search iteration check the stop boundary before doing more work.
 
 `reference/exhaustive.py` enumerates every customer permutation and every weak
 composition of its length into labeled vehicle routes. It independently computes
@@ -55,7 +55,7 @@ objective; started vehicles still count even if all their deliveries completed.
 with state cannot establish the integrity of an absent historical plan.
 
 JSON schema version 1 uses explicit arrays, dataclass field names and integer
-units. Unsupported versions fail. `instance.json` and `plan.json` round-trip
+units. Unknown fields, duplicate object keys, and unsupported versions fail. A misspelled or future constraint is never silently ignored. The [format reference](FORMAT.md) lists accepted objects and defaults. `instance.json` and `plan.json` round-trip
 through strict parsers; no pickle or executable format is used. Future incompatible
 formats require a new schema version. Reports come from verified schedules;
 synthetic x/y geometry never substitutes for matrix costs.

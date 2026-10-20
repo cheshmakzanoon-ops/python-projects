@@ -188,3 +188,28 @@ def test_format_receiver_is_evaluated_before_its_arguments() -> None:
 def test_expression_branches_join_conditional_name_writes(expression: str) -> None:
     source = f"import os\nx={expression}\nos.system(y)\n"
     assert findings(source) == [("PT001", 3, "high")]
+
+
+@pytest.mark.parametrize(
+    "statement",
+    [
+        "value = record[(command := input())]",
+        "value = record[:(command := input())]",
+        "record[(command := input())] = 0",
+        "record[(command := input())]: int",
+        "del record[(command := input())]",
+    ],
+)
+def test_subscript_and_mutation_target_effects_update_names(statement: str) -> None:
+    source = f'import os\ncommand = "safe"\n{statement}\nos.system(command)\n'
+    assert findings(source) == [("PT001", 4, "high")]
+
+
+def test_subscript_visits_receiver_before_index_and_finds_nested_sinks() -> None:
+    source = "import os\ncommand = input()\nvalue = record[os.system(command)]\n"
+    assert findings(source) == [("PT001", 3, "high")]
+
+
+def test_augmented_assignment_target_effects_are_not_evaluated_twice() -> None:
+    source = 'import os\nrecord[(command := input())] += (command := "safe")\nos.system(command)\n'
+    assert not findings(source)

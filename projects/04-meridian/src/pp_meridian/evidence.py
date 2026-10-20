@@ -36,7 +36,13 @@ def provenance() -> dict[str, object]:
     contracts = (
         [
             root / p
-            for p in ["ruff.toml", "AGENTS.md", "portfolio.toml", "scripts/portfolio.py"]
+            for p in [
+                "ruff.toml",
+                "CONTRIBUTING.md",
+                "docs/REQUIREMENTS.md",
+                "portfolio.toml",
+                "scripts/portfolio.py",
+            ]
             if (root / p).is_file()
         ]
         if checkout

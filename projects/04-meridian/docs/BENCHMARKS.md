@@ -15,7 +15,7 @@ Reports contain batch throughput, p50/p95/max posting latency, sampled lock wait
 
 ```sh
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 uv run --locked python -m pp_meridian.cli benchmark --profile ci --output /tmp/meridian-ci --seed 1729
-# Run standard alone under the coordinator's exclusive resource lease.
+# Run the standard profile alone on a dedicated machine.
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 uv run --locked python -m pp_meridian.cli benchmark --profile standard --output /tmp/meridian-standard --seed 1729
 ```
 

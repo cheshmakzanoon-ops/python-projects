@@ -1,7 +1,7 @@
 [project]
 name = "pp-meridian"
 version = "0.1.0"
-description = "Meridian: independent Python portfolio project"
+description = "Transactional double-entry ledger with immutable history and statement reconciliation"
 requires-python = ">=3.13"
 dependencies = ["Django>=5.2.12,<5.3", "psycopg[binary]>=3.2,<4"]
 [project.scripts]

@@ -19,12 +19,12 @@ join check reducer behavior. The CLI demo writes actual history, ZIP and timelin
 Final check commands: `ruff format --check .`, `ruff check .`, `mypy src`, `pytest`,
 `uv build`, and a clean outside-tree wheel-install smoke test, all through the locked
 project environment. Source evidence from development is labelled dirty and cannot
-substitute for the coordinator's immutable committed-tree verification.
+substitute for immutable committed-tree verification.
 
-Local final result: 54 tests pass on both 3.13.16 and 3.14.8. Real paused-process tests
+The initial immutable acceptance snapshot passed 54 tests on both 3.13.16 and 3.14.8. Real paused-process tests
 in `test_process_fencing.py` extend AN-04/AN-06 across an actual child process boundary.
 The installed CLI test independently reads every exported row and resets owned state.
 The snapshot test backs up/restores real PostgreSQL rows and resumes a persisted timer.
 Defined core branch coverage is 93.5% (216 branches, 14 missing), combined coverage 96%.
 See `../artifacts/development-verification.json` for actual commands and source scope.
-This local result awaits independent review and committed immutable verification.
+Later changes and their validation are recorded in [VERIFICATION.md](VERIFICATION.md).

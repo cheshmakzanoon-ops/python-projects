@@ -1,7 +1,7 @@
 [project]
 name = "pp-current"
 version = "0.1.0"
-description = "Current: independent Python portfolio project"
+description = "Durable event-time processing with ordered ingress, late revisions, and recoverable checkpoints"
 requires-python = ">=3.13"
 dependencies = [
     "typer>=0.16",

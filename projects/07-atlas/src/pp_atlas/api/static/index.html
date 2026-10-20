@@ -1,16 +1,84 @@
-<!doctype html><html lang=en><meta charset=utf-8><title>Atlas search</title>
-<style>body{font:18px system-ui;max-width:850px;margin:3rem auto;padding:1rem}input{padding:.7rem}article{border-top:1px solid #ccc;padding:1rem}mark{background:#ffe48b}</style>
-<h1>Atlas</h1><p>Search your authorized technical knowledge base.</p>
-<form id=f><input id=token type=password placeholder='Access token' required autocomplete=off>
-<input id=q placeholder='Query or &quot;exact phrase&quot;' size=35><button>Search</button></form>
-<p id=status role=status></p><main id=results></main><script>
-const form=document.getElementById('f'), results=document.getElementById('results');
-const statusLabel=document.getElementById('status'), token=document.getElementById('token');
-const query=document.getElementById('q');
-form.onsubmit=async e=>{e.preventDefault();results.replaceChildren();
-try {
-const response=await fetch('/search?q='+encodeURIComponent(query.value),{headers:{Authorization:'Bearer '+token.value}});
-const data=await response.json();statusLabel.textContent=response.ok?data.total+' results':data.detail;
-for(const hit of data.hits||[]){const a=document.createElement('article'),h=document.createElement('h2'),p=document.createElement('p');h.textContent=hit.title+' · '+hit.score.toFixed(3);p.innerHTML=hit.snippet;a.append(h,p);results.append(a);}
-}catch(error){statusLabel.textContent='Search unavailable. Check the local service.';}};
-</script></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <title>Atlas · Document search</title>
+    <link rel="stylesheet" href="/assets/search.css">
+    <script src="/assets/search.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#query">Skip to search</a>
+    <div class="workspace">
+      <header class="masthead">
+        <a class="brand" href="/"><span class="brand-symbol" aria-hidden="true">A</span>ATLAS</a>
+        <span class="workspace-label">Document workspace</span>
+        <span class="local-label"><span aria-hidden="true"></span>Local index</span>
+      </header>
+      <main>
+        <section class="introduction" aria-labelledby="page-title">
+          <p class="eyebrow">A clearer path to knowledge</p>
+          <h1 id="page-title">Find the right document.</h1>
+          <p class="lede">Search runbooks, design notes and technical references.<br class="wide-only"> Every result respects your current access.</p>
+        </section>
+        <form id="search-form" class="search-panel" role="search" aria-label="Search documents">
+          <details id="connection" open>
+            <summary><span>Connection</span><span id="connection-state" class="connection-state">Access token required</span></summary>
+            <div class="connection-fields">
+              <div class="field">
+                <label for="token">Access token</label>
+                <input id="token" type="password" required autocomplete="off" spellcheck="false" autocapitalize="off" aria-describedby="token-help">
+                <p id="token-help" class="field-help">Provided by your administrator. Kept in this page only.</p>
+              </div>
+              <button id="forget-token" class="quiet-button" type="button">Clear connection</button>
+            </div>
+          </details>
+          <div class="search-fields">
+            <label for="query">Search your documents</label>
+            <div class="query-row">
+              <input id="query" name="q" type="search" placeholder="Try a topic, phrase or document type" autocomplete="off" aria-describedby="query-help">
+              <button id="search-button" class="primary-button" type="submit" disabled>Search<span aria-hidden="true">→</span></button>
+            </div>
+            <p id="query-help" class="field-help">Words match together. Use quotes for an exact phrase, or <code>type:runbook</code> to narrow a search.</p>
+            <div class="examples" aria-label="Example searches">
+              <span>Try</span>
+              <button type="button" data-query="recovery">recovery</button>
+              <button type="button" data-query="&quot;write ahead log&quot;">“write ahead log”</button>
+              <button type="button" data-query="type:runbook">type:runbook</button>
+            </div>
+          </div>
+        </form>
+        <noscript><p class="status">Enable JavaScript to use the search view. The authenticated HTTP API and CLI remain available.</p></noscript>
+        <section class="results-section" aria-labelledby="results-heading">
+          <div class="results-heading-row">
+            <h2 id="results-heading">Your results</h2>
+            <p id="result-count" class="result-count"></p>
+          </div>
+          <p id="status" class="status" role="status" aria-live="polite">Ready when you are. Enter an access token and a search, or leave the query empty to browse.</p>
+          <ul id="facets" class="facets" aria-label="Matching document types" hidden></ul>
+          <div id="results" class="results" aria-busy="false">
+            <div class="empty-state">
+              <span class="empty-symbol" aria-hidden="true">⌕</span>
+              <h3>Knowledge, within reach.</h3>
+              <p>Your authorized documents will appear here.<br>Search by topic or browse the collection.</p>
+            </div>
+          </div>
+          <nav id="pagination" class="pagination" aria-label="Search results pages" hidden>
+            <button id="previous" class="secondary-button" type="button">← Previous</button>
+            <span id="page-description"></span>
+            <button id="next" class="secondary-button" type="button">Next →</button>
+          </nav>
+        </section>
+      </main>
+      <footer><span>Atlas · Permission-aware document search</span><span>Indexed locally. Visible by permission.</span></footer>
+    </div>
+    <dialog id="document-dialog" aria-labelledby="document-title">
+      <div class="document-header"><p class="eyebrow">Document</p><button id="close-document" class="quiet-button" type="button" autofocus>Close <span aria-hidden="true">×</span></button></div>
+      <h2 id="document-title"></h2>
+      <p id="document-id" class="document-id"></p>
+      <p id="document-status" role="status"></p>
+      <pre id="document-text" class="document-text"></pre>
+    </dialog>
+  </body>
+</html>

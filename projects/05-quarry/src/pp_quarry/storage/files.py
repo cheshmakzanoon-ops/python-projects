@@ -4,6 +4,9 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
+from typing import Any
+
+import pyarrow.parquet as pq
 
 from pp_quarry.sources import file_hash
 
@@ -40,4 +43,24 @@ def manifest_path(root: Path, value: str) -> Path:
         or not path.is_file()
     ):
         raise ValueError("manifest path must name a regular file in owned data without symlinks")
+    return path
+
+
+def verify_entry(root: Path, entry: dict[str, Any]) -> Path:
+    """Verify committed bytes before reading or reusing a published file.
+
+    The catalog checksum authenticates content relative to the local manifest,
+    not its author. The dataset still requires a trusted local filesystem.
+    """
+    path = manifest_path(root, entry["path"])
+    if path.stat().st_size != entry["bytes"] or file_hash(path) != entry["sha256"]:
+        raise ValueError(f"checksum/size mismatch: {path.name}")
+    parquet = pq.ParquetFile(path)
+    try:
+        if str(parquet.schema_arrow) != entry["schema"]:
+            raise ValueError(f"Parquet schema mismatch: {path.name}")
+        if parquet.metadata.num_rows != entry["rows"]:
+            raise ValueError(f"row count mismatch: {path.name}")
+    finally:
+        parquet.close()
     return path

@@ -251,6 +251,14 @@ class Engine:
 
     @classmethod
     def restore(cls, raw: str, config: Config) -> Engine:
+        """Restore a compatible, internally consistent committed state."""
+        try:
+            return cls._restore(raw, config)
+        except (KeyError, TypeError, AttributeError) as error:
+            raise ValueError("invalid checkpoint structure") from error
+
+    @classmethod
+    def _restore(cls, raw: str, config: Config) -> Engine:
         data = json.loads(raw)
         if data["version"] != CODE_VERSION or canonical(data["config"]) != canonical(
             asdict(config)
@@ -279,4 +287,91 @@ class Engine:
         engine.peak_state = data["peak_state"]
         engine.max_watermark_lag = data["max_watermark_lag"]
         engine.max_finalization_lag = data["max_finalization_lag"]
+        engine._validate_checkpoint()
         return engine
+
+    def _validate_checkpoint(self) -> None:
+        """Reject corrupt state instead of replaying from an invented processing prefix."""
+
+        def integer(value: object, minimum: int = 0, maximum: int | None = None) -> bool:
+            return type(value) is int and value >= minimum and (maximum is None or value <= maximum)
+
+        if not integer(self.position, maximum=MAX_TIME):
+            raise ValueError("invalid checkpoint position")
+        progress = self.progress
+        if set(progress.inputs) != set(self.config.inputs) or not progress.idle <= set(
+            progress.inputs
+        ):
+            raise ValueError("invalid checkpoint input topology")
+        if not integer(progress.watermark, MIN_TIME, MAX_TIME) or any(
+            not integer(value, MIN_TIME, MAX_TIME) for value in progress.inputs.values()
+        ):
+            raise ValueError("invalid checkpoint watermarks")
+        active = [
+            value for identity, value in progress.inputs.items() if identity not in progress.idle
+        ]
+        if progress.watermark > max(progress.inputs.values()) or (
+            active and progress.watermark < min(active)
+        ):
+            raise ValueError("inconsistent checkpoint watermarks")
+        if any(progress.inputs[identity] == MAX_TIME for identity in progress.idle):
+            raise ValueError("ended checkpoint input cannot be idle")
+        if set(self.dispositions) != {"on-time", "accepted-late", "rejected-late"} or any(
+            not integer(value) for value in self.dispositions.values()
+        ):
+            raise ValueError("invalid checkpoint dispositions")
+        if sum(self.dispositions.values()) > self.position:
+            raise ValueError("checkpoint dispositions exceed processing prefix")
+        for identity, window in self.state.items():
+            if (
+                window.operator not in ("tumbling", "sliding")
+                or not isinstance(window.key, str)
+                or type(window.start) is not int
+                or not integer(window.revision)
+                or type(window.dirty) is not bool
+                or identity != canonical([window.operator, window.key, window.start])
+            ):
+                raise ValueError("invalid checkpoint window identity")
+            slide = self.config.size if window.operator == "tumbling" else self.config.slide
+            end = window.start + self.config.size
+            if window.start % slide or end + self.config.lateness < progress.watermark:
+                raise ValueError("invalid checkpoint window lifetime")
+            if (end > progress.watermark) != (window.revision == 0 and window.dirty):
+                raise ValueError("inconsistent checkpoint window revision")
+            if end <= progress.watermark and window.dirty:
+                raise ValueError("unpublished checkpoint window")
+            aggregate = window.aggregate
+            if (
+                not integer(aggregate.count, 1)
+                or type(aggregate.total) is not int
+                or type(aggregate.minimum) is not int
+                or type(aggregate.maximum) is not int
+                or not aggregate.minimum * aggregate.count
+                <= aggregate.total
+                <= aggregate.maximum * aggregate.count
+                or aggregate.minimum > aggregate.maximum
+            ):
+                raise ValueError("invalid checkpoint aggregate")
+        ordinals: set[int] = set()
+        for key, records in self.join.items():
+            if not records:
+                raise ValueError("empty checkpoint join bucket")
+            for record in records:
+                if (
+                    key != record.key
+                    or record.kind != "event"
+                    or record.input_id not in progress.inputs
+                    or not 1 <= record.ingress_ordinal <= self.position
+                    or record.ingress_ordinal in ordinals
+                    or record.event_time + self.config.join_interval + self.config.lateness
+                    < progress.watermark
+                ):
+                    raise ValueError("invalid checkpoint join record")
+                ordinals.add(record.ingress_ordinal)
+        retained = len(self.state) + self.join_count
+        if (
+            not integer(self.peak_state, retained, self.config.state_limit)
+            or not integer(self.max_watermark_lag)
+            or not integer(self.max_finalization_lag)
+        ):
+            raise ValueError("invalid checkpoint resource metrics")

@@ -3,20 +3,22 @@
 from __future__ import annotations
 
 import asyncio
-from collections.abc import AsyncIterator, Awaitable, Callable
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager, suppress
 from dataclasses import asdict
 from typing import Annotated, Any
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import JSONResponse, Response
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 
+from pp_proving_ground.serving.body_limit import BodyLimitMiddleware
 from pp_proving_ground.serving.service import ServingProcess, Unavailable
 
 
 class PredictRequest(BaseModel):
-    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False, strict=True)
     records: Annotated[list[dict[str, float | None]], Field(min_length=1, max_length=1000)]
 
 
@@ -47,17 +49,20 @@ def create_app(process: ServingProcess, auto_refresh: bool = True) -> FastAPI:
         description="Local synthetic equipment model lifecycle",
     )
 
-    @app.middleware("http")
-    async def bounded_body(
-        request: Request, call_next: Callable[[Request], Awaitable[Response]]
-    ) -> Response:
-        payload = bytearray()
-        async for chunk in request.stream():
-            payload.extend(chunk)
-            if len(payload) > 2 * 1024 * 1024:
-                return JSONResponse({"detail": "request body exceeds 2 MiB"}, status_code=413)
-        request._body = bytes(payload)
-        return await call_next(request)
+    app.add_middleware(BodyLimitMiddleware)
+
+    @app.exception_handler(RequestValidationError)
+    async def invalid_request(request: Request, error: RequestValidationError) -> JSONResponse:
+        # Pydantic errors may contain nonfinite inputs or arbitrary request values.
+        # Return locations and explanations without reflecting those values.
+        return JSONResponse(
+            {
+                "detail": [
+                    {key: item[key] for key in ("loc", "msg", "type")} for item in error.errors()
+                ]
+            },
+            status_code=422,
+        )
 
     @app.post("/refresh")
     async def refresh() -> dict[str, Any]:

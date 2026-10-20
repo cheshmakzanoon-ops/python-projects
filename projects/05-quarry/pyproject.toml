@@ -1,7 +1,8 @@
 [project]
 name = "pp-quarry"
 version = "0.1.0"
-description = "Quarry: independent Python portfolio project"
+description = "A transactional local lakehouse with versioned events and immutable Parquet snapshots"
+readme = "README.md"
 requires-python = ">=3.13"
 dependencies = ["pyarrow>=21", "duckdb>=1.4"]
 [project.scripts]

@@ -4,6 +4,12 @@
 
 The engine is flow-sensitive for names, and path-insensitive at joins. It does not prove branch predicates or correlate two separate conditions. Function calls do not propagate user-function summaries. Mutable object fields, descriptors, comprehensions, closure captures and exceptions have partial coverage. Try handlers are reachable from entry, but exact raising timing and finally exit overrides are unsupported. These limitations are explicit evidence, not silently safe values. Imported APIs are assumed not to undergo runtime monkeypatching; lexical rebinding is modeled. Module functions use the module's terminal bindings as a conservative static approximation, not a model of every import-time call ordering.
 
+Heap values remain unknown, but evaluating a subscript or mutation target still
+evaluates its receiver and index. Assignment expressions in those positions
+update name state and nested sinks produce diagnostics. Augmented assignment
+evaluates the target once before the right-hand side; repeating it during binding
+would introduce false flows and violate Python's evaluation order.
+
 **Origins are separate from semantics.** Adding textual evidence to the convergence key would allow an unbounded loop trace and make termination depend on explanatory strings. The semantic lattice contains finite flags and bounded target sets; provenance is independently bounded. Confidence is separate from severity. A PT900 coverage warning is not proof that a particular vulnerability exists.
 
 **SQL execution is configured by method protocol.** Without a type checker, an unresolved receiver's `.execute` can be either a database cursor or another API. Treating all unresolved methods as safe would lose common cursor-parameter cases. The default conservative protocol may produce false positives; explicitly configure it for the target codebase. Supported parameterization requires fixed query text and a distinct argument value. Interpolated queries remain findings even when a second parameter tuple exists.

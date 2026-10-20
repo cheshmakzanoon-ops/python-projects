@@ -1,1 +1,103 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Meridian · {{ kind }}</title><style>body{font-family:system-ui;max-width:70rem;margin:3rem auto;background:#f6f4ed;color:#182b3a}pre{padding:2rem;background:white;overflow:auto}a{color:#075e68}</style></head><body><h1>Meridian · {{ kind }}</h1><p>Immutable accounting history and explicit reconciliation review. Amounts are integer minor units.</p><pre>{{ data }}</pre><a href="?offset={{ next }}&amp;limit={{ limit }}">Next page</a></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meridian · {{ kind|title }}</title>
+  <style>
+    :root { color-scheme: light; --ink: #162f3b; --muted: #52656b; --line: #d7e0df; --accent: #006b63; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #f4f7f5; color: var(--ink); font: 1rem/1.55 system-ui, sans-serif; }
+    a { color: var(--accent); text-underline-offset: .2em; }
+    a:hover { text-decoration-thickness: .15em; }
+    a:focus-visible { outline: 3px solid #b36c00; outline-offset: 4px; }
+    .skip { position: absolute; left: 1rem; top: -4rem; background: white; padding: .5rem; }
+    .skip:focus { top: .5rem; }
+    header { background: #102f3b; color: white; padding: 1.5rem max(1.25rem, calc((100vw - 72rem)/2)); }
+    header strong { font-size: 1.3rem; letter-spacing: .03em; }
+    header p { margin: .25rem 0 0; color: #c8dcd8; }
+    main { max-width: 72rem; margin: 2.5rem auto; padding: 0 1.25rem 3rem; }
+    h1 { font-size: clamp(1.8rem, 5vw, 2.5rem); line-height: 1.2; margin: 0 0 .5rem; }
+    h2 { font-size: 1.2rem; margin: 0; }
+    .eyebrow { color: var(--accent); font-weight: 700; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .5rem; }
+    .muted { color: var(--muted); }
+    code { font-size: .88em; overflow-wrap: anywhere; }
+    .identity { margin: .5rem 0 1.75rem; }
+    .panel { margin: 1.5rem 0; background: white; border: 1px solid var(--line); border-radius: .6rem; overflow: hidden; }
+    .panel-heading { padding: 1.1rem 1.25rem; border-bottom: 1px solid var(--line); }
+    .panel-heading p { margin: .25rem 0 0; }
+    .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); margin: 0; padding: 1.25rem; gap: 1.5rem; }
+    dt { color: var(--muted); font-size: .85rem; }
+    dd { margin: .25rem 0 0; font-size: 1.15rem; font-weight: 600; overflow-wrap: anywhere; }
+    .table-scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th, td { padding: .85rem 1.25rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { background: #f7faf8; font-size: .85rem; font-weight: 600; white-space: nowrap; }
+    tbody tr:last-child td { border-bottom: 0; }
+    .number { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .badge { display: inline-block; border: 1px solid var(--line); border-radius: .25rem; padding: .1rem .45rem; font-size: .8rem; white-space: nowrap; }
+    .warning { background: #fff4da; border-color: #d4ad58; color: #654500; }
+    .empty { text-align: center; color: var(--muted); padding: 2rem; }
+    .pagination { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; }
+    footer { border-top: 1px solid var(--line); margin-top: 2rem; padding-top: 1rem; color: var(--muted); font-size: .85rem; }
+    @media (max-width: 40rem) { main { margin-top: 1.5rem; } th, td { padding: .75rem; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#content">Skip to record</a>
+  <header><strong>Meridian</strong><p>Ledger &amp; reconciliation</p></header>
+  <main id="content">
+    <p class="eyebrow">{{ kind|title }} record</p>
+    <h1>{% if account %}{{ account.name }}{% elif journal %}Journal {{ journal.sequence }}{% else %}Reconciliation review{% endif %}</h1>
+    <p class="identity muted"><code>{{ identity }}</code></p>
+
+    {% if journal %}
+    <section class="panel" aria-labelledby="journal-heading">
+      <div class="panel-heading"><h2 id="journal-heading">Posted journal</h2><p class="muted">Immutable postings. Corrections require a linked reversal.</p></div>
+      <dl class="metrics">
+        <div><dt>Currency</dt><dd>{{ journal.currency }}</dd></div>
+        <div><dt>Commit sequence</dt><dd>{{ journal.sequence }}</dd></div>
+        <div><dt>Reference</dt><dd>{{ journal.reference|default:"No reference" }}</dd></div>
+        <div><dt>Reversal of</dt><dd>{% if journal.reversal_of %}<a href="/journals/{{ journal.reversal_of }}"><code>{{ journal.reversal_of }}</code></a>{% else %}Original journal{% endif %}</dd></div>
+      </dl>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Journal postings">
+        <table><thead><tr><th scope="col">Account</th><th scope="col">Posting</th><th scope="col" class="number">Amount · minor units</th></tr></thead>
+          <tbody>{% for posting in journal.postings %}<tr><td><a href="/accounts/{{ posting.account_id }}"><code>{{ posting.account_id }}</code></a></td><td><code>{{ posting.id }}</code></td><td class="number">{{ posting.minor_units }}</td></tr>{% endfor %}</tbody>
+        </table>
+      </div>
+    </section>
+    {% elif account %}
+    <section class="panel" aria-labelledby="account-heading">
+      <div class="panel-heading"><h2 id="account-heading">Account summary</h2></div>
+      <dl class="metrics"><div><dt>Currency</dt><dd>{{ account.currency }}</dd></div><div><dt>Balance · minor units</dt><dd>{{ balance }}</dd></div></dl>
+    </section>
+    <section class="panel" aria-labelledby="history-heading">
+      <div class="panel-heading"><h2 id="history-heading">Posting history</h2><p class="muted">Ordered by committed tenant sequence. Balance is calculated from immutable history.</p></div>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Account posting history">
+        <table><thead><tr><th scope="col">Sequence</th><th scope="col">Reference</th><th scope="col">Journal</th><th scope="col" class="number">Amount · minor units</th></tr></thead>
+          <tbody>{% for posting in history %}<tr><td>{{ posting.journal.sequence }}</td><td>{{ posting.journal.reference|default:"No reference" }}</td><td><a href="/journals/{{ posting.journal_id }}"><code>{{ posting.journal_id }}</code></a></td><td class="number">{{ posting.amount }}</td></tr>{% empty %}<tr><td colspan="4" class="empty">No postings on this page.</td></tr>{% endfor %}</tbody>
+        </table>
+      </div>
+    </section>
+    {% else %}
+    <section class="panel" aria-labelledby="run-heading">
+      <div class="panel-heading"><h2 id="run-heading">Matching summary</h2><p class="muted">Proposals never change accounting history. Decisions require an explicit authenticated API request.</p></div>
+      <dl class="metrics"><div><dt>Statement rows</dt><dd>{{ run.summary.rows }}</dd></div><div><dt>Available postings</dt><dd>{{ run.summary.postings }}</dd></div><div><dt>Candidate edges</dt><dd>{{ run.summary.edges }}</dd></div><div><dt>Ambiguous components</dt><dd>{{ run.summary.ambiguous_components }}</dd></div></dl>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Reconciliation proposals">
+        <table><thead><tr><th scope="col">Statement row</th><th scope="col">Posting</th><th scope="col">Review</th><th scope="col">Status</th></tr></thead>
+          <tbody>{% for proposal in proposals %}<tr><td>{{ proposal.row.identity }}<br><code>{{ proposal.row_id }}</code></td><td><code>{{ proposal.posting_id }}</code></td><td>{% if proposal.ambiguous %}<span class="badge warning">Ambiguous match</span>{% else %}<span class="badge">Unique optimum</span>{% endif %}<br><small class="muted">Proposal <code>{{ proposal.id }}</code></small></td><td>{{ proposal.status|title }}</td></tr>{% empty %}<tr><td colspan="4" class="empty">No proposals on this page.</td></tr>{% endfor %}</tbody>
+        </table>
+      </div>
+    </section>
+    {% endif %}
+
+    {% if not journal %}
+    <nav class="pagination" aria-label="Record pagination">
+      <span class="muted">Offset {{ offset }} · up to {{ limit }} records</span>
+      <span>{% if offset %}<a href="?offset={{ previous }}&amp;limit={{ limit }}" rel="prev">Previous page</a>{% endif %}{% if has_more %} <a href="?offset={{ next }}&amp;limit={{ limit }}" rel="next">Next page</a>{% endif %}</span>
+    </nav>
+    {% endif %}
+    <footer>Tenant <code>{{ tenant }}</code> · Verified membership required. Amounts are signed integer minor units in the displayed currency.</footer>
+  </main>
+</body>
+</html>

@@ -11,6 +11,7 @@ import json
 import os
 import re
 import shutil
+import stat
 import tempfile
 import zipfile
 from dataclasses import asdict, dataclass
@@ -58,6 +59,39 @@ class ArtifactManifest:
     def identity(self) -> str:
         return digest(asdict(self))
 
+    def validate(self) -> None:
+        if type(self.format_version) is not int or self.format_version != 1:
+            raise ArtifactError("unsupported artifact format")
+        if self.serialization != "skops-reviewed-v1":
+            raise ArtifactError("unsupported artifact format")
+        for value in (
+            self.model_sha256,
+            self.run_identity,
+            self.dataset_digest,
+            self.split_digest,
+        ):
+            if not isinstance(value, str) or re.fullmatch(r"[a-f0-9]{64}", value) is None:
+                raise ArtifactError("artifact identities must be lowercase SHA-256 digests")
+        if (
+            not isinstance(self.feature_names, tuple)
+            or not self.feature_names
+            or any(not isinstance(name, str) or not name for name in self.feature_names)
+            or len(set(self.feature_names)) != len(self.feature_names)
+        ):
+            raise ArtifactError("artifact feature names must be nonempty and unique")
+        if self.estimator not in {"prior", "logistic", "tree"}:
+            raise ArtifactError("unsupported estimator")
+        if self.environment != environment_versions():
+            raise ArtifactError("unsupported persistence-library versions")
+
+
+def _sync_directory(path: Path) -> None:
+    fd = os.open(path, os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+
 
 class ArtifactStore:
     max_model_bytes = 64 * 1024 * 1024
@@ -99,10 +133,14 @@ class ArtifactStore:
                 result.estimator,
                 environment_versions(),
             )
+            manifest.validate()
             with (stage / "manifest.json").open("xb") as stream:
                 stream.write(canonical(asdict(manifest)))
                 stream.flush()
                 os.fsync(stream.fileno())
+            # File fsync does not persist the stage directory's child entries.
+            # Publish only after both names are durable inside that directory.
+            _sync_directory(stage)
             if interrupt_before_publish:
                 raise InterruptedError("injected interruption before artifact publication")
             destination = self.path(manifest.identity)
@@ -112,11 +150,7 @@ class ArtifactStore:
                 if not destination.is_dir():
                     raise
                 self.inspect(manifest.identity)
-            fd = os.open(self.root, os.O_RDONLY)
-            try:
-                os.fsync(fd)
-            finally:
-                os.close(fd)
+            _sync_directory(self.root)
             return manifest
         finally:
             if stage.exists():
@@ -128,21 +162,22 @@ class ArtifactStore:
         if directory.is_symlink() or manifest_path.is_symlink() or model.is_symlink():
             raise ArtifactError("symlink artifacts prohibited")
         try:
+            if not all(stat.S_ISREG(path.stat().st_mode) for path in (manifest_path, model)):
+                raise ArtifactError("artifact members must be regular files")
             if manifest_path.stat().st_size > 65536 or model.stat().st_size > self.max_model_bytes:
                 raise ArtifactError("artifact size limit")
-            raw: dict[str, Any] = json.loads(manifest_path.read_text())
+            raw: dict[str, Any] = json.loads(manifest_path.read_text(encoding="utf-8"))
+            if not isinstance(raw, dict) or not isinstance(raw.get("feature_names"), list):
+                raise ArtifactError("artifact feature schema must be an array")
             raw["feature_names"] = tuple(raw["feature_names"])
             manifest = ArtifactManifest(**raw)
+            manifest.validate()
             if manifest.identity != identity or file_hash(model) != manifest.model_sha256:
                 raise ArtifactError("artifact checksum mismatch")
-            if manifest.format_version != 1 or manifest.serialization != "skops-reviewed-v1":
-                raise ArtifactError("unsupported artifact format")
-            if manifest.estimator not in {"prior", "logistic", "tree"}:
-                raise ArtifactError("unsupported estimator")
-            if manifest.environment != environment_versions():
-                raise ArtifactError("unsupported persistence-library versions")
             return manifest
-        except (OSError, TypeError, KeyError, json.JSONDecodeError) as error:
+        except ArtifactError:
+            raise
+        except (OSError, TypeError, KeyError, ValueError) as error:
             raise ArtifactError("invalid/incomplete artifact") from error
 
     def load(self, identity: str) -> tuple[Pipeline, ArtifactManifest]:
@@ -167,16 +202,26 @@ class ArtifactStore:
             if set(unknown) - REVIEWED_TYPES:
                 raise ArtifactError(f"unreviewed serialization types: {unknown}")
             pipeline = sio.loads(data, trusted=list(REVIEWED_TYPES))
-            if not isinstance(pipeline, Pipeline):
+            if type(pipeline) is not Pipeline:
                 raise ArtifactError("expected supported complete pipeline")
-            expected = {"imputer", "scaler", "classifier"}
-            if set(pipeline.named_steps) != expected:
+            if tuple(name for name, _ in pipeline.steps) != ("imputer", "scaler", "classifier"):
                 raise ArtifactError("unsupported pipeline components")
             if (
                 type(pipeline.named_steps["imputer"]) is not SimpleImputer
                 or type(pipeline.named_steps["scaler"]) is not StandardScaler
             ):
                 raise ArtifactError("unsupported preprocessing types")
+            imputer, scaler = pipeline.named_steps["imputer"], pipeline.named_steps["scaler"]
+            if (
+                imputer.strategy != "median"
+                or imputer.add_indicator is not True
+                or imputer.keep_empty_features is not True
+                or scaler.with_mean is not True
+                or scaler.with_std is not True
+            ):
+                raise ArtifactError("unsupported preprocessing configuration")
+            if pipeline.n_features_in_ != len(manifest.feature_names):
+                raise ArtifactError("pipeline feature count disagrees with artifact schema")
             classifiers = {
                 "prior": DummyClassifier,
                 "logistic": LogisticRegression,

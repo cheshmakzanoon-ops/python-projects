@@ -96,17 +96,29 @@ def solve(
     )
     weights = [1.0] * len(names)
     counts = [0] * len(names)
+
+    def stopping_reason() -> str | None:
+        if cancelled is not None and cancelled():
+            return "cancelled"
+        if budget.seconds is not None and time.monotonic() - started >= budget.seconds:
+            return "wall_clock"
+        return None
+
+    stopped = False
     if best is None:
         # Budget includes construction. Check deadlines before entering it; once
         # started, a constructor is an atomic bounded operation, not preemptible.
-        if cancelled is not None and cancelled():
-            reason = "cancelled"
-        elif budget.seconds is not None and time.monotonic() - started >= budget.seconds:
-            reason = "wall_clock"
+        stop = stopping_reason()
+        if stop is not None:
+            reason, stopped = stop, True
         else:
             best = construct(instance, regret=False)
             if best is None:
-                best = construct(instance, regret=True)
+                stop = stopping_reason()
+                if stop is not None:
+                    reason, stopped = stop, True
+                else:
+                    best = construct(instance, regret=True)
             if best is not None:
                 report = verify(instance, best)
                 if not report.valid:
@@ -119,11 +131,11 @@ def solve(
         trajectory.append((0, *best.objective))
     iterations = 0
     for iteration in range(1, budget.iterations + 1):
-        if cancelled is not None and cancelled():
-            reason = "cancelled"
+        if stopped:
             break
-        if budget.seconds is not None and time.monotonic() - started >= budget.seconds:
-            reason = "wall_clock"
+        stop = stopping_reason()
+        if stop is not None:
+            reason = stop
             break
         iterations = iteration
         operator = rng.choices(range(len(names)), weights=weights, k=1)[0]

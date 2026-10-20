@@ -43,7 +43,13 @@ def provenance(
 ) -> dict[str, Any]:
     root = project.parent.parent
     root_hash = hashlib.sha256()
-    for name in ["AGENTS.md", "ruff.toml", "portfolio.toml", "scripts/portfolio.py"]:
+    for name in [
+        "CONTRIBUTING.md",
+        "docs/REQUIREMENTS.md",
+        "ruff.toml",
+        "portfolio.toml",
+        "scripts/portfolio.py",
+    ]:
         path = root / name
         if path.exists():
             root_hash.update(name.encode())

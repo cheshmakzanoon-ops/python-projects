@@ -50,11 +50,11 @@ def provenance(seed: int, profile: str) -> dict[str, Any]:
         digest.update(path.read_bytes())
     root_digest = hashlib.sha256()
     for name in (
-        "AGENTS.md",
+        "CONTRIBUTING.md",
         "ruff.toml",
         "portfolio.toml",
         "scripts/portfolio.py",
-        "PYTHON_PORTFOLIO_MASTER_EXECUTION_BRIEF.md",
+        "docs/REQUIREMENTS.md",
     ):
         path = repository / name
         if path.exists():

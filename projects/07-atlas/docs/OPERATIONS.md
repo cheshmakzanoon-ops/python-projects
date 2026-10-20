@@ -19,7 +19,7 @@ uv run --locked atlas delete --root /tmp/atlas-index --tenant docs topic-00-runb
 
 The corpus JSON contract is schema_version=1 plus a documents array, each carrying
 id, title, text, ACL list and string metadata dictionary. Ingestion reads only the
-explicitly selected file and bounds it at20 MB; path-like document IDs are data.
+explicitly selected file and bounds it at 20 MB; path-like document IDs are data.
 Updates use the same ingest/upsert interface. `set_acl` replaces the full ACL, so
 revocation is unambiguous. Empty ACL denies everyone; `*` means authenticated
 principals within this tenant. `user:NAME` and `group:NAME` are the other subjects.
@@ -27,7 +27,7 @@ principals within this tenant. `user:NAME` and `group:NAME` are the other subjec
 ## Local HTTP/search view
 
 Configure `ATLAS_TOKEN_BINDINGS` securely as a JSON object mapping bearer strings
-(at least16 characters) to `{tenant,subject,admin}` objects. Do not commit real token
+(at least 16 characters) to `{tenant,subject,admin}` objects. Do not commit real token
 values or put them in chat. For a synthetic loopback demonstration only:
 
 ```sh
@@ -36,14 +36,19 @@ ATLAS_TOKEN_BINDINGS='{"local-only-demo-token":{"tenant":"docs","subject":"alice
 ```
 
 Open http://127.0.0.1:8107/ and enter the synthetic token in the password field.
-The view does not store tokens. API docs are at `/docs`. GET `/health` reports
+The view keeps the token in the current page only. Changing or clearing the
+connection immediately clears prior results and document content. JavaScript is
+required; the token has no form field name and cannot fall back to URL submission.
+See the [HTTP/browser guide](HTTP_API.md) for pagination, errors and privacy policy.
+API schemas are at `/openapi.json`; interactive docs are at `/docs`. GET `/health` reports
 process liveness; authenticated `/ready` loads and validates the tenant index, then
 returns only `{"status":"ready"}`. Corpus statistics remain available through the
 trusted administrative CLI and Python interface.
 All search/fetch/export operations require bearer authentication. POST documents,
 DELETE documents/{id}, PUT documents/{id}/acl, PUT groups/{subject}, POST merge
-require this tenant's admin binding. Export/search are paginated. The adapter caps
-request bodies at2.1 MB and rejects extra document fields such as tenant/groups.
+require this tenant's admin binding. `admin` must be a JSON boolean; strings such
+as `"false"` are refused. Export/search are paginated. The adapter caps
+request bodies at 2.1 MB and rejects extra document fields such as tenant/groups.
 Do not expose the local static-token demonstration publicly; use a proper TLS and
 identity boundary if deploying in a separate task. Stop with Ctrl-C; no background
 process is spawned by demo or benchmark commands.
@@ -60,7 +65,7 @@ An integration test exercises a real copied-root restore.
 
 To reproduce failure only in disposable owned demo state: run demo, alter bytes
 in one `.jsonl.gz` under its `state` subtree, then run inspect/search. Atlas raises
-`CorruptSegment`; HTTP returns503 without private content. Restore the entire
+`CorruptSegment`; HTTP returns 503 without private content. Restore the entire
 coherent backup; do not update recorded checksums to match corrupted bytes.
 Unknown format/tokenizer versions require an explicit migration or rebuild from
 trusted source documents, not permissive fallback.

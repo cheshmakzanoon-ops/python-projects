@@ -37,4 +37,4 @@ normal reader is intentionally materialized.
 Linux ingestion/durability tests are required. Other platforms may reject directory
 fsync and are not claimed to provide the Linux durability contract. Query timing
 side channels, disk tampering by privileged users, distributed replication, PDF,
-OCR, crawling and dense/LLM retrieval are outside scope.
+OCR, crawling and neural reranking are outside scope.

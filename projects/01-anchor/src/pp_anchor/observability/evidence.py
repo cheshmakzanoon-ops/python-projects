@@ -28,7 +28,13 @@ def source_evidence(seed: int, profile: str, parameters: JSON) -> JSON:
         if path.is_file():
             digest.update(str(path.relative_to(project)).encode() + b"\0" + path.read_bytes())
     contracts = hashlib.sha256()
-    for name in ("AGENTS.md", "portfolio.toml", "ruff.toml", "scripts/portfolio.py"):
+    for name in (
+        "CONTRIBUTING.md",
+        "docs/REQUIREMENTS.md",
+        "portfolio.toml",
+        "ruff.toml",
+        "scripts/portfolio.py",
+    ):
         path = root / name
         if path.exists():
             contracts.update(name.encode() + b"\0" + path.read_bytes())

@@ -16,7 +16,7 @@
   Operator weights use deterministic RNG consumption and stable tie breaking.
 * Wall deadlines are cooperative at complete operator boundaries. Construction
   and repair are atomic; they may overrun the requested wall limit by one
-  operation. Cancellation retains the incumbent. There is no unsafe thread kill.
+  operation. Cancellation retains the incumbent. Once observed, cancellation is latched; a changing callback cannot resume work in that run. Stop conditions are checked between the greedy and regret constructors as well as between search operations. There is no unsafe thread kill.
 * Exact enumeration is intentionally tiny and independent; it is never an
   unsupported claim of global optimality on a 500-stop heuristic result.
 * Vehicle manifests name jobs, not merely spare capacity. A started truck with
@@ -27,3 +27,6 @@
   is a complete seeded greedy reconstruction, while a search iteration is a
   neighborhood. Actual counts and durations are published. Equal caps do not
   imply equal CPU effort or an optimal comparison algorithm.
+
+* JSON documents use an explicit field allowlist and reject duplicate keys. Silently ignoring an unfamiliar constraint could produce a feasible answer to a different problem. Metadata belongs outside the versioned instance/plan contract.
+* Rendering consumes independently verified schedules. Actual boundary delays are distinct from directed travel, and zero-length service is a marker rather than an invented interval. Replayed historical schedules describe the model, not an unavailable timestamped execution log.

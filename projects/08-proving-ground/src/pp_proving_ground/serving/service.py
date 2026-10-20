@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import math
 import threading
 from dataclasses import dataclass
+from numbers import Real
 from typing import Any, Callable
 
 import numpy as np
@@ -134,17 +136,27 @@ class ServingProcess:
 
     def predict_records(self, records: list[dict[str, float | None]]) -> Prediction:
         snapshot = self.snapshot()
-        if not 1 <= len(records) <= 1000:
+        if not isinstance(records, list) or not 1 <= len(records) <= 1000:
             raise ValueError("prediction requires 1..1000 records")
         names = snapshot.feature_names
-        if any(set(row) != set(names) for row in records):
+        if any(not isinstance(row, dict) or set(row) != set(names) for row in records):
             raise ValueError("schema: exact feature names required")
+        for row in records:
+            for value in row.values():
+                if value is None:
+                    continue
+                if isinstance(value, bool) or not isinstance(value, Real):
+                    raise ValueError("sensor values must be finite numbers or null")
+                try:
+                    finite = math.isfinite(value)
+                except OverflowError as error:
+                    raise ValueError("sensor value exceeds floating-point range") from error
+                if not finite:
+                    raise ValueError("sensor values must be finite numbers or null")
         matrix = np.asarray(
             [[np.nan if row[n] is None else row[n] for n in names] for row in records],
             dtype=np.float64,
         )
-        if np.isinf(matrix).any():
-            raise ValueError("infinite input")
         # Do not recapture self._snapshot here: a swap after parsing must not change metadata.
         values = predict(snapshot.pipeline, matrix)
         return Prediction(

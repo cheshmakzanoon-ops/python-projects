@@ -1,6 +1,6 @@
 # Acceptance and evidence mapping
 
-All eight Routecraft gates passed coordinator verification. Clean source commit
+Historical clean-source verification covers all eight Routecraft gates. Source commit
 `b3caa0e4594034ee8edf9ca05c3fd879d6fe18a2` passed format, lint, strict mypy,
 **75 tests on each of Python 3.13.16 and 3.14.8**, sdist/wheel builds, an isolated
 wheel-installed demo/cleanup, the public demo and CI benchmark. The accepted
@@ -36,3 +36,7 @@ Read the wrappers' enumerated source scopes separately from the application raw
 hashes; their input sets differ. Historical dirty development samples remain
 labeled as such and do not replace this evidence. Numerical results, observed
 atomic wall overruns and unsupported scenarios are in [BENCHMARKS](BENCHMARKS.md).
+
+## Boundary and reporting regressions
+
+`tests/unit/test_stop_boundaries.py` verifies one-shot cancellation, deadline/cancellation between construction attempts, and incumbent retention. `tests/integration/test_boundary_safety.py` rejects symlink ancestors, unknown/duplicate JSON fields, unsupported versions, invalid matrix-version identities, and successful CLI exit codes for invalid solver inputs. `tests/integration/test_timeline_intervals.py` checks that drawn travel durations equal the verified travel objective and that zero-duration service is not stretched. Current test counts and interpreter checks are recorded in [verification](VERIFICATION.md).

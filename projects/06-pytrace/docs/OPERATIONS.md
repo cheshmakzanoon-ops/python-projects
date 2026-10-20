@@ -8,11 +8,19 @@ Use `analyze --config /tmp/config.json` for declarative call summaries. The file
 
 `explain ROOT IDENTIFIER` reanalyzes the selected source and emits the matching diagnostic and evidence. `cache inspect CACHE` shows cache paths, content hashes and imports. Delete an owned cache to force a clean run; corrupted JSON also triggers rebuild. Never treat cache files from another writer as authoritative verification. Output diagnostics have `schema_version: 1`; future incompatible versions require explicit migration.
 
+Keep report, plan, patch and cache destinations separate from source. Preflight
+refuses destinations that alias analyzed Python files, including symlinks and hard
+links; plan and patch destinations must also be distinct. A cache update replaces
+only a complete serialized result. Failed publication preserves the prior cache
+and cleans up its own uniquely named `.pytrace-cache-*.tmp` file. Abrupt process
+termination can leave such a temporary; remove it only when no analyzer is using
+that directory. Cache files are not a backup or a durable verification record.
+
 For edits, preview first with `diff ROOT file.py --plan /tmp/plan.json`. Explicit apply requires `apply /tmp/plan.json --root ROOT --journal /tmp/new-journal`. The independently selected `--root` must match the saved plan. A journal directory must not already exist. Stale hashes, traversal, symlinks, duplicated edits, unsupported replacements or invalid syntax fail before writes. After an interruption, inspect `plan.json`, `complete`, and backups in the journal; run `recover JOURNAL --root ROOT` to restore originals. Recovery refuses content changed after the apply and never overwrites it silently.
 
 Demos/benchmarks require absolute empty or explicitly owned directories. `clean-demo --output ABS` removes fixed generated state under a matching owner marker. Unrelated files at the output root remain. Do not store user documents inside generated `trusted`, `corpus`, `cache` or `journal` directories; those are owned demo namespaces. Reset never deletes arbitrary source trees.
 
-JSON integration uses paths relative to the selected root, stable diagnostic IDs, one-based Unicode locations, evidence messages and explicit confidence/coverage. An analyzer finding is a review prompt, not a certification or a recommended automatic security patch.
+JSON integration uses paths relative to the selected root, stable diagnostic IDs, one-based Unicode locations, evidence messages and explicit confidence/coverage. An analyzer finding calls for review; it is not a certification or a recommended automatic security patch.
 
 Journal recovery covers process interruption after a valid prepared manifest exists. Backup/manifest and directory persistence are not fsynced as one protocol; sudden power loss is outside the recovery guarantee. File replacement fsync alone does not establish power-loss durability.
 

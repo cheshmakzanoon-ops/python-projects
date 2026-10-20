@@ -101,8 +101,17 @@ class Database:
             manifest = self.path / "MANIFEST"
             if not manifest.exists():
                 # Never initialize over an unrecognized nonempty database directory.
-                if any(p.name not in ("LOCK", "MANIFEST.pending") for p in self.path.iterdir()):
+                if any(
+                    p.name not in ("LOCK", "WAL", "MANIFEST.pending") for p in self.path.iterdir()
+                ):
                     raise Corruption("missing manifest in nonempty database")
+                wal_path = self.path / "WAL"
+                if wal_path.exists() and wal_path.stat().st_size:
+                    raise Corruption("missing manifest with nonempty WAL")
+                # Establish and sync the WAL before publishing the first manifest.
+                # A retry may finish this initialization only while the WAL is empty.
+                # Once the manifest exists, a missing WAL is evidence of file loss.
+                wal = WAL(wal_path, failpoint)
                 atomic_metadata(manifest, {"format": 1, "sequence": 0, "tables": []})
             state = read_metadata(manifest)
             version, sequence, names = (
@@ -129,10 +138,16 @@ class Database:
                     if record.sequence > sequence or not table.bloom.contains(record.key):
                         raise Corruption("table sequence or Bloom disagrees with manifest")
                     self._latest[record.key] = max(self._latest.get(record.key, 0), record.sequence)
-            wal = WAL(self.path / "WAL", failpoint)
+            if wal is None:
+                try:
+                    wal = WAL(self.path / "WAL", failpoint, create=False)
+                except FileNotFoundError as exc:
+                    raise Corruption("missing WAL in initialized database") from exc
             for batch in wal.recover():
                 if batch[0].sequence <= self._checkpoint:
                     continue
+                if batch[0].sequence != self._sequence + 1:
+                    raise Corruption("WAL sequence gap after manifest checkpoint")
                 self._publish(batch)
             self._wal = wal
             self._cleanup_orphans()

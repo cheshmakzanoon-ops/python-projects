@@ -189,6 +189,16 @@ class Engine:
         return snapshot, generation
 
     @staticmethod
+    def _validate_window(limit: int, offset: int) -> None:
+        if (
+            type(limit) is not int
+            or type(offset) is not int
+            or not 1 <= limit <= 100
+            or not 0 <= offset <= 10_000
+        ):
+            raise ValueError("limit must be an integer in 1..100 and offset in 0..10000")
+
+    @staticmethod
     def _visible(principal: Principal, snapshot: CatalogSnapshot, query: Query) -> set[str]:
         permissions = {"*", f"user:{principal.subject}"}
         permissions.update(f"group:{g}" for g in snapshot.groups.get(principal.subject, ()))
@@ -205,8 +215,7 @@ class Engine:
     def search(
         self, principal: Principal, query: str, *, limit: int = 10, offset: int = 0
     ) -> SearchResult:
-        if not 1 <= limit <= 100 or not 0 <= offset <= 10_000:
-            raise ValueError("invalid limit/offset")
+        self._validate_window(limit, offset)
         parsed = parse(query)
         with self._lock:
             snapshot, generation = self._snapshot(principal.tenant)
@@ -325,19 +334,43 @@ class Engine:
             return tuple(sorted(self._visible(principal, snapshot, Query((), (), ()))))
 
     def export(self, principal: Principal) -> tuple[Document, ...]:
+        """Export all authorized current documents; use export_page for bounded reads."""
         with self._lock:
             snapshot, generation = self._snapshot(principal.tenant)
             visible = self._visible(principal, snapshot, Query((), (), ()))
-            return tuple(
-                Document(
-                    ident,
-                    generation.records[ident].title,
-                    generation.records[ident].text,
-                    snapshot.documents[ident].acl,
-                    dict(snapshot.documents[ident].metadata),
-                )
-                for ident in sorted(visible)
+            return self._export_documents(snapshot, generation, sorted(visible))
+
+    def export_page(
+        self, principal: Principal, *, limit: int = 100, offset: int = 0
+    ) -> tuple[int, tuple[Document, ...]]:
+        """Return authorized total and one ID-ordered page from the same ACL snapshot.
+
+        Only selected document records are materialized. Offset pagination can shift
+        between requests when writers publish or permissions change; each request
+        independently enforces the committed ACL at its own snapshot boundary.
+        """
+        self._validate_window(limit, offset)
+        with self._lock:
+            snapshot, generation = self._snapshot(principal.tenant)
+            visible = sorted(self._visible(principal, snapshot, Query((), (), ())))
+            return len(visible), self._export_documents(
+                snapshot, generation, visible[offset : offset + limit]
             )
+
+    @staticmethod
+    def _export_documents(
+        snapshot: CatalogSnapshot, generation: Generation, identifiers: Iterable[str]
+    ) -> tuple[Document, ...]:
+        return tuple(
+            Document(
+                ident,
+                generation.records[ident].title,
+                generation.records[ident].text,
+                snapshot.documents[ident].acl,
+                dict(snapshot.documents[ident].metadata),
+            )
+            for ident in identifiers
+        )
 
     def merge(self, tenant: str) -> int:
         """Streaming segment output; transaction checks prevent lost concurrent writes.

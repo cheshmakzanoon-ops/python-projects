@@ -1,6 +1,6 @@
 # Atlas relevance judgment review
 
-Coordinator review of the authored corpus and query intents, before final portfolio verification. The implementation owner authored the fixture set and judgments; this review did not consult per-query ranking outputs or derive labels from the scorer. No judgments were changed during review.
+Semantic review of the authored corpus and query intents, before final portfolio verification. The implementation owner authored the fixture set and judgments; this review did not consult per-query ranking outputs or derive labels from the scorer. No judgments were changed during review.
 
 - Corpus SHA-256: `e3f24f2f08379dae885622179cd58765a72f54797d42b0acb83decf073e6bec1`.
 - Judgment SHA-256: `eccefbe08f5525d9168229f6bbffe6b8636cc4276cb4da5d0a0df75f3f88854c`.

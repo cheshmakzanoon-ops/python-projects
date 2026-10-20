@@ -1,7 +1,7 @@
 [project]
 name = "pp-proving-ground"
 version = "0.1.0"
-description = "Proving-Ground: independent Python portfolio project"
+description = "Reproducible tabular ML experiments, audited promotion, and consistent local serving"
 requires-python = ">=3.13"
 dependencies = ["numpy>=2.3", "scikit-learn>=1.7", "pyarrow>=20", "fastapi>=0.115", "uvicorn>=0.35", "skops>=0.13"]
 [project.scripts]

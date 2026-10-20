@@ -1,51 +1,74 @@
 # Anchor
 
-Anchor coordinates declarative export workflows across process failures. Its original
-core is a deterministic DAG reducer and a PostgreSQL transaction adapter: history,
-logical scheduling, lease epochs, and terminal transitions commit together. Psycopg
-supplies the driver, asyncio supplies bounded workers, and FastAPI supplies the local
-control plane. It does not serialize suspended Python call stacks.
+A durable workflow engine for declarative, versioned DAGs. Anchor coordinates
+activities, timers, signals and compensation across process failures. PostgreSQL
+holds ordered history and task projections; a deterministic reducer reconstructs
+state and detects incompatible replay. Activities execute at least once, so external
+effects need a stable idempotency key and an explicit cancellation contract.
 
-```bash
-uv sync --locked --python 3.13.16
-# Supply ANCHOR_DATABASE_URL for an owned PostgreSQL database.
+## Run the recovery demonstration
+
+Use Linux, uv 0.12.23, and an owned PostgreSQL database. From the repository root,
+`python scripts/services.py up anchor` starts a loopback PostgreSQL container and
+prints its connection URL. Export that URL as `ANCHOR_DATABASE_URL`, then run from
+this directory:
+
+```sh
+uv sync --locked --python 3.14.8
 uv run --locked python -m pp_anchor.cli demo --output /tmp/anchor-demo --seed 1729
 uv run --locked python -m pp_anchor.cli clean-demo --output /tmp/anchor-demo
 ```
 
-The demo generates CSV partitions, joins them into a deterministic ZIP, consumes early
-approval, persists a timer, and kills a worker after publication but before its durable
-acknowledgement. Another worker reclaims the epoch and finishes. `history.json` and
-`timeline.txt` show one logical provider publication and verified replay.
+The output directory must be empty. The demonstration exports 60 synthetic rows,
+joins CSV partitions into a deterministic ZIP, consumes an approval signal and
+persists a timer. It kills a worker after provider publication but before the durable
+acknowledgement. A replacement reclaims the lease and finishes with one logical
+publication. Inspect `history.json`, `timeline.txt` and `dataset.zip` before cleanup.
+Cleanup removes only marked output and its dedicated database schema.
+
+## Python interface
 
 ```python
 import asyncio
+import os
+
 from pp_anchor import Definition, Engine, Step, drain
 
-# dsn is supplied by the caller, never embedded in definitions or history.
-with Engine(dsn, schema="anchor_local") as engine:
+with Engine(os.environ["ANCHOR_DATABASE_URL"], schema="anchor_local") as engine:
     definition = Definition("hello", 1, (Step("first"), Step("last", after=("first",))))
     run_id = engine.submit(definition, {"message": "hello"}, "request-1")
     asyncio.run(drain(engine))
     assert engine.replay(run_id).status == "completed"
 ```
 
-Custom async activities register through `ActivityRegistry.register(name, handler)`.
-Their `ActivityContext` exposes a stable `business_key`, task payload, attempt, and
-lease epoch. External effects must honor their own stable business idempotency key.
-The included provider demonstrates this contract and a persistent cleanup fence.
+`ActivityRegistry.register(name, handler)` registers async activities. A handler's
+`ActivityContext.task` contains payload, attempt number and lease epoch;
+`ActivityContext.business_key` remains stable across retries. Epoch checks fence
+stale engine updates. They cannot stop an external effect already in progress.
+The included synthetic provider persists a cancellation fence; another provider
+must supply equivalent guarantees before claiming full cancellation.
 
-Run `uv run --locked python -m pp_anchor.cli --help` for submit, inspect, replay,
-worker, scheduler, serve, demo, benchmark and owned cleanup commands. The control API
-binds to loopback at port 8101; it has no authentication and assumes trusted local users.
+## Development
 
-See [architecture](docs/ARCHITECTURE.md), [decisions](docs/DECISIONS.md),
-[operations](docs/OPERATIONS.md), [acceptance](docs/ACCEPTANCE.md),
-[benchmarks](docs/BENCHMARKS.md), and the [case study](docs/CASE_STUDY.md).
-PostgreSQL process-failure tests require Linux and a real service; pure reducer and
-packaging checks do not require a database. The supported interpreter floor is 3.13.
+```sh
+uv run --locked ruff format --check .
+uv run --locked ruff check .
+uv run --locked mypy src
+uv run --locked pytest
+uv build
+```
 
-For source review, start at `persistence/engine.py::_append` (atomic history/projection),
-`replay/reducer.py::decide` (command replay), and `tests/integration/test_process_fencing.py`
-(real resumed stale process). Local verification: 54 tests pass on both 3.13.16 and 3.14.8;
-final committed portfolio checks and standard benchmark remain coordinator-owned gates.
+Persistence tests require `ANCHOR_DATABASE_URL` and fail explicitly when it is absent.
+Use `pytest tests/unit` for database-free boundary and reducer tests. CPython 3.13.16
+is also supported; use a separate environment when testing interpreter compatibility.
+
+The [HTTP API](docs/HTTP_API.md) is a trusted local control plane on port 8101, without
+authentication. Keep it on loopback. The [runbook](docs/OPERATIONS.md) covers workers,
+schedulers, diagnosis and checksummed backup/restore. Review [architecture](docs/ARCHITECTURE.md),
+[decisions](docs/DECISIONS.md), [acceptance](docs/ACCEPTANCE.md),
+[benchmarks](docs/BENCHMARKS.md), [case study](docs/CASE_STUDY.md) and
+[verification records](docs/VERIFICATION.md) for contracts and measured limits.
+
+For code review, start with `persistence/engine.py::_append` for atomic history and
+projection updates, `replay/reducer.py::decide` for deterministic commands, and
+`tests/integration/test_process_fencing.py` for a real resumed stale process.

@@ -8,9 +8,13 @@ Run a fresh demo through the README command. `inspect --output PATH` opens an ex
 
 For a custom application, keep source offsets stable across retries. Admit records before considering them acknowledged. If admission raises after commit, retry identical records. On Runtime/checkpoint failure discard that Engine, close the journal, reopen, and recover; rerun `Runtime.run`. Never attempt to continue mutating an Engine whose apply or budget check failed. Change Config only when starting a new job, or explicitly migrate state in a separate supported migration implementation.
 
+Opening a journal validates the format, column types/nullability, primary and unique keys, index collations, foreign keys, table flags and declared CHECK constraints before changing pragmas or creating tables. Column collations and conflict policies must also match the supported format; a case-insensitive payload column would weaken exact acknowledgement matching. Existing unrelated databases, incomplete layouts, triggers and future format versions are rejected. Only an empty database can be initialized. Schema creation and the singleton format row commit in one transaction; a failed or interrupted creation leaves an empty schema that can be retried. Concurrent initializers recheck the schema under the writer lock, and the WAL-mode transition retries only transient SQLite BUSY errors within a bounded wait budget. This does not permit concurrent Runtime owners. SQLite may create transient WAL/shared-memory sidecars while reading a WAL-mode database; rejection does not change its application schema or stored records. The main-file page budget uses the database's actual page size.
+
+`Journal.read(after, limit)` requires a nonnegative integer cursor and a positive integer limit; `Journal.pending(limit)` also requires a positive integer limit. Booleans, fractions and SQLite's negative-limit convention are rejected rather than turning a bounded page into an unbounded read. Exhaust an iterator by advancing to the last returned ingress ordinal, not by passing a negative limit.
+
 Checkpoint code version `current-2` rejects `current-1` state. Do not edit the saved version
 string to bypass this check: older state can contain records that violated input lifecycle
-rules. There is no automatic checkpoint migration. Stop the owner and back up the original
+rules. There is no automatic checkpoint migration. Recovery also validates registered inputs, watermark relationships, window identities and aggregates, join identities, disposition/resource counters, and the checkpoint position against retained ingress. Invalid state fails without rewriting the checkpoint. This detects inconsistent persisted state; it does not authenticate a database supplied by an untrusted party. Stop the owner and back up the original
 journal before rebuilding anything.
 
 For a controlled rebuild, retain the original complete `Config`, `job_id`, mapper,

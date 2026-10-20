@@ -57,7 +57,7 @@ this includes the state machine and binary I/O,
 and excludes measurement/provenance/demo adapters explicitly. A separate required
 100-seed × 5,000-operation suite compares independent dictionary histories,
 periodically flushes/compacts pinned snapshots, rejects conflicts, and reopens
-the real database. Its current run status is tracked in `AGENT_STATUS.md`.
+the real database. Its current run status is tracked in `VERIFICATION.md`.
 
 The first CI workload measured 0.06822 s full compaction and 0.01793 s validated
 reopen for 2,000 starting records with 2,000 mixed operations. Durable batches

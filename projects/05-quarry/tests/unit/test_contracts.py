@@ -56,3 +56,34 @@ def test_dag_cycles_unknown_nodes_invalid_config() -> None:
         Contract(minimum=5, maximum=2)
     with pytest.raises(ValueError):
         Contract({"bad": Field("unknown")})
+
+
+@pytest.mark.parametrize(
+    "name", ["buckets", "batch_size", "memory_mb", "threads", "max_record_bytes"]
+)
+@pytest.mark.parametrize("value", [True, 1.5])
+def test_resource_configuration_rejects_noninteger_values(name: str, value: int) -> None:
+    with pytest.raises(ValueError, match="integers"):
+        Config(**{name: value})
+
+
+@pytest.mark.parametrize("name", ["minimum", "maximum"])
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), True, 10**400])
+def test_quality_bounds_are_finite_in_python_and_json_contracts(name: str, value: float) -> None:
+    with pytest.raises(ValueError, match="finite"):
+        Contract(**{name: value})
+    with pytest.raises(ValueError, match="finite"):
+        Contract.from_dict({**Contract().to_dict(), name: value})
+
+
+@pytest.mark.parametrize("name", ["min_rows", "max_rows"])
+@pytest.mark.parametrize("value", [True, 1.5])
+def test_row_bounds_cannot_be_booleans_or_fractions(name: str, value: int) -> None:
+    with pytest.raises(ValueError, match="integers"):
+        Contract(**{name: value})
+
+
+@pytest.mark.parametrize("name", ["", "a\x00b"])
+def test_contract_field_names_can_be_published_as_sql_identifiers(name: str) -> None:
+    with pytest.raises(ValueError, match="field names"):
+        Contract({name: Field("string")})

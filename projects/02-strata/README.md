@@ -1,16 +1,20 @@
 # Strata
 
-Strata is a small embedded LSM engine for versioned byte records. Its original
-Python core implements binary transaction logs, an ordered skip-list memtable,
-checksummed immutable blocks, stable Bloom filters, sparse indexes, snapshot
-isolation, full compaction, and crash recovery. It uses no database library for
-storage. SQLite appears only as an explicitly configured benchmark baseline.
+Strata is an embedded key-value engine with snapshot-isolated transactions and
+crash recovery. Its storage core implements a write-ahead log, an ordered
+skip-list memtable, immutable sorted tables, Bloom filters, sparse indexes, and
+compaction. Keys and values are bytes. No database library implements the storage
+layer; SQLite is used only as an optional benchmark baseline.
 
-One process owns a database. Threads may hold independent snapshots; commit
-publication and maintenance serialize. Transactions use first-committer-wins
-write conflicts. Snapshot isolation permits write skew: this is not a
-serializable database. Linux on a local POSIX filesystem is the required tested
-durability platform. No network service or credentials are required.
+A database has one owning process. Independent snapshots support concurrent
+readers, while commits and maintenance serialize. First-committer-wins detects
+write conflicts; reads do not enter the conflict set, so write skew is possible.
+The durability contract requires Linux and a local POSIX filesystem with working
+`fsync` and atomic rename. No service or credentials are required.
+
+## Run the demonstration
+
+From `projects/02-strata`, with uv 0.12.23:
 
 ```sh
 uv sync --locked --python 3.14.8
@@ -19,43 +23,65 @@ uv run --locked python -m pp_strata.cli inspect /tmp/strata-demo/catalog
 uv run --locked python -m pp_strata.cli clean-demo --output /tmp/strata-demo
 ```
 
-The demo first retains a catalog snapshot through overwrite, deletion, flush,
-and compaction, then backs it up and restores it. After closing all handles,
-a subprocess owns a separate database, acknowledges ten transactions, and
-terminates after syncing an additional batch. A fresh owner verifies recovery.
-The output includes `demo.json` and a readable `timeline.txt`.
+Use a new absolute output path. The demo holds an old catalog snapshot through
+an overwrite, deletion, flush, and compaction, then backs up and restores that
+view. A separate owner process acknowledges ten transactions and exits after
+syncing one additional batch. A fresh owner verifies that every acknowledged
+write survived and the unacknowledged batch is whole. `demo.json` records the
+checks; `timeline.txt` explains each transition.
+
+## Use the library
 
 ```python
 from pp_strata import Database
 
 with Database.open("/tmp/example-strata", durability="sync") as db:
-    with db.begin() as tx:  # normal exit commits; exceptional exit aborts
+    with db.begin() as tx:
         tx.put(b"account:a", b"120")
         tx.put(b"account:b", b"80")
+
     with db.snapshot() as snapshot:
         assert snapshot.get(b"account:a") == b"120"
         print(list(snapshot.scan(start=b"account:", stop=b"account;")))
 ```
 
-For a deliberate failure, inspect `tests/acceptance/test_faults.py`: its child
-processes terminate at WAL, table, manifest, and retirement boundaries. The
-failed-sync test demonstrates a poisoned writer, readable old snapshots,
-recovery of a complete unacknowledged batch, and sequence advancement.
+A successful transaction context exit commits; an exception aborts. `get` returns
+`None` for absence and `b""` for a stored empty value. Scans are ordered and
+half-open: `start <= key < stop`. Each scan materializes its result while holding
+the database lock, so its iterator remains valid after compaction or handle
+closure. Close snapshot and transaction handles promptly to release retained
+versions. Do not share a handle between threads or inherit it across `fork`.
+
+Keys are limited to 4 KiB, values to 1 MiB, and an encoded transaction to 16 MiB.
+Size/type validation occurs before persistent mutation. In sync mode, successful
+commit acknowledgement follows WAL synchronization. An I/O error can leave a
+whole but unacknowledged batch; further writes fail with `WriterFailed` until
+close and recovery. Application operation IDs are needed to resolve retry
+ambiguity. See the [runbook](docs/OPERATIONS.md) before recovery or backup.
+
+## Validate changes
 
 ```sh
 uv run --locked ruff format --check .
 uv run --locked ruff check .
 uv run --locked mypy src
-uv run --locked pytest --cov --cov-report=term-missing
-uv build
-uv run --locked python benchmarks/extended_stateful.py --output /tmp/strata-extended.json
-uv run --locked python -m pp_strata.cli benchmark --profile ci --output /tmp/strata-bench --seed 1729
+uv run --locked pytest
+uv build --python 3.14.8
 ```
 
-The standard profile generates 250,000 initial 16-byte keys / 256-byte values,
-200,000 mixed operations, and a separate 50,000-operation hot-key churn phase.
-Run it alone. See [architecture](docs/ARCHITECTURE.md),
-[formats and tradeoffs](docs/DECISIONS.md), [runbook](docs/OPERATIONS.md),
-[acceptance mapping](docs/ACCEPTANCE.md), [measurements](docs/BENCHMARKS.md),
-and [case study](docs/CASE_STUDY.md). Current verification is recorded in
-[agent status](docs/AGENT_STATUS.md).
+Python 3.13.16 is also supported. Use a separate virtual environment when testing
+the two interpreters, and run their builds sequentially. The acceptance suite
+includes process termination, short writes, failed synchronization, malformed
+files, missing log records, snapshot retention, backup integrity, and write skew.
+The [verification record](docs/VERIFICATION.md) separates current checks from
+historical large workloads.
+
+The standard benchmark writes 250,000 initial records, runs 200,000 mixed
+operations, and adds 50,000 hot-key churn operations. Full compaction, materialized
+scans/backups, and per-key conflict metadata limit scale. Historical measurements
+are in [benchmarks](docs/BENCHMARKS.md); they are not production-capacity claims.
+
+Further reading: [architecture](docs/ARCHITECTURE.md),
+[formats and design decisions](docs/DECISIONS.md),
+[acceptance mapping](docs/ACCEPTANCE.md), [case study](docs/CASE_STUDY.md),
+and [dependency and fixture provenance](docs/THIRD_PARTY.md).

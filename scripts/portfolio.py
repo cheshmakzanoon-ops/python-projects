@@ -70,9 +70,10 @@ def execute(command: list[str], cwd: Path, timeout: int = 600) -> int:
 
 def project_task(task: str, project: dict[str, object], profile: str = "ci") -> int:
     directory = ROOT / str(project["directory"])
-    base = ["uv", "run", "--locked"]
-    if os.environ.get("PORTFOLIO_PYTHON"):
-        base += ["--python", os.environ["PORTFOLIO_PYTHON"]]
+    # Select one interpreter for the entire task, including builds and wheel checks.
+    # Relying on uv's nearest .python-version here can silently disagree with setup.
+    interpreter = os.environ.get("PORTFOLIO_PYTHON") or str(project["default_python"])
+    base = ["uv", "run", "--locked", "--python", interpreter]
     if not (directory / "uv.lock").exists():
         print(f"{project['slug']}: incomplete: uv.lock missing", file=sys.stderr)
         return 2
@@ -83,7 +84,7 @@ def project_task(task: str, project: dict[str, object], profile: str = "ci") -> 
                 "sync",
                 "--locked",
                 "--python",
-                os.environ.get("PORTFOLIO_PYTHON", str(project["default_python"])),
+                interpreter,
             ]
         ]
     elif task == "check":
@@ -97,13 +98,14 @@ def project_task(task: str, project: dict[str, object], profile: str = "ci") -> 
                 "build",
                 "--no-sources",
                 "--python",
-                os.environ.get("PORTFOLIO_PYTHON", str(project["default_python"])),
+                interpreter,
             ],
             [
                 sys.executable,
                 str(ROOT / "scripts/wheel_smoke.py"),
                 str(directory),
                 str(project["package"]),
+                interpreter,
             ],
         ]
     else:

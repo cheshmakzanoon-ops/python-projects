@@ -10,7 +10,7 @@ from typing import Any
 
 from pp_pytrace.cache import analyze
 from pp_pytrace.codemods.plan import apply, create_plan, load_plan, patch, recover
-from pp_pytrace.frontend.discovery import ParseFailure, read_bounded
+from pp_pytrace.frontend.discovery import ParseFailure, discover, guard_output, read_bounded
 from pp_pytrace.reporting.sarif import sarif, validate
 from pp_pytrace.rules.registry import Config
 from pp_pytrace.workloads import benchmark, clean_demo, demo
@@ -73,6 +73,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
     try:
         if args.command == "analyze":
+            if args.output:
+                guard_output(args.output, discover(args.root))
             config = Config()
             if args.config:
                 if args.config.stat().st_size > 32_000:
@@ -114,6 +116,12 @@ def main(argv: list[str] | None = None) -> int:
             _emit(matching[0], None)
         elif args.command == "diff":
             plan = create_plan(args.root, args.files)
+            sources = discover(args.root)
+            for output in (args.output, args.plan):
+                if output:
+                    guard_output(output, sources)
+            if args.output and args.plan:
+                guard_output(args.output, [args.plan])
             _emit(patch(plan), args.output)
             if args.plan:
                 _emit(plan.to_dict(), args.plan)

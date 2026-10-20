@@ -78,6 +78,7 @@ def destroy_repair(
     repaired = repair(instance, routes, sorted(removed), regret=True)
     return make_plan(instance, repaired) if repaired is not None else None
 
+
 def two_opt_star(instance: RoutingInstance, plan: Plan, rng: random.Random) -> Plan | None:
     """Exchange two suffixes without modifying committed replanning prefixes."""
     if len(plan.routes) < 2:

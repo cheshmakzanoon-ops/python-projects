@@ -1,4 +1,5 @@
 import asyncio
+import json
 
 import pytest
 from fastapi.testclient import TestClient
@@ -6,6 +7,39 @@ from fastapi.testclient import TestClient
 from pp_anchor import ActivityRegistry, ConflictError, Definition, Engine, Step, Worker, drain
 from pp_anchor.api.app import create_app
 from pp_anchor.persistence.engine import AdmissionError
+
+
+@pytest.mark.parametrize("text", ["\x00", "\ud800"])
+def test_http_rejects_nonrepresentable_payload_text_without_database_error(engine, text):
+    definition = Definition("json-boundary", 1, (Step("work"),))
+    request = {
+        "definition": definition.to_dict(),
+        "payload": {"text": text},
+        "idempotency_key": "invalid-json-text",
+    }
+    with TestClient(create_app(engine), raise_server_exceptions=False) as client:
+        response = client.post(
+            "/runs",
+            content=json.dumps(request).encode(),
+            headers={"Content-Type": "application/json"},
+        )
+    assert response.status_code == 422, response.text
+    assert engine.metrics()["runs"] == {}
+
+
+def test_http_signal_payload_is_validated_before_database_write(engine):
+    run_id = engine.submit(
+        Definition("json-signal", 1, (Step("wait", kind="signal", signal="go"),)), {}, "signal-run"
+    )
+    before = engine.history(run_id)
+    with TestClient(create_app(engine), raise_server_exceptions=False) as client:
+        response = client.post(
+            f"/runs/{run_id}/signals",
+            content=b'{"name":"go","payload":{"text":"\\u0000"},"idempotency_key":"signal"}',
+            headers={"Content-Type": "application/json"},
+        )
+    assert response.status_code == 422
+    assert engine.history(run_id) == before
 
 
 def test_admission_and_idempotency_during_overload(engine, dsn):
@@ -186,3 +220,89 @@ def test_maximum_length_internal_chain_completes_without_recursion(engine):
     assert len(history) == 1001
     assert [event.step for event in history[1:]] == [step.name for step in steps]
     assert history[-1].commands == ("terminal:completed",)
+
+
+def test_history_pagination_matches_full_history_and_bounds_query(engine):
+    definition = Definition("page", 1, tuple(Step(f"s{i}", kind="join") for i in range(7)))
+    run_id = engine.submit(definition, {}, "page")
+    full = engine.history(run_id)
+    assert len(full) == 8
+    collected = []
+    after = 0
+    with TestClient(create_app(engine)) as client:
+        while True:
+            response = client.get(f"/runs/{run_id}/history", params={"after": after, "limit": 3})
+            assert response.status_code == 200
+            page = response.json()
+            if not page["events"]:
+                assert page["next_after"] == after
+                break
+            assert len(page["events"]) <= 3
+            collected.extend(page["events"])
+            after = page["next_after"]
+    assert [event["seq"] for event in collected] == [event.seq for event in full]
+    assert engine.history(run_id, after=2, limit=3) == full[2:5]
+    assert engine.history(run_id, after=full[-1].seq, limit=3) == []
+
+
+@pytest.mark.parametrize("after,limit", [(-1, 1), (True, 1), (0, 0), (0, 1001), (0, 1.5)])
+def test_invalid_history_windows_are_rejected(engine, after, limit):
+    with pytest.raises(ValueError):
+        engine.history("unused", after=after, limit=limit)
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), -1, 0, True, 10**1000])
+def test_invalid_lease_cannot_mutate_task(engine, value):
+    run_id = engine.submit(Definition("lease", 1, (Step("x"),)), {}, "lease")
+    with pytest.raises(ValueError):
+        engine.claim(value)
+    task = engine.claim()
+    assert task is not None
+    with pytest.raises(ValueError):
+        engine.heartbeat(task, value)
+    with pytest.raises(ValueError):
+        Worker(engine, lease_seconds=value)
+    engine.finish(task)
+    assert engine.status(run_id)["status"] == "completed"
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), -1, True, 10**1000])
+def test_invalid_timer_clock_offset_is_rejected(engine, value):
+    with pytest.raises(ValueError):
+        engine.tick(advance_seconds=value)
+
+
+def test_unknown_http_request_fields_are_rejected(engine):
+    with TestClient(create_app(engine)) as client:
+        response = client.post(
+            "/runs",
+            json={
+                "definition": Definition("strict", 1, (Step("x"),)).to_dict(),
+                "idempotency_key": "strict",
+                "paylod": {"important": "misspelled"},
+            },
+        )
+    assert response.status_code == 422
+    assert engine.metrics()["runs"] == {}
+
+
+def test_maximum_retry_policy_remains_representable_in_database(engine):
+    run_id = engine.submit(
+        Definition("retry-cap", 1, (Step("x", max_attempts=32, retry_delay=31536000),)),
+        {},
+        "retry-cap",
+    )
+    for attempt in range(1, 33):
+        task = engine.claim()
+        assert task is not None and task.attempt_number == attempt
+        engine.finish(task, error="still unavailable")
+        event = engine.history(run_id)[-1]
+        assert event.data["retry_delay"] == (31536000 if attempt < 32 else 0)
+        if attempt < 32:
+            # Exercise every allowed attempt without waiting on the real deadline.
+            with engine.transaction() as c:
+                c.execute(
+                    "UPDATE activity_tasks SET available_at=clock_timestamp() WHERE workflow_id=%s",
+                    (run_id,),
+                )
+    assert engine.status(run_id)["status"] == "failed"

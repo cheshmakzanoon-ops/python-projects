@@ -3,7 +3,7 @@
 The accepted standard run passed on CPython 3.14.8 at source commit
 `ec1d0106df086a48923016c33199cfbda0aebbc0`, in a clean, isolated Linux checkout.
 The [raw benchmark report](../../../docs/evidence/final/standard/routecraft-3.14.8-benchmark-benchmark.json)
-contains every trial; the [coordinator verification wrapper](../../../docs/evidence/final/standard/routecraft-3.14.8.json)
+contains every trial; the [verification wrapper](../../../docs/evidence/final/standard/routecraft-3.14.8.json)
 records commands, immutable source inputs, exit codes and unchanged-source checks.
 The benchmark command took 709.636 seconds including warmups, checks and reporting.
 These measurements concern synthetic island deliveries, not real roads.

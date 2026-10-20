@@ -1,39 +1,32 @@
 # Routecraft
 
-Routecraft plans a fictional island delivery fleet with capacity, directed integer
-travel times, service-start windows, service durations, and depot-return shifts.
-Its Python implementation owns greedy and regret insertion, directed relocation,
-swap and route reversal, and an adaptive destroy/repair search. A separate verifier
-recomputes every schedule and objective; a deliberately small exhaustive solver
-provides an oracle up to six customers and two vehicles.
+Routecraft solves vehicle-routing problems with directed travel times, capacity limits, service-start windows, service durations, and depot-return shifts. Its insertion and neighborhood search produce candidate plans; a separate verifier recomputes every schedule, cargo balance, directed arc, and objective. A small exhaustive solver supplies exact answers for up to six customers and two vehicles.
 
-```bash
+The objective is lexicographic: use fewer vehicles first, then reduce total directed travel. A heuristic answer is `FEASIBLE` or `NO_FEASIBLE_PLAN_FOUND`. Only exhaustive enumeration establishes `OPTIMAL` or `PROVEN_INFEASIBLE`; the large-instance optimality gap is unknown.
+
+## Run and inspect a plan
+
+From this project directory, using uv 0.12.23:
+
+```sh
 uv sync --locked --python 3.14.8
-uv run --locked python -m pp_routecraft.cli demo --output /tmp/routecraft-demo --seed 1729
-uv run --locked python -m pp_routecraft.cli verify \
+uv run --locked --python 3.14.8 python -m pp_routecraft.cli demo --output /tmp/routecraft-demo --seed 1729
+uv run --locked --python 3.14.8 python -m pp_routecraft.cli verify \
   --instance /tmp/routecraft-demo/replanned-instance.json \
   --plan /tmp/routecraft-demo/replanned-plan.json
-uv run --locked python -m pp_routecraft.cli benchmark --profile ci \
-  --output /tmp/routecraft-ci --seed 1729
 ```
 
-Python 3.13.16 remains supported. Each project has its own environment; do not
-create a worktree for ordinary cloud tasks. Linux is the measured benchmark
-platform. The solver/library itself uses the standard library; Matplotlib draws
-maps and timelines and supplies no optimization algorithms.
+The demo constructs and improves 25 synthetic deliveries, records rejection of a deliberately duplicated stop, and adds a new request after one vehicle has completed a service. That vehicle keeps its remaining cargo; an unstarted vehicle must load the new job.
 
-The demo constructs and improves 25 deliveries, deliberately duplicates a stop
-and records the verifier's rejection, completes one service, accepts a new
-request, and replans from the actual departure boundary. The started vehicle
-retains exactly its cargo; another vehicle must load the new job. Open
-`routes.svg`, `timeline.svg`, and their `replanned-` counterparts alongside
-`demo.json`. Coordinates are synthetic visual aids, not real roads.
+Inspect `demo.json`, `plan.json`, `routes.svg`, and `timeline.svg`, then the corresponding `replanned-` files. Route maps show directed order; coordinates are visual aids rather than road geometry. Timeline legends distinguish travel, window waiting, service, and delay at the actual replanning boundary. Zero-duration service is a tick rather than a fabricated interval.
 
-Use `generate`, `solve`, `verify`, `replan`, and `compare` for individual steps;
-`python -m pp_routecraft.cli COMMAND --help` lists the arguments. `solve --exact`
-is intentionally limited to tiny instances. A heuristic result is `FEASIBLE` or
-`NO_FEASIBLE_PLAN_FOUND`; only full enumeration establishes `OPTIMAL` or
-`PROVEN_INFEASIBLE`. The large-instance optimality gap remains **unknown**.
+Outputs require an absolute directory that is empty or bears the exact Routecraft ownership marker. Cleanup removes fixed owned filenames and preserves unrelated files:
+
+```sh
+uv run --locked --python 3.14.8 python -m pp_routecraft.cli clean-demo --output /tmp/routecraft-demo
+```
+
+## Python API
 
 ```python
 from pp_routecraft import SearchBudget, solve, verify
@@ -42,16 +35,27 @@ from pp_routecraft.fixtures import island
 instance = island(25, seed=1729)
 result = solve(instance, SearchBudget(iterations=100), seed=1729)
 if result.plan is not None:
-    assert verify(instance, result.plan).valid
-    print(result.plan.objective)  # (vehicles used, total directed travel)
+    report = verify(instance, result.plan)
+    assert report.valid
+    print(report.objective)  # (vehicles used, total directed travel)
+else:
+    print(result.status, result.stopping_reason)
 ```
 
-[Architecture](docs/ARCHITECTURE.md), [decisions](docs/DECISIONS.md),
-[acceptance mapping](docs/ACCEPTANCE.md), [operations](docs/OPERATIONS.md),
-[measurements](docs/BENCHMARKS.md), and [case study](docs/CASE_STUDY.md) explain
-contracts, evidence and limitations. No project code license has been chosen by
-the repository owner; [provenance](docs/THIRD_PARTY.md) records dependencies.
+Iteration budgets are reproducible for equal inputs, seeds, and package versions. Wall-clock limits and cancellation are cooperative at completed-operation boundaries; an insertion or repair can overrun the requested deadline. A stop observation prevents further work and retains any verified incumbent.
 
-[Small authentic sample artifacts](artifacts/README.md) include the independently
-verified hand-checkable directed tour and actual map/timeline, with a manifest
-identifying its dirty development source snapshot.
+`generate`, `solve`, `verify`, `replan`, and `compare` expose the individual steps; use `COMMAND --help` for arguments. The [JSON format](docs/FORMAT.md) specifies supported fields and units. Unknown fields, duplicate object keys, and unsupported versions fail explicitly rather than silently dropping constraints.
+
+## Development and limits
+
+```sh
+uv run --locked --python 3.14.8 ruff format --check .
+uv run --locked --python 3.14.8 ruff check .
+uv run --locked --python 3.14.8 mypy src
+uv run --locked --python 3.14.8 pytest
+uv build --python 3.14.8
+```
+
+Python 3.13.16 is also supported in a separate environment. The solver requires no service, external routing API, credentials, or paid dataset. It uses standard-library algorithms; Matplotlib renders reports. Benchmarks were measured on Linux with synthetic instances. Replanning requires a named departure/service-completion boundary and prohibits cargo transfers, reloading, live traffic changes, and mid-edge snapshots.
+
+Read [architecture](docs/ARCHITECTURE.md), [design decisions](docs/DECISIONS.md), [operations](docs/OPERATIONS.md), [acceptance](docs/ACCEPTANCE.md), [verification](docs/VERIFICATION.md), and [benchmarks](docs/BENCHMARKS.md) for contracts and evidence. The [case study](docs/CASE_STUDY.md) explains tradeoffs; [sample artifacts](artifacts/README.md) retain their historical source provenance. [Third-party notices](docs/THIRD_PARTY.md) record dependencies and asset origin.

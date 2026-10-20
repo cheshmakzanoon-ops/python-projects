@@ -13,6 +13,7 @@ from pp_resonance.alignment.dynamic import align, load_score
 from pp_resonance.analysis import analyze, analyze_chunks
 from pp_resonance.audio_io.pcm import blocks, preview, write
 from pp_resonance.benchmark import benchmark
+from pp_resonance.formats import read_json
 from pp_resonance.metrics.evaluate import pitch_grid
 from pp_resonance.midi.export import check_bytes, export
 from pp_resonance.model import NoteEvent, ReferenceNote
@@ -254,14 +255,20 @@ def main() -> None:
             }
 
         else:
-            data = json.loads(args.input.read_text())
-            if data.get("schema_version") != 1:
+            analysis_data = read_json(args.input, max_bytes=64_000_000)
+            if (
+                not isinstance(analysis_data, dict)
+                or type(analysis_data.get("schema_version")) is not int
+                or analysis_data["schema_version"] != 1
+                or not isinstance(analysis_data.get("notes"), list)
+                or any(not isinstance(note, dict) for note in analysis_data["notes"])
+            ):
                 raise ValueError("Require analysis schema_version=1")
-            notes = [NoteEvent(**n) for n in data["notes"]]
-            export(output / "transcription.mid", notes, data["sample_rate"])
+            notes = [NoteEvent(**n) for n in analysis_data["notes"]]
+            export(output / "transcription.mid", notes, analysis_data["sample_rate"])
             result = {"midi_notes_checked": len(check_bytes(output / "transcription.mid"))}
         print(json.dumps(result, indent=2, allow_nan=False))
-    except (ValueError, OSError, KeyError, TypeError, sf.LibsndfileError) as error:
+    except (ValueError, OSError, KeyError, TypeError, OverflowError, sf.LibsndfileError) as error:
         parser.exit(2, f"resonance: {error}\n")
 
 

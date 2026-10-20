@@ -15,7 +15,7 @@ Run `MERIDIAN_DATABASE_URL=... [MERIDIAN_PG_CONTAINER=explicit-local-container] 
 
 The public CLI demo drives journal creation/retry/reversal through the JSON API and uses application services for concurrent transfers and reconciliation; root settlement integration exercises a live HTTP server with an independent Anchor process. This distinction is explicit: Django's test client is an in-process HTTP request adapter, not proof of network deployment.
 
-Development results and remaining checks are recorded in AGENT_STATUS; final immutable committed-source evidence belongs to the coordinator. Generated reports include exact source/lock hashes and dirty-state metadata. A source edit invalidates earlier benchmark evidence, even when tests later pass.
+Current checks and historical source-specific results are recorded in [verification](VERIFICATION.md). Generated reports include exact source/lock hashes and dirty-state metadata. A source edit invalidates earlier benchmark evidence, even when tests later pass.
 
 Independent review regressions extend ME-06: raw SQL cannot bind tenant A's idempotency key to tenant B's journal; a previous-schema poisoned cache cannot leak its journal even before migration; invalid legacy cache/statement history blocks migration. Both direct SQL and application statement imports race account tenant/currency changes while holding real PostgreSQL locks; the history wins and mutation is rejected. Empty reconciliation runs freeze account identity too. Solver regression costs of 10^100 retain exact integer results without colliding with a finite unreachable-distance sentinel.
 

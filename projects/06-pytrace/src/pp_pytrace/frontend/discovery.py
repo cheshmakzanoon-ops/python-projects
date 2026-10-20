@@ -58,6 +58,21 @@ def read_source(path: Path, limits: Limits = Limits()) -> str:
     return decode_source(read_bounded(path, limits.max_bytes))
 
 
+def guard_output(output: Path, sources: list[Path]) -> None:
+    """Refuse an output that aliases selected source, including hard links.
+
+    Path spelling alone is insufficient: callers may select a symlink or a
+    second hard link to the source as a report/cache destination. This preflight
+    protects ordinary local use; it does not lock out concurrent filesystem edits.
+    """
+    resolved = output.resolve()
+    for source in sources:
+        if resolved == source.resolve() or (
+            output.exists() and source.exists() and output.samefile(source)
+        ):
+            raise ValueError("output must not overwrite selected source")
+
+
 def discover(
     root: Path,
     excludes: tuple[str, ...] = (".venv/*", ".git/*", "__pycache__/*"),

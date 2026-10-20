@@ -40,7 +40,13 @@ def metadata(seed: int, profile: str) -> dict[str, Any]:
     lockfile = root / "data/uv.lock" if installed else root / "uv.lock"
     contracts = [
         repository / name
-        for name in ("AGENTS.md", "ruff.toml", "portfolio.toml", "scripts/portfolio.py")
+        for name in (
+            "CONTRIBUTING.md",
+            "docs/REQUIREMENTS.md",
+            "ruff.toml",
+            "portfolio.toml",
+            "scripts/portfolio.py",
+        )
         if (repository / name).is_file()
     ]
     revision = subprocess.run(

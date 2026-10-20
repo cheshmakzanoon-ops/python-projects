@@ -26,7 +26,7 @@ expired first attempt, a higher lease epoch, and successful completion with one 
 provider publication. This demonstrates the specific idempotency/fencing contract of
 this provider; arbitrary external providers need their own equivalent enforcement.
 
-Actual measurements are linked from BENCHMARKS.md when completed. Process-kill tests
+Measured workloads are linked from [BENCHMARKS.md](BENCHMARKS.md). Process-kill tests
 cannot establish behavior under every power-loss/controller failure. Long histories
 currently replay on each transition and are the clearest next performance boundary;
 versioned integrity-checked snapshots would be justified after measuring that workload.
@@ -35,9 +35,9 @@ The initial measured ci baseline completed five 100-workflow/500-activity runs a
 3.95 workflows/s under substantial shared-host contention. The isolated 100,000 future
 timer probe fired none, took 0.059 seconds for an idle tick, and added 0 KiB peak RSS.
 Those historical results include exact source hashes in artifacts; they predate final
-queue indexes and must not be presented as a controlled speedup comparison. Final local
-correctness is 54 passing tests on both interpreters with 93.5% branch coverage of the
-defined core. The case study's next justified optimization remains long-history snapshotting,
+queue indexes and must not be presented as a controlled speedup comparison. The initial acceptance snapshot passed 54 tests on both interpreters with 93.5%
+branch coverage of the defined core; later regression suites are recorded separately
+in [verification records](VERIFICATION.md). The case study's next justified optimization remains long-history snapshotting,
 after profiling an appropriate workload rather than chasing a synthetic throughput target.
 
 ## Committed standard measurement

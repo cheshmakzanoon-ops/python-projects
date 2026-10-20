@@ -79,3 +79,18 @@ def test_actual_rename_deleted_and_empty_diff(tmp_path):
         git("commit", "-qm", "non UTF8 filename")
         assert selection.diff_paths("HEAD~1", "HEAD", tmp_path) is None
         assert len(selection.select(None, selection.load_projects())) == 10
+
+
+def test_noncanonical_and_overlapping_paths_cannot_underselect(monkeypatch):
+    projects = deepcopy(selection.load_projects())
+    projects[0]["directory"] = "projects/./01-anchor"
+    monkeypatch.setattr(selection.tomllib, "load", lambda stream: {"projects": projects})
+    with pytest.raises(ValueError, match="canonical"):
+        selection.load_projects()
+    projects[0]["directory"] = "projects"
+    with pytest.raises(ValueError, match="overlap"):
+        selection.load_projects()
+
+
+def test_git_option_is_not_accepted_as_a_revision():
+    assert selection.diff_paths("--output=/tmp/portfolio-diff", "HEAD") is None

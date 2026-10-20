@@ -20,3 +20,7 @@ respective upstream licenses; consult installed package metadata before reuse.
 The repository owner has not selected a code/data distribution license. No SPDX
 identifier or redistribution permission is invented here. Recommendation: the
 owner should choose and add an appropriate license before inviting reuse.
+
+The browser image in `docs/images/search-desktop.png` is an original Chromium
+capture of this application using the included synthetic quality corpus. No external
+photograph, icon package, web font or third-party design asset is redistributed.

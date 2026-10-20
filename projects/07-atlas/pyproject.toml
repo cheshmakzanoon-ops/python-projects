@@ -1,7 +1,7 @@
 [project]
 name = "pp-atlas"
 version = "0.1.0"
-description = "Atlas: independent Python portfolio project"
+description = "Permission-aware lexical search with visible-set BM25 and immutable index generations"
 requires-python = ">=3.13"
 dependencies = ["fastapi>=0.115", "uvicorn>=0.34"]
 [project.scripts]

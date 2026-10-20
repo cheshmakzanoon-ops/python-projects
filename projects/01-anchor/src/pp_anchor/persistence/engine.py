@@ -1,6 +1,7 @@
 """PostgreSQL transaction adapter. All mutations lock the run before its projections."""
 
 import hashlib
+import math
 import re
 import uuid
 from collections.abc import Callable, Iterator
@@ -20,6 +21,12 @@ from pp_anchor.history.events import HistoryEvent
 from pp_anchor.replay.reducer import WorkflowState, decide, replay
 
 Row = dict[str, object]
+
+
+def validate_lease_seconds(value: float) -> None:
+    """Reject unusable leases before they can strand a running task in PostgreSQL."""
+    if type(value) not in (int, float) or not 0 < value <= 31536000 or not math.isfinite(value):
+        raise ValueError("lease_seconds must be finite seconds in (0, 31536000]")
 
 
 class AdmissionError(RuntimeError):
@@ -112,9 +119,12 @@ class Engine:
             raise KeyError(run_id)
         return row
 
-    def _events(self, c: Connection[Row], run_id: str) -> list[HistoryEvent]:
+    def _events(
+        self, c: Connection[Row], run_id: str, *, after: int = 0, limit: int | None = None
+    ) -> list[HistoryEvent]:
         rows = c.execute(
-            "SELECT * FROM history_events WHERE workflow_id=%s ORDER BY event_seq", (run_id,)
+            "SELECT * FROM history_events WHERE workflow_id=%s AND event_seq>%s ORDER BY event_seq LIMIT %s",
+            (run_id, after, limit),
         ).fetchall()
         return [
             HistoryEvent(
@@ -277,10 +287,21 @@ class Engine:
                 "definition_digest": row["definition_digest"],
             }
 
-    def history(self, run_id: str) -> list[HistoryEvent]:
+    def history(
+        self, run_id: str, *, after: int = 0, limit: int | None = None
+    ) -> list[HistoryEvent]:
+        """Read ordered events; optional SQL pagination bounds fetched rows.
+
+        The default returns the complete history for replay/export callers.
+        HTTP callers must supply a bounded limit.
+        """
+        if type(after) is not int or after < 0:
+            raise ValueError("after must be a non-negative integer")
+        if limit is not None and (type(limit) is not int or not 1 <= limit <= 1000):
+            raise ValueError("limit must be an integer in 1..1000")
         with self.transaction() as c:
             self._run(c, run_id)
-            return self._events(c, run_id)
+            return self._events(c, run_id, after=after, limit=limit)
 
     def replay(self, run_id: str, definition: Definition | None = None) -> WorkflowState:
         with self.transaction() as c:
@@ -345,8 +366,7 @@ class Engine:
         return self.status(run_id)
 
     def claim(self, lease_seconds: float = 5) -> Task | None:
-        if lease_seconds <= 0:
-            raise ValueError("lease_seconds must be positive")
+        validate_lease_seconds(lease_seconds)
         with self.transaction() as c:
             row = c.execute("""SELECT r.* FROM workflow_runs r WHERE r.terminal_status IN ('running','compensating') AND EXISTS (
                 SELECT 1 FROM activity_tasks t WHERE t.workflow_id=r.workflow_id AND
@@ -426,8 +446,7 @@ class Engine:
         return row
 
     def heartbeat(self, task: Task, lease_seconds: float = 5) -> None:
-        if lease_seconds <= 0:
-            raise ValueError("lease_seconds must be positive")
+        validate_lease_seconds(lease_seconds)
         with self.transaction() as c:
             self._active(c, task)
             c.execute(
@@ -442,7 +461,9 @@ class Engine:
             failed = error is not None
             retry = failed and task.attempt_number < int(str(row["max_attempts"]))
             status = "pending" if retry else ("failed" if failed else "completed")
-            delay = float(str(row["retry_delay"])) * 2 ** (task.attempt_number - 1)
+            # Bound the actual exponential delay as well as its configured base.
+            # Valid 32-attempt definitions must never overflow PostgreSQL timestamps.
+            delay = min(float(str(row["retry_delay"])) * 2 ** (task.attempt_number - 1), 31536000)
             c.execute(
                 "UPDATE activity_tasks SET status=%s,available_at=clock_timestamp()+%s*interval '1 second',lease_expiry=NULL WHERE workflow_id=%s AND command_id=%s",
                 (status, delay if retry else 0, task.workflow_id, task.command_id),
@@ -488,6 +509,14 @@ class Engine:
 
     def tick(self, *, advance_seconds: float = 0, limit: int = 1000) -> int:
         """Test-only clock injection applies to timer eligibility; DB owns all lease time."""
+        if (
+            type(advance_seconds) not in (int, float)
+            or not 0 <= advance_seconds <= 31536000
+            or not math.isfinite(advance_seconds)
+        ):
+            raise ValueError("advance_seconds must be finite seconds in 0..31536000")
+        if type(limit) is not int or not 1 <= limit <= 1000:
+            raise ValueError("limit must be an integer in 1..1000")
         count = 0
         for _ in range(limit):
             with self.transaction() as c:

@@ -1,5 +1,6 @@
 """Deterministic monophonic MIDI, plus an independent standard-MIDI byte checker."""
 
+import math
 import struct
 from fractions import Fraction
 from pathlib import Path
@@ -11,8 +12,26 @@ from pp_resonance.model import AudioSpec, NoteEvent
 
 def export(path: Path, notes: list[NoteEvent], rate: int, tempo: int = 500000) -> None:
     AudioSpec(rate)
-    if not 0 < tempo <= 0xFFFFFF:
+    if type(tempo) is not int or not 0 < tempo <= 0xFFFFFF:
         raise ValueError("MIDI tempo must fit its positive 24-bit field")
+    for note in notes:
+        if (
+            not isinstance(note.id, str)
+            or not note.id
+            or type(note.start) is not int
+            or type(note.end) is not int
+            or type(note.midi) is not int
+            or not all(
+                isinstance(value, (int, float))
+                and not isinstance(value, bool)
+                and math.isfinite(value)
+                for value in (note.frequency, note.confidence, note.cents, note.spread_cents)
+            )
+            or note.frequency <= 0
+            or not 0 <= note.confidence <= 1
+            or note.spread_cents < 0
+        ):
+            raise ValueError("MIDI requires finite note metadata and integer sample positions")
     midi = mido.MidiFile(type=0, ticks_per_beat=480)
     track = mido.MidiTrack()
     midi.tracks.append(track)

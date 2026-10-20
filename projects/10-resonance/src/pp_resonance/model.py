@@ -1,5 +1,6 @@
 """Versioned public records; integer samples are the timing authority."""
 
+import math
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -14,9 +15,9 @@ class AudioSpec:
     channels: int = 1
 
     def __post_init__(self) -> None:
-        if self.sample_rate not in (44100, 48000):
+        if type(self.sample_rate) is not int or self.sample_rate not in (44100, 48000):
             raise ValueError("Supported sample rates are 44100 and 48000 Hz; resample explicitly")
-        if self.channels not in (1, 2):
+        if type(self.channels) is not int or self.channels not in (1, 2):
             raise ValueError("Only mono or stereo PCM is supported")
 
 
@@ -26,8 +27,13 @@ class FrameConfig:
     hop: int = 256
 
     def __post_init__(self) -> None:
-        if self.size < 1024 or not 0 < self.hop <= self.size:
-            raise ValueError("Require frame size >=1024 and hop in [1,size]")
+        if (
+            type(self.size) is not int
+            or type(self.hop) is not int
+            or not 1024 <= self.size <= 65536
+            or not 0 < self.hop <= self.size
+        ):
+            raise ValueError("Require integer frame size in [1024,65536] and hop in [1,size]")
 
 
 @dataclass(frozen=True)
@@ -83,6 +89,15 @@ class AnalysisConfig:
     minimum_confidence: float = 0.8
 
     def __post_init__(self) -> None:
+        if not isinstance(self.frame, FrameConfig):
+            raise ValueError("Analysis frame must be a FrameConfig")
+        if any(
+            isinstance(value, bool)
+            or not isinstance(value, (int, float))
+            or not math.isfinite(value)
+            for value in (self.threshold, self.silence_rms, self.minimum_confidence)
+        ):
+            raise ValueError("Analysis thresholds must be finite numbers")
         if not 0 < self.threshold < 1 or not 0 < self.minimum_confidence <= 1:
             raise ValueError("Pitch threshold/confidence must be in (0,1)")
         if not self.silence_rms > 0:

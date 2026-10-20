@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resonance · recording analysis</title>
+<style>
+:root{color-scheme:light;--ink:#173a35;--muted:#49635e;--paper:#f5f4ef;--line:#d8dfdb;--accent:#176854}
+*{box-sizing:border-box}body{font:16px/1.6 system-ui,sans-serif;margin:0;background:var(--paper);color:var(--ink)}
+main,header,footer{max-width:1180px;margin:auto;padding:1.5rem 2rem}header{padding-top:3rem;padding-bottom:1rem}
+h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.1;letter-spacing:-.04em;margin:.5rem 0 1rem}h2{font-size:1.3rem;margin:0 0 .75rem}
+p{max-width:78ch}a{color:#095b4c;text-underline-offset:.2em}a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid #b15c10;outline-offset:4px}.skip{position:absolute;left:1rem;top:-5rem;background:white;padding:.6rem}.skip:focus{top:1rem}
+.eyebrow{font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;font-weight:700;color:var(--accent)}.muted,.scope{color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--line);margin:1.5rem 0}
+.stat{padding:1rem;background:white}.stat dt{font-size:.8rem;color:var(--muted)}.stat dd{margin:0;font-size:1.7rem;font-variant-numeric:tabular-nums;font-weight:600}
+section{background:white;border:1px solid var(--line);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem}audio{display:block;width:100%;margin:1rem 0}
+.downloads{display:flex;flex-wrap:wrap;gap:.75rem 1.25rem}.downloads a{font-weight:600}figure{margin:0}img{display:block;width:100%;height:auto}
+figcaption,.scope{font-size:.9rem}.table-scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+caption{text-align:left;color:var(--muted);font-size:.9rem;padding:.5rem 0 1rem}td,th{padding:.65rem .8rem;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+thead th{font-size:.8rem;background:#f2f6f4}th:first-child{text-align:left}tbody th{font-weight:500}.empty{text-align:left;white-space:normal;color:var(--muted)}
+details{border-top:1px solid var(--line);padding:1rem 0}summary{cursor:pointer;font-weight:600}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.6 ui-monospace,monospace;background:#f2f6f4;padding:1rem}
+footer{font-size:.85rem;color:var(--muted);padding-bottom:3rem}@media(max-width:640px){main,header,footer{padding-left:1rem;padding-right:1rem}section{padding:1rem}.stats{grid-template-columns:repeat(2,1fr)}}
+</style></head><body>
+<a class="skip" href="#content">Skip to analysis</a>
+<header><p class="eyebrow">Resonance / offline monophonic analysis</p>
+<h1>Recording analysis</h1><p class="muted">Pitch, timing and uncertainty from the recorded signal, with a traceable note transcription.</p>
+<dl class="stats"><div class="stat"><dt>Recording</dt><dd>$duration s</dd></div>
+<div class="stat"><dt>Detected notes</dt><dd>$note_count</dd></div>
+<div class="stat"><dt>Voiced frames</dt><dd>$voiced_percent%</dd></div>
+<div class="stat"><dt>Sample rate</dt><dd>$sample_rate kHz</dd></div></dl></header>
+<main id="content">
+<section aria-labelledby="playback-heading"><h2 id="playback-heading">Recording playback</h2>
+<p id="playback-scope" class="scope">$playback_scope</p>
+<audio controls preload="metadata" aria-label="Recording audio" aria-describedby="playback-scope" src="data:audio/wav;base64,$audio_data">Your browser does not support embedded audio playback.</audio>
+<nav class="downloads" aria-label="Download analysis files"><a href="audio.wav" download>Audio preview</a><a href="transcription.mid" download>Download MIDI</a><a href="analysis.json" download>Analysis JSON</a></nav>
+<p class="scope">Downloads use the companion files saved beside this report.</p></section>
+<section aria-labelledby="signal-heading"><h2 id="signal-heading">Signal and estimated notes</h2>
+<figure><img alt="Waveform, spectrogram and detected versus reference notes over time" src="data:image/png;base64,$image">
+<figcaption>Green: detected notes. Dashed orange: reference notes when supplied. Vertical lines: detected onsets. Labels show cents and confidence. <a href="analysis.png">Open full-size figure</a>.</figcaption></figure></section>
+<section aria-labelledby="diagnostics-heading"><h2 id="diagnostics-heading">Interpretation and recording diagnostics</h2>
+<ul>$diagnostics</ul><p>Confidence measures periodicity evidence, not the probability of musical correctness. Wide pitch spread can reflect bends or vibrato; median intonation does not judge artistic intention. Unvoiced frames remain in JSON.</p></section>
+<section aria-labelledby="notes-heading"><h2 id="notes-heading">Note transcription</h2>
+<p id="note-units" class="scope">Times are in seconds. Cents are relative to each detected note's equal-tempered MIDI pitch. Spread is the 90th minus 10th pitch percentile. Scroll the table horizontally on smaller screens.</p>
+<div class="table-scroll" role="region" aria-labelledby="notes-heading" tabindex="0"><table aria-describedby="note-units">
+<caption>Detected notes across the full recording</caption>
+<thead><tr><th scope="col">Note</th><th scope="col">MIDI</th><th scope="col">Start s</th><th scope="col">End s</th><th scope="col">Cents</th><th scope="col">Confidence</th><th scope="col">Spread ¢</th></tr></thead><tbody>$rows</tbody></table></div></section>
+<section aria-labelledby="evidence-heading"><h2 id="evidence-heading">Analysis details</h2>
+<details><summary>Source and numerical provenance</summary><pre>$provenance</pre></details>
+<details><summary>Alignment: matched, extra and missing notes</summary><pre>$alignment</pre></details></section>
+<script type="application/json" id="pitch-trajectory">$trajectory</script>
+</main><footer>Synthetic fixture results do not establish accuracy on arbitrary guitar recordings. This report describes offline monophonic analysis; it does not grade a performance.</footer>
+</body></html>

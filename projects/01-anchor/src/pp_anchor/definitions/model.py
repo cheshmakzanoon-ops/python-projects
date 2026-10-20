@@ -8,9 +8,36 @@ from dataclasses import asdict, dataclass
 from typing import Literal
 
 JSON = dict[str, object]
+MAX_JSON_DEPTH = 64
+
+
+def validate_json(value: object) -> None:
+    """Bound JSON structure and reject text PostgreSQL cannot represent.
+
+    Iteration avoids recursion failures on untrusted values. Repeated container
+    references are valid; cycles eventually exceed the depth bound.
+    """
+    pending: list[tuple[object, int]] = [(value, 1)]
+    while pending:
+        current, depth = pending.pop()
+        if isinstance(current, (dict, list, tuple)):
+            if depth > MAX_JSON_DEPTH:
+                raise ValueError("JSON nesting exceeds 64 levels")
+            children = (
+                [*current.keys(), *current.values()] if isinstance(current, dict) else current
+            )
+            pending.extend((child, depth + 1) for child in children)
+        elif isinstance(current, str):
+            if "\x00" in current:
+                raise ValueError("JSON strings cannot contain null characters")
+            try:
+                current.encode("utf-8")
+            except UnicodeEncodeError as exc:
+                raise ValueError("JSON strings must contain valid Unicode") from exc
 
 
 def canonical(value: object) -> str:
+    validate_json(value)
     try:
         return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
     except (TypeError, ValueError) as exc:
@@ -59,9 +86,9 @@ class Step:
             raise ValueError("max_attempts must be an integer in 1..32")
         for number in (self.delay, self.retry_delay):
             if (
-                not isinstance(number, (int, float))
-                or not math.isfinite(number)
+                type(number) not in (int, float)
                 or not 0 <= number <= 31536000
+                or not math.isfinite(number)
             ):
                 raise ValueError("Delays must be finite seconds in 0..31536000")
 
@@ -75,8 +102,8 @@ class Definition:
     def __post_init__(self) -> None:
         if not isinstance(self.name, str) or not 1 <= len(self.name) <= 100:
             raise ValueError("Definition name must contain 1..100 characters")
-        if type(self.version) is not int or self.version < 1:
-            raise ValueError("Definition version must be a positive integer")
+        if type(self.version) is not int or not 1 <= self.version <= 2_147_483_647:
+            raise ValueError("Definition version must be an integer in 1..2147483647")
         if (
             not isinstance(self.steps, tuple)
             or not 1 <= len(self.steps) <= 1000

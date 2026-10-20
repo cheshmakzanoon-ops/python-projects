@@ -1,7 +1,7 @@
 # Acceptance mapping
 
-AT-01–AT-08 are verified through project tests, independent coordinator review and
-integration. Python 3.13.16 and 3.14.8 compatibility runs each pass 40 tests, with
+AT-01–AT-08 are verified through project tests, independent review and
+integration. The original Python 3.13.16 and 3.14.8 compatibility runs each passed 40 tests, with
 no required service skipped. The final required standard workload passed from
 clean immutable commit `59443e2bcdfc6a1dd81f8334c108474eef2d3030`.
 
@@ -18,14 +18,14 @@ clean immutable commit `59443e2bcdfc6a1dd81f8334c108474eef2d3030`.
 
 Independent expected behavior comes from literal hand-score arithmetic, a simpler
 ASCII document/visibility dictionary and directly calculated DCG metrics. Relevance
-labels were written from intent before retrieval. The completed coordinator
+labels were written from intent before retrieval. The independent
 [judgment review](../../../docs/evidence/atlas-judgment-review.md) records corpus
 and judgment hashes, semantic checks, rubric agreement and narrow-template
 limitations without consulting per-query scorer output. No judgments were changed
 during review. Recall is over the authored relevant pool; human-assessor agreement
 and broad natural-query relevance are not claimed.
 
-The coordinator's code-search integration uses actual PyTrace findings through
+The code-search integration uses actual PyTrace findings through
 JSON and Atlas's public API. It covers obsolete document deletion, hidden-update
 score invariance, merge, tenant isolation, fetch/export, caches and revocation.
 

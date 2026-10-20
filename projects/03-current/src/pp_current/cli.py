@@ -189,7 +189,13 @@ def provenance(seed: int, profile: str) -> dict[str, object]:
         source.update(path.read_bytes())
     repo = root.parents[1]
     contract = hashlib.sha256()
-    for name in ("AGENTS.md", "ruff.toml", "portfolio.toml", "scripts/portfolio.py"):
+    for name in (
+        "CONTRIBUTING.md",
+        "docs/REQUIREMENTS.md",
+        "ruff.toml",
+        "portfolio.toml",
+        "scripts/portfolio.py",
+    ):
         path = repo / name
         if path.exists():
             contract.update(name.encode())

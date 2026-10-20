@@ -1,7 +1,7 @@
 [project]
 name = "pp-pytrace"
 version = "0.1.0"
-description = "Pytrace: independent Python portfolio project"
+description = "Flow-sensitive Python analysis and conservative source transformations"
 requires-python = ">=3.13"
 dependencies = ["libcst>=1.8", "jsonschema>=4.25"]
 [project.scripts]

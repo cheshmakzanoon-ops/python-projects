@@ -9,16 +9,22 @@ from typing import Annotated
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 
 from pp_atlas import CorruptSegment, Document, Engine, Principal
 from pp_atlas.api.body_limit import BodyLimitMiddleware
+from pp_atlas.api.security import BrowserSecurityMiddleware
 
 
 @dataclass(frozen=True)
 class Identity:
     principal: Principal
     admin: bool = False
+
+    def __post_init__(self) -> None:
+        if type(self.admin) is not bool:
+            raise ValueError("identity admin must be a boolean")
 
 
 class DocumentInput(BaseModel):
@@ -63,6 +69,9 @@ def create_app(engine: Engine, tokens: dict[str, Identity]) -> FastAPI:
         return who
 
     app.add_middleware(BodyLimitMiddleware, max_bytes=2_100_000)
+    app.add_middleware(BrowserSecurityMiddleware)
+    static = Path(__file__).parent / "static"
+    app.mount("/assets", StaticFiles(directory=static), name="assets")
 
     @app.exception_handler(ValueError)
     async def invalid(_: Request, error: ValueError) -> JSONResponse:
@@ -94,7 +103,7 @@ def create_app(engine: Engine, tokens: dict[str, Identity]) -> FastAPI:
     ) -> dict[str, object]:
         return dataclasses.asdict(engine.search(who.principal, q, limit=limit, offset=offset))
 
-    @app.get("/documents/{document_id}")
+    @app.get("/documents/{document_id:path}")
     def fetch(document_id: str, who: Annotated[Identity, Depends(identity)]) -> dict[str, object]:
         document = engine.fetch(who.principal, document_id)
         # Readers receive content/metadata; ACL subjects are an admin concern.
@@ -109,14 +118,12 @@ def create_app(engine: Engine, tokens: dict[str, Identity]) -> FastAPI:
     def export(
         who: Annotated[Identity, Depends(identity)], limit: int = 100, offset: int = 0
     ) -> dict[str, object]:
-        if not 1 <= limit <= 100 or not 0 <= offset <= 10_000:
-            raise ValueError("invalid limit/offset")
-        documents = engine.export(who.principal)
+        total, documents = engine.export_page(who.principal, limit=limit, offset=offset)
         return {
-            "total": len(documents),
+            "total": total,
             "documents": [
                 {"id": d.id, "title": d.title, "text": d.text, "metadata": d.metadata}
-                for d in documents[offset : offset + limit]
+                for d in documents
             ],
         }
 
@@ -134,11 +141,11 @@ def create_app(engine: Engine, tokens: dict[str, Identity]) -> FastAPI:
         )
         return {"id": document.id, "revision": revision}
 
-    @app.delete("/documents/{document_id}")
+    @app.delete("/documents/{document_id:path}")
     def delete(document_id: str, who: Annotated[Identity, Depends(admin)]) -> dict[str, bool]:
         return {"deleted": engine.delete(who.principal.tenant, document_id)}
 
-    @app.put("/documents/{document_id}/acl")
+    @app.put("/documents/{document_id:path}/acl")
     def acl(
         document_id: str, value: ACLInput, who: Annotated[Identity, Depends(admin)]
     ) -> dict[str, bool]:

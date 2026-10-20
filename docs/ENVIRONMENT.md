@@ -8,7 +8,7 @@ The tested dependency installation script is [cloud_install.sh](../scripts/cloud
 bash scripts/cloud_install.sh
 ```
 
-It checks both interpreter installations, syncs eleven locked environments (ten products plus quality tooling), pulls the pinned PostgreSQL image and checks the bootstrap. It changes generated environments/caches, not source or lockfiles. Repeated execution is supported. `/workspace/.cache/uv` and `/workspace/.python` are writable; the image's home directory is read-only.
+It checks uv's pinned version and both interpreter installations, syncs eleven locked environments (ten products plus quality tooling), pulls the pinned PostgreSQL image and checks the bootstrap. It changes generated environments/caches, not source or lockfiles. Repeated execution is supported. `/workspace/.cache/uv` and `/workspace/.python` are writable; the image's home directory is read-only. Tool invocations also use `UV_TOOL_DIR=/workspace/.tools/uv`, `UV_TOOL_BIN_DIR=/workspace/.local/bin`, and `XDG_CACHE_HOME=/workspace/.cache` so advisory tools do not attempt writes to the home directory.
 
 Processes and connections do not survive an environment snapshot. Start the two separate loopback-only synthetic development databases:
 
@@ -24,7 +24,7 @@ export MERIDIAN_PG_CONTAINER=pp-meridian-dev
 
 The helper checks `pg_isready`, allocates distinct ephemeral host ports and records only local synthetic connection metadata under ignored `.local/services`. Local trust authentication is limited to these loopback demo containers; this is not a shared deployment configuration. Actual tests and demos exercise transactions and backup/restore; readiness alone is not functional verification. To remove only one owned container, use `python scripts/services.py down anchor` or `down meridian`. Never prune unrelated containers.
 
-Use the existing checkout directly; do not create worktrees. Read `AGENTS.md` and project runbooks before development. Numerical threads are capped by the dispatcher. Heavy standard benchmarks run serially, using a scratch filesystem with enough space. Final verification uses disposable local Git clones, preserving exact provenance while isolating interpreter environments:
+Use the existing checkout directly. Read `CONTRIBUTING.md` and project runbooks before development. Numerical threads are capped by the dispatcher. Heavy standard benchmarks run serially, using a scratch filesystem with enough space. Final verification uses disposable local Git clones, preserving exact provenance while isolating interpreter environments:
 
 ```sh
 python scripts/verify_snapshot.py --python 3.14.8 --temp-root /workspace --output /workspace/python-projects/.local/new-verification

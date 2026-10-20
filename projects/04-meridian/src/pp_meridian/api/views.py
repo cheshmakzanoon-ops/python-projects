@@ -1,13 +1,11 @@
 """HTTP Basic (Django password verification) JSON API; tenant header is verified.
 
-Basic auth is explicit per request and carries no ambient session authority;
-use TLS outside loopback. Session views retain Django CSRF enforcement.
+Every request requires both Basic credentials and an explicit tenant header;
+Django session cookies do not authorize these routes. Use TLS outside loopback.
 """
 
 import base64
 import binascii
-import json
-from typing import cast
 from uuid import UUID
 
 from django.contrib.auth import authenticate
@@ -15,8 +13,10 @@ from django.core.exceptions import ObjectDoesNotExist, RequestDataTooBig
 from django.db import IntegrityError
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 
+from pp_meridian.api.validation import json_object, pagination
 from pp_meridian.application import ledger, reconcile
 from pp_meridian.domain.journal import Entry, JournalValue
 from pp_meridian.domain.money import parse_amount
@@ -69,25 +69,20 @@ def _identity(data: dict[str, object], key: str) -> UUID:
 
 
 def _page(request: HttpRequest) -> tuple[int, int]:
-    offset, limit = int(request.GET.get("offset", 0)), int(request.GET.get("limit", 50))
-    if offset < 0 or not 1 <= limit <= 100:
-        raise ValueError("pagination requires offset>=0 and limit 1..100")
-    return offset, limit
+    return pagination(request.GET.get("offset", "0"), request.GET.get("limit", "50"))
 
 
 @csrf_exempt
+@never_cache
 def endpoint(request: HttpRequest, operation: str, identity: UUID | None = None) -> JsonResponse:
     try:
         user, tenant = principal(request)
         expected = "GET" if operation in {"journal", "balance", "run_detail"} else "POST"
         if request.method != expected:
-            return JsonResponse({"error": "method not allowed"}, status=405)
-        if len(request.body) > 1_000_000:
-            raise ValueError("request too large")
-        raw = json.loads(request.body or b"{}")
-        if not isinstance(raw, dict):
-            raise ValueError("JSON object required")
-        data = cast(dict[str, object], raw)
+            response = JsonResponse({"error": "method not allowed"}, status=405)
+            response["Allow"] = expected
+            return response
+        data = json_object(request.body)
         if operation == "accounts":
             account = ledger.create_account(
                 user, tenant, _text(data, "name"), _text(data, "currency")
@@ -199,51 +194,70 @@ def endpoint(request: HttpRequest, operation: str, identity: UUID | None = None)
         return JsonResponse({"error": "database invariant rejected request"}, status=409)
 
 
+@never_cache
 def screen(request: HttpRequest, kind: str, identity: UUID) -> HttpResponse:
     try:
         user, tenant = principal(request)
+        if request.method != "GET":
+            response = HttpResponse("Method not allowed", status=405, content_type="text/plain")
+            response["Allow"] = "GET"
+            return response
         offset, limit = _page(request)
+        context: dict[str, object] = {
+            "kind": kind,
+            "identity": str(identity),
+            "tenant": str(tenant),
+        }
+        has_more = False
         if kind == "journal":
-            data: object = journal_data(Journal.objects.get(id=identity, tenant_id=tenant))
+            journal = Journal.objects.get(id=identity, tenant_id=tenant)
+            context["journal"] = journal_data(journal)
         elif kind == "account":
             account = Account.objects.get(id=identity, tenant_id=tenant)
-            data = {
-                "name": account.name,
-                "balance": ledger.balance(user, tenant, identity),
-                "history": [
-                    {
-                        "sequence": p.journal.sequence,
-                        "amount": p.amount,
-                        "journal": str(p.journal_id),
-                    }
-                    for p in Posting.objects.filter(account=account)
-                    .select_related("journal")
-                    .order_by("journal__sequence")[offset : offset + limit]
-                ],
-            }
+            history = list(
+                Posting.objects.filter(account=account)
+                .select_related("journal")
+                .order_by("journal__sequence")[offset : offset + limit + 1]
+            )
+            has_more = len(history) > limit
+            context.update(
+                {
+                    "account": account,
+                    "balance": ledger.balance(user, tenant, identity),
+                    "history": history[:limit],
+                }
+            )
         else:
             run = ReconciliationRun.objects.get(id=identity, account__tenant_id=tenant)
-            data = {
-                "summary": run.summary,
-                "proposals": [
-                    {"id": str(p.id), "ambiguous": p.ambiguous, "status": p.status}
-                    for p in run.proposals.order_by("id")[offset : offset + limit]
-                ],
-            }
-        return render(
-            request,
-            "meridian/review.html",
+            proposals = list(
+                run.proposals.select_related("row", "posting").order_by("id")[
+                    offset : offset + limit + 1
+                ]
+            )
+            has_more = len(proposals) > limit
+            context.update({"run": run, "proposals": proposals[:limit]})
+        context.update(
             {
-                "kind": kind,
-                "data": json.dumps(data, indent=2),
                 "offset": offset,
+                "previous": max(0, offset - limit),
                 "next": offset + limit,
                 "limit": limit,
-            },
+                "has_more": has_more,
+            }
         )
+        response = render(
+            request,
+            "meridian/review.html",
+            context,
+        )
+        response["Content-Security-Policy"] = (
+            "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; "
+            "frame-ancestors 'none'; form-action 'none'"
+        )
+        return response
     except ledger.Forbidden:
-        return HttpResponse("Verified membership required", status=403)
+        return HttpResponse("Verified membership required", status=403, content_type="text/plain")
     except ObjectDoesNotExist:
-        return HttpResponse("Not found", status=404)
+        return HttpResponse("Not found", status=404, content_type="text/plain")
     except ValueError as error:
-        return HttpResponse(str(error), status=400)
+        return HttpResponse(str(error), status=400, content_type="text/plain")

@@ -27,8 +27,8 @@ EXCLUDED_PARTS = {
     "docs",
 }
 ROOT_INPUTS = [
-    "AGENTS.md",
-    "PYTHON_PORTFOLIO_MASTER_EXECUTION_BRIEF.md",
+    "CONTRIBUTING.md",
+    "docs/REQUIREMENTS.md",
     "portfolio.toml",
     "ruff.toml",
     "scripts",

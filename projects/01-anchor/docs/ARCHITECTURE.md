@@ -22,8 +22,8 @@ checks command IDs at every event and rejects a changed definition at event one.
 
 Every mutation locks the run row before its task projection. `_append` reconstructs
 state, appends history, creates tasks/timers and updates status in one PostgreSQL
-transaction. Recursive immediate join and pre-delivered signal completion stays in
-that same transaction. Unique ingress keys, history sequences and command IDs are
+transaction. Immediate joins and pre-delivered signals use an explicit event stack in
+that same transaction; a maximum-size DAG does not consume one Python frame per step. Unique ingress keys, history sequences and command IDs are
 additional constraints, rather than substitutes for transactional lock ordering.
 Schedulers and workers select unlocked run rows with `FOR UPDATE SKIP LOCKED`.
 Parallel activities execute outside transactions, so run serialization is confined to

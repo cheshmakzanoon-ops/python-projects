@@ -1,5 +1,10 @@
-# Small evidence
+# Sample output
 
-Generated bulk results belong outside source. The CLI writes provenance-bearing JSON and HTML into caller-selected owned output directories. Final committed-source reports are indexed by root docs/evidence; this directory does not contain fabricated future commit hashes or development snapshots mislabeled as immutable evidence.
+`demo-development-snapshot.json` records a local development demonstration. Its
+source commit, content hashes, and dirty flag identify the exact measured input.
+It illustrates the report format; it does not verify later source revisions.
 
-`demo-development-snapshot.json` is a real local development run, explicitly marked dirty with the actual code commit and source hash. It is a small behavior sample, not final immutable verification. The source digest excludes this artifacts directory to avoid self-reference.
+The CLI writes full JSON and HTML reports to a caller-selected owned directory.
+Generated bulk output remains outside the source tree. Historical committed-source
+verification is indexed in [repository evidence](../../../docs/evidence/README.md).
+This artifacts directory is excluded from source digests to avoid self-reference.

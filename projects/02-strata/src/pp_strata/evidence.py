@@ -39,7 +39,13 @@ def provenance() -> dict[str, object]:
         paths = [p for p in project.rglob("*") if p.is_file() and "__pycache__" not in p.parts]
     contracts = [
         repo / p
-        for p in ("ruff.toml", "AGENTS.md", "portfolio.toml", "scripts/portfolio.py")
+        for p in (
+            "ruff.toml",
+            "CONTRIBUTING.md",
+            "docs/REQUIREMENTS.md",
+            "portfolio.toml",
+            "scripts/portfolio.py",
+        )
         if (repo / p).exists()
     ]
     try:

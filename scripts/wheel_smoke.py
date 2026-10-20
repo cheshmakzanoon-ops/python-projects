@@ -22,7 +22,8 @@ def main():
                 "uv",
                 "venv",
                 "--python",
-                os.environ.get("PORTFOLIO_PYTHON")
+                (sys.argv[3] if len(sys.argv) > 3 else None)
+                or os.environ.get("PORTFOLIO_PYTHON")
                 or (project / ".python-version").read_text().strip(),
                 str(Path(folder) / "venv"),
             ],

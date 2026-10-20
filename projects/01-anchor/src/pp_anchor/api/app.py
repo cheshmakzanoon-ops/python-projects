@@ -4,19 +4,24 @@ from dataclasses import asdict
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
+from pp_anchor.api.body_limit import BodyLimitMiddleware
 from pp_anchor.definitions.model import Definition
 from pp_anchor.persistence.engine import AdmissionError, ConflictError, Engine
 
 
 class SubmitRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     definition: dict[str, object]
     payload: dict[str, object] = Field(default_factory=dict)
     idempotency_key: str = Field(min_length=1, max_length=200)
 
 
 class SignalRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     name: str = Field(min_length=1, max_length=100)
     payload: dict[str, object] = Field(default_factory=dict)
     idempotency_key: str = Field(min_length=1, max_length=200)
@@ -25,24 +30,7 @@ class SignalRequest(BaseModel):
 def create_app(engine: Engine) -> FastAPI:
     app = FastAPI(title="Anchor local control API", version="1")
 
-    @app.middleware("http")
-    async def bound_body(request: Request, call_next: object) -> object:
-        # Bound chunked requests as well as Content-Length before Pydantic parsing.
-        size = 0
-        chunks = []
-        async for chunk in request.stream():
-            size += len(chunk)
-            if size > 1_048_576:
-                return JSONResponse({"detail": "Request exceeds 1 MiB"}, status_code=413)
-            chunks.append(chunk)
-        request._body = b"".join(chunks)
-        from collections.abc import Awaitable, Callable
-        from typing import cast
-
-        from starlette.responses import Response
-
-        handler = cast(Callable[[Request], Awaitable[Response]], call_next)
-        return await handler(request)
+    app.add_middleware(BodyLimitMiddleware)
 
     @app.exception_handler(AdmissionError)
     async def admission(request: Request, exc: AdmissionError) -> JSONResponse:
@@ -87,8 +75,7 @@ def create_app(engine: Engine) -> FastAPI:
     def history(run_id: str, after: int = 0, limit: int = 100) -> dict[str, object]:
         if after < 0 or not 1 <= limit <= 1000:
             raise HTTPException(422, "after >= 0 and 1 <= limit <= 1000 required")
-        events = engine.history(run_id)
-        page = [asdict(e) for e in events if e.seq > after][:limit]
+        page = [asdict(e) for e in engine.history(run_id, after=after, limit=limit)]
         return {"events": page, "next_after": page[-1]["seq"] if page else after}
 
     @app.get("/health")

@@ -22,7 +22,7 @@ Quality commands are `ruff format --check .`, `ruff check .`, `mypy src`,
 Coverage scope is the actual codec, WAL, memtable, SSTable, metadata I/O, error,
 and transaction/recovery modules; demo, provenance, and benchmark adapters are
 excluded explicitly. CLI behavior has real subprocess acceptance tests anyway.
-See `AGENT_STATUS.md` for exact current results and `BENCHMARKS.md` for measured
+See `VERIFICATION.md` for exact current results and `BENCHMARKS.md` for measured
 artifacts. Both accepted [3.13.16](../../../docs/evidence/final/python313/strata-3.13.16.json)
 and [3.14.8](../../../docs/evidence/final/python314/strata-3.14.8.json) compatibility
 wrappers and the [full standard run](../../../docs/evidence/final/standard/strata-3.14.8.json)
