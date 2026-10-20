@@ -38,7 +38,10 @@ Inserting `x` between `a` and `b` computes its service start from the cached
 departure of `a`. At the frozen-prefix boundary that departure is the actual
 snapshot time. The insertion is feasible exactly when `x` meets its window and
 its departure plus `travel[x][b]` meets `b`'s latest threshold, or the depot
-deadline at the route end. Load/manifest eligibility is checked separately.
+deadline at the route end. Load/manifest eligibility is checked separately:
+every started manifest reserves its jobs before any unstarted vehicle is
+considered, and a started target can receive only its own manifest jobs. A timing
+certificate alone is not authority to transfer cargo.
 Its travel change is exactly `travel[a][x] + travel[x][b] - travel[a][b]`;
 this does not assume symmetric or metric travel. The unchanged suffix keeps its
 direction. Route reversal and block moves continue to reschedule their complete
@@ -74,7 +77,8 @@ reproducible for equal input, seed, package versions and budget. Wall-clock mode
 reports actual iterations and makes no deterministic-count promise. Cancellation
 is latched when observed; both construction attempts and every search iteration
 check the stop boundary before doing more work. A final observation also runs
-when no next iteration exists, including a zero-iteration construction. A deadline
+when no next iteration exists, including a zero-iteration construction, after
+the retained incumbent's independent verification. A deadline
 or cancellation during the last atomic operation is reported as such; that
 operation's verified incumbent is retained. Cancellation takes precedence over a
 simultaneously observed wall deadline. Completed iterations include rejected or
@@ -98,7 +102,9 @@ permute each assigned route, then simulate directly. They compare both accepted
 and rejected plans with the verifier, and compare the optimum/infeasibility with
 the exact reference. Separate insertion tests compare every position against
 unindexed simulation with asymmetric/zero arcs, windows, services, capacities,
-partial manifests, frozen prefixes and delayed actual departures.
+partial manifests, frozen prefixes and delayed actual departures. A separate
+three-vehicle assignment oracle checks that every insertion respects onboard
+ownership, including an idle vehicle ordered before the actual cargo owner.
 
 ## Rolling state and cargo ownership
 

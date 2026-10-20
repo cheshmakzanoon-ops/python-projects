@@ -10,6 +10,8 @@ The actual checkout commit during measurement was
 `cd058b59c5308b88807492c43acc6e3d93128c0b`; the source scope and baseline file
 hash are explicit in the record. This was a concurrent-development run on
 CPython 3.14.8, not an isolated performance lease or a new standard benchmark.
+It precedes the final-verification and cargo-eligibility peer fixes. The retained
+record describes that actual snapshot and is not relabeled as the finished source.
 
 Each case uses one sufficiently capacitated vehicle, synthetic directed island
 arcs, broad windows, seed 1729 and three alternating-order pairs. A separate

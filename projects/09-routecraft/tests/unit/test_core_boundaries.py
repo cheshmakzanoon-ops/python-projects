@@ -93,3 +93,58 @@ def test_comparison_baseline_reports_a_deadline_crossed_by_its_final_constructio
         result = construction_baseline(tiny(), SearchBudget(0, 1.0), 1729)
     assert result.stopping_reason == "wall_clock"
     assert result.iterations == 0 and result.plan == incumbent
+
+
+@pytest.mark.parametrize("cause", ["cancelled", "wall_clock"])
+def test_final_verification_is_inside_the_stop_boundary(cause: str) -> None:
+    incumbent = construct(tiny())
+    assert incumbent is not None
+    calls, now, stopped = 0, 0.0, False
+
+    def verified(*args, **kwargs):
+        nonlocal calls, now, stopped
+        report = verify(*args, **kwargs)
+        calls += 1
+        if calls == 2:  # Initial-incumbent validation, then final validation.
+            now, stopped = 2.0, True
+        return report
+
+    with (
+        patch("pp_routecraft.search.solver.time.monotonic", side_effect=lambda: now),
+        patch("pp_routecraft.search.solver.verify", side_effect=verified),
+    ):
+        result = solve(
+            tiny(),
+            SearchBudget(0, 1.0 if cause == "wall_clock" else None),
+            initial=incumbent,
+            cancelled=(lambda: stopped) if cause == "cancelled" else None,
+        )
+    assert result.stopping_reason == cause
+    assert result.iterations == 0 and result.plan == incumbent
+
+
+@pytest.mark.parametrize("owner", [0, 1])
+@pytest.mark.parametrize("regret", [False, True])
+def test_onboard_job_is_constructed_on_its_owner_with_an_idle_vehicle_available(
+    owner: int, regret: bool
+) -> None:
+    vehicles = (Vehicle(7, 2), Vehicle(3, 2))
+    states = tuple(
+        VehicleState(
+            vehicle.id,
+            index == owner,
+            (),
+            0,
+            0,
+            int(index == owner),
+            (LoadedJob(1, 1),) if index == owner else (),
+        )
+        for index, vehicle in enumerate(vehicles)
+    )
+    instance = RoutingInstance((Stop(1, 1),), vehicles, ((0, 1), (1, 0)), states=states)
+    plan = construct(instance, regret=regret)
+    assert plan is not None
+    assert verify(instance, plan).valid
+    assert plan.routes[owner].stops == (1,)
+    result = solve(instance, SearchBudget(2))
+    assert result.plan is not None and verify(instance, result.plan).valid

@@ -179,3 +179,49 @@ def test_exact_reference_matches_independent_labeled_assignment_enumeration() ->
             Status.OPTIMAL if expected is not None else Status.PROVEN_INFEASIBLE
         )
         assert (exact.plan.objective if exact.plan else None) == expected
+
+
+def test_insertion_eligibility_matches_independent_multi_vehicle_cargo_assignment() -> None:
+    rng = random.Random(91341)
+    for _ in range(150):
+        count = rng.randint(2, 8)
+        vehicles = (Vehicle(8, 20), Vehicle(3, 20), Vehicle(17, 20))
+        ownership = {node: rng.choice((None, 1, 2)) for node in range(1, count + 1)}
+        inserted = rng.randrange(1, count + 1)
+        states = tuple(
+            VehicleState(
+                vehicle.id,
+                index > 0,
+                (),
+                0,
+                0,
+                sum(owner == index for owner in ownership.values()) if index else 0,
+                tuple(LoadedJob(node, 1) for node, owner in ownership.items() if owner == index)
+                if index
+                else (),
+            )
+            for index, vehicle in enumerate(vehicles)
+        )
+        travel = tuple(
+            tuple(0 if a == b else rng.randrange(40) for b in range(count + 1))
+            for a in range(count + 1)
+        )
+        instance = RoutingInstance(
+            tuple(Stop(node, 1) for node in range(1, count + 1)), vehicles, travel, states=states
+        )
+        routes = [
+            tuple(
+                node
+                for node, owner in ownership.items()
+                if node != inserted and (owner == index if index else owner is None)
+            )
+            for index in range(3)
+        ]
+        target = ownership[inserted] or 0
+        jobs = routes[target]
+        expected = {(target, position) for position in range(len(jobs) + 1)}
+        actual = {
+            (candidate.vehicle_index, candidate.position)
+            for candidate in options(instance, routes, inserted)
+        }
+        assert actual == expected, (ownership, inserted, actual, expected)

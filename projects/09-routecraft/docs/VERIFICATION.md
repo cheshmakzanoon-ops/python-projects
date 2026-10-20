@@ -6,8 +6,8 @@ The revised core passed complete structured project checks on Linux x86_64:
 
 | Interpreter | Tests | Additional checks |
 | --- | ---: | --- |
-| CPython 3.14.8 | 140 passed in 12.30 s | Ruff format/lint, strict mypy on 22 source files, sdist/wheel builds, external runtime-only installed-wheel demo |
-| CPython 3.13.16 | 140 passed in 12.12 s | Same checks, separate environment and build directory |
+| CPython 3.14.8 | 147 passed in 13.05 s | Ruff format/lint, strict mypy on 22 source files, sdist/wheel builds, external runtime-only installed-wheel demo |
+| CPython 3.13.16 | 147 passed in 11.58 s | Same checks, separate environment and build directory |
 
 Both JUnit reports recorded zero failures, errors or skips. Commands were
 `PORTFOLIO_PYTHON=3.14.8 python scripts/portfolio.py check routecraft` and the
@@ -21,8 +21,13 @@ constructors: `0→1→2→0` costs three units within a ten-unit shift, while t
 prefix's direct `1→0` return costs 100. Infeasible partial routes now receive real
 insertion checks rather than being pruned. The original failure is retained in
 `test_core_boundaries.py`, along with controlled cancellation/deadline schedules
-during construction, the last iteration, and a supplied incumbent with zero
-iterations. The comparison baseline also checks its final deadline boundary.
+during construction, the last iteration, final independent verification, and a
+supplied incumbent with zero iterations. The comparison baseline also checks its
+final deadline boundary. Peer review caught a missing manifest exclusion in the
+initial timing fast path: an idle truck ordered before the cargo owner could win
+an insertion and cause construction to fail. Independent verification prevented
+an invalid plan from escaping. The fast path now enforces the same no-transfer
+eligibility before timing, with public greedy/regret owner-order regressions.
 
 Insertion profiles were challenged against direct unindexed simulation on 600
 seeded cases (`611271`), including nonmetric/zero arcs, service windows/durations,
@@ -31,23 +36,33 @@ third independently enumerated model assigns customers to labeled vehicles and
 then permutes each route on 35 tiny cases (`702813`); it checks verifier acceptance
 and rejection and the exact optimum/infeasibility. The exact reference itself now
 uses a separate path-prefix waiting-deficit formula, with final verifier agreement
-required. A dense 80-customer work-bound regression guards against rescheduling
-every insertion position.
+required. An additional 150 three-vehicle assignment cases (`91341`) independently
+check cargo eligibility. A dense 80-customer work-bound regression guards against
+rescheduling every insertion position.
+
+A separate read-only mathematical review on both interpreters checked 10,190
+insertion positions, including 2,359 feasible timing-profile bases, and 80 exact
+cases covering 13,792 labeled route plans. Its final checks exercised 874
+three-vehicle cargo-assignment queries, both final-verification stop schedules
+and public owner-order/greedy-regret cases. No remaining disagreement was found
+within those bounded inputs; this is not a completeness proof for the heuristic.
 
 The [paired insertion diagnostic](evidence/core-insertion-2026-10-20.json) preserves
 its actual dirty source digest
 `cafee5831a2b70fe70838aed5e526797f271d6362cca057ab0f411834fcec5fb`, measured checkout
 `cd058b59c5308b88807492c43acc6e3d93128c0b`, baseline `39d3a8d`, parameters and
-counter scope. All nine dense-route pairs and the separate regret control returned
+counter scope. It precedes the final-verification and cargo-eligibility peer fixes;
+its historical digest is not relabeled as the final source. All nine dense-route
+pairs and the separate regret control returned
 identical independently verified plans. [Benchmark documentation](BENCHMARKS.md)
 distinguishes deterministic work counts from concurrent-development timing.
 The retained reproduction driver was also executed successfully into a fresh
 temporary report; its output does not replace the original evidence.
 
 Both installed-wheel demos returned static objective `(4, 714)`, rejected the
-deliberately duplicated stop and verified rolling objective `(4, 728)`. The earlier
-rolling demonstration below returned `(4, 700)`; newly eligible repair moves change
-the seeded search path and do not guarantee heuristic dominance. No standard
+deliberately duplicated stop and verified rolling objective `(4, 700)`, matching
+the earlier seeded demonstration. New valid repair choices do not establish
+general heuristic dominance. No standard
 benchmark was rerun and no large-instance optimality bound is claimed. Dependencies
 and the lockfile are unchanged.
 

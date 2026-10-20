@@ -94,6 +94,9 @@ def options(
 ) -> list[Candidate]:
     choices: list[Candidate] = []
     state_map = {s.vehicle_id: s for s in instance.states}
+    occupied = {
+        loaded.stop_id for state in instance.states if state.started for loaded in state.loaded
+    }
     for index, jobs in enumerate(routes):
         vehicle = instance.vehicles[index]
         state = state_map.get(vehicle.id)
@@ -101,6 +104,8 @@ def options(
         if state and state.started and job not in {j.stop_id for j in state.loaded}:
             continue
         if not state or not state.started:
+            if job in occupied:
+                continue
             demand = profile.demand if profile else sum(instance.stops[j - 1].demand for j in jobs)
             if demand + instance.stops[job - 1].demand > vehicle.capacity:
                 continue
