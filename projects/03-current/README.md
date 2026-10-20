@@ -42,9 +42,9 @@ finally:
     journal.close()
 ```
 
-Admission identity is `(source_id, partition, source_offset)`: an identical retry returns the same ordinal, and conflicting reuse fails atomically. Event IDs do not deduplicate distinct offsets. Times are integer milliseconds; negative timestamps are supported. Windows are half open, join bounds are inclusive, and an event exactly at `watermark - lateness` is accepted. Idle inputs must explicitly resume; end-of-input is terminal.
+Admission identity is `(source_id, partition, source_offset)`: an identical retry returns the same ordinal, and conflicting reuse fails atomically. Event IDs do not deduplicate distinct offsets. Times are integer milliseconds; negative timestamps are supported. Windows are half open, join bounds are inclusive, and an event exactly at `watermark - lateness` is accepted. Idle inputs must explicitly resume; end-of-input is terminal. If every unfinished input is idle, progress freezes until one resumes or all end.
 
-External delivery uses `Journal.pending(limit)`, `IdempotentSink.put(delivery)`, then `Journal.acknowledge(delivery)`. Acknowledgement follows the sink commit. Immutable payload identities detect conflicting retries, and an older revision never overwrites a newer result. This contract covers the supplied journal and sink, not arbitrary external side effects.
+External delivery uses `Journal.pending(limit)`, `IdempotentSink.put(delivery)`, then `Journal.acknowledge(delivery)`. Acknowledgement follows the sink commit. Immutable payload identities detect conflicting retries, and an older revision never overwrites a newer result. Publication is atomic within the journal; delivery between databases is at least once with idempotent effects in the supplied sink. A stale Engine cannot overwrite another committed checkpoint. Cancellation waits for submitted database work to settle before returning; recover after any failed/cancelled run.
 
 ## Validate and operate
 
@@ -57,5 +57,7 @@ uv build --python 3.14.8
 ```
 
 Python 3.13.16 is also supported; use a separate `UV_PROJECT_ENVIRONMENT` as described in [operations](docs/OPERATIONS.md). The [verification record](docs/VERIFICATION.md) separates current checks from historical benchmark evidence.
+
+Checkpoint `current-3` requires rebuilding older checkpoints from retained ingress. The [runbook](docs/OPERATIONS.md#rebuild-a-current-1current-2-checkpoint) provides configuration-preserving export/replay commands and downstream reconciliation requirements.
 
 See [architecture](docs/ARCHITECTURE.md) for transaction boundaries, [decisions](docs/DECISIONS.md) for persisted contracts, [acceptance](docs/ACCEPTANCE.md) for invariant-to-test mappings, and [benchmarks](docs/BENCHMARKS.md) for measured costs. Current retains ingress and delivery history and has finite admission, outbox, state, and database-page budgets. It does not provide distributed ownership, dynamic rescaling, or a bounded-memory batch exporter. The [case study](docs/CASE_STUDY.md) explains the replay and measurement tradeoffs.

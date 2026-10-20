@@ -1,5 +1,28 @@
 # Benchmarks
 
+## Focused join comparison
+
+The [October 20 core comparison](evidence/core-join-2026-10-20.json) runs immutable baseline `39d3a8d4be3e8e2e7de85379790d68f5367d6825` and the reviewed working tree in separate CPython 3.14.8 subprocesses. It applies 12,000 same-key readings without intervening watermarks, one sparse metadata probe, then end-of-input. Each version runs three repetitions, with no warmup. Every repetition verifies the same five exact pair identities, two window aggregates with count/sum 12,000, delivery order and complete final expiration.
+
+| Measurement | Baseline full scan | Indexed lazy merge |
+| --- | ---: | ---: |
+| Median apply time, seconds | 1.408118 | 0.169456 |
+| Candidate examinations | 72,006,000 | 6 |
+| Process RSS high-water mark, bytes | 22,282,240 | 23,396,352 |
+
+The old count is the exact full-scan formula `n*(n-1)/2 + n`; the new count is the engine's consumed-candidate diagnostic. Eliminating same-stream scans reduced apply time by about 8.3 times in this particular retention-heavy sparse-probe workload. The derived index adds references and bucket/list overhead; this measurement does not establish a memory improvement. RSS includes all allocations in the isolated probe process, including its prepared record list, imports and staged outputs. It is not an engine-only byte budget.
+
+Reproduce from this project directory with a fresh report filename:
+
+```sh
+uv run --locked --python 3.14.8 python benchmarks/join_density.py \
+  --baseline 39d3a8d --output /tmp/current-join-comparison.json
+```
+
+The driver reads trusted historical Git objects into a temporary source tree without changing the checkout, uses the same interpreter for both versions, checks unchanged current source before/after, and refuses to overwrite evidence. The report records the full baseline commit, current source/test/config digest, driver/probe hashes, exact samples and scope. The current digest is `91924a0db27061e07bd36c72669dfb4f5fedb014334b2d19ac89dc7fd82f812f`; the report explicitly marks that source as an uncommitted working tree. There is no random generator in this probe. Shared-machine timing and one synthetic shape do not establish general throughput or production capacity. Dense opposite-stream matches still cost one delivery per matching pair, and watermark pruning still examines retained state.
+
+## Historical standard workload
+
 The accepted standard measurement uses clean committed source [ec1d0106df086a48923016c33199cfbda0aebbc0](https://github.com/cheshmakzanoon-ops/python-projects/tree/ec1d0106df086a48923016c33199cfbda0aebbc0/projects/03-current), CPython 3.14.8 and seed 1729. The [raw benchmark](../../../docs/evidence/final/standard/current-3.14.8-benchmark-benchmark.json) contains all checkpoint samples and parameters; the [execution record](../../../docs/evidence/final/standard/current-3.14.8.json) records the exact command, immutable source inputs, hashes, exit status and unchanged-source check.
 
 | Measurement | Ordinary | Separate 50%-hot-key run |

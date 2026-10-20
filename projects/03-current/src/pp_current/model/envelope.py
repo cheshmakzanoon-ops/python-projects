@@ -55,7 +55,8 @@ class Record:
             raise ValueError("unsupported record schema/kind")
         if self.stream not in ("reading", "metadata"):
             raise ValueError("unsupported stream")
-        if len(canonical(self.dictionary()).encode()) > 16_384:
+        # The durable ordinal is internal metadata, not part of wire capacity.
+        if len(self.wire().encode()) > 16_384:
             raise ValueError("record exceeds 16 KiB")
 
     def dictionary(self) -> dict[str, object]:

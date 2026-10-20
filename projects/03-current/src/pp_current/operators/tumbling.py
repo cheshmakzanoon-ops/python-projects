@@ -2,14 +2,26 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from dataclasses import dataclass
 
 
-def windows(timestamp: int, size: int, slide: int) -> list[int]:
+def validate_windows(size: int, slide: int) -> None:
     if size < 1 or slide < 1 or size % slide:
         raise ValueError("positive size must be an integer multiple of slide")
+
+
+def window_starts(timestamp: int, size: int, slide: int) -> Iterator[int]:
+    """Assign starts lazily so the owner can reserve state before every insertion."""
+    validate_windows(size, slide)
     latest = timestamp // slide * slide
-    return [latest - i * slide for i in range(size // slide)]
+    for index in range(size // slide):
+        yield latest - index * slide
+
+
+def windows(timestamp: int, size: int, slide: int) -> list[int]:
+    """Materialized assignment helper for callers handling deliberately small windows."""
+    return list(window_starts(timestamp, size, slide))
 
 
 @dataclass

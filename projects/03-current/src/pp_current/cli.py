@@ -253,25 +253,79 @@ def clean_demo(output: Path = typer.Option(...)) -> None:
 
 
 @app.command()
-def inspect(output: Path = typer.Option(...)) -> None:
+def inspect(
+    output: Path = typer.Option(...),
+    ingress: bool = typer.Option(
+        False, "--ingress", help="Export the retained ordered ingress as NDJSON."
+    ),
+    configuration: bool = typer.Option(
+        False, "--config", help="Export saved Config without restoring checkpoint state."
+    ),
+) -> None:
+    if ingress and configuration:
+        raise typer.BadParameter("choose either --ingress or --config")
     journal = Journal(output / "current.sqlite", read_only=True)
     try:
-        print(json.dumps(journal.export(), indent=2))
+        if configuration:
+            row = journal.db.execute("SELECT state FROM checkpoint WHERE id=1").fetchone()
+            if row is None:
+                raise ValueError(
+                    "journal has no saved configuration; use the original application Config"
+                )
+            print(json.dumps(json.loads(row[0])["config"], indent=2))
+        elif ingress:
+            after = 0
+            while records := journal.read(after, 1000):
+                for record in records:
+                    print(record.wire())
+                after = records[-1].ingress_ordinal
+        else:
+            print(json.dumps(journal.export(), indent=2))
     finally:
         journal.close()
 
 
 @app.command()
-def replay(output: Path = typer.Option(...), input: Path = typer.Option(...)) -> None:
+def replay(
+    output: Path = typer.Option(...),
+    input: Path = typer.Option(...),
+    config_file: Path | None = typer.Option(
+        None, "--config", help="Saved Config JSON for an identity pipeline."
+    ),
+    job_id: str = typer.Option(
+        "demo", help="Fresh delivery namespace; reconcile before switching external sinks."
+    ),
+) -> None:
+    config = None
+    if config_file is not None:
+        data = json.loads(config_file.read_text(encoding="utf-8"))
+        if not isinstance(data, dict) or not isinstance(data.get("inputs"), list):
+            raise ValueError("configuration must be an object with an input-identity array")
+        data["inputs"] = tuple(data["inputs"])
+        config = Config(**data)
+        if config.pipeline_version != "identity-v1":
+            raise ValueError(
+                "CLI replay supports identity-v1 only; use the original application mapper/predicate"
+            )
     fresh_output(output)
     journal = Journal(output / "current.sqlite")
     try:
-        records = list(read_ndjson(input))
-        if not records:
+        inputs = set()
+        count = 0
+        batch = []
+        for record in read_ndjson(input):
+            inputs.add(record.input_id)
+            batch.append(record)
+            count += 1
+            if len(batch) == 1000:
+                journal.admit(batch)
+                batch = []
+        if batch:
+            journal.admit(batch)
+        if not count:
             raise ValueError("replay input contains no records")
-        journal.admit(records)
-        config = Config(tuple(sorted({record.input_id for record in records})))
-        asyncio.run(Runtime(journal, journal.recover(config)).run())
+        config = config or Config(tuple(sorted(inputs)))
+        asyncio.run(Runtime(journal, journal.recover(config, job_id=job_id)).run())
         print(json.dumps(journal.export(), indent=2))
     finally:
         journal.close()

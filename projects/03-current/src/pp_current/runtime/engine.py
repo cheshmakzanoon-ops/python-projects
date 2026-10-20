@@ -5,14 +5,16 @@ from __future__ import annotations
 import heapq
 import json
 from collections import deque
+from collections.abc import Iterator
 from dataclasses import asdict, dataclass, field
 from typing import cast
 
+from pp_current.errors import BudgetExceeded
 from pp_current.event_time.policy import MAX_TIME, MIN_TIME, Progress
 from pp_current.model.envelope import Record, canonical
-from pp_current.operators.tumbling import Aggregate, windows
+from pp_current.operators.tumbling import Aggregate, validate_windows, window_starts
 
-CODE_VERSION = "current-2"
+CODE_VERSION = "current-3"
 
 
 @dataclass(frozen=True)
@@ -36,7 +38,7 @@ class Config:
             raise ValueError("nonempty string input identities required")
         if not isinstance(self.pipeline_version, str) or not self.pipeline_version:
             raise ValueError("nonempty pipeline version required")
-        windows(0, self.size, self.slide)
+        validate_windows(self.size, self.slide)
         if min(self.workers, self.state_limit) < 1 or min(self.lateness, self.join_interval) < 0:
             raise ValueError("invalid configuration")
 
@@ -85,10 +87,17 @@ class Engine:
             raise ValueError("nonempty job identity required")
         self.config = config
         self.job_id = job_id
+        self._identity = canonical([job_id, asdict(config)])
+        self._checkpoint: str | None = None
+        self._pending_limit: int | None = None
+        self._failed = False
+        self._running = False
         self.progress = Progress(dict.fromkeys(config.inputs, MIN_TIME))
         self.position = 0
         self.state: dict[str, Window] = {}
         self.join: dict[str, list[Record]] = {}
+        self._join_index: dict[tuple[str, str, int], list[Record]] = {}
+        self.join_candidates_examined = 0
         self.pending: list[Delivery] = []
         self.dispositions: dict[str, int] = {"on-time": 0, "accepted-late": 0, "rejected-late": 0}
         self.trace: deque[tuple[int, str, int]] = deque(maxlen=10_000)
@@ -104,8 +113,7 @@ class Engine:
             self.max_finalization_lag = max(
                 self.max_finalization_lag, self.progress.watermark - window.start - self.config.size
             )
-        window.revision += 1
-        window.dirty = False
+        revision = window.revision + 1
         key = canonical([window.key, window.start, window.start + self.config.size])
         payload = canonical(
             {
@@ -115,7 +123,16 @@ class Engine:
                 **window.aggregate.result(),
             }
         )
-        self.pending.append(Delivery(self.job_id, window.operator, key, window.revision, payload))
+        self._stage(Delivery(self.job_id, window.operator, key, revision, payload))
+        window.revision = revision
+        window.dirty = False
+
+    def _stage(self, delivery: Delivery) -> None:
+        if self._pending_limit is not None and len(self.pending) >= self._pending_limit:
+            raise BudgetExceeded(
+                "staged output budget reached: recover and adjust delivery capacity"
+            )
+        self.pending.append(delivery)
 
     def validate(self, record: Record) -> None:
         """Check ordered admission and input lifecycle before applying or filtering."""
@@ -128,8 +145,20 @@ class Engine:
         if record.kind == "event" and record.input_id in self.progress.idle:
             raise ValueError("explicit resume required before event")
 
+    def ensure_usable(self) -> None:
+        if self._failed:
+            raise RuntimeError("engine failed: discard it and recover the durable checkpoint")
+
     def apply(self, record: Record, *, filtered: bool = False) -> str:
+        self.ensure_usable()
         self.validate(record)
+        try:
+            return self._apply(record, filtered=filtered)
+        except BaseException:
+            self._failed = True
+            raise
+
+    def _apply(self, record: Record, *, filtered: bool) -> str:
         if filtered:
             if record.kind != "event":
                 raise ValueError("control records cannot be filtered")
@@ -159,16 +188,15 @@ class Engine:
             self._expire()
         self.trace.append((self.position, disposition, self.progress.watermark))
         self.peak_state = max(self.peak_state, len(self.state) + self.join_count)
-        if self.peak_state > self.config.state_limit:
-            raise MemoryError("operator state limit reached: restore checkpoint and raise budget")
         return disposition
 
     def _event(self, record: Record) -> None:
         if record.stream == "reading":
             for operator, slide in [("tumbling", self.config.size), ("sliding", self.config.slide)]:
-                for start in windows(record.event_time, self.config.size, slide):
+                for start in window_starts(record.event_time, self.config.size, slide):
                     identity = canonical([operator, record.key, start])
                     if identity not in self.state:
+                        self._reserve_state()
                         self.state[identity] = Window(operator, record.key, start)
                         heapq.heappush(self.close_heap, (start + self.config.size, identity))
                         heapq.heappush(
@@ -180,15 +208,11 @@ class Engine:
                     window.dirty = True
                     if start + self.config.size <= self.progress.watermark:
                         self._emit(window)
-        matches = self.join.setdefault(record.key, [])
-        for other in matches:
-            if (
-                other.stream != record.stream
-                and abs(other.event_time - record.event_time) <= self.config.join_interval
-            ):
+        for other in self._join_candidates(record):
+            if abs(other.event_time - record.event_time) <= self.config.join_interval:
                 left, right = (record, other) if record.stream == "reading" else (other, record)
                 key = canonical([left.ingress_ordinal, right.ingress_ordinal])
-                self.pending.append(
+                self._stage(
                     Delivery(
                         self.job_id,
                         "interval-join",
@@ -206,8 +230,36 @@ class Engine:
                         ),
                     )
                 )
-        matches.append(record)
+        self._reserve_state()
+        self.join.setdefault(record.key, []).append(record)
+        self._index_join(record)
         self.join_count += 1
+
+    def _reserve_state(self) -> None:
+        if len(self.state) + self.join_count >= self.config.state_limit:
+            raise MemoryError("operator state limit reached: recover with an adequate state budget")
+
+    def _index_join(self, record: Record) -> None:
+        width = self.config.join_interval + 1
+        identity = record.key, record.stream, record.event_time // width
+        self._join_index.setdefault(identity, []).append(record)
+
+    def _join_candidates(self, record: Record) -> Iterator[Record]:
+        # Each bucket is already in ingress order. Merge at most three iterators
+        # lazily, so a staging limit stops fanout without copying its candidate
+        # history. Floor division also handles negative event times.
+        interval = self.config.join_interval
+        width = interval + 1
+        opposite = "metadata" if record.stream == "reading" else "reading"
+        buckets = (
+            self._join_index.get((record.key, opposite, part), ())
+            for part in range(
+                (record.event_time - interval) // width, (record.event_time + interval) // width + 1
+            )
+        )
+        for other in heapq.merge(*buckets, key=lambda other: other.ingress_ordinal):
+            self.join_candidates_examined += 1
+            yield other
 
     def _expire(self) -> None:
         watermark = self.progress.watermark
@@ -219,18 +271,29 @@ class Engine:
         while self.expire_heap and self.expire_heap[0][0] < watermark:
             _, identity = heapq.heappop(self.expire_heap)
             self.state.pop(identity, None)
-        for key in list(self.join):
-            self.join_count -= len(self.join[key])
-            self.join[key] = [
-                r
-                for r in self.join[key]
-                if r.event_time + self.config.join_interval + self.config.lateness >= watermark
-            ]
-            self.join_count += len(self.join[key])
-            if not self.join[key]:
-                del self.join[key]
+        self._join_index.clear()
+        self.join_count = 0
+        retained: dict[str, list[Record]] = {}
+        for key, records in self.join.items():
+            kept = []
+            for record in records:
+                if (
+                    record.event_time + self.config.join_interval + self.config.lateness
+                    >= watermark
+                ):
+                    kept.append(record)
+                    self._index_join(record)
+            if kept:
+                retained[key] = kept
+                self.join_count += len(kept)
+        self.join = retained
 
     def dump(self) -> str:
+        self.ensure_usable()
+        if canonical([self.job_id, asdict(self.config)]) != self._identity:
+            raise RuntimeError(
+                "job/config identity changed: recover with the original configuration"
+            )
         return canonical(
             {
                 "version": CODE_VERSION,
@@ -260,9 +323,12 @@ class Engine:
     @classmethod
     def _restore(cls, raw: str, config: Config) -> Engine:
         data = json.loads(raw)
-        if data["version"] != CODE_VERSION or canonical(data["config"]) != canonical(
-            asdict(config)
-        ):
+        if data["version"] != CODE_VERSION:
+            raise ValueError("incompatible checkpoint/code/config version")
+        stored_config = Config(**data["config"])
+        saved = asdict(stored_config)
+        saved["state_limit"] = config.state_limit
+        if canonical(saved) != canonical(asdict(config)):
             raise ValueError("incompatible checkpoint/code/config version")
         engine = cls(config, data["job_id"])
         engine.position = data["position"]
@@ -288,6 +354,9 @@ class Engine:
         engine.max_watermark_lag = data["max_watermark_lag"]
         engine.max_finalization_lag = data["max_finalization_lag"]
         engine._validate_checkpoint()
+        for records in engine.join.values():
+            for record in records:
+                engine._index_join(record)
         return engine
 
     def _validate_checkpoint(self) -> None:
@@ -307,8 +376,16 @@ class Engine:
             not integer(value, MIN_TIME, MAX_TIME) for value in progress.inputs.values()
         ):
             raise ValueError("invalid checkpoint watermarks")
+        if (progress.watermark == MAX_TIME) != all(
+            value == MAX_TIME for value in progress.inputs.values()
+        ):
+            raise ValueError(
+                "premature terminal checkpoint: unfinished inputs require raw-ingress replay"
+            )
         active = [
-            value for identity, value in progress.inputs.items() if identity not in progress.idle
+            value
+            for identity, value in progress.inputs.items()
+            if identity not in progress.idle and value != MAX_TIME
         ]
         if progress.watermark > max(progress.inputs.values()) or (
             active and progress.watermark < min(active)
@@ -370,7 +447,8 @@ class Engine:
                 ordinals.add(record.ingress_ordinal)
         retained = len(self.state) + self.join_count
         if (
-            not integer(self.peak_state, retained, self.config.state_limit)
+            not integer(self.peak_state, retained)
+            or retained > self.config.state_limit
             or not integer(self.max_watermark_lag)
             or not integer(self.max_finalization_lag)
         ):

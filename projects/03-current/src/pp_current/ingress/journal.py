@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 import sqlite3
+import threading
 import time
 from dataclasses import replace
+from functools import wraps
 from pathlib import Path
-from typing import Callable
+from typing import Callable, Concatenate, ParamSpec, TypeVar
 
+from pp_current.errors import BudgetExceeded, CheckpointConflict
 from pp_current.ingress.schema import STATEMENTS
 from pp_current.ingress.schema import validate as validate_schema
 from pp_current.model.envelope import Record
@@ -21,8 +24,21 @@ def no_failure(point: str) -> None:
     pass
 
 
-class BudgetExceeded(RuntimeError):
-    """An admission or output budget has been reached; caller must back off."""
+P = ParamSpec("P")
+T = TypeVar("T")
+
+
+def serialized(
+    method: Callable[Concatenate["Journal", P], T],
+) -> Callable[Concatenate["Journal", P], T]:
+    """Keep one connection's readers and acknowledgements outside writer transactions."""
+
+    @wraps(method)
+    def call(self: Journal, /, *args: P.args, **kwargs: P.kwargs) -> T:
+        with self._lock:
+            return method(self, *args, **kwargs)
+
+    return call
 
 
 class Journal:
@@ -41,6 +57,7 @@ class Journal:
                 raise ValueError("nonnegative integer journal budgets required")
         if max_disk_bytes < 40960:
             raise ValueError("disk budget must allow at least ten pages")
+        self._lock = threading.RLock()
         self.max_records = max_records
         self.max_outbox = max_outbox
         self.failpoint = failpoint
@@ -104,9 +121,11 @@ class Journal:
                 self.db.execute("ROLLBACK")
             raise
 
+    @serialized
     def close(self) -> None:
         self.db.close()
 
+    @serialized
     def admit(self, records: list[Record]) -> list[Record]:
         admitted = []
         replayed = 0
@@ -151,6 +170,7 @@ class Journal:
         if type(limit) is not int or not 1 <= limit < 2**63:
             raise ValueError("positive integer page limit required")
 
+    @serialized
     def read(self, after: int, limit: int = 1000) -> list[Record]:
         self._validate_cursor(after, limit)
         rows = self.db.execute(
@@ -159,6 +179,7 @@ class Journal:
         ).fetchall()
         return [Record.parse(raw, ordinal=ordinal) for ordinal, raw in rows]
 
+    @serialized
     def recover(self, config: Config, job_id: str | None = None) -> Engine:
         row = self.db.execute("SELECT position,state FROM checkpoint WHERE id=1").fetchone()
         if row:
@@ -174,19 +195,34 @@ class Journal:
                 raise ValueError("checkpoint position does not match durable ingress")
             if job_id is not None and engine.job_id != job_id:
                 raise ValueError("checkpoint belongs to a different job")
+            engine._checkpoint = row[1]
+            engine._pending_limit = self.max_outbox
             return engine
-        return Engine(config, "demo" if job_id is None else job_id)
+        engine = Engine(config, "demo" if job_id is None else job_id)
+        engine._pending_limit = self.max_outbox
+        return engine
 
+    @serialized
     def publish(self, engine: Engine) -> None:
         started = time.perf_counter()
         self.failpoint("checkpoint-before-stage")
         self.db.execute("BEGIN IMMEDIATE")
         try:
+            current = self.db.execute("SELECT position,state FROM checkpoint WHERE id=1").fetchone()
+            expected = current[1] if current else None
+            if engine._checkpoint != expected or (current and engine.position < current[0]):
+                raise CheckpointConflict("checkpoint changed: discard the stale engine and recover")
+            last = self.db.execute("SELECT COALESCE(MAX(ordinal),0) FROM ingress").fetchone()[0]
+            if not 0 <= engine.position <= last:
+                raise ValueError("checkpoint position exceeds durable ingress")
             unsent = self.db.execute("SELECT COUNT(*) FROM deliveries WHERE sent=0").fetchone()[0]
             if unsent + len(engine.pending) > self.max_outbox:
                 raise BudgetExceeded("outbox budget reached: drain sink before checkpoint retry")
+            if any(delivery.job_id != engine.job_id for delivery in engine.pending):
+                raise ValueError("checkpoint outbox contains a different job")
+            state = engine.dump()
             self.db.execute(
-                "INSERT OR REPLACE INTO checkpoint VALUES(1,?,?)", (engine.position, engine.dump())
+                "INSERT OR REPLACE INTO checkpoint VALUES(1,?,?)", (engine.position, state)
             )
             self.failpoint("checkpoint-during-stage")
             for delivery in engine.pending:
@@ -197,6 +233,7 @@ class Journal:
             if self.db.in_transaction:
                 self.db.execute("ROLLBACK")
             raise
+        engine._checkpoint = state
         self.checkpoint_seconds.append(time.perf_counter() - started)
         engine.pending.clear()
         self.failpoint("checkpoint-after-publication")
@@ -219,6 +256,7 @@ class Journal:
             (*d.identity, d.payload),
         )
 
+    @serialized
     def pending(self, limit: int = 100) -> list[Delivery]:
         self._validate_cursor(0, limit)
         return [
@@ -229,6 +267,7 @@ class Journal:
             )
         ]
 
+    @serialized
     def acknowledge(self, delivery: Delivery) -> None:
         cursor = self.db.execute(
             "UPDATE deliveries SET sent=1 WHERE job=? AND operator=? AND key=? AND revision=? AND payload=?",
@@ -237,6 +276,7 @@ class Journal:
         if cursor.rowcount != 1:
             raise ValueError("unknown delivery or conflicting acknowledgement payload")
 
+    @serialized
     def export(self) -> list[dict[str, object]]:
         import json
 

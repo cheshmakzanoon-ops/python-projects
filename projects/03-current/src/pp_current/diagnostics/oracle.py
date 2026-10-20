@@ -89,8 +89,14 @@ def reconcile(
                 clocks[identity] = next_time
                 if kind == "end":
                     inactive.discard(identity)
-            active = [clock for source, clock in clocks.items() if source not in inactive]
-            if active:
+            active = [
+                clock
+                for source, clock in clocks.items()
+                if source not in inactive and clock != 2**63 - 1
+            ]
+            if all(clock == 2**63 - 1 for clock in clocks.values()):
+                watermark = 2**63 - 1
+            elif active:
                 watermark = max(watermark, min(active))
     for identity, samples in values.items():
         _, logical = identity.split(":", 1)

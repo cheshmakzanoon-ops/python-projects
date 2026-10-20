@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "scenario": "same-key readings without watermarks, one sparse metadata probe, then end",
+  "records": 12002,
+  "repetitions": 3,
+  "source": {
+    "schema_version": 1,
+    "project": "current",
+    "source_commit": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+    "source_dirty": true,
+    "source_scope": "project",
+    "source_content_sha256": "91924a0db27061e07bd36c72669dfb4f5fedb014334b2d19ac89dc7fd82f812f",
+    "root_contract_sha256": "7886074794d41173fe432a6bef0e5fc153cbf7a563027b7cc944cd32e0a8f1f9",
+    "lockfile_sha256": "baf15ac83a35752ad671410a6466a49a8b6f5b43d6210beed3cb3bd6982239a3",
+    "python": "3.14.8",
+    "os": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "cpu": "unknown",
+    "memory_limit_bytes": null,
+    "seed": null,
+    "dataset_id": "b3c53f32c3cf9f99ad21c068bad1f2a765ca4caa3a74b5fcf7c8991b61bcd4bf",
+    "profile": "focused-join",
+    "warmup_runs": 0,
+    "measurement_runs": 3
+  },
+  "driver_sha256": "75bbbd6c435c99904c29559c68e93c948cdfd629791a597ca7799a3794a4535b",
+  "probe_sha256": "3f566fe5063523f237a09a1be94a1bb670f4869ba35775b0252a01d5c878816c",
+  "measured_at_utc": "2026-10-20T08:31:53.931672+00:00",
+  "scope": "Engine.apply elapsed time; Record creation/imports excluded; process RSS includes all probe allocations",
+  "limits": "Synthetic comparison on a shared machine, not a standard workload or production capacity claim",
+  "baseline_commit": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+  "baseline": {
+    "processing_seconds": [
+      1.4315051920002588,
+      1.4081183729995246,
+      1.383503448000738
+    ],
+    "median_seconds": 1.4081183729995246,
+    "peak_process_rss_bytes": 22282240,
+    "checks": [
+      {
+        "join_pairs": 5,
+        "window_results": 2,
+        "candidate_checks": 72006000,
+        "counter_scope": "full-scan formula"
+      },
+      {
+        "join_pairs": 5,
+        "window_results": 2,
+        "candidate_checks": 72006000,
+        "counter_scope": "full-scan formula"
+      },
+      {
+        "join_pairs": 5,
+        "window_results": 2,
+        "candidate_checks": 72006000,
+        "counter_scope": "full-scan formula"
+      }
+    ]
+  },
+  "indexed": {
+    "processing_seconds": [
+      0.19112807300007262,
+      0.16945591299918306,
+      0.16034331599985308
+    ],
+    "median_seconds": 0.16945591299918306,
+    "peak_process_rss_bytes": 23396352,
+    "checks": [
+      {
+        "join_pairs": 5,
+        "window_results": 2,
+        "candidate_checks": 6,
+        "counter_scope": "engine diagnostic"
+      },
+      {
+        "join_pairs": 5,
+        "window_results": 2,
+        "candidate_checks": 6,
+        "counter_scope": "engine diagnostic"
+      },
+      {
+        "join_pairs": 5,
+        "window_results": 2,
+        "candidate_checks": 6,
+        "counter_scope": "engine diagnostic"
+      }
+    ]
+  }
+}

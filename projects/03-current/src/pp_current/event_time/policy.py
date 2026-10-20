@@ -34,7 +34,15 @@ class Progress:
             if record.kind == "end":
                 # A finished input contributes positive infinity even if it was idle.
                 self.idle.discard(identity)
-        active = [v for k, v in self.inputs.items() if k not in self.idle]
-        if active:
+        active = [
+            value
+            for key, value in self.inputs.items()
+            if key not in self.idle and value != MAX_TIME
+        ]
+        if all(value == MAX_TIME for value in self.inputs.values()):
+            self.watermark = MAX_TIME
+        elif active:
             self.watermark = max(self.watermark, min(active))
+        # Finished inputs do not turn "all unfinished inputs idle" into terminal
+        # progress. Those inputs can resume; freeze until one does or all end.
         return self.watermark

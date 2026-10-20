@@ -11,6 +11,22 @@
 | CU-07 | `test_bounded_async_hot_key_and_writer_stall`, `test_ndjson_and_real_disk_budget`, CLI hot benchmark | Finite queues and responsive heartbeat during writer stall; 50%-hot keys; explicit outbox/admission/state limits and real SQLite page exhaustion |
 | CU-08 | `test_admission_lost_ack_conflicts_and_offset_identity`, `test_map_filter_and_replay_no_double_application`, `test_restore_compatibility_and_stable_partition` | Source-offset replay is distinct from event ID reuse; no double apply; incompatible code/config fails closed |
 
+## Core semantic and concurrency review
+
+| Evidence | What it establishes |
+| --- | --- |
+| `tests/reference_trace.py`, `tests/property/test_online_trace.py` | A full-history model independently scans accepted pairs and recomputes window revisions; every generated prefix compares disposition, watermark and exact ordered delivery identity/payload, with restore every seventh record. It uses a separate finished-input set rather than production progress/index helpers. |
+| `tests/unit/test_terminal_progress.py` | Ending the last active input does not finalize an unfinished idle input. Resume accepts the lateness boundary and produces the correct sum/revision. Premature terminal checkpoint state is rejected. |
+| `tests/integration/test_owner_failures.py` | Same/different-job stale owners cannot replace committed state; a shared-connection acknowledgement cannot leak into a rolled-back publication; cancellation waits for the DB worker; multiple mapper failures, callback cancellation and cancelled failed I/O do not leak/hang; staged fanout stops after at most budget+1 candidates and requires fresh recovery. |
+| `tests/integration/test_publication_schedule.py` | Eight failure schedules combine four publication boundaries with empty/nonempty prior prefixes, actual close/reopen and an independent control-history model. Every immutable revision and local latest row agrees with the committed prefix. |
+| `tests/integration/test_delivery_restart.py` | Both sink insertion phases roll back atomically. Two jobs share logical keys safely. A real child exits after sink commit before journal acknowledgement, followed by restart, duplicate delivery and reversed revision order. |
+| `tests/integration/test_state_backpressure.py` | Sliding fanout reserves state before allocation; higher state budgets recover/replay; a lower budget depends on current retained state rather than historical peak. Semantic Config changes still fail. |
+| `tests/integration/test_wire_boundaries.py` | A valid 16 KiB wire record round-trips with its delimiter and retains capacity when the durable ordinal gains digits; overlimit records remain rejected. |
+| `tests/unit/test_join_index.py` | Sparse probes, zero/positive intervals, negative times, inclusive boundaries, deterministic delivery order, index restore and expiration agree with a direct pair model. |
+| `tests/acceptance/test_checkpoint_rebuild.py` | Real CLI exports older retained ingress/config read-only, replays under a fresh namespace with corrected late revision, preserves source bytes, rejects custom transformations and batches 2,001 input records as 1,000/1,000/1. |
+
+The core pass adds 36 cases to the 123-case persistence review. The final count and complete interpreter/build checks are in [verification](VERIFICATION.md). The repeatable [focused join comparison](BENCHMARKS.md#focused-join-comparison) measures the changed candidate lookup against an immutable baseline; it does not substitute for the historical standard workload.
+
 Required tests are real and have no skip/xfail paths. Property examples combine values, negative/out-of-order times, streams and keys; admission properties generate identical and conflicting offset retries. The oracle deliberately enumerates batch window boundaries and matches accepted retained pairs separately from runtime window assignment/heaps.
 
 Coverage scope includes model, event_time, operators, runtime, ingress, sinks and sources, including persistence branches. CLI plumbing, workload generation and the independent oracle are excluded from this core metric; CLI behavior is exercised through subprocess acceptance tests. See [verification](VERIFICATION.md) for measured results and historical immutable evidence.

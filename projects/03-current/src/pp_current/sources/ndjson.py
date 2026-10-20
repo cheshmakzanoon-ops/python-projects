@@ -9,6 +9,7 @@ from pp_current.model.envelope import Record
 def read_ndjson(path: Path) -> Iterator[Record]:
     with path.open(encoding="utf-8") as handle:
         while raw := handle.readline(16_385):
-            if len(raw.encode()) > 16_384 or not raw.endswith("\n"):
+            # Allow the delimiter in addition to the 16 KiB record itself.
+            if len(raw.encode()) > 16_385 or not raw.endswith("\n"):
                 raise ValueError("overlong or unterminated NDJSON record")
             yield Record.parse(raw)
