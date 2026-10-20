@@ -99,7 +99,13 @@ def summarize(folders: list[Path]) -> dict[str, Any]:
             ):
                 raise ValueError(f"duplicate or changed retained artifact: {name}")
             artifacts[name] = artifact["sha256"]
-        if {item["integration"] for item in run["integrations"]} != INTEGRATIONS:
+        if (
+            len(run["integrations"]) != len(INTEGRATIONS)
+            or {item["integration"] for item in run["integrations"]} != INTEGRATIONS
+            or any(
+                item["exit_code"] != 0 or item["status"] != "passed" for item in run["integrations"]
+            )
+        ):
             raise ValueError("all three public integrations are required")
         for name in INTEGRATIONS:
             relative = f"{name}/integration.json"
@@ -140,7 +146,11 @@ def summarize(folders: list[Path]) -> dict[str, Any]:
                 or report["status"] != "passed"
                 or report["source_dirty"] is not False
                 or report["source_unchanged_after"] is not True
-                or any(check["exit_code"] != 0 for check in report["checks"])
+                or any(
+                    check["exit_code"] != 0
+                    or check.get("process_exit_code", check["exit_code"]) != 0
+                    for check in report["checks"]
+                )
             ):
                 raise ValueError(f"invalid clean-source project record: {relative}")
             checks = {}
@@ -148,6 +158,9 @@ def summarize(folders: list[Path]) -> dict[str, Any]:
                 command = check["command"]
                 if len(command) > 2 and command[1] == "scripts/portfolio.py":
                     task = command[2]
+                    tail = [slug, "--profile", "ci"] if task == "benchmark" else [slug]
+                    if task not in CHECKS or command[3:] != tail:
+                        raise ValueError(f"command target/profile does not match record: {slug}")
                     if task in checks:
                         raise ValueError(f"duplicate project check: {slug} {task}")
                     checks[task] = check

@@ -63,6 +63,8 @@ def runs(tmp_path, monkeypatch):
                     "log": log,
                     "seconds": 1.0,
                 }
+                if task == "benchmark":
+                    check["command"] += ["--profile", "ci"]
                 if task == "check":
                     junit = f"{slug}.xml"
                     (folder / junit).write_text('<testsuite tests="1"><testcase/></testsuite>')
@@ -100,7 +102,10 @@ def runs(tmp_path, monkeypatch):
                 "requested_projects": [p["slug"] for p in projects],
                 "requested_checks": ["check", "demo", "benchmark"],
                 "benchmark_profile": "ci",
-                "integrations": [{"integration": n} for n in publication.INTEGRATIONS],
+                "integrations": [
+                    {"integration": n, "exit_code": 0, "status": "passed"}
+                    for n in publication.INTEGRATIONS
+                ],
             },
         )
         _inventory(folder)
@@ -128,6 +133,9 @@ def test_complete_retained_matrix_publishes_actual_outcomes(runs):
         "mixed_commit",
         "different_source",
         "missing_stage",
+        "failed_process",
+        "wrong_command_target",
+        "failed_outer_integration",
     ],
 )
 def test_incomplete_or_contradictory_evidence_cannot_publish(runs, defect):
@@ -154,6 +162,23 @@ def test_incomplete_or_contradictory_evidence_cannot_publish(runs, defect):
         record["source_content_sha256"] = "c" * 64
         _write(path, record)
         _inventory(folder)
+    elif defect == "failed_process":
+        path = folder / "anchor-3.14.8.json"
+        record = json.loads(path.read_text())
+        record["checks"][0]["process_exit_code"] = 23
+        _write(path, record)
+        _inventory(folder)
+    elif defect == "wrong_command_target":
+        path = folder / "strata-3.14.8.json"
+        record = json.loads(path.read_text())
+        record["checks"][0]["command"][3] = "anchor"
+        _write(path, record)
+        _inventory(folder)
+    elif defect == "failed_outer_integration":
+        path = folder / "verification.json"
+        record = json.loads(path.read_text())
+        record["integrations"][0].update(exit_code=23, status="failed")
+        _write(path, record)
     elif defect == "missing_stage":
         path = folder / "stream-lake/integration.json"
         record = json.loads(path.read_text())

@@ -54,6 +54,9 @@ def main() -> int:
         "UV_WORKING_DIR",
         "PYTHONPATH",
         "PYTHONHOME",
+        "PYTEST_ADDOPTS",
+        "PYTEST_PLUGINS",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD",
     ):
         environment.pop(name, None)
     environment["PORTFOLIO_PYTHON"] = args.python
@@ -140,19 +143,21 @@ def main() -> int:
                     {
                         "command": command,
                         "exit_code": result.returncode,
+                        "process_exit_code": result.returncode,
                         "seconds": time.perf_counter() - start,
                         "log": log.name,
                     }
                 )
-                if check == "check" and result.returncode == 0:
+                if check == "check":
                     try:
                         outcomes = read_junit(test_report)
                         checks[-1]["tests"] = outcomes.as_dict()
                         checks[-1]["junit_report"] = test_report.name
-                        if not outcomes.ready:
+                        if not outcomes.ready and result.returncode == 0:
                             checks[-1]["exit_code"] = 1
                     except ValueError as error:
-                        checks[-1]["exit_code"] = 1
+                        if result.returncode == 0:
+                            checks[-1]["exit_code"] = 1
                         checks[-1]["report_error"] = str(error)
                 print(
                     f"{project['slug']} {args.python} {check}: {checks[-1]['exit_code']}",

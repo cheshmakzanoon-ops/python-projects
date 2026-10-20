@@ -93,6 +93,9 @@ def project_task(task: str, project: ProjectSpec, profile: str = "ci") -> int:
         "UV_WORKING_DIR": str(directory),
         "PYTHONPATH": None,
         "PYTHONHOME": None,
+        "PYTEST_ADDOPTS": None,
+        "PYTEST_PLUGINS": None,
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": None,
     }
     if not os.environ.get("UV_PROJECT_ENVIRONMENT") and interpreter != project["default_python"]:
         overrides["UV_PROJECT_ENVIRONMENT"] = str(
@@ -233,7 +236,20 @@ def main() -> int:
     if args.task == "integration":
         if args.project not in {"settlement", "stream-lake", "code-search"}:
             parser.error("select settlement, stream-lake, or code-search")
-        return execute([sys.executable, str(ROOT / "integrations/run.py"), args.project], ROOT)
+        return execute(
+            [sys.executable, str(ROOT / "integrations/run.py"), args.project],
+            ROOT,
+            overrides={
+                name: None
+                for name in (
+                    "UV_PROJECT_ENVIRONMENT",
+                    "UV_PROJECT",
+                    "UV_WORKING_DIR",
+                    "PYTHONPATH",
+                    "PYTHONHOME",
+                )
+            },
+        )
     selected = next((p for p in projects if p["slug"] == args.project), None)
     if selected is None:
         parser.error("select a project from `list`")

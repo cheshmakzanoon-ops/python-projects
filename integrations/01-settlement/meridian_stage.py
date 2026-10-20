@@ -10,15 +10,38 @@ import threading
 from pathlib import Path
 from wsgiref.simple_server import WSGIRequestHandler, make_server
 
-from pp_meridian.cli import clean, initialize
-
 
 class QuietHandler(WSGIRequestHandler):
     def log_message(self, format: str, *args: object) -> None:
         pass
 
 
+def anchor_environment(root: Path, interpreter: str) -> dict[str, str]:
+    """The nested participant must not inherit Meridian's selected environment."""
+    environment = os.environ.copy()
+    for name in (
+        "UV_PROJECT_ENVIRONMENT",
+        "UV_PROJECT",
+        "UV_WORKING_DIR",
+        "PYTHONPATH",
+        "PYTHONHOME",
+    ):
+        environment.pop(name, None)
+    directory = root / "projects/01-anchor"
+    default = (directory / ".python-version").read_text().strip()
+    environment.update(UV_PROJECT=str(directory), UV_WORKING_DIR=str(directory))
+    environment["UV_PROJECT_ENVIRONMENT"] = str(
+        directory / ".venv"
+        if interpreter == default
+        else root / ".local/venvs" / f"anchor-{interpreter}"
+    )
+    environment["PORTFOLIO_PYTHON"] = interpreter
+    return environment
+
+
 def run(output: Path) -> None:
+    from pp_meridian.cli import clean, initialize
+
     ledger_output = output / "ledger"
     ledger_output.mkdir()
     initialize(ledger_output)
@@ -53,12 +76,20 @@ def run(output: Path) -> None:
     }
     (output / "local-connection.json").write_text(json.dumps(configuration))
     root = Path(__file__).resolve().parents[2]
-    command = ["uv", "run", "--locked"]
-    if os.environ.get("PORTFOLIO_PYTHON"):
-        command += ["--python", os.environ["PORTFOLIO_PYTHON"]]
+    interpreter = (
+        os.environ.get("PORTFOLIO_PYTHON")
+        or (root / "projects/01-anchor/.python-version").read_text().strip()
+    )
+    command = ["uv", "run", "--locked", "--python", interpreter]
     command += ["python", str(Path(__file__).with_name("anchor_stage.py")), "--output", str(output)]
     try:
-        subprocess.run(command, cwd=root / "projects/01-anchor", check=True, timeout=180)
+        subprocess.run(
+            command,
+            cwd=root / "projects/01-anchor",
+            env=anchor_environment(root, interpreter),
+            check=True,
+            timeout=180,
+        )
         anchor = json.loads((output / "anchor-evidence.json").read_text())
         journals = list(Journal.objects.filter(tenant=tenant).order_by("sequence"))
         assert len(journals) == 3, "one successful posting plus one reversed posting pair"

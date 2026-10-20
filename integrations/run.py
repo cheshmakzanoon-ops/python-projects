@@ -42,6 +42,16 @@ def main() -> int:
         parser.error("integration output must be empty; each execution owns fresh state")
     output.mkdir(parents=True, exist_ok=True)
     environment = os.environ.copy()
+    # Each stage owns its product environment; a caller's editor/source selectors
+    # must neither redirect it nor let uv replace an unrelated environment.
+    for name in (
+        "UV_PROJECT_ENVIRONMENT",
+        "UV_PROJECT",
+        "UV_WORKING_DIR",
+        "PYTHONPATH",
+        "PYTHONHOME",
+    ):
+        environment.pop(name, None)
     if Path("/workspace").exists():
         environment.setdefault("UV_CACHE_DIR", "/workspace/.cache/uv")
         environment.setdefault("UV_PYTHON_INSTALL_DIR", "/workspace/.python")
@@ -62,17 +72,36 @@ def main() -> int:
         if not path.exists():
             print(f"Incomplete integration: missing {stage}", file=sys.stderr)
             return 2
-        command = ["uv", "run", "--locked"]
-        if "PORTFOLIO_PYTHON" in environment:
-            command += ["--python", environment["PORTFOLIO_PYTHON"]]
+        project = projects[slug]
+        requested = environment.get("PORTFOLIO_PYTHON") or project["default_python"]
+        interpreter = next(
+            (
+                version
+                for version in project["required_python_versions"]
+                if requested in (version, version.rsplit(".", 1)[0])
+            ),
+            None,
+        )
+        if interpreter is None:
+            parser.error(f"{slug}: unsupported interpreter {requested!r}")
+        directory = (ROOT / project["directory"]).resolve()
+        stage_environment = environment.copy()
+        stage_environment["PORTFOLIO_PYTHON"] = interpreter
+        stage_environment.update(UV_PROJECT=str(directory), UV_WORKING_DIR=str(directory))
+        stage_environment["UV_PROJECT_ENVIRONMENT"] = str(
+            directory / ".venv"
+            if interpreter == project["default_python"]
+            else ROOT / ".local/venvs" / f"{slug}-{interpreter}"
+        )
+        command = ["uv", "run", "--locked", "--python", interpreter]
         command += ["python", str(path), "--output", str(output)]
         start = time.perf_counter()
         log = output / f"{slug}.log"
         with log.open("w") as stream:
             process = subprocess.Popen(
                 command,
-                cwd=ROOT / projects[slug]["directory"],
-                env=environment,
+                cwd=directory,
+                env=stage_environment,
                 stdout=stream,
                 stderr=subprocess.STDOUT,
                 start_new_session=os.name != "nt",

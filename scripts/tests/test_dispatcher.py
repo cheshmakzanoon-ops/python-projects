@@ -167,3 +167,41 @@ def test_compatibility_setup_uses_separate_project_environment(tmp_path, monkeyp
     assert portfolio.project_task("setup", project) == 0
     assert calls[0][0][-1] == "3.13.16"
     assert calls[0][1]["overrides"]["UV_PROJECT_ENVIRONMENT"].endswith("current-3.13.16")
+
+
+def test_inherited_pytest_filter_cannot_hide_a_failing_required_test(tmp_path, monkeypatch):
+    from test_results import read_junit
+
+    project = next(p for p in portfolio.manifest() if p["slug"] == "current")
+    monkeypatch.setattr(portfolio, "ROOT", tmp_path)
+    directory = tmp_path / project["directory"]
+    directory.mkdir(parents=True)
+    (directory / "uv.lock").write_text("version=1\n")
+    source = directory / "test_subject.py"
+    source.write_text("def test_kept(): pass\ndef test_omitted(): assert False\n")
+    monkeypatch.setenv("PYTEST_ADDOPTS", "-k kept")
+    monkeypatch.setenv("PYTEST_PLUGINS", "a_nonexistent_external_plugin")
+    monkeypatch.setenv("PYTEST_DISABLE_PLUGIN_AUTOLOAD", "1")
+    real_execute = portfolio.execute
+    reports = []
+
+    def execute(command, cwd, timeout=600, **kwargs):
+        if "--junitxml" not in command:
+            return 0
+        report = command[command.index("--junitxml") + 1]
+        reports.append(Path(report))
+        return real_execute(
+            [sys.executable, "-m", "pytest", "-q", str(source), "--junitxml", report],
+            cwd,
+            timeout,
+            **kwargs,
+        )
+
+    monkeypatch.setattr(portfolio, "execute", execute)
+    assert portfolio.project_task("check", project) == 1
+    assert read_junit(reports[0]).as_dict() == {
+        "passed": 1,
+        "failed": 1,
+        "errors": 0,
+        "skipped": 0,
+    }

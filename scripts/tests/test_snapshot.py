@@ -12,21 +12,28 @@ SCRIPTS = Path(__file__).resolve().parents[1]
 
 
 @pytest.mark.parametrize(
-    ("check", "xml", "expected"),
+    ("check", "xml", "command_exit", "expected"),
     [
-        ("demo", None, 0),
-        ("check", '<testsuite tests="1"><testcase name="executed"/></testsuite>', 0),
+        ("demo", None, 0, 0),
+        ("check", '<testsuite tests="1"><testcase name="executed"/></testsuite>', 0, 0),
         (
             "check",
             '<testsuite tests="1" skipped="1"><testcase><skipped/></testcase></testsuite>',
+            0,
             1,
         ),
-        ("check", '<testsuite tests="0"/>', 1),
-        ("check", None, 1),
+        ("check", '<testsuite tests="0"/>', 0, 1),
+        ("check", None, 0, 1),
+        (
+            "check",
+            '<testsuite tests="1" failures="1"><testcase><failure/></testcase></testsuite>',
+            23,
+            1,
+        ),
     ],
 )
 def test_snapshot_isolates_environment_and_records_executed_results(
-    tmp_path, monkeypatch, check, xml, expected
+    tmp_path, monkeypatch, check, xml, command_exit, expected
 ):
     monkeypatch.syspath_prepend(str(SCRIPTS))
     spec = importlib.util.spec_from_file_location("verify_snapshot", SCRIPTS / "verify_snapshot.py")
@@ -42,12 +49,14 @@ def test_snapshot_isolates_environment_and_records_executed_results(
     (source / "scripts/portfolio.py").write_text(
         "import os\n"
         "if any(name in os.environ for name in "
-        "('UV_PROJECT_ENVIRONMENT','UV_PROJECT','UV_WORKING_DIR','PYTHONPATH','PYTHONHOME')):\n"
+        "('UV_PROJECT_ENVIRONMENT','UV_PROJECT','UV_WORKING_DIR','PYTHONPATH','PYTHONHOME',"
+        "'PYTEST_ADDOPTS','PYTEST_PLUGINS','PYTEST_DISABLE_PLUGIN_AUTOLOAD')):\n"
         "    raise SystemExit('verification reused caller environment')\n"
         f"report = {xml!r}\n"
         "if report is not None:\n"
         "    from pathlib import Path\n"
         "    Path(os.environ['PORTFOLIO_CHECK_REPORT']).write_text(report)\n"
+        f"raise SystemExit({command_exit})\n"
     )
     for arguments in (
         ["init", "-q"],
@@ -60,7 +69,15 @@ def test_snapshot_isolates_environment_and_records_executed_results(
     output = tmp_path / "results"
     monkeypatch.setattr(snapshot, "ROOT", source)
     monkeypatch.setenv("UV_PROJECT_ENVIRONMENT", str(tmp_path / "unrelated-environment"))
-    for name in ("UV_PROJECT", "UV_WORKING_DIR", "PYTHONPATH", "PYTHONHOME"):
+    for name in (
+        "UV_PROJECT",
+        "UV_WORKING_DIR",
+        "PYTHONPATH",
+        "PYTHONHOME",
+        "PYTEST_ADDOPTS",
+        "PYTEST_PLUGINS",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD",
+    ):
         monkeypatch.setenv(name, str(tmp_path / "unrelated-source"))
     monkeypatch.setattr(
         sys,
@@ -72,6 +89,10 @@ def test_snapshot_isolates_environment_and_records_executed_results(
     assert report["status"] == ("passed" if expected == 0 else "failed")
     assert report["source_unchanged_after"]
     assert not report["source_dirty"]
+    assert report["checks"][0]["process_exit_code"] == command_exit
+    if command_exit:
+        assert report["checks"][0]["exit_code"] == command_exit
+        assert report["checks"][0]["tests"]["failed"] == 1
     summary = json.loads((output / "verification.json").read_text())
     assert summary["status"] == report["status"]
     assert summary["source_commit"] == report["source_commit"]
