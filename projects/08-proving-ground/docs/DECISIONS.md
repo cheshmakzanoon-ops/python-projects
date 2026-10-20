@@ -1,10 +1,120 @@
 # Design decisions
 
-1. **Explicit split manifests instead of a random train/test call.** Random row splitting would leak correlated repeated asset observations into a misleading forecasting estimate. Temporal purge and embargo answer forecasting; distinct entity holdout answers unseen assets. Neither policy is advertised as solving the other question.
-2. **One fitted sklearn pipeline.** A manually repeated preprocessing path would make online/batch parity fragile. Imputation, indicators, scaling and classifier are persisted and loaded together; test fixtures independently compute the permitted training medians.
-3. **Content identity and semantic experiment identity are separate.** Skops archives can include changing internal identifiers. Normalizing those bytes would depend on undocumented serialization internals. We hash actual artifacts and compare reproducible predictions at absolute tolerance `1e-12`; retries share canonical experiment identity and receive distinct attempt records.
-4. **SQLite conditional deployment transitions.** A filesystem `current-model` overwrite loses competing promotions. SQLite serializes a short write transaction, checks expected generation and commits decision plus deployment atomically. Hashes bind reports to candidates; this is not a claim that cryptographic checks independently prove the submitted evaluator's statistics are truthful. Registry report submission is a trusted local API.
-5. **Requested versus applied generations.** Promotion means a registry request, not that every serving process loaded it. Loading before snapshot swap and comparing requested generation at completion prevents stale loads. A rollback can use version 1 at generation 3, so version number cannot replace the deployment generation.
-6. **Constrained skops with explicit type review instead of pickle.** Only built-in median-imputer/scaler plus prior/logistic/tree pipelines are supported. Explicit reviewed additions are `numpy.dtype` (data-only dtype descriptors) and `sklearn.tree._tree.Tree` (native node storage). Unknown custom classes are refused even if all content hashes match. Exact persistence-library versions are required. Skops is not an arbitrary-code sandbox; locally generated supported models are the trust boundary.
-7. **Fixed validation gates and asset bootstrap.** A single accuracy figure is inadequate for imbalanced faults. Undefined discrimination on one-class validation fails. Outcome-free slice definitions and clustered uncertainty avoid claiming confidence from many correlated rows. Test reports remain descriptive and cannot supply registry gate evidence.
-8. **Simple original mechanisms instead of MLflow.** scikit-learn estimates models and PyArrow writes columns; original code owns data/split/run identity, leak contracts, artifact publication, promotion CAS/audit and serving consistency. A distributed registry, AutoML and arbitrary model plugins would add risk without closing this task's guarantees.
+## Evaluate persisted content
+
+An evaluation must answer what the published model predicts. Previously the
+caller supplied both a fitted result and an artifact digest. Those arguments
+could disagree: a strong logistic result authorized a published prior classifier
+in the reproduced baseline failure. Matching the report's digest to the manifest
+only checked the false attribution consistently.
+
+The evaluator now loads the verified artifact and scores that pipeline. The
+extra deserialization is intentional. Re-serializing a caller pipeline would
+not prove equality because skops archives can differ between saves. A manifest
+or a report hash is not a signature from an independent trusted evaluator;
+manual report submission remains a trusted local API.
+
+## Version evidence without rewriting history
+
+Changing evaluator code alone cannot repair reports already accepted under the
+old contract. Reports are now schema 2 and the frozen policy identity is
+`validation-artifact-v2`. Numeric demonstration thresholds remain the same.
+SQLite's table format remains version 1 because its structural schema did not
+change. Report/decision semantics have their own explicit versions.
+
+Legacy policies are read-only even when an operator explicitly supplies one.
+Historical reports and decisions retain their original identity and meaning.
+Reevaluation creates a fresh registry, preserves an old/new mapping, exposes
+unreadable models and gate failures, and requests no deployment. A `--registry`
+selector lets operators inspect, train, promote, and serve that target while
+keeping the source registry intact. It does not relocate its shared model store.
+
+## Own dataset buffers
+
+Setting `array.flags.writeable = False` on a caller-owned view does not freeze
+its writable base. Dataset construction now copies arrays into immutable byte
+buffers before validating them. This costs a full dataset copy and hashing still
+reads the actual content; the benefit is stable values through ordinary aliases.
+A cached digest would need to account for NumPy's mutable shape, dtype, strides,
+and other state. It is deliberately avoided. The recorded layout rejects common
+metadata mutations, including zero-stride views that otherwise preserve shape
+and dtype while changing observed values.
+
+The data producer must finish constructing its arrays before calling the
+constructor. Copying several independent concurrent producers is not a substitute
+for their own snapshot protocol. In-process Python objects are not a sandbox
+against code intentionally bypassing their contracts.
+
+## Freeze membership and the scientific question
+
+Random row splitting would overstate future forecasting quality for correlated
+asset observations. Temporal purge and embargo enforce label availability across
+boundaries; entity holdout asks a different unseen-asset question. Neither policy
+solves the other question. Membership, data identity, boundaries, and question
+are explicit so reviewers can inspect what was estimated.
+
+The imputer, missingness indicators, scaler, and classifier are one fitted
+pipeline. Independent held-out-value tests check that its preprocessing learns
+only from training rows. Publication carries the fit's data/split/sensor order
+and rejects inconsistent caller arguments.
+
+## Asset multiplicities instead of duplicate rows
+
+Cluster bootstrap must sample whole assets. Expanding rows repeated work and
+memory, and searching the complete dataset separately for every asset added
+`O(nU)` setup. The revised algorithm prepares asset and tied-score indices once,
+then changes only asset multiplicities. Its per-draw work is linear in rows,
+assets, and score groups. Exact tiny threshold models protect tie handling and
+absent-class behavior independently of NumPy/scikit-learn implementation details.
+
+The interval remains conditional on both classes being present. Undefined draws
+are counted explicitly rather than silently described as unconditional evidence.
+A stricter scientific policy might require a minimum number of independent
+assets or use a different estimand. That would change the declared approval
+question and requires a new frozen policy, rather than a quiet numerical tweak.
+
+## Separate semantic and byte identity
+
+Experiment identity covers data/split/source/lock/preprocessing/estimator/
+hyperparameters/seed. Timestamps and retry IDs belong to separate attempts.
+Each actual skops archive has a content identity that may differ across repeated
+saves. Numerical reproducibility means predictions match at absolute tolerance
+`1e-12` for the declared fixtures, not universal byte equality or portability
+across arbitrary library versions.
+
+Only reviewed built-in median-imputer/scaler plus prior/logistic/tree pipelines
+are supported. `numpy.dtype` and sklearn's native decision-tree storage are
+explicit allowlist additions. Unknown classes are never automatically trusted.
+The publication path validates the serialized snapshot before making it visible;
+the loader repeats those checks at use. This is a constrained persistence
+contract rather than arbitrary-model sandboxing.
+
+## SQLite owns deployment decisions
+
+A filesystem current-model pointer cannot safely express competing promotions,
+rejection audit, or rollback history. SQLite's `BEGIN IMMEDIATE` serializes the
+expected-generation comparison and accepted deployment/audit writes. A rejected
+known candidate commits its audit without changing deployment. After an
+acknowledgement is lost, the operator observes current state before making a new
+decision; blindly retrying an old generation is intentionally rejected.
+
+Registration captures canonical report bytes once so stored identity and returned
+metadata cannot disagree when caller-owned dictionaries change. Immutable
+historical model/evaluation binding is preserved: a new evaluation goes into a
+new registry, rather than replacing one in place. Real child-process exits test
+the database commit boundaries; mocks cannot establish SQLite recovery behavior.
+
+## One load per generation; snapshots outlive publication
+
+Same-generation refresh calls share one load and result. A separate newer
+generation may load while an old loader stalls, preserving the ability to apply
+a rollback. This permits concurrent work across distinct generations rather than
+pretending Python can forcibly cancel arbitrary loaders. Global admission control
+and remote fleet coordination are outside this local service's contract.
+
+Prediction captures a strong reference to one pipeline and all its metadata.
+Snapshot publication and readiness observation share a lock; fitting and
+inference do not hold that lock. Closing is terminal, wakes waiters, and prevents
+late publication. Already captured predictions may finish. API shutdown closes
+before cancelling the watcher because cancellation of `to_thread` leaves the
+worker running. A fresh process object owns a later server lifespan.

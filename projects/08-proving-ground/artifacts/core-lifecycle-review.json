@@ -1,0 +1,505 @@
+{
+  "baseline_concurrency": {
+    "actual_deserializations": 8,
+    "all_refreshes_returned_true": true,
+    "baseline_revision": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+    "late_load_published_after_asgi_shutdown": true,
+    "registration_returned_identity_differs_from_persisted": true,
+    "same_generation_concurrent_callers": 8
+  },
+  "baseline_failures": {
+    "baseline_revision": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+    "dataset_alias_changes_frozen_identity": true,
+    "evaluation_laundering": {
+      "accepted_generation": 1,
+      "served_artifact_metrics": {
+        "brier": 0.21826666666666664,
+        "class_balance": 0.32166666666666666,
+        "count": 600,
+        "positives": 193,
+        "pr_auc": 0.32166666666666666,
+        "roc_auc": 0.5
+      },
+      "served_estimator": "prior",
+      "served_gate_failures": [
+        "pr_auc below 0.35",
+        "roc_auc below 0.65",
+        "brier exceeds 0.2"
+      ],
+      "submitted_gate_failures": [],
+      "submitted_metrics": {
+        "brier": 0.10967087840058008,
+        "class_balance": 0.32166666666666666,
+        "count": 600,
+        "positives": 193,
+        "pr_auc": 0.8420700303218032,
+        "roc_auc": 0.9177349747297934
+      }
+    },
+    "publication_accepts_wrong_fit_dataset": true
+  },
+  "baseline_reproduction": {
+    "method": "git archive baseline project into /tmp; use its src on PYTHONPATH with locked Python3.14.8 directly. Frozen fixture retains actual accepted legacy archive/SQL; tests reconstruct without Git.",
+    "scripts": {
+      "baseline-concurrency-reproducer.py": {
+        "sha256": "17619890669249ab3ef8c7d78591fa8ca4d62a5cd8a53500c492d1572b44d8e4",
+        "workspace_path": ".local/proving-ground-deep-review/baseline-concurrency-reproducer.py"
+      },
+      "baseline-reproducer.py": {
+        "sha256": "40ba86004e09e438a047d2ad89e0b76eb7f9e14efba258950ecd00c32a8cd077",
+        "workspace_path": ".local/proving-ground-deep-review/baseline-reproducer.py"
+      }
+    }
+  },
+  "baseline_revision": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+  "bootstrap_baseline": {
+    "algorithm_module": "/tmp/pg-core-baseline/projects/08-proving-ground/src/pp_proving_ground/evaluation/metrics.py",
+    "algorithm_module_sha256": "b17c3c250b7bf523fa9ef2230a1c856df57ff1b9382c04b36f2c972bbb87f387",
+    "baseline_comparison_revision": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+    "caller_source_label": "baseline-39d3a8d-export",
+    "format_version": 1,
+    "input_sha256": "0f2ba1a8de0382c36a95728b777f5013d9a5e15280b5b8c0d144c9de0d89cdf2",
+    "limitations": [
+      "working-tree run, not immutable final-commit certification",
+      "shared host timings are descriptive",
+      "correctness is independently tested with exact tiny threshold models"
+    ],
+    "measurements": [
+      {
+        "report": {
+          "asset_count": 2000,
+          "defined_repetitions": 32,
+          "pr_auc_95_percentile": [
+            0.8259566867100012,
+            0.8401625620681217
+          ],
+          "repetitions": 32,
+          "unit": "asset",
+          "warning": "Descriptive clustered interval; small slices and one fleet limit inference."
+        },
+        "seconds": 0.144484941999508,
+        "work": {
+          "direct_score_orders": 0,
+          "expanded_row_indices": 640000,
+          "membership_scan_values": 40000000,
+          "sklearn_average_precision_calls": 32
+        }
+      },
+      {
+        "report": {
+          "asset_count": 2000,
+          "defined_repetitions": 32,
+          "pr_auc_95_percentile": [
+            0.8259566867100012,
+            0.8401625620681217
+          ],
+          "repetitions": 32,
+          "unit": "asset",
+          "warning": "Descriptive clustered interval; small slices and one fleet limit inference."
+        },
+        "seconds": 0.14068343700000696,
+        "work": {
+          "direct_score_orders": 0,
+          "expanded_row_indices": 640000,
+          "membership_scan_values": 40000000,
+          "sklearn_average_precision_calls": 32
+        }
+      },
+      {
+        "report": {
+          "asset_count": 2000,
+          "defined_repetitions": 32,
+          "pr_auc_95_percentile": [
+            0.8259566867100012,
+            0.8401625620681217
+          ],
+          "repetitions": 32,
+          "unit": "asset",
+          "warning": "Descriptive clustered interval; small slices and one fleet limit inference."
+        },
+        "seconds": 0.14373286800037022,
+        "work": {
+          "direct_score_orders": 0,
+          "expanded_row_indices": 640000,
+          "membership_scan_values": 40000000,
+          "sklearn_average_precision_calls": 32
+        }
+      },
+      {
+        "report": {
+          "asset_count": 2000,
+          "defined_repetitions": 32,
+          "pr_auc_95_percentile": [
+            0.8259566867100012,
+            0.8401625620681217
+          ],
+          "repetitions": 32,
+          "unit": "asset",
+          "warning": "Descriptive clustered interval; small slices and one fleet limit inference."
+        },
+        "seconds": 0.15504392999991978,
+        "work": {
+          "direct_score_orders": 0,
+          "expanded_row_indices": 640000,
+          "membership_scan_values": 40000000,
+          "sklearn_average_precision_calls": 32
+        }
+      },
+      {
+        "report": {
+          "asset_count": 2000,
+          "defined_repetitions": 32,
+          "pr_auc_95_percentile": [
+            0.8259566867100012,
+            0.8401625620681217
+          ],
+          "repetitions": 32,
+          "unit": "asset",
+          "warning": "Descriptive clustered interval; small slices and one fleet limit inference."
+        },
+        "seconds": 0.13999642100043275,
+        "work": {
+          "direct_score_orders": 0,
+          "expanded_row_indices": 640000,
+          "membership_scan_values": 40000000,
+          "sklearn_average_precision_calls": 32
+        }
+      }
+    ],
+    "median_seconds": 0.14373286800037022,
+    "parameters": {
+      "assets": 2000,
+      "bootstrap_seed": 113,
+      "input_seed": 1729,
+      "repetitions": 32,
+      "rows": 20000,
+      "runs": 5,
+      "score_levels": 97,
+      "warmup_runs": 0
+    },
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "python": "3.14.8 (main, Oct  3 2026, 01:04:31) [Clang 22.1.3 ]",
+    "scope": "asset bootstrap only; no fitting, disk artifacts, serving, or full lifecycle",
+    "timing_assertion": false,
+    "work_interpretation": "membership scans and row expansion count only calls owned by the selected algorithm; library-internal work is excluded. Legacy sklearn AP sorts scores once per call; new direct tied-score ordering occurs once.",
+    "workload_script_sha256": "7c523fb1dc10bcae3268022a8a738ad0ce0b297baf5ed1b2f220407854e3112a"
+  },
+  "bootstrap_current": {
+    "algorithm_module": "/workspace/python-projects/projects/08-proving-ground/src/pp_proving_ground/evaluation/bootstrap.py",
+    "algorithm_module_sha256": "b86380e7236e6d2dce26061954cbe54e892ac3e91373205dc6ca85d20e3860ff",
+    "baseline_comparison_revision": "39d3a8d4be3e8e2e7de85379790d68f5367d6825",
+    "caller_source_label": "working-tree-deep-review",
+    "format_version": 1,
+    "input_sha256": "0f2ba1a8de0382c36a95728b777f5013d9a5e15280b5b8c0d144c9de0d89cdf2",
+    "limitations": [
+      "working-tree run, not immutable final-commit certification",
+      "shared host timings are descriptive",
+      "correctness is independently tested with exact tiny threshold models"
+    ],
+    "measurements": [
+      {
+        "report": {
+          "algorithm": "cluster-multiplicity-tied-ap-v1",
+          "asset_count": 2000,
+          "defined_repetitions": 32,
+          "interval_condition": "both classes present in the resampled fleet",
+          "pr_auc_95_percentile": [
+            0.8259566867100012,
+            0.8401625620681217
+          ],
+          "repetitions": 32,
+          "row_count": 20000,
+          "score_groups": 97,
+          "seed": 113,
+          "undefined_repetitions": 0,
+          "unit": "asset",
+          "warning": "Descriptive conditional clustered interval; few assets and one fleet limit inference."
+        },
+        "seconds": 0.0064748380000310135,
+        "work": {
+          "direct_score_orders": 1,
+          "expanded_row_indices": 0,
+          "membership_scan_values": 0,
+          "sklearn_average_precision_calls": 0
+        }
+      },
+      {
+        "report": {
+          "algorithm": "cluster-multiplicity-tied-ap-v1",
+          "asset_count": 2000,
+          "defined_repetitions": 32,
+          "interval_condition": "both classes present in the resampled fleet",
+          "pr_auc_95_percentile": [
+            0.8259566867100012,
+            0.8401625620681217
+          ],
+          "repetitions": 32,
+          "row_count": 20000,
+          "score_groups": 97,
+          "seed": 113,
+          "undefined_repetitions": 0,
+          "unit": "asset",
+          "warning": "Descriptive conditional clustered interval; few assets and one fleet limit inference."
+        },
+        "seconds": 0.0056978650000019115,
+        "work": {
+          "direct_score_orders": 1,
+          "expanded_row_indices": 0,
+          "membership_scan_values": 0,
+          "sklearn_average_precision_calls": 0
+        }
+      },
+      {
+        "report": {
+          "algorithm": "cluster-multiplicity-tied-ap-v1",
+          "asset_count": 2000,
+          "defined_repetitions": 32,
+          "interval_condition": "both classes present in the resampled fleet",
+          "pr_auc_95_percentile": [
+            0.8259566867100012,
+            0.8401625620681217
+          ],
+          "repetitions": 32,
+          "row_count": 20000,
+          "score_groups": 97,
+          "seed": 113,
+          "undefined_repetitions": 0,
+          "unit": "asset",
+          "warning": "Descriptive conditional clustered interval; few assets and one fleet limit inference."
+        },
+        "seconds": 0.005659467000441509,
+        "work": {
+          "direct_score_orders": 1,
+          "expanded_row_indices": 0,
+          "membership_scan_values": 0,
+          "sklearn_average_precision_calls": 0
+        }
+      },
+      {
+        "report": {
+          "algorithm": "cluster-multiplicity-tied-ap-v1",
+          "asset_count": 2000,
+          "defined_repetitions": 32,
+          "interval_condition": "both classes present in the resampled fleet",
+          "pr_auc_95_percentile": [
+            0.8259566867100012,
+            0.8401625620681217
+          ],
+          "repetitions": 32,
+          "row_count": 20000,
+          "score_groups": 97,
+          "seed": 113,
+          "undefined_repetitions": 0,
+          "unit": "asset",
+          "warning": "Descriptive conditional clustered interval; few assets and one fleet limit inference."
+        },
+        "seconds": 0.00595101699946099,
+        "work": {
+          "direct_score_orders": 1,
+          "expanded_row_indices": 0,
+          "membership_scan_values": 0,
+          "sklearn_average_precision_calls": 0
+        }
+      },
+      {
+        "report": {
+          "algorithm": "cluster-multiplicity-tied-ap-v1",
+          "asset_count": 2000,
+          "defined_repetitions": 32,
+          "interval_condition": "both classes present in the resampled fleet",
+          "pr_auc_95_percentile": [
+            0.8259566867100012,
+            0.8401625620681217
+          ],
+          "repetitions": 32,
+          "row_count": 20000,
+          "score_groups": 97,
+          "seed": 113,
+          "undefined_repetitions": 0,
+          "unit": "asset",
+          "warning": "Descriptive conditional clustered interval; few assets and one fleet limit inference."
+        },
+        "seconds": 0.005802602999210649,
+        "work": {
+          "direct_score_orders": 1,
+          "expanded_row_indices": 0,
+          "membership_scan_values": 0,
+          "sklearn_average_precision_calls": 0
+        }
+      }
+    ],
+    "median_seconds": 0.005802602999210649,
+    "parameters": {
+      "assets": 2000,
+      "bootstrap_seed": 113,
+      "input_seed": 1729,
+      "repetitions": 32,
+      "rows": 20000,
+      "runs": 5,
+      "score_levels": 97,
+      "warmup_runs": 0
+    },
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "python": "3.14.8 (main, Oct  3 2026, 01:04:31) [Clang 22.1.3 ]",
+    "scope": "asset bootstrap only; no fitting, disk artifacts, serving, or full lifecycle",
+    "timing_assertion": false,
+    "work_interpretation": "membership scans and row expansion count only calls owned by the selected algorithm; library-internal work is excluded. Legacy sklearn AP sorts scores once per call; new direct tied-score ordering occurs once.",
+    "workload_script_sha256": "7c523fb1dc10bcae3268022a8a738ad0ce0b297baf5ed1b2f220407854e3112a"
+  },
+  "checks": [
+    {
+      "command": "PORTFOLIO_PYTHON=3.14.8 python scripts/portfolio.py check proving-ground",
+      "counts": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 195
+      },
+      "fresh_sdist_and_wheel": true,
+      "installed_wheel_demo_and_cleanup": true,
+      "junit_sha256": "6c8f95b8384063e87776270dc9cfcd83a343c625a2aa23c32ce486119bed528f",
+      "junit_workspace_path": ".local/checks/proving-ground/3.14.8/fa641b785b184a39ad313f4dffaa5e53/pytest.xml",
+      "mypy_strict_source_files": 27,
+      "python": "3.14.8",
+      "ruff_format": true,
+      "ruff_lint": true,
+      "separate_environment": true,
+      "source_note": "executable code/tests/fixture unchanged after these checks; documentation finalized afterward"
+    },
+    {
+      "command": "PORTFOLIO_PYTHON=3.13.16 python scripts/portfolio.py check proving-ground",
+      "counts": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 195
+      },
+      "fresh_sdist_and_wheel": true,
+      "installed_wheel_demo_and_cleanup": true,
+      "junit_sha256": "8c2d468d59d03a3ed1c7c58c42e1d46920c0cd9ed3a9de53092bd2d1ab1a1688",
+      "junit_workspace_path": ".local/checks/proving-ground/3.13.16/7f31aef6fce446bd8ce8edd7043bc6bc/pytest.xml",
+      "mypy_strict_source_files": 27,
+      "python": "3.13.16",
+      "ruff_format": true,
+      "ruff_lint": true,
+      "separate_environment": true,
+      "source_note": "executable code/tests/fixture unchanged after these checks; documentation finalized afterward"
+    }
+  ],
+  "code_input_scope": "src/**/*.py, tests/**/*.py, tests/fixtures/*.json, benchmarks/**/*.py, pyproject.toml, uv.lock, .python-version; documentation/examples/generated evidence excluded",
+  "code_input_sha256": "66af5531f3a2f04a2e1ed2d536a881572aa3632d00211120dcf3baf2f252dd01",
+  "code_inputs": {
+    ".python-version": "5abd4dc1efa09469b88916c8e4e027a8c266a9b6d06f43ac9da3e30cd00b4ab5",
+    "benchmarks/cluster_bootstrap.py": "7c523fb1dc10bcae3268022a8a738ad0ce0b297baf5ed1b2f220407854e3112a",
+    "benchmarks/run.py": "0920902fc4cccbb28f41f1a695853f0cbe5cabf15d755650609369ce40d45cdc",
+    "pyproject.toml": "dd9dcc92a3eda45d2923a0df0c35f448e4b53c7e6482c10d7e005fb746f38843",
+    "src/pp_proving_ground/__init__.py": "6bfced3feaffbb59c5268aa2e1ddf1eee7d9c6178df78f0edb4a0854c003ccbb",
+    "src/pp_proving_ground/artifacts/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/pp_proving_ground/artifacts/store.py": "e29102c3a66b494f7183dad8541655be86b74c8b460c6b70a05721bfba165862",
+    "src/pp_proving_ground/cli.py": "20caf31b8ae9e8dfd90ad1653fdcac4afd58846d0bdde437333ba01b76ebaf3d",
+    "src/pp_proving_ground/data_contracts/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/pp_proving_ground/data_contracts/schema.py": "61ea0d408ae454a317a922402cd5ae0cf0ec562b7d652c47ed86031c8df594fd",
+    "src/pp_proving_ground/evaluation/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/pp_proving_ground/evaluation/bootstrap.py": "b86380e7236e6d2dce26061954cbe54e892ac3e91373205dc6ca85d20e3860ff",
+    "src/pp_proving_ground/evaluation/metrics.py": "ffb1fa3d8e58711472ee91e2339a75ebc2c8bee2937419c3139b52a689cd82c3",
+    "src/pp_proving_ground/experiments/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/pp_proving_ground/experiments/identity.py": "f139f692dde5ae13be04c76b9b6cc0e0b283ce1f73fe742ae2d16184f74c8c7c",
+    "src/pp_proving_ground/monitoring/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/pp_proving_ground/monitoring/drift.py": "cc53c39b5def015dbfafa9243039496827cfec9cd4a0134fdfaa4b6ac1e83749",
+    "src/pp_proving_ground/registry/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/pp_proving_ground/registry/sqlite.py": "f8bcba6cbc94f1cbdf0e63812e9f7f4c379da0d643eb3af481cc1b37ce26cff2",
+    "src/pp_proving_ground/reports/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/pp_proving_ground/reports/model_card.py": "a97300c412ec07fb8808b144e627f48cd95535510ad439896dd076b65d61c776",
+    "src/pp_proving_ground/reports/provenance.py": "8bab264552590741513984f22c7f5008418de8e6a7f47458aae5b4928e1f1176",
+    "src/pp_proving_ground/serving/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/pp_proving_ground/serving/api.py": "72daf8329fcc5b2fd965b435c936c5d0c669d654bc7e1678816d43edc85e3cab",
+    "src/pp_proving_ground/serving/body_limit.py": "c192216c99d1c328f1531ba02c2429d45be3b09daf0f7c4f114a0d6fc88eb91b",
+    "src/pp_proving_ground/serving/service.py": "00cc68b698090942cb77771463629a9c1ccdaa17e1a1747111f01c36a4805c0d",
+    "src/pp_proving_ground/splits/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/pp_proving_ground/splits/manifest.py": "e5a58d31026bd5003186a7b71628102505dff2d91694adc8cca64717858ddbf3",
+    "src/pp_proving_ground/training/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/pp_proving_ground/training/model_registry.py": "d86873faef9fd880ca80818234f27aa6804667c763eea881f07c142fbf6c5928",
+    "src/pp_proving_ground/training/pipeline.py": "890fcb701558208c7948d683b668627426ebe3b8c96091165b306f534a6b418c",
+    "tests/acceptance/test_lifecycle.py": "28fa82793d9432f20ec18da1bc0c7260250aff1f8c08fb70cd3e4ee8caecd1fc",
+    "tests/conftest.py": "3685c349649702cc491114556244840d81b9a624f1fce3089cb79235c2869a13",
+    "tests/fixtures/legacy-evaluation-v1.json": "89ebdce892dc7bf83c6a83f993052a8db41e88c8d905bde8b3f751f72192b8fb",
+    "tests/integration/test_artifacts.py": "ff17eae38fa71621dec73fb0205519a23e35b9a7750aff4b6ce02ed120c5a52e",
+    "tests/integration/test_fit_publication.py": "25db71b113983ba15cd1d7454cb778b6cc892ee4315d88be0c6bbe8cdccd36f2",
+    "tests/integration/test_legacy_evaluation.py": "63a98b637a88224c85148a802c373ad77eefe6432958a2957567e3efdac13b5b",
+    "tests/integration/test_registry_and_serving.py": "db1dc354de3b689f9210ccedb9a756c624a2871cc1fc17a8ce544f0866bbe5d4",
+    "tests/integration/test_registry_crashes.py": "6b6691d635a169b2db07124711e5ae2b4f0cb185d2c932ab304e95c66cc17cfc",
+    "tests/integration/test_review_regressions.py": "8ceab0fb4a520ed9eca05fecf8a9e8a454158c373afd6bdac3a24d1b1cf52f54",
+    "tests/integration/test_serving_ownership.py": "28af98c8cbb48e1c047dde5f09a8cd1054a0f123fd3e9296689bfbeb27c096ec",
+    "tests/integration/test_trust_boundaries.py": "98c6521bf46924e4a76e176329af56c710d095bbec8cb7bdf874c347deeda517",
+    "tests/property/test_invariants.py": "928100fb9459766259c124a9de4ee60d319b5b1320716a5944b31b951c6672c2",
+    "tests/property/test_registry_state_machine.py": "8408f9fdfa01953b986f01f9449962a8963003d83010a5be75fa54bc363aed4b",
+    "tests/unit/test_body_limit.py": "a2d4e06811074270f5e5a21c6560e723f241efa74c9b3f4d070d622836d6a3d9",
+    "tests/unit/test_clustered_average_precision.py": "1680d9e24e9a17ecd33b90a3d3e546d2e96b02f697162b85676bddd43652d85b",
+    "tests/unit/test_contracts.py": "cad89582e563034313ddf6420fe55d1ede0b6fac9c1abd81fdd6be77e7ba702f",
+    "tests/unit/test_dataset_ownership.py": "4be9bd6819bb5ee0ed4ae288bdd1b023529524252c1cb359ad62f6f622ea7a25",
+    "tests/unit/test_evaluation.py": "d976a19583eea6eacdb82cea645123f5439110cd9f5094e19c1509d687456b4c",
+    "tests/unit/test_model_registry.py": "824beaf55cca16e095a613c31431c88e7df8b6c63694f74a48c2a158fd7b7bbc",
+    "uv.lock": "48ddce6dd70acac05a8094cf70e3d40ee7feb534591e49776292ef00436a508f"
+  },
+  "format_version": 1,
+  "initial_before_fix_regressions": {
+    "cases": "seven writable-base dataset aliases and three fit/publication data/split/sensor provenance substitutions",
+    "failed": 10,
+    "log_sha256": "8a6fd7ae0c472353d6e6c6a8782a6122f1b0f4059e251ee4e75bcae54d3bdb12",
+    "passed": 0
+  },
+  "limits": [
+    "No full250000-row lifecycle rerun; historical performance is separately labeled.",
+    "Bootstrap timing samples used shared host and partly overlapped a normal check; no timing assertions.",
+    "Current bootstrap still performs weighted linear row/count work; counters exclude library-internal operations.",
+    "Intervals condition on both classes; no minimum independent-asset gate or real-fleet inference claim.",
+    "Local report submission and registry files are trusted; hashes/type checks are not an arbitrary-code sandbox.",
+    "Crash tests use process exits on local SQLite, not exhaustive hardware power loss.",
+    "Distinct generations can load concurrently; arbitrary loader threads cannot be forcibly cancelled.",
+    "External target registries still depend on the selected output model store.",
+    "Dependencies, lockfile, root/shared files and Git were not changed by this project review."
+  ],
+  "mathematical_reference": {
+    "method": "exact Fraction-based threshold counts over all27 ordered three-asset draws for each of three tied-score fixtures; separate seeded expanded fleets and undefined-class accounting",
+    "test_path": "tests/unit/test_clustered_average_precision.py"
+  },
+  "peer_review": {
+    "cases": [
+      "ten weighted multiplicity combinations vs expanded sklearn AP",
+      "seeded percentile/class accounting",
+      "actual persisted prior scoring",
+      "simultaneous conditional promotions and rejection audit",
+      "real child exit after deployment INSERT before COMMIT",
+      "single-flight/waiter close/late-load prevention",
+      "dataset alias and stride isolation",
+      "legacy fixture reassessment preserving source bytes",
+      "explicit target registry train/promote/serve adoption via real TestClient readiness"
+    ],
+    "followup": "Final serving boundary also refuses explicit legacy read-only handles; covered by mandatory regression.",
+    "outcome": "no further concrete defect in inspected core/CLI scope",
+    "reported": "independent read-only probes; no project mutations"
+  },
+  "project": "proving-ground",
+  "scope": "deep core lifecycle review; bounded clustered-AP measurement, not standard lifecycle workload",
+  "source_state": "reviewed working tree; no immutable final-commit claim",
+  "sqlite_faults": {
+    "accepted_exit_positions": [
+      "after audit INSERT",
+      "after deployment INSERT",
+      "after COMMIT"
+    ],
+    "checks": [
+      "audit/deployment atomicity",
+      "no rejection deployment",
+      "integrity_check",
+      "foreign_key_check",
+      "acknowledgement loss followed by observed next generation",
+      "registration canonical snapshot under caller update"
+    ],
+    "rejected_exit_positions": [
+      "after audit INSERT",
+      "after COMMIT"
+    ],
+    "test_path": "tests/integration/test_registry_crashes.py"
+  }
+}

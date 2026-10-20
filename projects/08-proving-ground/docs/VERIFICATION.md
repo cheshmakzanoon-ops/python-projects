@@ -4,7 +4,63 @@ Proving Ground is tested on Linux x86_64 with standard CPython 3.13.16 and
 3.14.8. Each product owns its dependency lock and virtual environment. Numerical
 checks use `OMP_NUM_THREADS=OPENBLAS_NUM_THREADS=MKL_NUM_THREADS=1`.
 
-## Artifact and serving review — October 20, 2026
+## Core lifecycle review — October 20, 2026
+
+The current scope repairs exact artifact evaluation, dataset snapshot ownership,
+publication provenance and serviceability, clustered-AP work, report capture,
+and serving load/shutdown ownership. A legacy read-only registry also cannot
+start serving through the Python API. The new evaluation report is schema 2;
+legacy policy is audit-only. Reevaluation retains the source registry and creates
+an undeployed target with model/report mapping and explicit failures.
+
+The actual baseline at `39d3a8d4be3e8e2e7de85379790d68f5367d6825` accepted
+and served a prior model using another fitted model's passing statistics. The
+[historical fixture](../tests/fixtures/README.md) preserves its original bytes,
+manifest, SQL history, and checksums. An additional baseline process exercise
+observed eight deserializations for eight same-generation calls, late load
+publication after ASGI shutdown, and a returned registration identity differing
+from the stored report after a coordinated caller update. Seven dataset alias
+cases and three publication-provenance cases failed before correction.
+
+Current verification runs the complete suite on each supported interpreter,
+sequentially in separate environments. Both include format/lint, strict typing,
+fresh sdist/wheel builds, and an installed-wheel demo with cleanup. The current
+case count is **195 passed on each interpreter**, with zero failures, errors,
+skips, or expected failures. Exact workspace result paths and JUnit hashes are
+recorded in the [core review artifact](../artifacts/core-lifecycle-review.json);
+historical counts below describe only their named revisions. The only suite warning is upstream Starlette's deprecation of
+its current httpx TestClient integration.
+
+Independent numerical evidence includes all 27 ordered three-asset draws for
+three tied-score fixtures, exact rational threshold AP, seeded expanded-fleet
+percentiles including undefined draws, and bounded deterministic work. The
+five-repeat 20,000-row bootstrap comparison matches baseline endpoints exactly
+while eliminating individual-asset rescans and duplicate-row expansion. It is
+not a rerun of the historical 250,000-row lifecycle.
+
+SQLite tests abruptly exit real child writers after audit insertion, after
+deployment insertion, and after COMMIT. Accepted audit/deployment state remains
+atomic; rejected decisions never create deployment. Separate controlled threads
+check snapshot capture during caller updates, one load across eight refresh
+calls, explicit retry, stale-generation completion, waiter release on close,
+and a request finishing after its process closes.
+
+A read-only peer independently checked ten cluster multiplicity combinations
+against expanded scikit-learn AP; exact seeded bootstrap quantiles; persisted
+prior evaluation; simultaneous conditional promotions and rejection audit; a
+child killed after real deployment insertion before COMMIT; coalescing and
+terminal close; dataset aliases/strides; legacy byte preservation/reassessment;
+and explicit-registry train/promote/serve adoption using actual TestClient
+readiness. No further concrete defect was found in that scope. Peer probes were
+isolated and did not replace the project's full suite.
+
+Limits remain explicit: the interval is conditional on both classes, gates do
+not require a minimum independent-asset count, local report submission is trusted,
+loaders cannot be forcibly cancelled, and full hardware power loss or a remote
+serving fleet is outside these checks. The working-tree evidence does not claim
+an immutable final-commit certificate. No dependencies or lockfile were changed.
+
+## Historical artifact and serving review — October 20, 2026
 
 Artifact publication now synchronizes the staged directory after synchronizing
 its model and manifest files and before renaming the directory into the

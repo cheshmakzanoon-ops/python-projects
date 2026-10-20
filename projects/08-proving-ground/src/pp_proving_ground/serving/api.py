@@ -38,6 +38,9 @@ def create_app(process: ServingProcess, auto_refresh: bool = True) -> FastAPI:
         try:
             yield
         finally:
+            # Cancelling to_thread does not cancel its worker. Close first so any
+            # in-flight completion cannot revive a stopped serving process.
+            process.close()
             if watcher is not None:
                 watcher.cancel()
                 with suppress(asyncio.CancelledError):

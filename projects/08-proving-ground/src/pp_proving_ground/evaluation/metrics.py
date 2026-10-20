@@ -9,10 +9,14 @@ from typing import Any, Literal
 import numpy as np
 from sklearn.metrics import average_precision_score, brier_score_loss, roc_auc_score
 
+from pp_proving_ground.artifacts.store import ArtifactStore
 from pp_proving_ground.data_contracts.schema import DatasetVersion, FloatArray, IntArray
+from pp_proving_ground.evaluation.bootstrap import asset_bootstrap as asset_bootstrap
 from pp_proving_ground.experiments.identity import digest
 from pp_proving_ground.splits.manifest import SplitManifest
-from pp_proving_ground.training.pipeline import TrainingResult, predict
+from pp_proving_ground.training.pipeline import predict
+
+CURRENT_POLICY_VERSION = "validation-artifact-v2"
 
 
 @dataclass(frozen=True)
@@ -25,7 +29,7 @@ class EvaluationReport:
     calibration: tuple[dict[str, float | int | None], ...]
     slices: tuple[dict[str, Any], ...]
     uncertainty: dict[str, Any]
-    version: int = 1
+    version: int = 2
 
     @property
     def identity(self) -> str:
@@ -67,31 +71,8 @@ def calibration(
     return tuple(result)
 
 
-def asset_bootstrap(
-    labels: IntArray, probability: FloatArray, assets: IntArray, seed: int, repetitions: int = 100
-) -> dict[str, Any]:
-    rng = np.random.default_rng(seed)
-    units = np.unique(assets)
-    positions = {int(a): np.flatnonzero(assets == a) for a in units}
-    estimates: list[float] = []
-    for _ in range(repetitions):
-        sampled = rng.choice(units, len(units), replace=True)
-        indices = np.concatenate([positions[int(a)] for a in sampled])
-        if len(np.unique(labels[indices])) == 2:
-            estimates.append(float(average_precision_score(labels[indices], probability[indices])))
-    interval = np.quantile(estimates, [0.025, 0.975]).tolist() if estimates else [None, None]
-    return {
-        "unit": "asset",
-        "asset_count": len(units),
-        "repetitions": repetitions,
-        "defined_repetitions": len(estimates),
-        "pr_auc_95_percentile": interval,
-        "warning": "Descriptive clustered interval; small slices and one fleet limit inference.",
-    }
-
-
 def evaluate(
-    result: TrainingResult,
+    store: ArtifactStore,
     data: DatasetVersion,
     split: SplitManifest,
     artifact: str,
@@ -99,10 +80,18 @@ def evaluate(
     seed: int = 1729,
     bootstrap_repetitions: int = 100,
 ) -> EvaluationReport:
+    """Score the verified persisted model, never an independently supplied pipeline."""
     split.validate(data)
+    pipeline, manifest = store.load(artifact)
+    if (manifest.dataset_digest, manifest.split_digest, manifest.feature_names) != (
+        data.identity,
+        split.identity,
+        tuple(feature.name for feature in data.schema),
+    ):
+        raise ValueError("evaluation inputs disagree with persisted fit provenance")
     indices = split.indices(role)
     labels = data.labels[indices]
-    probability = predict(result.pipeline, data.features[indices])
+    probability = predict(pipeline, data.features[indices])
     slices: list[dict[str, Any]] = []
     # Asset buckets defined before outcome inspection, plus missingness slices.
     for name, mask in [(f"asset_mod4={i}", data.assets[indices] % 4 == i) for i in range(4)] + [
@@ -130,7 +119,7 @@ def evaluate(
 
 @dataclass(frozen=True)
 class GatePolicy:
-    version: str = "validation-v1"
+    version: str = CURRENT_POLICY_VERSION
     minimum_count: int = 100
     minimum_per_class: int = 10
     minimum_pr_auc: float = 0.35
@@ -143,8 +132,10 @@ class GatePolicy:
 
     def judge(self, report: EvaluationReport) -> tuple[str, ...]:
         failures: list[str] = []
-        if report.version != 1 or report.role != "validation":
-            failures.append("only schema-v1 validation reports can authorize promotion")
+        if report.version != 2 or report.role != "validation":
+            failures.append(
+                "only schema-v2 verified-artifact validation reports can authorize promotion"
+            )
         for name in ["count", "positives", "class_balance", "pr_auc", "roc_auc", "brier"]:
             value = report.metrics.get(name)
             if (

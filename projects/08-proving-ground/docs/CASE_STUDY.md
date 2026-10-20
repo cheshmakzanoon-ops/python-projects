@@ -1,3 +1,74 @@
+# A passing report for the wrong model
+
+At baseline `39d3a8d4be3e8e2e7de85379790d68f5367d6825`, a registry could
+correctly compare every stored digest and still deploy a failing candidate.
+The evaluator accepted two independent arguments: an in-memory fitted pipeline
+and a published artifact identity. Nothing established that they represented the
+same model.
+
+The reproduction fitted prior and logistic pipelines on the same frozen split,
+published the prior, and evaluated logistic while supplying the prior's digest.
+The resulting report was internally consistent and all bindings matched the
+published manifest, so registration and promotion succeeded at generation 1.
+The statistics belonged to logistic:
+
+| Statistic | Submitted logistic evidence | Actual persisted prior |
+| --- | ---: | ---: |
+| Average precision | 0.842070 | 0.321667 |
+| ROC-AUC | 0.917735 | 0.500000 |
+| Brier | 0.109671 | 0.218267 |
+
+All three prior metrics failed the unchanged default gates. A report checksum
+could preserve that false attribution but could not correct it. The fixture in
+`tests/fixtures/legacy-evaluation-v1.json` retains the actual baseline archive,
+manifest, report, and accepted SQLite history. Its provenance and checksums are
+[documented with the fixture](../tests/fixtures/README.md).
+
+The new evaluator loads and scores verified persisted bytes. Publication also
+requires the dataset, split, and ordered sensors recorded by the fitter, and
+validates the serialized snapshot before making it visible. A test replaces
+the caller's original prior pipeline with logistic after publication; evaluation
+still reports the actual prior's failing statistics. This establishes the
+boundary directly instead of asserting only that strings match.
+
+Existing evidence needed its own repair policy. Reports are now schema 2 and
+the frozen policy identity changed. Legacy registries remain read-only, even
+with an explicit legacy policy. Reevaluation creates new reports from actual
+artifacts in a new, undeployed registry; it preserves the original audit rather
+than claiming the old decision used the new semantics. Operators can select
+that target with `--registry` for training, promotion, and serving. The
+[runbook](OPERATIONS.md#upgrade-legacy-evaluation-evidence) shows the dependency
+on the original model store and the handling of partial failures.
+
+The same review found ownership and work problems beneath that boundary.
+Read-only NumPy flags left writable caller aliases able to change a frozen
+dataset. Owned immutable buffers now preserve the input snapshot, and metadata
+layout changes are rejected. Eight same-generation refresh callers previously
+started eight deserializations; they now share one attempt. ASGI shutdown
+previously allowed a still-running loader thread to publish afterward; terminal
+close now prevents that while allowing a previously captured prediction to finish.
+Registration also snapshots report bytes once so a coordinated caller metrics
+update cannot make returned and persisted evaluation identities disagree.
+
+The clustered bootstrap had a separate algorithmic cost: locating every asset
+rescanned the complete dataset, and each draw expanded duplicate row indices
+and reordered scores. A fixed tied-score plan plus asset multiplicities computes
+the same AP statistic without those operations. Exact tiny rational models and
+an independent expanded-fleet implementation check it. The bounded five-repeat
+workload records 40 million membership scan values and 640,000 expanded row
+indices per old run versus none of those operations in the replacement, which
+orders scores once. Both implementations produced exactly the same recorded
+percentile endpoints. This is a focused 20,000-row calculation; it does not
+replace the historical full-lifecycle measurements below.
+
+Real SQLite child-process exits test accepted/rejected commit boundaries, and
+independent peer probes exercise tied bootstrap, legacy reassessment, competing
+promotions, late loads, shutdown, and explicit target adoption. Current results
+and limits are in [VERIFICATION.md](VERIFICATION.md); source licensing and
+real-equipment validation remain owner decisions.
+
+## Historical implementation and workload evidence
+
 # Reproducible experiments with byte-variable model archives
 
 The task was to make an ML result traceable from declared equipment features through frozen evaluation and an auditable deployment. The project owns semantic identity, split/leakage checks, validation policy, content publication, generation comparisons and serving snapshots; sklearn owns model fitting and skops supplies a constrained persistence mechanism.

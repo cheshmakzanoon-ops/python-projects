@@ -43,7 +43,7 @@ class RegistryHistory(RuleBasedStateMachine):
                 split.identity,
                 tuple(f.name for f in data.schema),
             )
-            report = evaluate(trained, data, split, manifest.identity, bootstrap_repetitions=3)
+            report = evaluate(store, data, split, manifest.identity, bootstrap_repetitions=3)
             if i == 1:
                 report = replace(report, metrics={**report.metrics, "roc_auc": None})
             self.models.append(self.registry.register(manifest.identity, report))

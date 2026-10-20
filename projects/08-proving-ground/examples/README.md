@@ -13,3 +13,9 @@ uv run --locked python -m pp_proving_ground.cli model-card --output /tmp/pg-stag
 ```
 
 Use `generate --split-policy entity` to ask an unseen-asset question. This changes the scientific question and is not a substitute for temporal forecasting validation. The API accepts a list of records whose exact sensor names come from `split.json`'s referenced dataset contract; missing sensor *values* use JSON `null`, while missing sensor *keys* are refused.
+
+For an existing legacy registry, follow the [upgrade procedure](../docs/OPERATIONS.md#upgrade-legacy-evaluation-evidence).
+`reevaluate-registry` leaves its fresh target undeployed. Use `--registry` on
+train/evaluate/promote/serve to adopt that target without replacing historical
+registry bytes. The selected output remains the dataset/split/model-store root;
+retain it with every external registry that depends on it.

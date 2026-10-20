@@ -15,6 +15,7 @@ from pp_proving_ground.splits.manifest import SplitManifest
 from pp_proving_ground.training.model_registry import build_estimator
 
 EstimatorName = Literal["prior", "logistic", "tree"]
+PREPROCESSING = "median-impute-indicators+standard-scale-v1"
 
 
 @dataclass(frozen=True)
@@ -23,7 +24,10 @@ class TrainingResult:
     estimator: EstimatorName
     train_rows: int
     train_row_digest: str
-    preprocessing: str = "median-impute-indicators+standard-scale-v1"
+    dataset_digest: str
+    split_digest: str
+    feature_names: tuple[str, ...]
+    preprocessing: str = PREPROCESSING
 
 
 def fit(
@@ -50,7 +54,15 @@ def fit(
     )
     train = split.indices("train")
     pipeline.fit(data.features[train], data.labels[train])
-    return TrainingResult(pipeline, estimator, len(train), digest(data.row_ids[train].tolist()))
+    return TrainingResult(
+        pipeline,
+        estimator,
+        len(train),
+        digest(data.row_ids[train].tolist()),
+        data.identity,
+        split.identity,
+        tuple(feature.name for feature in data.schema),
+    )
 
 
 def predict(pipeline: Pipeline, features: FloatArray) -> FloatArray:

@@ -7,6 +7,7 @@ import json
 import os
 import resource
 import shutil
+import sqlite3
 import statistics
 import sys
 import time
@@ -31,7 +32,7 @@ from pp_proving_ground.reports.provenance import (
 )
 from pp_proving_ground.serving.service import ServingProcess
 from pp_proving_ground.splits.manifest import SplitManifest, freeze
-from pp_proving_ground.training.pipeline import EstimatorName, TrainingResult, fit, predict
+from pp_proving_ground.training.pipeline import PREPROCESSING, EstimatorName, fit, predict
 
 OWNER = ".proving-ground-owned.json"
 
@@ -130,7 +131,7 @@ def lifecycle(
             data.identity,
             split.identity,
             code,
-            "median-indicator-standard-v1",
+            PREPROCESSING,
             estimator,
             {},
             seed,
@@ -147,7 +148,7 @@ def lifecycle(
             split.identity,
             tuple(f.name for f in data.schema),
         )
-        report = evaluate(trained, data, split, manifest.identity, seed=seed)
+        report = evaluate(store, data, split, manifest.identity, seed=seed)
         version = registry.register(manifest.identity, report)
         reports[name], results[name], manifests[name], versions[name] = (
             report,
@@ -191,9 +192,7 @@ def lifecycle(
     if not parity:
         raise AssertionError("offline and served pipeline disagree")
     # Final-test report is descriptive and computed after candidate selection and promotion.
-    final_test = evaluate(
-        results[chosen], data, split, manifests[chosen].identity, role="test", seed=seed
-    )
+    final_test = evaluate(store, data, split, manifests[chosen].identity, role="test", seed=seed)
     serving.predict(batch)  # Warmup, then five independent timed inference repetitions.
     latencies: list[float] = []
     for _ in range(5):
@@ -303,16 +302,20 @@ def stage_generate(
     return {"dataset_digest": data.identity, "split_digest": split.identity}
 
 
-def stage_train(output: Path, estimator: EstimatorName, seed: int) -> dict[str, Any]:
+def stage_train(
+    output: Path, estimator: EstimatorName, seed: int, registry_path: Path | None = None
+) -> dict[str, Any]:
     data = read_parquet(output / "dataset.parquet")
     split = read_split(output)
     split.validate(data)
+    store = ArtifactStore(output / "models")
+    registry = Registry(registry_path or output / "registry.sqlite3", store)
     code, lock = identity_for_source(project_directory())
     spec = ExperimentSpec(
         data.identity,
         split.identity,
         code,
-        "median-indicator-standard-v1",
+        PREPROCESSING,
         estimator,
         {},
         seed,
@@ -320,12 +323,10 @@ def stage_train(output: Path, estimator: EstimatorName, seed: int) -> dict[str, 
     )
     attempt = RunRecord.begin(spec, output / "runs", {"python": sys.version})
     trained = fit(data, split, estimator, seed)
-    store = ArtifactStore(output / "models")
     manifest = store.publish(
         trained, spec.identity, data.identity, split.identity, tuple(f.name for f in data.schema)
     )
-    report = evaluate(trained, data, split, manifest.identity, seed=seed)
-    registry = Registry(output / "registry.sqlite3", store)
+    report = evaluate(store, data, split, manifest.identity, seed=seed)
     version = registry.register(manifest.identity, report)
     atomic_json(
         output / "runs" / spec.identity / f"{attempt.attempt_id}-complete.json",
@@ -339,36 +340,95 @@ def stage_train(output: Path, estimator: EstimatorName, seed: int) -> dict[str, 
     }
 
 
-def stage_evaluate(output: Path, version: int, role: str) -> dict[str, Any]:
+def stage_evaluate(
+    output: Path, version: int, role: str, registry_path: Path | None = None
+) -> dict[str, Any]:
     if role not in {"validation", "test"}:
         raise ValueError("unknown evaluation role")
     data = read_parquet(output / "dataset.parquet")
     split = read_split(output)
     store = ArtifactStore(output / "models")
-    registry = Registry(output / "registry.sqlite3", store)
+    registry = Registry(registry_path or output / "registry.sqlite3", store)
     model = next((m for m in registry.versions() if m.version == version), None)
     if model is None:
         raise ValueError("unknown model version")
-    pipeline, manifest = store.load(model.artifact_digest)
-    if manifest.dataset_digest != data.identity or manifest.split_digest != split.identity:
-        raise ValueError("evaluation inputs incompatible with trained artifact")
-    # Final-test evaluation is allowed only after this model has already been promoted.
+    # Final-test evaluation follows an accepted deployment, never candidate selection.
     if role == "test" and not any(
         d["accepted"] and d["candidate_version"] == version for d in registry.audit()
     ):
         raise ValueError("final-test evaluation requires a previously promoted candidate")
-    estimator: EstimatorName = (
-        "prior"
-        if manifest.estimator == "prior"
-        else "logistic"
-        if manifest.estimator == "logistic"
-        else "tree"
-    )
-    result = TrainingResult(pipeline, estimator, len(split.train), "persisted")
     report = evaluate(
-        result, data, split, manifest.identity, "validation" if role == "validation" else "test"
+        store,
+        data,
+        split,
+        model.artifact_digest,
+        "validation" if role == "validation" else "test",
     )
     return asdict(report)
+
+
+def stage_reevaluate_registry(
+    output: Path,
+    destination: Path,
+    source_policy: GatePolicy | None = None,
+) -> dict[str, Any]:
+    """Retain old history, score actual artifacts, and create no deployment request."""
+    if not destination.is_absolute():
+        raise ValueError("destination registry must be an absolute fresh path")
+    report_path = destination.with_name(destination.name + ".reevaluation.json")
+    if report_path.exists():
+        raise ValueError("reevaluation report already exists; choose a fresh destination")
+    data = read_parquet(output / "dataset.parquet")
+    split = read_split(output)
+    split.validate(data)
+    store = ArtifactStore(output / "models")
+    source = Registry.open_read_only(output / "registry.sqlite3", store, source_policy)
+    models = source.versions()
+    policy = GatePolicy()  # Freeze independently of the reevaluated outcomes.
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    fd = os.open(destination, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    os.close(fd)
+    target = Registry(destination, store, policy)
+    reevaluations: list[dict[str, Any]] = []
+    errors: list[dict[str, Any]] = []
+    for model in models:
+        try:
+            report = evaluate(store, data, split, model.artifact_digest)
+            registered = target.register(model.artifact_digest, report)
+            reevaluations.append(
+                {
+                    "source_version": model.version,
+                    "target_version": registered.version,
+                    "artifact_digest": model.artifact_digest,
+                    "source_evaluation": model.evaluation_digest,
+                    "target_evaluation": report.identity,
+                    "promotion_failures": policy.judge(report),
+                }
+            )
+        except (ValueError, OSError) as error:
+            errors.append(
+                {
+                    "source_version": model.version,
+                    "artifact_digest": model.artifact_digest,
+                    "error": str(error),
+                }
+            )
+    result = {
+        "format_version": 1,
+        "status": "partial" if errors else "completed",
+        "source_registry": str(source.path.resolve()),
+        "target_registry": str(destination.resolve()),
+        "source_policy": source.policy.identity,
+        "target_policy": policy.identity,
+        "source_deployment": asdict(source.current()),
+        "target_deployment": asdict(target.current()),
+        "dataset_digest": data.identity,
+        "split_digest": split.identity,
+        "reevaluations": reevaluations,
+        "errors": errors,
+    }
+    atomic_json(report_path, result)
+    return result
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -395,28 +455,48 @@ def main(argv: list[str] | None = None) -> int:
         "--estimator", choices=["prior", "logistic", "tree"], default="logistic"
     )
     train_parser.add_argument("--seed", type=int, default=1729)
+    train_parser.add_argument("--registry", type=Path)
     eval_parser = sub.add_parser("evaluate")
     eval_parser.add_argument("--output", type=Path, required=True)
     eval_parser.add_argument("--version", type=int, required=True)
     eval_parser.add_argument("--role", choices=["validation", "test"], default="validation")
+    eval_parser.add_argument("--registry", type=Path)
     for name in ["model-card", "drift"]:
         report_parser = sub.add_parser(name)
         report_parser.add_argument("--output", type=Path, required=True)
         if name == "drift":
             report_parser.add_argument("--incoming", type=Path, required=True)
+        else:
+            report_parser.add_argument("--registry", type=Path)
+    reassess = sub.add_parser("reevaluate-registry")
+    reassess.add_argument("--output", type=Path, required=True)
+    reassess.add_argument("--destination", type=Path, required=True)
+    reassess.add_argument("--source-policy", type=Path)
     serve = sub.add_parser("serve")
     serve.add_argument("--output", type=Path, required=True)
     serve.add_argument("--port", type=int, default=8108)
+    serve.add_argument("--registry", type=Path)
     for name in ["inspect", "promote", "rollback", "predict"]:
         command = sub.add_parser(name)
         command.add_argument("--output", type=Path, required=True)
+        command.add_argument("--registry", type=Path)
         if name in {"promote", "rollback"}:
             command.add_argument("--version", type=int, required=True)
             command.add_argument("--expected-generation", type=int, required=True)
         if name == "predict":
             command.add_argument("--input", type=Path, required=True)
     args = parser.parse_args(argv)
+    selected_registry = getattr(args, "registry", None) or args.output / "registry.sqlite3"
     try:
+        if args.command == "reevaluate-registry":
+            policy = (
+                GatePolicy(**json.loads(args.source_policy.read_text()))
+                if args.source_policy
+                else None
+            )
+            result = stage_reevaluate_registry(args.output, args.destination, policy)
+            print(json.dumps(result))
+            return 1 if result["errors"] else 0
         if args.command == "generate":
             print(
                 json.dumps(
@@ -427,15 +507,17 @@ def main(argv: list[str] | None = None) -> int:
             )
             return 0
         if args.command == "train":
-            print(json.dumps(stage_train(args.output, args.estimator, args.seed)))
+            print(
+                json.dumps(stage_train(args.output, args.estimator, args.seed, selected_registry))
+            )
             return 0
         if args.command == "evaluate":
-            print(json.dumps(stage_evaluate(args.output, args.version, args.role)))
+            print(
+                json.dumps(stage_evaluate(args.output, args.version, args.role, selected_registry))
+            )
             return 0
         if args.command == "model-card":
-            registry = Registry(
-                args.output / "registry.sqlite3", ArtifactStore(args.output / "models")
-            )
+            registry = Registry(selected_registry, ArtifactStore(args.output / "models"))
             version = registry.current().model_version
             if version is None:
                 raise ValueError("model-card requires a deployed version")
@@ -485,7 +567,11 @@ def main(argv: list[str] | None = None) -> int:
             )
             return 0
         store = ArtifactStore(args.output / "models")
-        registry = Registry(args.output / "registry.sqlite3", store)
+        registry = (
+            Registry.open_read_only(selected_registry, store)
+            if args.command == "inspect"
+            else Registry(selected_registry, store)
+        )
         if args.command in {"promote", "rollback"}:
             result = asdict(
                 registry.promote(
@@ -497,6 +583,7 @@ def main(argv: list[str] | None = None) -> int:
             print(
                 json.dumps(
                     {
+                        "registry_path": str(registry.path.resolve()),
                         "versions": [asdict(v) for v in registry.versions()],
                         "deployment": asdict(registry.current()),
                         "audit": registry.audit(),
@@ -519,7 +606,7 @@ def main(argv: list[str] | None = None) -> int:
 
                 uvicorn.run(create_app(process), host="127.0.0.1", port=args.port)
         return 0
-    except (ValueError, OSError, RuntimeError) as error:
+    except (ValueError, OSError, RuntimeError, sqlite3.Error) as error:
         print(f"proving-ground: {error}", file=sys.stderr)
         return 2
 

@@ -6,10 +6,12 @@ from dataclasses import replace
 
 import numpy as np
 import pytest
+import skops.io as sio
 from fastapi.testclient import TestClient
 
 import pp_proving_ground.serving.service as serving_module
 from pp_proving_ground.evaluation.metrics import GatePolicy, evaluate
+from pp_proving_ground.experiments.identity import canonical, file_hash
 from pp_proving_ground.registry.sqlite import PromotionRejected, Registry
 from pp_proving_ground.serving.api import create_app
 from pp_proving_ground.serving.service import ServingProcess, Unavailable
@@ -21,7 +23,7 @@ def second_candidate(context, data, split):
     manifest = context.store.publish(
         trained, "b" * 64, data.identity, split.identity, tuple(f.name for f in data.schema)
     )
-    report = evaluate(trained, data, split, manifest.identity, bootstrap_repetitions=5)
+    report = evaluate(context.store, data, split, manifest.identity, bootstrap_repetitions=5)
     return context.registry.register(manifest.identity, report)
 
 
@@ -276,9 +278,16 @@ def test_supported_but_invalid_classifier_state_never_becomes_ready(context, dat
         classifier.class_prior_ = np.array([-0.1, 1.1])
     with pytest.raises(ValueError):
         predict(candidate.pipeline, data.features[:2])
-    manifest = context.store.publish(
-        candidate, "c" * 64, data.identity, split.identity, tuple(f.name for f in data.schema)
-    )
+    # Simulate a historical or externally copied artifact; new publication refuses it.
+    from dataclasses import asdict
+
+    model_path = context.store.root / "legacy-invalid.skops"
+    sio.dump(candidate.pipeline, model_path)
+    manifest = replace(context.manifest, model_sha256=file_hash(model_path), estimator="prior")
+    directory = context.store.path(manifest.identity)
+    directory.mkdir()
+    model_path.rename(directory / "model.skops")
+    (directory / "manifest.json").write_bytes(canonical(asdict(manifest)))
     report = replace(context.report, artifact_digest=manifest.identity)
     version = context.registry.register(manifest.identity, report)
     process = ServingProcess(context.registry)

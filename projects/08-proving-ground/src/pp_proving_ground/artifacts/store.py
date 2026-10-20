@@ -19,6 +19,7 @@ from io import BytesIO
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import skops.io as sio
 from sklearn.dummy import DummyClassifier
 from sklearn.impute import SimpleImputer
@@ -28,7 +29,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeClassifier
 
 from pp_proving_ground.experiments.identity import canonical, digest, file_hash
-from pp_proving_ground.training.pipeline import TrainingResult
+from pp_proving_ground.training.pipeline import TrainingResult, predict
 
 # Reviewed data-only dtype descriptors and sklearn native decision-tree node storage.
 # No custom estimator, transformer, callable or user-specified module is trusted.
@@ -114,6 +115,12 @@ class ArtifactStore:
         names: tuple[str, ...],
         interrupt_before_publish: bool = False,
     ) -> ArtifactManifest:
+        if (dataset, split, names) != (
+            result.dataset_digest,
+            result.split_digest,
+            result.feature_names,
+        ):
+            raise ArtifactError("artifact inputs disagree with fit provenance")
         stage = Path(tempfile.mkdtemp(prefix=".stage-", dir=self.root))
         try:
             model = stage / "model.skops"
@@ -134,6 +141,9 @@ class ArtifactStore:
                 environment_versions(),
             )
             manifest.validate()
+            # Validate the serialized snapshot, not the still-mutable caller pipeline.
+            # A supported class list alone does not make a fitted model serviceable.
+            self._deserialize(model.read_bytes(), manifest)
             with (stage / "manifest.json").open("xb") as stream:
                 stream.write(canonical(asdict(manifest)))
                 stream.flush()
@@ -189,7 +199,12 @@ class ArtifactStore:
 
         if hashlib.sha256(data).hexdigest() != manifest.model_sha256:
             raise ArtifactError("artifact changed during load")
+        return self._deserialize(data, manifest), manifest
+
+    def _deserialize(self, data: bytes, manifest: ArtifactManifest) -> Pipeline:
         try:
+            if len(data) > self.max_model_bytes:
+                raise ArtifactError("artifact size limit")
             # Bound the expanded archive before skops parses its schema/type metadata.
             with zipfile.ZipFile(BytesIO(data)) as archive:
                 members = archive.infolist()
@@ -229,7 +244,11 @@ class ArtifactStore:
             }
             if type(pipeline.named_steps["classifier"]) is not classifiers[manifest.estimator]:
                 raise ArtifactError("unsupported classifier type")
-            return pipeline, manifest
+            # Check finite and missing inputs before publication or serving ownership.
+            probe = np.zeros((2, len(manifest.feature_names)), dtype=np.float64)
+            probe[1] = np.nan
+            predict(pipeline, probe)
+            return pipeline
         except ArtifactError:
             raise
         except Exception as error:

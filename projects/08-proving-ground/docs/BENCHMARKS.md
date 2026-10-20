@@ -1,6 +1,53 @@
 # Reproducible measurements
 
-## Accepted full standard run
+## Bounded clustered-AP calculation
+
+`benchmarks/cluster_bootstrap.py` measures only asset-bootstrap calculation:
+20,000 rows, 2,000 assets, 97 tied score levels, 32 cluster draws, and five fresh
+runs without warmup. Data seed is 1729; bootstrap seed is 113. It excludes model
+fitting, serialization, registry, serving, and the complete lifecycle. Inputs and
+actual algorithm modules have SHA-256 identities in the
+[core review evidence](../artifacts/core-lifecycle-review.json).
+
+The unchanged script ran against a Git-exported baseline
+`39d3a8d4be3e8e2e7de85379790d68f5367d6825` and the reviewed working tree.
+Every repetition produced the same interval
+`[0.8259566867100012, 0.8401625620681217]`, with 32 defined draws. The maximum
+old/new endpoint difference was zero for this workload. Exact tiny threshold
+models separately establish numerical correctness; agreement with old code
+alone would not establish it.
+
+| Work per complete run | Baseline | Revised |
+| --- | ---: | ---: |
+| Values scanned to find individual asset positions | 40,000,000 | 0 |
+| Expanded duplicate row indices across draws | 640,000 | 0 |
+| scikit-learn AP calls, each ordering scores | 32 | 0 |
+| Direct tied-score orderings in the new plan | 0 | 1 |
+| Five-run median wall time | 0.143733 s | 0.005803 s |
+
+Counters observe application-owned NumPy/AP calls. They do not count every
+library-internal operation, and zero duplicate expansion does not mean zero
+per-row work: weighted counts still visit rows on each draw. All five runs
+have the same deterministic work counts. The runs used the shared review host;
+a normal check ran concurrently during part of the measurement. Timings are
+descriptive, not an isolated capacity claim or a test threshold. The source was
+still a working tree; an immutable final-commit check is a separate step.
+
+Reproduce the bounded current workload from this project with a fresh output:
+
+```sh
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+  uv run --locked python benchmarks/cluster_bootstrap.py \
+  --source-label reviewed-working-tree --output /tmp/pg-bootstrap.json
+```
+
+For a historical comparison, export the named revision with `git archive` and
+run the same script with that export's `src` on `PYTHONPATH`, using the locked
+interpreter directly. Inspect `algorithm_module`, its hash, the input digest,
+and workload script hash to confirm which implementation actually ran. The
+caller label is explicitly a label, not an independently observed revision.
+
+## Historical accepted full standard run
 
 The full standard workload **passed** on clean committed source `59443e2bcdfc6a1dd81f8334c108474eef2d3030`, Python 3.14.8, seed 1729. [Raw benchmark measurements](../../../docs/evidence/final/standard/proving-ground-3.14.8-benchmark-benchmark.json) retain all model/evaluation/transition records. The [execution and provenance wrapper](../../../docs/evidence/final/standard/proving-ground-3.14.8.json) records exact source/root input lists, the standard command, exit code 0 and unchanged source afterward. This accepted run supersedes development-only timing claims.
 
@@ -43,7 +90,7 @@ Correctness checks passed: prior rejected, corrupt artifact copy refused, offlin
 ```bash
 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
   uv run --locked python -m pp_proving_ground.cli benchmark --profile ci --output /tmp/pg-ci --seed 1729
-# Run standard alone alone on an idle machine:
+# Run standard alone on an idle machine:
 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
   uv run --locked python -m pp_proving_ground.cli benchmark --profile standard --output /tmp/pg-standard --seed 1729
 ```

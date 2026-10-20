@@ -46,7 +46,7 @@ def context(
     manifest = store.publish(
         trained, "a" * 64, data.identity, split.identity, tuple(f.name for f in data.schema)
     )
-    report = evaluate(trained, data, split, manifest.identity, bootstrap_repetitions=20)
+    report = evaluate(store, data, split, manifest.identity, bootstrap_repetitions=20)
     registry = Registry(tmp_path / "registry.db", store)
     model = registry.register(manifest.identity, report)
     return Context(store, registry, manifest, report, model, trained)

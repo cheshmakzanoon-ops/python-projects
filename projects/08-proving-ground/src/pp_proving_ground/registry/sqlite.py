@@ -2,16 +2,21 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import sqlite3
-from contextlib import contextmanager
+from contextlib import closing, contextmanager
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Iterator
 
 from pp_proving_ground.artifacts.store import ArtifactStore
-from pp_proving_ground.evaluation.metrics import EvaluationReport, GatePolicy
+from pp_proving_ground.evaluation.metrics import (
+    CURRENT_POLICY_VERSION,
+    EvaluationReport,
+    GatePolicy,
+)
 from pp_proving_ground.experiments.identity import canonical, digest
 
 
@@ -52,11 +57,31 @@ class PromotionRejected(ValueError):
 
 
 class Registry:
-    def __init__(self, path: Path, store: ArtifactStore, policy: GatePolicy = GatePolicy()):
-        path.parent.mkdir(parents=True, exist_ok=True)
+    def __init__(
+        self,
+        path: Path,
+        store: ArtifactStore,
+        policy: GatePolicy = GatePolicy(),
+        *,
+        read_only: bool = False,
+    ):
+        if not read_only and policy.version != CURRENT_POLICY_VERSION:
+            raise ValueError(
+                "legacy promotion policy is read-only; re-evaluate into a new registry"
+            )
+        if not read_only:
+            path.parent.mkdir(parents=True, exist_ok=True)
         self.path, self.store, self.policy = path, store, policy
+        self.read_only = read_only
         with self.connection() as conn:
             self._validate_format(conn)
+            # Refuse an incompatible frozen policy before any writable pragma/DDL.
+            if conn.execute("PRAGMA user_version").fetchone()[0] == 1:
+                self._validate_policy(conn)
+            elif read_only:
+                raise ValueError("read-only registry must have an initialized schema")
+            if read_only:
+                return
             conn.execute("PRAGMA journal_mode=WAL")
             conn.execute("BEGIN IMMEDIATE")
             try:
@@ -79,15 +104,46 @@ class Registry:
                 conn.execute(
                     "INSERT OR IGNORE INTO settings VALUES('policy', ?)", (policy.identity,)
                 )
-                stored = conn.execute("SELECT value FROM settings WHERE key='policy'").fetchone()
-                if stored is None or stored[0] != policy.identity:
-                    raise ValueError(
-                        "registry policy differs from frozen policy; create explicit new registry"
-                    )
+                self._validate_policy(conn)
                 conn.commit()
             except BaseException:
                 conn.rollback()
                 raise
+
+    def _validate_policy(self, conn: sqlite3.Connection) -> None:
+        stored = conn.execute("SELECT value FROM settings WHERE key='policy'").fetchone()
+        if stored is None or stored[0] != self.policy.identity:
+            raise ValueError(
+                "registry policy differs from frozen policy; re-evaluate into a new registry"
+            )
+
+    @classmethod
+    def open_read_only(
+        cls,
+        path: Path,
+        store: ArtifactStore,
+        policy: GatePolicy | None = None,
+    ) -> Registry:
+        """Read historical records without granting legacy evidence promotion authority."""
+        with closing(sqlite3.connect(path.resolve().as_uri() + "?mode=ro", uri=True)) as conn:
+            cls._validate_format(conn)
+            stored = conn.execute("SELECT value FROM settings WHERE key='policy'").fetchone()
+        candidates = (
+            (policy,) if policy is not None else (GatePolicy(), GatePolicy(version="validation-v1"))
+        )
+        selected = next(
+            (candidate for candidate in candidates if stored and candidate.identity == stored[0]),
+            None,
+        )
+        if selected is None:
+            raise ValueError(
+                "unknown frozen policy; supply its original GatePolicy for read-only access"
+            )
+        return cls(path, store, selected, read_only=True)
+
+    def _require_write(self) -> None:
+        if self.read_only:
+            raise ValueError("registry is read-only; re-evaluate into a new registry")
 
     @staticmethod
     def _validate_format(conn: sqlite3.Connection) -> None:
@@ -109,16 +165,30 @@ class Registry:
 
     @contextmanager
     def connection(self) -> Iterator[sqlite3.Connection]:
-        conn = sqlite3.connect(self.path, timeout=30, isolation_level=None)
-        conn.row_factory = sqlite3.Row
-        conn.execute("PRAGMA foreign_keys=ON")
-        conn.execute("PRAGMA synchronous=FULL")
+        conn = sqlite3.connect(
+            self.path.resolve().as_uri() + "?mode=ro" if self.read_only else str(self.path),
+            timeout=30,
+            isolation_level=None,
+            uri=self.read_only,
+        )
         try:
+            conn.row_factory = sqlite3.Row
+            conn.execute("PRAGMA foreign_keys=ON")
+            conn.execute("PRAGMA synchronous=FULL")
+            if self.read_only:
+                conn.execute("PRAGMA query_only=ON")
             yield conn
         finally:
             conn.close()
 
     def register(self, artifact: str, report: EvaluationReport) -> ModelVersion:
+        self._require_write()
+        if report.version != 2:
+            raise ValueError("registration requires a schema-v2 verified-artifact evaluation")
+        # Snapshot caller-owned nested metrics once. The persisted bytes, identity and
+        # returned ModelVersion must describe the same report under concurrent updates.
+        encoded_report = canonical(asdict(report))
+        evaluation = hashlib.sha256(encoded_report).hexdigest()
         manifest = self.store.inspect(artifact)
         if (report.artifact_digest, report.dataset_digest, report.split_digest) != (
             artifact,
@@ -133,7 +203,7 @@ class Registry:
                     "SELECT * FROM models WHERE artifact=?", (artifact,)
                 ).fetchone()
                 if prior is not None:
-                    if prior["evaluation"] != report.identity:
+                    if prior["evaluation"] != evaluation:
                         raise ValueError("immutable model already bound to another evaluation")
                     conn.commit()
                     return self._version(prior)
@@ -144,8 +214,8 @@ class Registry:
                         artifact,
                         manifest.dataset_digest,
                         manifest.split_digest,
-                        report.identity,
-                        canonical(asdict(report)).decode(),
+                        evaluation,
+                        encoded_report.decode(),
                     ),
                 )
                 version = int(cursor.lastrowid or 0)
@@ -155,7 +225,7 @@ class Registry:
                     artifact,
                     manifest.dataset_digest,
                     manifest.split_digest,
-                    report.identity,
+                    evaluation,
                 )
             except BaseException:
                 conn.rollback()
@@ -210,6 +280,7 @@ class Registry:
         evaluation_digest: str | None = None,
         rollback: bool = False,
     ) -> DeploymentGeneration:
+        self._require_write()
         with self.connection() as conn:
             conn.execute("BEGIN IMMEDIATE")
             try:

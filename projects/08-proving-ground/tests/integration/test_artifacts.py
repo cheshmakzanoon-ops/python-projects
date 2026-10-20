@@ -191,7 +191,15 @@ def test_artifact_write_refuses_custom_types_and_recovery_preserves_nonstage(con
 
     from pp_proving_ground.training.pipeline import TrainingResult
 
-    bad = TrainingResult(Pipeline([("classifier", UnreviewedModel())]), "logistic", 0, "none")
+    bad = TrainingResult(
+        Pipeline([("classifier", UnreviewedModel())]),
+        "logistic",
+        0,
+        "none",
+        data.identity,
+        context.manifest.split_digest,
+        context.manifest.feature_names,
+    )
     with pytest.raises(ArtifactError, match="unreviewed"):
         context.store.publish(
             bad,

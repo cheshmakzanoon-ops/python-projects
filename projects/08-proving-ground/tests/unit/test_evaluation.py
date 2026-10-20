@@ -5,6 +5,7 @@ from dataclasses import replace
 import numpy as np
 import pytest
 
+from pp_proving_ground.artifacts.store import ArtifactStore
 from pp_proving_ground.evaluation.metrics import (
     GatePolicy,
     asset_bootstrap,
@@ -92,12 +93,15 @@ def test_prior_logistic_tree_and_final_test_separation(data, split, trained, con
     policy = GatePolicy()
     initial = policy.identity
     prior = fit(data, split, "prior")
-    assert policy.judge(evaluate(prior, data, split, "prior", bootstrap_repetitions=3))
+    manifest = publish(context.store, prior, data, split)
+    assert policy.judge(
+        evaluate(context.store, data, split, manifest.identity, bootstrap_repetitions=3)
+    )
     assert not policy.judge(context.report)
     tree = fit(data, split, "tree")
     assert np.isfinite(predict(tree.pipeline, data.features[:50])).all()
     final = evaluate(
-        trained, data, split, context.manifest.identity, "test", bootstrap_repetitions=3
+        context.store, data, split, context.manifest.identity, "test", bootstrap_repetitions=3
     )
     assert final.role == "test" and policy.judge(final)
     assert policy.identity == initial
@@ -105,12 +109,14 @@ def test_prior_logistic_tree_and_final_test_separation(data, split, trained, con
     assert len(final.slices) == 6
 
 
-def test_actual_one_class_validation_report_is_ineligible(data, split, trained):
+def test_actual_one_class_validation_report_is_ineligible(data, split, tmp_path):
     labels = data.labels.copy()
     labels[list(split.validation)] = 0
     changed = replace(data, labels=labels)
     new_split = replace(split, dataset_digest=changed.identity)
-    report = evaluate(trained, changed, new_split, "one-class", bootstrap_repetitions=5)
+    store = ArtifactStore(tmp_path / "models")
+    manifest = publish(store, fit(changed, new_split, "logistic"), changed, new_split)
+    report = evaluate(store, changed, new_split, manifest.identity, bootstrap_repetitions=5)
     assert report.metrics["roc_auc"] is None
     assert report.metrics["pr_auc"] is None
     assert report.uncertainty["defined_repetitions"] == 0
@@ -130,15 +136,26 @@ def test_all_zero_and_all_one_trained_prior_prediction(data, split):
         metrics(np.array([], dtype=np.int64), np.array([]))
 
 
-def test_test_outcomes_do_not_change_training_validation_or_policy(data, split, trained):
+def test_test_outcomes_do_not_change_training_validation_or_policy(data, split, trained, tmp_path):
     policy = GatePolicy()
     labels = data.labels.copy()
     labels[list(split.test)] = 1 - labels[list(split.test)]
     changed = replace(data, labels=labels)
     changed_split = replace(split, dataset_digest=changed.identity)
     second = fit(changed, changed_split, "logistic")
-    before = evaluate(trained, data, split, "first", bootstrap_repetitions=3)
-    after = evaluate(second, changed, changed_split, "second", bootstrap_repetitions=3)
+    store = ArtifactStore(tmp_path / "models")
+    first = publish(store, trained, data, split)
+    second_manifest = publish(store, second, changed, changed_split)
+    before = evaluate(store, data, split, first.identity, bootstrap_repetitions=3)
+    after = evaluate(
+        store, changed, changed_split, second_manifest.identity, bootstrap_repetitions=3
+    )
     assert before.metrics == after.metrics
     assert policy.judge(before) == policy.judge(after)
     assert GatePolicy().identity == policy.identity
+
+
+def publish(store, trained, data, split):
+    return store.publish(
+        trained, "e" * 64, data.identity, split.identity, tuple(f.name for f in data.schema)
+    )

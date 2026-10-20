@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import hashlib
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -16,6 +16,15 @@ from pp_proving_ground.experiments.identity import canonical
 
 FloatArray = npt.NDArray[np.float64]
 IntArray = npt.NDArray[np.int64]
+_ARRAY_NAMES = (
+    "row_ids",
+    "assets",
+    "observed_at",
+    "feature_available_at",
+    "label_available_at",
+    "features",
+    "labels",
+)
 
 
 class ContractError(ValueError):
@@ -43,10 +52,19 @@ class DatasetVersion:
     horizon_hours: float
     generator: str
     seed: int
+    _array_layout: tuple[tuple[tuple[int, ...], str, tuple[int, ...]], ...] = field(
+        init=False, repr=False, compare=False
+    )
 
     def __post_init__(self) -> None:
+        # A read-only view is not a snapshot: its caller-owned base can still change.
+        # Immutable byte buffers also prevent callers from re-enabling NumPy writes.
+        for name in _ARRAY_NAMES:
+            array = getattr(self, name)
+            owned = np.frombuffer(array.tobytes(order="C"), dtype=array.dtype).reshape(array.shape)
+            object.__setattr__(self, name, owned)
         n, p = self.features.shape
-        if n < 10 or len(self.schema) != p:
+        if n < 10 or type(self.schema) is not tuple or len(self.schema) != p:
             raise ContractError("dataset dimensions")
         if any(
             f.kind != "float64" or not np.isfinite(f.availability_offset_hours) for f in self.schema
@@ -102,11 +120,22 @@ class DatasetVersion:
             raise ContractError("infinite feature value")
         if (self.label_available_at < self.observed_at + self.horizon_hours).any():
             raise ContractError("label arrives before horizon")
-        for array in (*vectors, self.features, self.feature_available_at):
-            array.flags.writeable = False
+        object.__setattr__(self, "_array_layout", self._layout())
 
     @property
     def identity(self) -> str:
+        # Read-only storage still permits shape/dtype/stride metadata mutations.
+        if self._layout() != self._array_layout:
+            raise ContractError("frozen dataset array layout was modified")
+        return self._content_identity()
+
+    def _layout(self) -> tuple[tuple[tuple[int, ...], str, tuple[int, ...]], ...]:
+        return tuple(
+            (getattr(self, name).shape, getattr(self, name).dtype.str, getattr(self, name).strides)
+            for name in _ARRAY_NAMES
+        )
+
+    def _content_identity(self) -> str:
         h = hashlib.sha256(
             canonical(
                 {
@@ -134,6 +163,7 @@ class DatasetVersion:
         return h.hexdigest()
 
     def validate_availability(self) -> None:
+        _ = self.identity
         if any(f.availability_offset_hours > 0 for f in self.schema):
             raise ContractError("declared feature unavailable at prediction time")
         if any(f.label_derived for f in self.schema):

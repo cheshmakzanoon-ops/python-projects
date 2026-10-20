@@ -1,45 +1,206 @@
-# Architecture and contracts
+# Experiment, publication, and deployment boundaries
 
-The domain has nine principal immutable records: `DatasetVersion`, `SplitManifest`, `ExperimentSpec`, `RunRecord`, `EvaluationReport`, `ArtifactManifest`, `ModelVersion`, `PromotionDecision` and `DeploymentGeneration`. A `ServingSnapshot` additionally binds a fitted pipeline to the artifact, model version and applied generation used for one request.
+Proving Ground answers two separate questions: what a candidate achieved on a
+frozen synthetic dataset, and which verified model a process actually used.
+A registry promotion is a deployment request. It does not assert that a serving
+process has loaded it or that a generated-data result transfers to real equipment.
 
-```mermaid
-flowchart LR
-  G[Seeded equipment generator] --> D[Dataset content digest / Parquet]
-  D --> S[Frozen membership + split policy]
-  S --> T[Train-only imputer / scaler / estimator]
-  T --> A[Staged skops content + immutable manifest]
-  A --> E[Validation report bound to artifact + data + split]
-  E --> R[SQLite registry / frozen gate policy]
-  R --> C[BEGIN IMMEDIATE / expected-generation comparison]
-  C --> L[Load + hash + type + compatibility checks]
-  L --> P[Atomic serving snapshot swap]
-  P --> Q[Prediction + actual version + applied generation]
+## Ownership
+
+| Owner | State and responsibility |
+| --- | --- |
+| `DatasetVersion` | An owned snapshot of identity, time, feature, and label arrays; schema and content identity. |
+| `SplitManifest` | Exact positional memberships, dataset identity, scientific question, and time/entity restrictions. |
+| `training.pipeline` | Train-only preprocessing and an estimator; fitted-result data/split/sensor provenance. |
+| `ArtifactStore` | Verified serialized snapshots and immutable content-addressed publication. |
+| `evaluation` | Predictions from the verified artifact, numerical summaries, slices, and clustered uncertainty. |
+| `Registry` | Immutable report binding, frozen policy, serialized generation changes, and audit. |
+| `ServingProcess` | In-flight loads, one published snapshot, request capture, and terminal shutdown. |
+
+No package imports a sibling product. NumPy and scikit-learn own numerical
+estimation; skops owns serialization; SQLite owns its transactions. The product
+owns the lifecycle connecting these boundaries.
+
+## Dataset and split
+
+Each row has an integer ID and asset ID, observation time, feature-availability
+times, label-availability time, and a binary six-hour outcome. Times are hours
+since the synthetic epoch. Missing feature values are NaN internally and null in
+record inference. Required identity, label, and time values cannot be missing.
+Parquet loading checks exact physical Arrow types before conversion and verifies
+schema and content identity after loading.
+
+Construction copies every input array into independently owned immutable byte
+buffers **before** validating the snapshot. A writable caller alias cannot change
+its values, and NumPy cannot re-enable writes into the byte buffers. Shape, dtype,
+and strides are also checked because NumPy permits altering array metadata even
+on read-only storage. Content hashes are recomputed from actual arrays; there is
+no cached digest that could outlive an altered array view. Construction does not
+provide an atomic snapshot of several independently changing external producers;
+callers must finish producing arrays before passing them in.
+
+The temporal question is future observations of an existing fleet, so asset IDs
+may overlap. For observation-time quantiles `v=0.6` and `t=0.8`, and embargo `e`:
+
+| Partition | Membership rule |
+| --- | --- |
+| train | `label_available_at < v` |
+| validation | `observed_at >= v + e` and `label_available_at < t` |
+| test | `observed_at >= t + e` |
+
+The default embargo is two hours. Equality at a label boundary is purged; rows
+in purge/embargo gaps are deliberately unused. A separate deterministic hash of
+asset ID allocates entity holdouts into 60/20/20 groups. Those groups are disjoint
+and answer unseen-asset generalization rather than future forecasting. Validation
+checks supplied memberships for overlap, bounds, and the declared restrictions;
+it does not prove that a person selected the policy before examining outcomes.
+
+Availability checks reject a declared future offset, a declared label-derived
+feature, or an actual feature availability later than its observation. They
+cannot discover an undisclosed causal relationship in a seemingly available
+sensor. Synthetic generation is not evidence about real fleet performance.
+
+## Fit, serialize, evaluate
+
+The median imputer, missing-value indicators, retained empty features, standard
+scaler, and classifier are fitted as one pipeline using only training indices.
+`TrainingResult` records the dataset, split, sensor order, training-row digest,
+and preprocessing identifier. Publication refuses different data/split/sensor
+arguments before staging. These records prevent accidental substitution within
+the supported fitter; they do not authenticate arbitrary in-process Python code.
+
+The persisted archive is the evaluation boundary. The public function is:
+
+```python
+evaluate(store, data, split, artifact_digest, role="validation", seed=1729)
 ```
 
-## Data and evaluation
+It loads and verifies that artifact, checks its data/split/sensor binding, then
+scores the loaded pipeline. It accepts no separate fitted pipeline. Mutating or
+replacing the original training object cannot substitute another model's
+statistics. This matters because skops can write different bytes for the same
+semantic fit; serializing the caller again is not a reliable equality test.
 
-Times are numeric hours since the synthetic epoch. Every observation has a stable numeric row ID and asset ID, observation time, per-feature availability times, label availability time and a six-hour fault horizon. Features have documented numeric types and a `label_derived` flag. The generator uses asset effects and slow time components, Bernoulli faults, class imbalance, missing sensors and an optional late-period shift. It is original synthetic data.
+Publication proceeds in this order:
 
-The temporal split asks how the existing fleet performs on future observations. Boundaries are fixed at observation-time quantiles 0.6 and 0.8. Training labels must be available **strictly before** the validation boundary. Validation observations begin at boundary + two-hour embargo and their labels must be available strictly before the test boundary. Test observations begin at test boundary + two hours. Rows inside purge/embargo regions are intentionally unused. Asset overlap is allowed under this question. A separate deterministic entity split hashes asset IDs into 60/20/20 groups, enforces disjoint IDs, and explicitly asks unseen-asset generalization instead of future forecasting.
+1. Serialize into a unique `.stage-*` directory and reject unreviewed types.
+2. Build a manifest binding actual model bytes to run, data, split, ordered
+   sensors, estimator, serialization format, and exact persistence-library versions.
+3. Deserialize the staged bytes through the same structural and inference
+   checks used on load. Supported classes alone do not authorize malformed state.
+4. Synchronize model and manifest files, then the stage directory entries.
+5. Rename into the manifest identity and synchronize the store directory.
 
-Membership is frozen before training. Median imputation, missing-value indicators and scaling are fitted through one sklearn pipeline using training rows only. The prior, logistic and depth-bounded tree all follow this path. Validation reports include count, positives, class balance, average precision (reported as PR-AUC), ROC-AUC when both classes exist, Brier score, ten calibration bins, fixed asset-modulo and missingness slices, and a seeded asset-cluster percentile bootstrap. Small slices are flagged. The whole asset is resampled to retain within-asset correlation; this does not estimate all future fleet uncertainty.
+Existing identical destinations must verify; they are not overwritten. A crash
+before rename leaves an unpublished stage. A crash after rename can leave an
+unreferenced immutable artifact. Registration happens separately and cannot
+reference an unpublished stage through the normal API. The supplied staging
+cleanup requires exclusive ownership and never deletes published directories.
 
-The default promotion policy is a frozen validation-v1 policy: at least 100 observations and 10 per class, PR-AUC at least 0.35, ROC-AUC at least 0.65 and Brier at most 0.20. These are demonstration thresholds set before fitting. Undefined, missing and nonfinite required metrics fail closed. Final-test labels cannot authorize promotion. The demo selects between the fixed logistic/tree candidates on validation PR-AUC and computes the test report only afterward. The staged CLI refuses final-test evaluation before the candidate has been promoted.
+A loader bounds archive expansion, checks its exact bytes against the manifest,
+reviews types, enforces step order/preprocessing/feature count/classifier family,
+and probes finite and missing inputs. Content hashes establish integrity, not
+permission to load arbitrary executable objects. The type allowlist is explicit;
+there is no model-upload, pickle, or arbitrary plugin interface.
 
-## Identity and persistence
+## Numerical evidence
 
-Canonical JSON is sorted, compact, UTF-8 and refuses NaN. Dataset identity covers schema, horizon, generator, seed and shape/dtype/bytes for every contract array. Split identity includes dataset identity, exact membership, boundaries, policy and scientific question. Experiment identity includes data, split, own-code digest, preprocessing, estimator/hyperparameters, seed and lock digest; timestamps and retry IDs are separate attempt metadata.
+The report contains average precision (named `pr_auc`), ROC-AUC, Brier score,
+counts/class balance, ten calibration bins, fixed asset-modulo and missingness
+slices, and asset-cluster bootstrap uncertainty. PR/ROC discrimination is
+undefined for a one-class partition. Calibration bins are left-closed and
+right-open except that probability 1 belongs in the last bin. Small slices are
+flagged; they do not silently become promotion evidence.
 
-Skops bytes have their own SHA-256. The artifact identity hashes a versioned manifest binding those bytes to run/data/split/schema and exact numpy/sklearn/skops versions. Serialization may differ between repeated saves; equal semantic experiments do not promise byte-identical artifacts. Local filesystem assumptions are POSIX rename, fsync and SQLite FULL synchronous mode on a functioning filesystem. Publication synchronizes model and manifest files, then their stage directory, before rename; it synchronizes the artifact-store directory afterward. Syncing only the files would leave their directory entries outside the durability boundary. Registration occurs only after published content verifies. A crash can leave an unreferenced stage or immutable artifact; no registry reference is created for an unpublished stage.
+`evaluation/bootstrap.py` orders distinct scores once. A draw samples whole
+assets with replacement and converts the draw into asset multiplicities. Row
+weights then produce positive and total counts at each tied-score threshold.
+No duplicate-row matrix or repeated score ordering is needed. The
+[numerical contract](EVALUATION.md) derives this calculation and its work bound.
+The seed, algorithm, score-group count, and both defined and undefined draw
+counts are retained. Percentiles are conditional on draws containing both
+classes. One asset can give a degenerate interval; the gate does not impose a
+minimum number of independent assets.
 
-SQLite files carry application_id 1347430193 and schema user_version 1; unrelated and future formats are refused. Canonical run specifications and attempt records also carry format version 1. SQLite uses WAL and `BEGIN IMMEDIATE` for initialization, registration and promotion. Every accepted/rejected promotion records candidate artifact, data, split, report, policy and expected generation. A deployment insert and its audit decision commit in the same transaction. Rejected generation comparisons are audited and committed without changing deployment. Rollback requires a previously deployed model and creates a new generation; no model history is deleted.
+The default gate requires at least 100 validation observations, ten per class,
+AP at least 0.35, ROC-AUC at least 0.65, and Brier at most 0.20. It rejects
+undefined/nonfinite metrics and inconsistent counts. It does not gate on bootstrap
+intervals or estimate uncertainty across new fleets. Candidate selection uses
+validation evidence; the staged CLI permits descriptive test evaluation only
+after that candidate has appeared in accepted deployment history.
 
-## Serving
+## Registry commit boundary
 
-Candidate deserialization occurs outside the serving lock. Hashes, persistence-library versions, explicit reviewed types and exact supported pipeline components are checked. The supported step order is median imputer with missing indicators and retained empty features, standard scaler, then the declared classifier. Manifest feature names are unique nonempty strings, and their count must match the fitted pipeline. Reordering or duplicating supported components does not satisfy that contract. A probe runs before publication. A completed load then checks the authoritative requested generation while holding the snapshot lock. A slow earlier load cannot replace a newer generation. Each prediction captures one snapshot and uses its pipeline **and** metadata until that request completes, including when a swap occurs mid-inference.
+Registry files retain SQLite application ID 1347430193 and schema version 1.
+The table layout did not change when the evaluation contract changed: current
+reports are schema 2, and the frozen policy version is
+`validation-artifact-v2`. Legacy `validation-v1` policies are audit-only.
+Opening them for writes is refused even when explicitly requested. Historical
+reports remain readable through `Registry.open_read_only`; connections use
+SQLite `mode=ro` plus `query_only`, and mutation methods reject immediately.
+Policy mismatch is checked before writable initialization pragmas or DDL.
 
-Readiness reports requested and applied generations separately. Failed candidate loads retain an older valid snapshot with its original metadata, or predictions are unavailable when no snapshot exists. The FastAPI lifespan watcher loads a new requested generation once; `/refresh` explicitly retries a failed current generation. Synchronous model work runs outside the event loop. Shutdown stops the watcher. The service has no model upload or pickle/joblib path.
+Registration serializes the supplied nested report once. Its stored bytes,
+SHA-256 identity, returned `ModelVersion`, and idempotent retry comparison all
+refer to that one snapshot, even if the caller subsequently updates a metrics
+dictionary. An artifact can bind to only one immutable evaluation in a registry.
+Submitted reports and the local registry API are trusted application inputs;
+hashes do not independently prove that a manually submitted statistic is true.
 
-## Monitoring and boundaries
+Promotion uses a fresh connection and `BEGIN IMMEDIATE`. It checks the frozen
+policy, stored report integrity and candidate/data/split binding, expected
+current generation, and artifact integrity. Rollback additionally requires a
+previous deployment of its target. An accepted audit row and deployment row
+commit together. A rejection commits only its audit row, then raises
+`PromotionRejected`. An unknown model is an invalid request, not a candidate
+policy decision. All write connections use foreign keys and FULL synchronization.
 
-Drift compares schema, missingness, standardized mean shifts and decile-bin PSI against a reference batch. It describes distributions, not model accuracy without labels. Requests are limited to 2 MiB, 1–1000 rows and exact sensor keys; JSON null is an explicit missing value. Finite numbers are accepted; booleans, numeric strings and nonfinite values are refused. The ASGI body middleware counts actual received bytes, rejects an oversize body before dispatch, and forwards accepted content through the supported receive protocol. Validation errors omit input values, including NaN/infinity values that cannot be serialized in a JSON response. The API is a local, unauthenticated loopback demonstration. Dataset inputs are constrained to exact Arrow column types and unique names, nonnull required identity/time/label fields, the versioned Parquet contract and matching embedded content identity. Types are checked before conversion so fractional IDs/labels cannot silently truncate. Normal cleanup removes only an owned demo directory with recognized entries; unexpected files block deletion.
+A process exit before COMMIT leaves neither an accepted deployment nor its audit
+row. Exit after COMMIT can lose the response while leaving both durable; retrying
+with the old expected generation must reject. A rejected decision has its own
+commit boundary and cannot create a deployment. The crash tests exercise real
+SQLite writes and abrupt child exits at these positions. They do not emulate
+all filesystem or hardware power-loss behavior.
+
+Legacy reevaluation reads existing artifacts into a fresh registry. It records
+old/new report identities, model-version mapping, gate failures, and unreadable
+artifacts. It carries no deployment or old audit decisions into the new registry.
+Old files retain their historical meaning. `ServingProcess` also refuses a
+legacy policy even when given an explicit read-only registry handle; audit-only
+access cannot start legacy serving. The [runbook](OPERATIONS.md) shows
+how to inspect and adopt the new target without replacing them.
+
+## Serving ownership
+
+Load work occurs outside the snapshot lock. Concurrent refresh calls for one
+generation share one load attempt and its result. Another generation can load
+independently, allowing a rollback to progress while an old loader is stalled.
+Failures do not become permanent retry caches: a later explicit refresh retries.
+There is no global admission limit across many different simultaneous generations;
+the local API's thread pool and operator usage remain capacity limits.
+
+Before publishing a candidate, the process reacquires its lock, checks terminal
+state and the authoritative requested generation, and refuses obsolete loads.
+The generation is distinct from model version: rollback can apply model 1 at
+generation 3. Each prediction captures a pipeline/artifact/model/applied-generation
+snapshot once and retains it through parsing and inference. An older in-flight
+prediction can finish after a swap with its original, correct metadata.
+
+Readiness reads requested generation while holding the publication lock, so a
+new snapshot cannot be paired with an older captured request. It reports pending
+or failed loading separately from the applied snapshot. A registry change just
+after that observation is a normal asynchronous transition, not a global
+transaction over SQLite and every serving process.
+
+`close()` is terminal and idempotent. It releases the active snapshot, wakes
+waiting refresh calls, and prevents late loads from publishing. A prediction
+that already captured a snapshot can finish. Python cannot forcibly cancel an
+arbitrary loader thread; its temporary candidate is released when it returns.
+The API lifespan closes the process before cancelling the watcher, since
+cancelling `asyncio.to_thread` does not stop its worker. Create a new
+`ServingProcess` for a new lifespan.
+
+Requests are limited to 2 MiB and 1–1000 records with exact sensor keys. Null is
+explicit missingness; booleans, strings, NaN, and infinity are refused. Body
+limits count actual streamed bytes before dispatch. Validation responses omit
+input values. The CLI binds loopback; no authentication is supplied.

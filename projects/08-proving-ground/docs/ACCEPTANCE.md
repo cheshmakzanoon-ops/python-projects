@@ -24,11 +24,44 @@ separately from the historical workload evidence below.
 | PG-07 | Explicit barriers pause prediction after snapshot capture, swap the deployed model, and prove that both the returned probabilities and version/artifact/applied-generation still belong to the captured pipeline. Failed candidate loading retains the previous snapshot and marks readiness pending/failed; rollback creates a newer generation referring to the earlier model. First-load failure yields unavailable predictions. |
 | PG-08 | Descriptive monitoring tests inject shifted means, missing values and schema changes. A child process abruptly exits after writing a serialized stage; recovery removes only unpublished stages and preserves valid artifacts. Injected interrupted publication and separately recorded run attempts exercise restart behavior. |
 
+## Core lifecycle regressions
+
+- `test_dataset_ownership.py` changes writable bases for all seven dataset arrays
+  and rejects altered NumPy shape/dtype/strides. The content cannot silently
+  change under a frozen split through an ordinary caller alias.
+- `test_fit_publication.py` rejects data/split/sensor provenance substitutions,
+  scores the actual persisted prior after the caller replaces its fitted pipeline,
+  and rejects an unserviceable serialized candidate before publication.
+- `test_legacy_evaluation.py` restores a fixture produced by the actual baseline
+  package: an accepted prior carrying logistic statistics. It preserves that
+  historical report/audit, prohibits legacy writes, reevaluates actual prior
+  bytes into schema 2 with no deployment, reports corrupted candidates, and
+  adopts a trained replacement through an explicit registry path, and refuses
+  legacy read-only handles at the serving API boundary.
+- `test_clustered_average_precision.py` enumerates all ordered three-asset draws
+  for three tied-score fixtures using exact rational threshold counts. A separate
+  seeded expanded-fleet reference checks percentiles and undefined draws. The
+  work test checks two initial index/order operations and no duplicate expansion.
+- `test_registry_crashes.py` kills real SQLite writers after audit INSERT, after
+  deployment INSERT, and after COMMIT. It separately checks rejected decisions,
+  integrity/foreign keys, acknowledgement loss, and one canonical report snapshot
+  under a coordinated caller update.
+- `test_serving_ownership.py` controls eight concurrent refresh callers, verifies
+  one deserialization/shared completion, explicit retry after failure, terminal
+  close/waiter release, late completion after ASGI shutdown, and a captured
+  prediction finishing with its original metadata after close.
+
+These supplement the temporal/split, independent-median, stateful deployment,
+real HTTP, out-of-order load, and cross-snapshot tests above. The
+[numerical contract](EVALUATION.md) and [architecture](ARCHITECTURE.md) state the
+scientific and concurrency limits; the gates do not require a minimum independent
+asset count or prove real-fleet performance.
+
 ## Coverage scope
 
-The domain core is `data_contracts/schema.py`, `splits/manifest.py`, `experiments/identity.py`, `training/pipeline.py`, `evaluation/metrics.py`, `artifacts/store.py`, `registry/sqlite.py`, `serving/service.py` and `monitoring/drift.py`. It excludes CLI plumbing, HTTP routing and report/provenance formatting when interpreting the branch target. Overall package coverage is also reported rather than concealing wrapper coverage.
+The domain core is `data_contracts/schema.py`, `splits/manifest.py`, `experiments/identity.py`, `training/pipeline.py`, `evaluation/metrics.py`, `evaluation/bootstrap.py`, `artifacts/store.py`, `registry/sqlite.py`, `serving/service.py` and `monitoring/drift.py`. It excludes CLI plumbing, HTTP routing and report/provenance formatting when interpreting the branch target. Overall package coverage is also reported rather than concealing wrapper coverage.
 
-## Accepted verification
+## Historical accepted verification
 
 PG-01–PG-08 passed on the required local platform. Both clean-source compatibility suites passed **103 tests** with normal lint/type/build/package checks, actual demos and CI workloads: [Python 3.13.16](../../../docs/evidence/final/python313/proving-ground-3.13.16.json) and [Python 3.14.8](../../../docs/evidence/final/python314/proving-ground-3.14.8.json). [Independent review](../../../docs/evidence/INDEPENDENT_REVIEW.md) additionally closed **58 checks**, including the separately reproduced physical-Parquet coercion, parameter-override and split-policy defects.
 

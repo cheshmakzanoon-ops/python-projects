@@ -2,8 +2,8 @@
 
 Proving Ground makes a tabular ML experiment traceable from input data to the
 model actually serving a prediction. It freezes dataset and split identities,
-fits preprocessing only on training rows, evaluates candidates against a fixed
-validation policy, and records conditional promotion and rollback decisions.
+owns immutable dataset buffers, fits preprocessing only on training rows,
+evaluates verified persisted candidates against a fixed validation policy, and records conditional promotion and rollback decisions.
 The equipment-fault task is synthetic; its predictive results do not establish
 utility on real equipment.
 
@@ -31,8 +31,11 @@ artifact copy, and rolls back through audited deployment generations.
 
 The output includes `report.json`, `split.json`, `model-card.json`, `drift.json`,
 immutable model artifacts, run attempts, and the SQLite registry. Reports bind
-metrics to the exact candidate, dataset, split, policy, and source. Final-test
-reports are computed after selection and cannot authorize promotion.
+metrics to the exact artifact, dataset, and split. Experiment records bind source
+and lock identities; registry decisions bind the frozen policy. Final-test
+reports are computed after selection and cannot authorize promotion. Evaluation
+loads the published model itself, so a different in-memory fit cannot supply its
+statistics.
 
 ## Serve and inspect
 
@@ -50,8 +53,9 @@ uv run --locked python -m pp_proving_ground.cli serve --output /tmp/pg-demo --po
 | `POST /refresh` | Retry loading the currently requested generation. |
 
 Prediction responses include probabilities, artifact digest, actual model
-version, and applied generation from one captured snapshot. A failed candidate
-load keeps the previous snapshot and its original metadata; readiness stays
+version, and applied generation from one captured snapshot. Concurrent refreshes
+for one generation share one load. Shutdown is terminal and prevents late load
+publication. A failed candidate load keeps the previous snapshot and its original metadata; readiness stays
 false until the requested generation is applied. Bodies are limited to 2 MiB.
 Booleans, numeric strings, and nonfinite values are rejected. The CLI binds to
 loopback. This service has no authentication and should remain on a trusted
@@ -62,6 +66,14 @@ A stale comparison is rejected and audited. Rollback creates a new generation
 for a previously deployed model; it does not delete history. See the
 [runbook](docs/OPERATIONS.md) for staged training, request examples, recovery,
 backup, and safe cleanup.
+
+Current promotions require schema-v2 verified-artifact reports. Legacy registries
+remain available for read-only audit; `reevaluate-registry` scores their actual
+artifacts into a fresh undeployed target. Registry-dependent commands accept
+`--registry` to adopt that target while retaining history. The target still
+depends on the selected output’s model store; preserve that dependency when
+backing up or cleaning outputs. See the
+[upgrade procedure](docs/OPERATIONS.md#upgrade-legacy-evaluation-evidence).
 
 ## Validate changes
 
@@ -78,7 +90,8 @@ interpreter checks sequentially. The [verification record](docs/VERIFICATION.md)
 separates current regressions from historical full-workload measurements.
 
 Further reading: [architecture](docs/ARCHITECTURE.md),
-[design decisions](docs/DECISIONS.md), [acceptance mapping](docs/ACCEPTANCE.md),
+[design decisions](docs/DECISIONS.md), [numerical contract](docs/EVALUATION.md),
+[acceptance mapping](docs/ACCEPTANCE.md),
 [benchmarks](docs/BENCHMARKS.md), [case study](docs/CASE_STUDY.md),
 [staged example](examples/README.md), and [provenance](docs/THIRD_PARTY.md).
 
