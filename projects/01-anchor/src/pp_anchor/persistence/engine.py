@@ -18,7 +18,8 @@ from psycopg_pool import ConnectionPool
 
 from pp_anchor.definitions.model import JSON, Definition, canonical, validate_activity_result
 from pp_anchor.history.events import HistoryEvent
-from pp_anchor.replay.reducer import WorkflowState, decide, replay
+from pp_anchor.persistence.transition import RunTransaction
+from pp_anchor.replay.reducer import DivergenceError, WorkflowState, replay
 
 Row = dict[str, object]
 
@@ -27,6 +28,16 @@ def validate_lease_seconds(value: float) -> None:
     """Reject unusable leases before they can strand a running task in PostgreSQL."""
     if type(value) not in (int, float) or not 0 < value <= 31536000 or not math.isfinite(value):
         raise ValueError("lease_seconds must be finite seconds in (0, 31536000]")
+
+
+def retry_delay(base: float, attempt: int) -> float:
+    """Cap before exponentiation; operator retry batches can exceed 1,024 attempts."""
+    if base == 0:
+        return 0.0
+    exponent = attempt - 1
+    if exponent >= math.log2(31536000) - math.log2(base):
+        return 31536000.0
+    return min(math.ldexp(base, exponent), 31536000.0)
 
 
 class AdmissionError(RuntimeError):
@@ -133,6 +144,7 @@ class Engine:
                 str(r["step"]),
                 cast(JSON, r["data"]),
                 tuple(cast(list[str], r["command_ids"])),
+                int(str(r["schema_version"])),
             )
             for r in rows
         ]
@@ -140,76 +152,19 @@ class Engine:
     def _append(
         self, c: Connection[Row], run_id: str, kind: str, step: str = "", data: JSON | None = None
     ) -> None:
-        row = self._run(c, run_id, lock=True)
-        definition = Definition.from_dict(cast(JSON, row["definition"]))
-        state = replay(definition, self._events(c, run_id))
-        by_name = {s.name: s for s in definition.steps}
-        # Preserve depth-first history order without a Python frame per internal step.
-        # The run lock protects this state and all projections until the transaction commits.
-        pending = [(kind, step, data)]
-        while pending:
-            kind, step, data = pending.pop()
-            event = HistoryEvent(state.seq + 1, kind, step, data or {})
-            commands = decide(state, event)
-            c.execute(
-                "INSERT INTO history_events(workflow_id,event_seq,kind,step,data,command_ids) VALUES(%s,%s,%s,%s,%s,%s)",
-                (
-                    run_id,
-                    event.seq,
-                    kind,
-                    step,
-                    Jsonb(event.data),
-                    Jsonb([x.command_id for x in commands]),
-                ),
-            )
-            c.execute(
-                "UPDATE workflow_runs SET event_seq=%s,terminal_status=%s WHERE workflow_id=%s",
-                (event.seq, state.status, run_id),
-            )
-            if kind in ("cancelled", "step_failed"):
-                c.execute(
-                    "UPDATE activity_tasks SET status='cancelled' WHERE workflow_id=%s AND NOT compensation AND status IN ('pending','running')",
-                    (run_id,),
-                )
-                # Fence first, even when the actual cleanup later fails. Late effects cannot resurrect.
-                c.execute(
-                    "INSERT INTO provider_effects(business_key,payload,fenced) VALUES(%s,%s,true) ON CONFLICT(business_key) DO UPDATE SET fenced=true",
-                    (run_id, Jsonb({})),
-                )
-            immediate: list[str] = []
-            for command in commands:
-                if command.kind in ("Complete", "Fail"):
-                    continue
-                item = by_name[command.step]
-                if command.kind in ("ScheduleActivity", "Compensate"):
-                    c.execute(
-                        "INSERT INTO activity_tasks(workflow_id,command_id,step,activity,compensation,max_attempts,retry_delay) VALUES(%s,%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING",
-                        (
-                            run_id,
-                            command.command_id,
-                            item.name,
-                            item.compensate if command.kind == "Compensate" else item.activity,
-                            command.kind == "Compensate",
-                            item.max_attempts,
-                            item.retry_delay,
-                        ),
-                    )
-                elif command.kind == "StartTimer":
-                    c.execute(
-                        "INSERT INTO timers(workflow_id,command_id,step,due_at) VALUES(%s,%s,%s,clock_timestamp()+%s*interval '1 second') ON CONFLICT DO NOTHING",
-                        (run_id, command.command_id, item.name, item.delay),
-                    )
-                elif command.kind == "AwaitSignal":
-                    if c.execute(
-                        "SELECT 1 FROM signals WHERE workflow_id=%s AND name=%s",
-                        (run_id, item.signal),
-                    ).fetchone():
-                        immediate.append(item.name)
-                elif command.kind == "Join":
-                    immediate.append(item.name)
-            pending.extend(
-                ("step_completed", name, {"source": "internal"}) for name in reversed(immediate)
-            )
+        RunTransaction(self, c, run_id).append(kind, step, data)
+
+    def _state(
+        self, c: Connection[Row], row: Row, definition: Definition | None = None
+    ) -> WorkflowState:
+        """Verify a coherent run projection/history snapshot before using it."""
+        stored = Definition.from_dict(cast(JSON, row["definition"]))
+        if stored.digest != row["definition_digest"]:
+            raise DivergenceError("run definition differs from its pinned digest")
+        state = replay(definition or stored, self._events(c, str(row["workflow_id"])))
+        if state.seq != row["event_seq"] or state.status != row["terminal_status"]:
+            raise DivergenceError("run projection disagrees with its committed history")
+        return state
 
     def _ingress(self, c: Connection[Row], kind: str, key: str, request: object) -> str | None:
         if not key or len(key) > 200:
@@ -274,10 +229,9 @@ class Engine:
 
     def status(self, run_id: str) -> JSON:
         with self.transaction() as c:
+            c.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
             row = self._run(c, run_id)
-            state = replay(
-                Definition.from_dict(cast(JSON, row["definition"])), self._events(c, run_id)
-            )
+            state = self._state(c, row)
             return {
                 "workflow_id": run_id,
                 "status": state.status,
@@ -305,11 +259,9 @@ class Engine:
 
     def replay(self, run_id: str, definition: Definition | None = None) -> WorkflowState:
         with self.transaction() as c:
+            c.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
             row = self._run(c, run_id)
-            return replay(
-                definition or Definition.from_dict(cast(JSON, row["definition"])),
-                self._events(c, run_id),
-            )
+            return self._state(c, row, definition)
 
     def signal(self, run_id: str, name: str, payload: JSON, idempotency_key: str) -> str:
         if not isinstance(name, str) or not 1 <= len(name) <= 100:
@@ -343,10 +295,9 @@ class Engine:
                     run_id,
                 ),
             )
-            self._append(c, run_id, "signal", data=request)
-            state = replay(
-                Definition.from_dict(cast(JSON, row["definition"])), self._events(c, run_id)
-            )
+            transition = RunTransaction(self, c, run_id)
+            transition.append("signal", data=request)
+            state = transition.state
             definition = state.definition
             for step in definition.steps:
                 if (
@@ -355,7 +306,7 @@ class Engine:
                     and step.name in state.scheduled
                     and step.name not in state.done
                 ):
-                    self._append(c, run_id, "step_completed", step.name, {"source": "signal"})
+                    transition.append("step_completed", step.name, {"source": "signal"})
         return run_id
 
     def cancel(self, run_id: str) -> JSON:
@@ -376,6 +327,8 @@ class Engine:
             if row is None:
                 return None
             run_id = str(row["workflow_id"])
+            transition = RunTransaction(self, c, run_id)
+            transition.sync_compensations()
             task = c.execute(
                 """SELECT * FROM activity_tasks WHERE workflow_id=%s AND
                 ((status='pending' AND available_at<=clock_timestamp()) OR
@@ -396,9 +349,7 @@ class Engine:
                     "UPDATE activity_tasks SET status='failed' WHERE workflow_id=%s AND command_id=%s",
                     (run_id, task["command_id"]),
                 )
-                self._append(
-                    c,
-                    run_id,
+                transition.append(
                     "compensation_failed" if task["compensation"] else "step_failed",
                     str(task["step"]),
                     {"error": "lease attempts exhausted"},
@@ -412,9 +363,7 @@ class Engine:
                 "INSERT INTO activity_attempts(workflow_id,command_id,attempt_number,lease_epoch,status,ready_delay) VALUES(%s,%s,%s,%s,'running',GREATEST(0,extract(epoch FROM (clock_timestamp()-%s::timestamptz))))",
                 (run_id, task["command_id"], number, epoch, task["available_at"]),
             )
-            self._append(
-                c,
-                run_id,
+            transition.append(
                 "activity_claimed",
                 str(task["step"]),
                 {"epoch": epoch, "attempt": number, "command_id": task["command_id"]},
@@ -441,6 +390,10 @@ class Engine:
             or row["status"] != "running"
             or row["lease_epoch"] != task.lease_epoch
             or not row["lease_valid"]
+            or row["attempt_number"] != task.attempt_number
+            or row["step"] != task.step
+            or row["activity"] != task.activity
+            or row["compensation"] != task.compensation
         ):
             raise StaleLeaseError("Lease expired, superseded, or cancelled")
         return row
@@ -463,7 +416,7 @@ class Engine:
             status = "pending" if retry else ("failed" if failed else "completed")
             # Bound the actual exponential delay as well as its configured base.
             # Valid 32-attempt definitions must never overflow PostgreSQL timestamps.
-            delay = min(float(str(row["retry_delay"])) * 2 ** (task.attempt_number - 1), 31536000)
+            delay = retry_delay(float(str(row["retry_delay"])), task.attempt_number)
             c.execute(
                 "UPDATE activity_tasks SET status=%s,available_at=clock_timestamp()+%s*interval '1 second',lease_expiry=NULL WHERE workflow_id=%s AND command_id=%s",
                 (status, delay if retry else 0, task.workflow_id, task.command_id),
@@ -504,8 +457,9 @@ class Engine:
                 "UPDATE activity_tasks SET status='pending',max_attempts=attempt_number+3,available_at=clock_timestamp() WHERE workflow_id=%s AND compensation AND status='failed' RETURNING step",
                 (run_id,),
             ).fetchall()
+            transition = RunTransaction(self, c, run_id)
             for row in rows:
-                self._append(c, run_id, "compensation_retry", str(row["step"]))
+                transition.append("compensation_retry", str(row["step"]))
 
     def tick(self, *, advance_seconds: float = 0, limit: int = 1000) -> int:
         """Test-only clock injection applies to timer eligibility; DB owns all lease time."""
@@ -534,10 +488,9 @@ class Engine:
                     "UPDATE timers SET fired=true WHERE workflow_id=%s AND NOT fired AND due_at<=clock_timestamp()+%s*interval '1 second' RETURNING step",
                     (run_id, advance_seconds),
                 ).fetchall()
+                transition = RunTransaction(self, c, run_id)
                 for timer in timers:
-                    self._append(
-                        c, run_id, "step_completed", str(timer["step"]), {"source": "timer"}
-                    )
+                    transition.append("step_completed", str(timer["step"]), {"source": "timer"})
                     count += 1
         return count
 

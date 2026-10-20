@@ -10,3 +10,4 @@ class HistoryEvent:
     step: str = ""
     data: JSON = field(default_factory=dict)
     commands: tuple[str, ...] = ()
+    schema_version: int = 2

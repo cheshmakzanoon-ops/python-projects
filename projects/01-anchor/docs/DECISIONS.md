@@ -1,29 +1,90 @@
-# Decisions
+# Design decisions
 
-1. **Explicit DAG rather than suspended Python coroutines.** A small auditable reducer
-   gives stable command IDs and deterministic replay. It omits arbitrary loops and
-   workflow stack capture; external work always runs as activities.
-2. **Run-row serialization rather than distributed scheduler leadership.** Independent
-   schedulers claim rows with SKIP LOCKED and all transitions use the same run-first
-   lock order. This avoids a leader election service and makes command/history atomicity
-   reviewable. It limits transition throughput within one very busy run.
-3. **Reconstruct short histories rather than trusting an in-memory cache.** Every
-   mutation replays persisted events. This makes restart semantics simple and catches
-   divergence immediately, at the cost of quadratic work for extremely long histories.
-   Snapshotting would require a versioned integrity-checked replay boundary and is not
-   implemented speculatively.
-4. **At-least-once execution plus provider idempotency.** A process can die after an
-   external effect and before the database acknowledgement. No local transaction can
-   make a remote provider exactly once. The demo provider persists its own stable
-   business key, publication count and irreversible cleanup fence.
-5. **Cancellation fences include in-flight steps.** Compensating only completed steps
-   is incorrect: a worker can have acted without acknowledging. Every scheduled step
-   with a cleanup is considered, including leased steps. A provider fence precedes
-   cleanup success, and failed cleanup remains unresolved.
-6. **Database clock authority.** Local process clock skew cannot renew expired leases.
-   Timer testing injects offset only in timer eligibility; production leases always
-   compare database time. Retries record exact selected delay in history.
-7. **No remote authentication story implied.** The control plane is a trusted loopback
-   development API, with request validation and bounded bodies. Deployment auth,
-   multi-region consensus, arbitrary-code sandboxing and live definition migration are
-   explicitly outside this product's contract.
+## Explicit DAG and replay rather than suspended execution
+
+The definition is an immutable, topologically ordered graph. Activities perform external
+work; a pure reducer consumes persisted outcomes and schedules successors. This makes
+command identities and incompatible replay inspectable without serializing a Python
+stack. It deliberately omits arbitrary loops, dynamic workflow code and live migration.
+
+A successor index and unsatisfied predecessor counts drive the forward frontier. A full
+scan of every step after every event was simple but made a batch do repeated unrelated
+work. The compiled graph keeps deterministic definition-order emission while touching
+only successors of newly completed steps. An independent transitive-ancestor model
+checks both forward scheduling and reverse rollback on generated graphs.
+
+## One transaction-local reconstruction rather than a process cache
+
+`RunTransaction` holds the run lock and reconstructs once for the caller's transaction.
+It reuses that state through timer batches, signal broadcasts and immediate internal
+commands, then is discarded. This removes repeated history reads inside one atomic
+transition without introducing cache invalidation across processes or failed commits.
+A fault after history insertion but before timer projection rolls back both; a fresh
+operation cannot inherit the failed in-memory state.
+
+Each later transaction still replays committed history. A persistent checkpoint cache
+would need a versioned integrity boundary and independent equivalence tests. It is not
+introduced merely to advertise faster long-running workflows. The bounded
+[transaction diagnostic](BENCHMARKS.md#scheduler-transaction-diagnostic) measures the
+specific replay/read behavior that changed.
+
+## Run-row serialization rather than scheduler leadership
+
+Every mutation takes the run row before task rows. Independent schedulers/workers use
+`SKIP LOCKED` to share runs without electing a leader. Unique ingress keys, event
+sequences and logical command IDs reinforce that transaction boundary. They do not
+replace it. This limits transition throughput inside one busy run and requires keeping
+external work outside transactions.
+
+Read-only status/replay instead use repeatable read. Comparing a run projection with
+history under separate read-committed snapshots can incorrectly diagnose a healthy
+concurrent commit as corruption. A single read snapshot avoids that false positive
+without blocking writers for the duration of replay.
+
+## Reverse causal cleanup rather than reverse insertion order
+
+For dependent resources, enqueueing `unpublish` before `release` does not stop another
+worker from leasing `release` first or while `unpublish` is paused. Cleanup eligibility
+therefore follows the reverse graph, including paths through non-compensable joins,
+timers and waits. Independent leaves can run concurrently; a failed leaf keeps its
+ancestors blocked until an explicit retry succeeds.
+
+The logical compensation commands are still created together with stable IDs. Pending
+versus blocked is a scheduler projection, not a new business operation. This preserves
+historical command identity and avoids encoding queue insertion time as an accidental
+ordering guarantee. An ordinary cancellation also closes the current attempt records;
+leaving them `running` would falsely report live work after terminal cleanup.
+
+## Provider idempotency and fencing rather than universal exactly-once
+
+A worker can die after an external commit but before acknowledging the engine. Retrying
+is unavoidable. The downstream operation must keep the same business key across retries.
+The synthetic provider persists publication count and an irreversible cancellation
+fence; another provider must supply its own equivalent behavior.
+
+Include a logical operation identity when a run performs several effects. For custom
+activities, `f"{context.business_key}/{context.task.step}"` distinguishes steps while
+remaining stable across attempts and matching their compensations. Do not append the
+attempt number or lease epoch to a business idempotency key. The built-in synthetic
+publication uses one effect per run; it is not a general multi-effect provider service.
+
+## Event codec versions rather than silent reinterpretation
+
+Version two validates state-machine transitions as well as emitted command IDs.
+Version-one histories continue under their original codec and remain inspectable without
+rewriting evidence. New scheduler projections enforce causal rollback for current workers
+on either codec. Unknown/mixed event versions and committed projection/history mismatches
+fail closed. The codec version, definition version and snapshot archive format are distinct.
+
+An upgrade must stop old writers, take a coherent backup and validate restored/replayed
+state before restarting. Old binaries do not understand version-two events or blocked
+cleanup tasks; binary rollback requires the corresponding pre-upgrade backup, not a
+mixture of interpretations over current data.
+
+## Trusted local control plane
+
+The HTTP adapter assumes trusted loopback clients and has no authentication. Bounded
+bodies, strict request contracts and owned cleanup protect development workflows, not a
+public multi-tenant deployment. Database schemas separate owned runs, not hostile users.
+Authentication, deployment policy, cross-region consensus and a code sandbox require
+separate designs.

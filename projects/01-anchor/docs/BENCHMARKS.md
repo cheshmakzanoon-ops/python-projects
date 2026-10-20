@@ -81,3 +81,35 @@ with median 3.95 workflows/s on a contended shared host. Its 100,000-timer idle 
 dirty-source provenance. They are not a controlled before/after optimization comparison.
 Queue inspection motivated partial active-run and per-run readiness indexes; the accepted
 immutable results above close the final ci and full standard workload gates.
+
+## Scheduler transaction diagnostic
+
+The [bounded transaction-batch report](../artifacts/transaction-batch.json) measures
+one run containing 32, 128, 512 and 1,000 due timers, with one sample at each width.
+The measured scope is scheduler eligibility, the complete transition transaction and
+commit; submission and final verification replay are excluded. Every sample read
+history **once**, completed every timer, recorded width + 1 events and left zero
+unfired timers. The 32-timer regression previously read/reconstructed history 32
+times inside the same transaction.
+
+| Due timers | Scheduler wall time | History reads | Final state |
+| ---: | ---: | ---: | --- |
+| 32 | 16.85 ms | 1 | completed |
+| 128 | 59.63 ms | 1 | completed |
+| 512 | 198.91 ms | 1 | completed |
+| 1,000 | 444.65 ms | 1 | completed |
+
+This is a focused structural diagnostic on a shared host, not a throughput comparison
+or latency guarantee. It uses a dirty development snapshot with exact project/lock
+hashes and source-stability verification, separate from the accepted historical
+workloads above. A later transaction still reconstructs its committed history; this
+change does not introduce persistent replay snapshots or remove all long-history cost.
+
+With `ANCHOR_DATABASE_URL` set, reproduce from this project directory using a new file:
+
+```sh
+uv run --locked python benchmarks/transaction_batch.py --output /tmp/anchor-batch-new.json
+```
+
+The diagnostic creates and drops only its own random `anchor_probe_*` schemas. It
+refuses an existing output file and asserts exact completion/history-read accounting.

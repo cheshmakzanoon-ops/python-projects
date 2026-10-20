@@ -44,7 +44,9 @@ with Engine(os.environ["ANCHOR_DATABASE_URL"], schema="anchor_local") as engine:
 `ActivityRegistry.register(name, handler)` registers async activities. A handler's
 `ActivityContext.task` contains payload, attempt number and lease epoch;
 `ActivityContext.business_key` remains stable across retries. Epoch checks fence
-stale engine updates. They cannot stop an external effect already in progress.
+stale engine updates. Cleanup follows reverse DAG dependencies: independent rollback
+branches may run together, while an ancestor remains blocked until its descendants
+finish. They cannot stop an external effect already in progress.
 The included synthetic provider persists a cancellation fence; another provider
 must supply equivalent guarantees before claiming full cancellation.
 
@@ -69,6 +71,6 @@ schedulers, diagnosis and checksummed backup/restore. Review [architecture](docs
 [benchmarks](docs/BENCHMARKS.md), [case study](docs/CASE_STUDY.md) and
 [verification records](docs/VERIFICATION.md) for contracts and measured limits.
 
-For code review, start with `persistence/engine.py::_append` for atomic history and
+For code review, start with `persistence/transition.py::RunTransaction.append` for atomic history and
 projection updates, `replay/reducer.py::decide` for deterministic commands, and
 `tests/integration/test_process_fencing.py` for a real resumed stale process.

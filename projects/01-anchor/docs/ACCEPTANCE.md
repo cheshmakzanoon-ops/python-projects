@@ -28,3 +28,18 @@ The snapshot test backs up/restores real PostgreSQL rows and resumes a persisted
 Defined core branch coverage is 93.5% (216 branches, 14 missing), combined coverage 96%.
 See `../artifacts/development-verification.json` for actual commands and source scope.
 Later changes and their validation are recorded in [VERIFICATION.md](VERIFICATION.md).
+
+## Core transition invariants
+
+`tests/integration/test_causal_rollback.py` extends the acceptance scenarios with an
+actual PostgreSQL parent/child resource foreign key, paused concurrent cleanup, forked
+rollback failure/retry, codec-one continuation, closed cancellation attempts, coherent
+read snapshots and process death between history and timer projection. The four initial
+regressions were observed failing before the core refactor: cleanup overtaking, repeated
+batch history reads, ignored event codecs and unrelated-step completion.
+
+`tests/property/test_rollback_model.py` independently derives transitive ancestors on
+generated DAGs. It checks the forward frontier and reverse cleanup frontier, injects
+one cleanup failure/retry, and verifies full replay. `tests/unit/test_replay_invariants.py`
+checks illegal phase transitions, mixed codecs and historical command compatibility.
+These checks supplement the original acceptance evidence; they do not relabel it.

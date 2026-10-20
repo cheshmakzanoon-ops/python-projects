@@ -1,5 +1,25 @@
 # Verification records
 
+## Current core verification
+
+The transaction/rollback implementation is described in [architecture](ARCHITECTURE.md)
+and its [design decisions](DECISIONS.md), with operational recovery examples in the
+[runbook](OPERATIONS.md). The four initial regression tests failed on the preceding
+implementation; the rest of the new coverage checks additional invariants rather than
+claiming four defects per test count. The suite includes a 60-example independent DAG
+oracle and real PostgreSQL/SIGKILL transaction recovery.
+
+| Interpreter | Python tests | Format/lint/strict types | Build/installed-wheel recovery |
+| --- | ---: | --- | --- |
+| 3.14.8 | 131 passed in 12.31 s | passed, 25 source files | passed |
+| 3.13.16 | 131 passed in 12.10 s | passed, 25 source files | passed |
+
+No skips or expected failures conceal missing services. One upstream Starlette/httpx
+warning remains. The bounded [scheduler diagnostic](BENCHMARKS.md#scheduler-transaction-diagnostic)
+verified one history read and exact timer completion at widths 32–1,000. Its report
+retains actual dirty-source provenance; earlier workloads below remain historical.
+
+
 ## Reliability and interface review — 2026-10-20
 
 The current review adds bounded SQL history pagination and replaces private request-body
